@@ -1,0 +1,14 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+    "
+%>
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();
+%>
+globalMap.put("<%=cid %>_NB_FEATURE", nbFeature_<%=cid %>);
+globalMap.put("<%=cid %>_NB_FEATURE_VALID", nbFeatureValid_<%=cid %>);
+globalMap.put("<%=cid %>_NB_FEATURE_INVALID", nbFeature_<%=cid %> - nbFeatureValid_<%=cid %>);

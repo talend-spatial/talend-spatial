@@ -1,0 +1,314 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+" 
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas!=null)&&(metadatas.size()>0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata!=null) {
+        String cid = node.getUniqueName();
+
+        String filename = ElementParameterParser.getValue(node, "__FILENAME__"); 
+        String geometry = ElementParameterParser.getValue(node,"__GEOMETRY_TYPE__");
+        String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+        String gpxType = ElementParameterParser.getValue(node,"__GPX_TYPE__"); 
+        String namespace = ElementParameterParser.getValue(node,"__NS_URL__");      
+        String dbHost = ElementParameterParser.getValue(node,"__DB_HOST__");
+        String dbPort = ElementParameterParser.getValue(node,"__DB_PORT__");
+        String dbUser = ElementParameterParser.getValue(node,"__DB_USER__");
+        String dbPasswd = ElementParameterParser.getValue(node,"__DB_PASSWD__");
+        String dbName = ElementParameterParser.getValue(node,"__DB_NAME__");
+        String dbSchema = ElementParameterParser.getValue(node,"__DB_SCHEMA__");
+        String dbTable = ElementParameterParser.getValue(node,"__DB_TABLE__");
+        String dbCol = ElementParameterParser.getValue(node,"__DB_COL__");
+        String md = ElementParameterParser.getValue(node,"__MD__");
+        String mdTpl = ElementParameterParser.getValue(node,"__MDTPL__");
+        String mdTitle = ElementParameterParser.getValue(node,"__MDTITLE__");
+        String mdAbstract = ElementParameterParser.getValue(node,"__MDABSTRACT__");
+        String mdPurpose = ElementParameterParser.getValue(node,"__MDPURPOSE__");
+        String mdTopicCategory = ElementParameterParser.getValue(node,"__MDTOPICCATEGORY__");
+        String targetCRS = ElementParameterParser.getValue(node,"__CRS__");
+        String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
+        String mifPrjFile = ElementParameterParser.getValue(node,"__MIFPRJ_FILE__");
+%>
+        /* initialize feature count */
+        int nbFeature_<%=cid %> = 0;
+       
+        org.opengis.referencing.crs.CoordinateReferenceSystem 
+                targetCRS_<%=cid %> = null;
+<%
+        /* Projection */
+        // TODO : if GPX CRS = EPSG:4326 
+        if (forceCRS.equals("true")) {
+%>        
+        try {
+            targetCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=targetCRS %>);
+        } catch (Exception e) {
+            System.out.println (e.getMessage());
+        }
+<%
+        }
+        
+
+        /* Metadata */ 
+        if (md.equals("true")) {
+%>
+        /* Initialize metadata (ie. Load template and set main element) */
+        org.talend.sdi.metadata.Metadata md_<%=cid %> = new org.talend.sdi.metadata.Metadata (
+                                                    org.talend.sdi.metadata.Metadata.Standard.ISO,
+                                                    "<%=mdTitle %>",
+                                                    "<%=mdPurpose %>",
+                                                    "<%=mdAbstract %>",
+                                                    "<%=mdTopicCategory %>",
+                                                    <%=mdTpl %>
+                                                    );
+        if (! md_<%=cid %>.setDateStamp ())
+            System.out.println ("<%=cid %> | Metadata | Can't set date stamp");
+
+<%
+            /* Type of feature from Codelist complex/composite/solid/surface/curve/point */
+            if (geometry.equals("com.vividsolutions.jts.geom.Point") ||
+                geometry.equals("com.vividsolutions.jts.geom.MultiPoint")) {
+%>
+                if (! md_<%=cid %>.setGeometricObjectType ("point"))
+                    System.out.println ("<%=cid %> | Metadata | Can't set geom type");
+<%
+            } else  if (geometry.equals("com.vividsolutions.jts.geom.Polygon") ||
+                geometry.equals("com.vividsolutions.jts.geom.MultiPolygon")) {
+%>
+                if (! md_<%=cid %>.setGeometricObjectType ("surface"))
+                    System.out.println ("<%=cid %> | Metadata | Can't set geom type");
+<%
+            } else  if (geometry.equals("com.vividsolutions.jts.geom.Line") ||
+                geometry.equals("com.vividsolutions.jts.geom.MultiLine")) {
+%>
+                if (! md_<%=cid %>.setGeometricObjectType ("curve"))
+                    System.out.println ("<%=cid %> | Metadata | Can't set geom type");
+<%
+            } else {
+%>
+                if (! md_<%=cid %>.setGeometricObjectType ("complex"))
+                    System.out.println ("<%=cid %> | Metadata | Can't set geom type");
+<%
+            }
+%>
+
+
+        /* Initialize element to be generated from flow */
+        org.geotools.geometry.jts.ReferencedEnvelope bbox<%=cid %> = new org.geotools.geometry.jts.ReferencedEnvelope();
+<%
+        }
+
+        if (formatType.equals("SHAPEFILE")) {
+%>
+        
+        /* create shapefile data store */
+        java.io.File shapefile_<%=cid %> = new java.io.File(<%=filename %>);
+        org.geotools.data.DataStore store_<%=cid %> =
+            new org.geotools.data.shapefile.ShapefileDataStore(shapefile_<%=cid %>.toURL());
+        
+        String schemaName_<%=cid %> = "aa";
+        
+<%
+        } else if (formatType.equals("GPX")) {
+%>
+        
+        /* create GPX data store */
+        java.io.File gpxfile_<%=cid %> = new java.io.File(<%=filename %>);
+        org.geotools.data.DataStore store_<%=cid %> =
+             new org.geotools.data.gpx.GpxDataStore(
+                    gpxfile_<%=cid %>.toURL(), java.net.URI
+                            .create(<%=namespace %>));
+        
+        String schemaName_<%=cid %> = <%=gpxType %>;
+        
+<%
+        } else if (formatType.equals("POSTGIS")) {
+%>  
+
+        java.util.Map params_<%=cid %> = new java.util.HashMap();
+        params_<%=cid %>.put("dbtype", "postgis");                //must be postgis
+        params_<%=cid %>.put("host", <%=dbHost %>);               //the name or ip address of the machine running PostGIS
+        params_<%=cid %>.put("port", new Integer(<%=dbPort %>));  //the port that PostGIS is running on (generally 5432)
+        params_<%=cid %>.put("database", <%=dbName %>);           //the name of the database to connect to.
+        params_<%=cid %>.put("user", <%=dbUser %>);               //the user to connect with
+        params_<%=cid %>.put("passwd", <%=dbPasswd %>);           //the password of the user.
+        params_<%=cid %>.put("schema", <%=dbSchema %>);           //the schema.
+        
+        /* create PostgisDataStoreFactory */
+        org.geotools.data.postgis.PostgisDataStoreFactory factory_<%=cid %> = 
+            new org.geotools.data.postgis.PostgisDataStoreFactory(); 
+        
+        /* create postgis database store */
+        /* org.geotools.data.DataStore store_<%=cid %> = org.geotools.data.DataStoreFinder.getDataStore(params_<%=cid %>); */
+        
+        org.geotools.data.DataStore store_<%=cid %> = factory_<%=cid %>.createDataStore(params_<%=cid %>); 
+        
+        String schemaName_<%=cid %> = <%=dbTable %>.toLowerCase();
+        
+<%
+        } else if (formatType.equals("MIFMID")) {
+%>
+        org.geotools.data.mif.MIFProjReader prjReader_<%=cid %> = new org.geotools.data.mif.MIFProjReader(<%=mifPrjFile %>);
+        String mifCrs_<%=cid %> = prjReader_<%=cid %>.checkSRID(targetCRS_<%=cid %>);
+        java.util.HashMap mifParams_<%=cid %> = new java.util.HashMap();
+        if (!mifCrs_<%=cid %>.equals("")) {
+            mifParams_<%=cid %>.put(org.geotools.data.mif.MIFDataStore.HCLAUSE_COORDSYS,
+                "earth projection " + mifCrs_<%=cid %>);
+        }
+        java.io.File outFile_<%=cid %> = new java.io.File(<%=filename %>);
+        String schemaName_<%=cid %> = outFile_<%=cid %>.getName().substring(0, outFile_<%=cid %>.getName().lastIndexOf("."));
+        org.geotools.data.DataStore store_<%=cid %> =
+            new org.geotools.data.mif.MIFDataStore(outFile_<%=cid %>.getParent(), mifParams_<%=cid %>);
+
+<%
+        }
+%>      
+
+        /* create a map of columns for later use */
+        java.util.Map<String, Integer> map_<%=cid %> = new java.util.HashMap<String, Integer>();
+
+        /* create schema */
+        org.geotools.feature.simple.SimpleFeatureTypeBuilder ftBuilder_<%=cid %> = new org.geotools.feature.simple.SimpleFeatureTypeBuilder();
+        ftBuilder_<%=cid %>.setName(schemaName_<%=cid %>);
+
+	/* Initialize Attribute Type Builder */
+        org.geotools.feature.AttributeTypeBuilder geoAttBuilder_<%=cid %> = null;
+        org.geotools.feature.AttributeTypeBuilder attBuilder_<%=cid %> = null;       
+ 
+<%
+        // TODO : Use column map to produce metadata using ISO 19110 ? 
+ 
+        List<IMetadataColumn> columns = metadata.getListColumns();
+        int sizeColumns = columns.size();
+        int colIdx = 0;
+        
+        // MIFFile object: Geometry must be the first attribute in schema
+        for (int i = 0; i < sizeColumns; i++) {
+            IMetadataColumn column = columns.get(i);
+            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+ 
+            /* Hack: Postgres doesn't like uppercase column names */
+            String columnLabel = column.getLabel();
+            if (formatType.equals("POSTGIS")) {
+                columnLabel = column.getLabel().toLowerCase();
+            }
+            if (javaType == JavaTypesManager.GEOMETRY) {
+                // If using CRS in PostGIS context set the CRS at the feature level
+%>
+	geoAttBuilder_<%=cid %> = new org.geotools.feature.AttributeTypeBuilder();
+	geoAttBuilder_<%=cid %>.setBinding(<%=geometry %>.class);
+	geoAttBuilder_<%=cid %>.setNillable(true);
+<%
+                if (forceCRS.equals("true")) {
+%>
+        geoAttBuilder_<%=cid %>.setCRS(targetCRS_<%=cid %>);
+<%
+                } 
+                if (formatType.equals("POSTGIS")) {
+%>
+        geoAttBuilder_<%=cid %>.setName(<%=dbCol %>);
+        ftBuilder_<%=cid %>.add(geoAttBuilder_<%=cid %>.buildDescriptor(<%=dbCol %>, geoAttBuilder_<%=cid %>.buildGeometryType()));
+        map_<%=cid %>.put(<%=dbCol %>, <%=colIdx %>);
+<%        
+		} else {
+%> 
+	geoAttBuilder_<%=cid %>.setName("<%=column.getLabel() %>");
+	ftBuilder_<%=cid %>.add(geoAttBuilder_<%=cid %>.buildDescriptor("<%=column.getLabel() %>", geoAttBuilder_<%=cid %>.buildGeometryType()));
+	map_<%=cid %>.put("<%=column.getLabel() %>", <%=colIdx %>);
+<%
+		}
+                break;
+            }
+        }
+
+        // FIXME : Unable to create MIFFile object: Unsupported attribute type: java.lang.Long
+        for (int i = 0; i < sizeColumns; i++) {
+            IMetadataColumn column = columns.get(i);
+            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+            // force nullable to true because geotools won't accept primitive types in schema
+            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
+
+            /* Hack: Postgres doesn't like uppercase column names */
+            String columnLabel = column.getLabel();
+            if (formatType.equals("POSTGIS")) {
+                columnLabel = column.getLabel().toLowerCase();
+            }
+
+            if (javaType != JavaTypesManager.GEOMETRY) {
+                colIdx ++;
+%>
+	attBuilder_<%=cid %> = new org.geotools.feature.AttributeTypeBuilder();
+	attBuilder_<%=cid %>.setName("<%=columnLabel %>");
+	attBuilder_<%=cid %>.setBinding(<%=typeToGenerate %>.class);
+	attBuilder_<%=cid %>.setNillable(<%=column.isNullable() %>);
+<%
+				// Set lentgh in schema if specified.
+				// Check 0 value too due to stange TOS behavior removing specified length in schema
+				if (column.getLength() != null && !column.getLength().toString().equals("0")) {	
+%>
+	attBuilder_<%=cid %>.setLength(<%=column.getLength() %>);
+	
+<%
+				}
+%>
+                
+	ftBuilder_<%=cid %>.add(attBuilder_<%=cid %>.buildDescriptor("<%=columnLabel %>",attBuilder_<%=cid %>.buildType()));
+                
+        map_<%=cid %>.put("<%=column.getLabel() %>", <%=colIdx %>);
+<% 
+            }
+        }
+        
+        if (formatType.equals("POSTGIS")) {
+%>
+        /* drop table if it already exists */
+        try {
+            org.geotools.data.postgis.PostgisDataStore pgStore =  
+                (org.geotools.data.postgis.PostgisDataStore) store_<%=cid %>;
+            java.sql.Connection conn = pgStore.getDataSource().getConnection();
+            conn.setAutoCommit(true);
+            java.sql.Statement statement = conn.createStatement();
+            String sql = "DROP TABLE " + <%=dbSchema %> + "." + schemaName_<%=cid %> + ";";
+            statement.execute(sql);
+            conn.close();
+            System.out.println("INFO: Table " + <%=dbSchema %> + "." + schemaName_<%=cid %> + " dropped.");
+        } catch (Exception e) {
+            // table doesn't exist
+        }
+<%
+        }
+%>
+
+        org.opengis.feature.simple.SimpleFeatureType featureType_<%=cid %> = ftBuilder_<%=cid %>.buildFeatureType();
+        String typeName_<%=cid %> = featureType_<%=cid %>.getTypeName();
+        store_<%=cid %>.createSchema(featureType_<%=cid %>);
+        org.geotools.data.FeatureWriter<org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature> writer_<%=cid %> = 
+        	store_<%=cid %>.getFeatureWriter(typeName_<%=cid %>, org.geotools.data.Transaction.AUTO_COMMIT);
+<%    
+
+
+
+        /* Projection for shapefile - Force Shapefile CRS */ 
+        if (formatType.equals("SHAPEFILE") && forceCRS.equals("true")) {
+%>        
+        ((org.geotools.data.shapefile.ShapefileDataStore)store_<%=cid %>).forceSchemaCRS(targetCRS_<%=cid %>);
+<%
+        }
+        // TODO others.
+    }
+}
+%>

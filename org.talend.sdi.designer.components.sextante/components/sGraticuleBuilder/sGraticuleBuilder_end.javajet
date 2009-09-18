@@ -1,0 +1,10 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        org.talend.core.model.metadata.IMetadataTable
+    	org.talend.core.model.process.IConnection        
+        java.util.List
+    "
+%>
+}

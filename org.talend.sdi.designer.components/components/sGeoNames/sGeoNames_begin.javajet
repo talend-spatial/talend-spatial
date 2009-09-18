@@ -1,0 +1,25 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+%>
+
+System.out.println ("This component is using geonames.org webservices."); 
+System.out.println ("More info on http://www.geonames.org");
+
+int nbFeature_<%=cid %> = 0;
+org.apache.commons.httpclient.HttpClient httpclient_<%=cid %> = 
+	new org.apache.commons.httpclient.HttpClient ();
+
+System.getProperties().setProperty("httpclient.useragent", "SpatialDataIntegrator");
+	

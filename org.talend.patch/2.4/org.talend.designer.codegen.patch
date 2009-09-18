@@ -1,0 +1,99 @@
+Index: META-INF/MANIFEST.MF
+===================================================================
+--- META-INF/MANIFEST.MF	(revision 16133)
++++ META-INF/MANIFEST.MF	(working copy)
+@@ -23,3 +23,5 @@
+  org.talend.designer.codegen.exception
+ Bundle-Vendor: .Talend SA.
+ Bundle-Activator: org.talend.designer.codegen.CodeGeneratorActivator
++Bundle-ClassPath: org.talend.sdi.jar,
++ .
+Index: build.properties
+===================================================================
+--- build.properties	(revision 16133)
++++ build.properties	(working copy)
+@@ -4,6 +4,8 @@
+                META-INF/,\
+                .,\
+                icons/,\
+-               resources/
++               resources/,\
++               org.talend.sdi.jar
+ javacSource=1.5
+ javacTarget=1.5
++source.org.talend.sdi.jar = src/main/java/
+Index: resources/footer.javajet
+===================================================================
+--- resources/footer.javajet	(revision 16133)
++++ resources/footer.javajet	(working copy)
+@@ -177,7 +177,7 @@
+ 			      context.<%=ctxParam.getName()%>=null;
+ 			  }
+ 			  <%
+-			    }else if(typeToGenerate.equals("Object")||typeToGenerate.equals("String") )
++			    }else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("String") )
+ 			    {
+ 			    %>
+ 			    context.<%=ctxParam.getName()%>=(<%=typeToGenerate%>) context.getProperty("<%=ctxParam.getName()%>");
+Index: resources/header.javajet
+===================================================================
+--- resources/header.javajet	(revision 16133)
++++ resources/header.javajet	(working copy)
+@@ -74,6 +74,8 @@
+ import java.io.IOException;
+ import java.util.Comparator;
+ 
++import org.talend.sdi.geometry.Geometry;
++
+ <%
+ 	List<INode> nodesWithImport = process.getNodesWithImport();
+ 	if(nodesWithImport != null) {
+Index: resources/subprocess_header.javajet
+===================================================================
+--- resources/subprocess_header.javajet	(revision 16133)
++++ resources/subprocess_header.javajet	(working copy)
+@@ -288,7 +288,7 @@
+                				this.<%=column.getLabel() %> = byteArray;
+            				}
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 			 		hasAtLeastOneObjectType = true;
+ 					%>
+ 						this.<%=column.getLabel() %> = (<%= typeToGenerate %>) dis.readObject();
+@@ -389,7 +389,7 @@
+                				dos.write(this.<%=column.getLabel() %>);
+ 		            	}
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 					%>
+        			    	dos.writeObject(this.<%=column.getLabel() %>);
+ 					<%
+@@ -450,7 +450,7 @@
+ 				hasAtLeastOneRead = true;
+ 			 	String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+ 
+-			 	if(typeToGenerate.equals("Object")) {
++			 	if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry")) {
+ 			 		hasAtLeastOneObjectType = true;
+ 			 	}
+ 			 	
+@@ -490,7 +490,7 @@
+            			    	this.<%=column.getLabel() %> = new Date(dis.readLong());
+            				}
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 					%>
+        			    	this.<%=column.getLabel() %> = (<%= typeToGenerate %>) ois.readObject();
+ 					<%
+@@ -585,7 +585,7 @@
+            			    	dos.writeLong(this.<%=column.getLabel() %>.getTime());
+ 		            	}
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 					%>
+        			    	oos.writeObject(this.<%=column.getLabel() %>);
+ 					<%

@@ -1,0 +1,111 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.process.ElementParameterParser
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List
+    "
+%>
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+
+    String filename = "";
+    String cidForward = "";
+    String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+    String md = ElementParameterParser.getValue(node,"__MD__");
+    String cid = node.getUniqueName();
+    /* Hack : When forwarded context variable are not initialized 
+        The name of the component is replaced by 
+        the name of the component + "_" + 
+        name of the template used
+    
+        eg. globalMap.put("sMapinfoOutput_1_SO_NB_FEATURE", ""); instead of 
+        globalMap.put("sMapinfoOutput_1_NB_FEATURE", ""); 
+        ... then you got null exception when calling those variable from 
+        another component.
+        */
+    if (cid.endsWith ("_SO")) {
+        cidForward = cid.substring(0, cid.length() - 3); // Using a forwarded component
+    } else {
+        cidForward = cid; // Using uGeoOutput directly
+    }
+
+
+    if (formatType.equals("POSTGIS")) {
+        // File for PostGis dataset will be stored in Talend default file dir. 
+        // TODO : Could we store this in database ?
+        filename = ElementParameterParser.getValue(node, "__COMP_DEFAULT_FILE_DIR__") +
+                ElementParameterParser.getValue(node,"__DB_NAME__") + "+ \"_\" +" +
+                ElementParameterParser.getValue(node,"__DB_TABLE__");
+    } else {
+        filename = ElementParameterParser.getValue(node, "__FILENAME__"); 
+    }
+
+
+
+    List<IMetadataTable> metadatas = node.getMetadataList();
+    if ((metadatas!=null)&&(metadatas.size()>0)) {
+        IMetadataTable metadata = metadatas.get(0);
+        if (metadata!=null) {
+            
+
+            if (md.equals("true")) {
+                if (!formatType.equals("POSTGIS")) {
+%>
+    /* OnlineSrc*/
+    if (! md_<%=cid %>.setOnlineResource (<%=filename %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set online resource elemnet");
+<%
+                }
+                // TODO : Can we add a link to a database into an onlineresource md element ? using which syntax ? 
+                // use Protocol : jdbc / URL jdbc syntax / Name : table name ?
+%>
+    /* Bbox info */
+    if (! md_<%=cid %>.setEX_GeographicBoundingBox (
+            bbox<%=cid %>.getMinX(),
+            bbox<%=cid %>.getMinY(),
+            bbox<%=cid %>.getMaxX(),
+            bbox<%=cid %>.getMaxY()
+            ))
+        System.out.println ("<%=cid %> | Metadata | Can't set extent");
+
+    /* Number of features */
+    if (! md_<%=cid %>.setGeometricObjectCount (nbFeature_<%=cid %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set object count");
+
+    /* TODO : proj */
+    /* TODO : Add contact info based on talend user ? */
+    /* TODO : Add job name in lineage ? */
+    
+    md_<%=cid %>.write(<%=filename %>, null);
+    globalMap.put("<%=cidForward %>_METADATA", md_<%=cid %>.toString());
+<%
+            } else {
+%>
+     globalMap.put("<%=cidForward %>_METADATA", "");
+<%
+            }
+
+%>
+     writer_<%=cid %>.close();
+     store_<%=cid %>.dispose();
+     java.io.File file_<%=cid %> = new java.io.File (<%=filename %>);
+     
+     String udigType_<%=cid %> = 
+     	(file_<%=cid %>.getName().lastIndexOf(".")!=-1?
+      		file_<%=cid %>.getName().substring(0, file_<%=cid %>.getName().lastIndexOf(".")):
+      		file_<%=cid %>.getName());
+      		// FIXME : handle postgis tables
+      		
+     String udigResourceId_<%=cid %> = <%=filename %> + "#" + udigType_<%=cid %>;
+
+            
+     globalMap.put("<%=cidForward %>_NB_FEATURE", nbFeature_<%=cid %>);
+     globalMap.put("<%=cidForward %>_UDIG_GEORESOURCEID", udigResourceId_<%=cid %>);
+     globalMap.put("<%=cidForward %>_UDIG_GEORESOURCE", <%=filename %>);
+<%
+        }
+    }
+%>

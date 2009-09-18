@@ -1,0 +1,48 @@
+== How-to run TOS from source ? ==
+http://www.talendforge.org/wiki/doku.php?id=dev:run_from_svn
+
+== How-to run SDI from source ? ==
+ * Run TOS from source.
+ * Import Eclipse project in TOS workspace.
+ * Apply the following patch to TOS :
+  * TODO
+
+== How-to build ? ==
+ * Download delta pack http://update.eclipse.org/downloads/drops/R-3.4-200806172000/index.php
+ * TODO : add target plaform
+ * TODO : add eclipse
+ * start eclipse
+ * apply patch to TOS plugin
+  * TODO list plugins
+ * define a directory to export all product and features (eg. ~/tmp/sdi.1.4.0.RC0).
+ * in org.talend.rcp.branding.sdi, Export sdi.product
+  * (if needed) Select all required platform
+ * in org.talend.rcp.branding.sdi-feature, go to include features, export.
+  * Export all features (excluding branding Jasper and TOS) 
+  * Ask Talend which one are required in order to reduce size of the package ?
+  * ... time for a coffee ...
+ * Fix org.talend.librairies issue (TODO FIXME): this plugin is not unzipped by the export process. It should ! So export this plugin manually unzip it and replace it in builds.
+{{{
+cd ~/tmp/1.4.0.RC0-plugins/plugin
+mkdir org.talend.librairies_2.2.0.v20090909
+mv org.talend.librairies_2.2.0.v20090909.jar org.talend.librairies_2.2.0.v20090909/.
+cd org.talend.librairies_2.2.0.v20090909
+unzip *
+rm org.talend.librairies_2.2.0.v20090909.jar
+}}}
+ * Clean & pack all
+{{{
+./build.sh ~/tmp/sdi.1.4.0.RC0 ~/tmp/1.4.0.RC0-plugins/plugins ~/myworkspace/etl/eclipse-target 1.4.0
+./package.sh ~/tmp/sdi.1.4.0.RC0 ~/tmp/1.4.0.RC0-plugins/plugins ~/myworkspace/etl/eclipse-target 1.4.0
+}}}
+ * Publish
+scp *.zip admin@c2cpc19.camptocamp.com:/var/www/www.spatialdataintegrator.org/htdocs/download/1.4/.
+
+
+How-to check ?
+{{{
+unzip SDI-Linux_x86-V1.4.0.zip
+cd SDI-Linux_x86-V1.4.0
+./SpaDIn -debug -consoleLog
+}}}
+

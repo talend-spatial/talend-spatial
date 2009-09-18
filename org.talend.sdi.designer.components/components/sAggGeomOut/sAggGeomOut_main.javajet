@@ -1,0 +1,122 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.process.IConnectionCategory
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+    java.util.List
+    java.util.Map
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String operation = "";
+
+IMetadataColumn geometryColumn = null;
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        List<IMetadataColumn> columns = metadata.getListColumns();
+        for (int j = 0; j < columns.size(); j++) {
+            IMetadataColumn column = columns.get(j);
+            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+            if(typeToGenerate.equals("Geometry")) {
+                geometryColumn = column;
+                break;
+            }
+        }
+    }
+}
+if (geometryColumn == null){
+    return "error(\"Cannot find a geometry column\");";
+}
+String colGeo = geometryColumn.getLabel();
+String colAgg = ElementParameterParser.getValue(node,"__COL__");
+
+
+List< ? extends IConnection> conns = node.getIncomingConnections();
+for (IConnection conn : conns) {
+    if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+        operation = ElementParameterParser.getValue(node,"__OPERATION__");
+%>
+if (hash_<%=colAgg %>_<%=cid %>.containsKey(<%=conn.getName() %>.<%=colAgg %>)) {
+    operation_result_<%=cid %> = hash_<%=colAgg %>_<%=cid %>.get(<%=conn.getName() %>.<%=colAgg %>);
+    // Dissolve geometry
+    org.talend.sdi.geometry.Geometry geomCur = (org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>;
+
+<%
+        /* 
+         * Geom operation according to component flavor.
+         */
+        if (operation.equals("union")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        ((org.talend.sdi.geometry.Geometry) operation_result_<%=cid %>.<%=colGeo %>).union(geomCur);
+
+<%
+        } else if (operation.equals("convexHullAccumulator")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        ((org.talend.sdi.geometry.Geometry) operation_result_<%=cid %>.<%=colGeo %>).union(geomCur).convexHull();
+
+<%
+        } else if (operation.equals("boundingBoxAccumulator")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        ((org.talend.sdi.geometry.Geometry) operation_result_<%=cid %>.<%=colGeo %>).union(geomCur).getEnvelope();
+
+<%
+        }
+%>
+
+} else {
+    operation_result_<%=cid %> = new OperationStruct<%=cid %>();
+    // Add id to the Operation ?
+
+<%
+        /* 
+         * Geom operation according to component flavor.
+         */
+        if (operation.equals("union")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        (org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>;
+
+<%
+        } else if (operation.equals("convexHullAccumulator")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        ((org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>).convexHull();
+
+<%
+        } else if (operation.equals("boundingBoxAccumulator")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> =
+        ((org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>).getEnvelope();
+
+<%
+        }
+%>
+
+    hash_<%=colAgg %>_<%=cid %>.put(<%=conn.getName() %>.<%=colAgg %>, operation_result_<%=cid %>);
+}
+    // TODO : add nb of features aggregated
+<%
+    }
+}
+%>

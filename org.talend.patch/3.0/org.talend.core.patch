@@ -1,0 +1,467 @@
+Index: src/main/java/org/talend/core/model/metadata/MappingFileLoader.java
+===================================================================
+--- src/main/java/org/talend/core/model/metadata/MappingFileLoader.java	(revision 26217)
++++ src/main/java/org/talend/core/model/metadata/MappingFileLoader.java	(working copy)
+@@ -55,7 +55,7 @@
+ 
+ 			JavaType[] javaTypes = JavaTypesManager.getJavaTypes();
+ 			for (JavaType javaType : javaTypes) {
+-				hAllTalendTypes.add(javaType.getId());
++		    	 hAllTalendTypes.add(javaType.getId());
+ 			}
+ 
+ 		} else if (codeLanguage == ECodeLanguage.PERL) {
+Index: src/main/java/org/talend/core/model/metadata/types/JavaTypesManager.java
+===================================================================
+--- src/main/java/org/talend/core/model/metadata/types/JavaTypesManager.java	(revision 26217)
++++ src/main/java/org/talend/core/model/metadata/types/JavaTypesManager.java	(working copy)
+@@ -75,6 +75,8 @@
+ 
+     public static final JavaType OBJECT = new JavaType(Object.class);
+ 
++	public static final JavaType GEOMETRY = new JavaType(org.talend.sdi.geometry.Geometry.class);
++
+     public static final JavaType LIST = new JavaType(List.class);
+ 
+     public static final JavaType BIGDECIMAL = new JavaType(BigDecimal.class);
+@@ -82,7 +84,7 @@
+     public static final JavaType PASSWORD = new JavaType(String.class, true, "Password");
+ 
+     public static final JavaType[] JAVA_TYPES = new JavaType[] { BOOLEAN, BYTE, BYTE_ARRAY, CHARACTER, DATE, DOUBLE, FLOAT,
+-            BIGDECIMAL, INTEGER, LONG, OBJECT, SHORT, STRING, LIST };
++            BIGDECIMAL, INTEGER, LONG, OBJECT, GEOMETRY, SHORT, STRING, LIST };
+ 
+     private static Map<String, JavaType> shortNameToJavaType;
+ 
+@@ -143,7 +145,7 @@
+         shortNameToJavaType.put(nullableName, javaType);
+         canonicalClassNameToJavaType.put(javaType.getNullableClass().getCanonicalName(), javaType);
+         labelToJavaType.put(javaType.getLabel(), javaType);
+-        idToJavaType.put(javaType.getId(), javaType);
++       	idToJavaType.put(javaType.getId(), javaType);
+         javaTypes.add(javaType);
+     }
+ 
+@@ -166,7 +168,7 @@
+      * @return primitive name if JavaType is primitive (boolean, int, etc.), else return Object type name (String, Date,
+      * etc.)
+      */
+-    public static String getShortNameFromJavaType(JavaType javaType) {
++    public static String getShortNameFromJavaType(JavaType javaType) {        
+         Class primitiveClass = javaType.getPrimitiveClass();
+         if (primitiveClass != null) {
+             return primitiveClass.getSimpleName();
+Index: src/main/java/org/talend/core/model/metadata/types/ContextParameterJavaTypeManager.java
+===================================================================
+--- src/main/java/org/talend/core/model/metadata/types/ContextParameterJavaTypeManager.java	(revision 26217)
++++ src/main/java/org/talend/core/model/metadata/types/ContextParameterJavaTypeManager.java	(working copy)
+@@ -31,7 +31,7 @@
+ 
+     public static final JavaType[] JAVA_TYPES = new JavaType[] { JavaTypesManager.BOOLEAN, JavaTypesManager.CHARACTER,
+             JavaTypesManager.DATE, JavaTypesManager.DOUBLE, JavaTypesManager.FLOAT, JavaTypesManager.INTEGER,
+-            JavaTypesManager.LONG, JavaTypesManager.SHORT, JavaTypesManager.STRING, JavaTypesManager.OBJECT,
++            JavaTypesManager.LONG, JavaTypesManager.SHORT, JavaTypesManager.STRING, JavaTypesManager.OBJECT, JavaTypesManager.GEOMETRY,
+             JavaTypesManager.BIGDECIMAL, JavaTypesManager.FILE, JavaTypesManager.DIRECTORY, JavaTypesManager.VALUE_LIST,
+             JavaTypesManager.PASSWORD };
+ 
+Index: META-INF/MANIFEST.MF
+===================================================================
+--- META-INF/MANIFEST.MF	(revision 26217)
++++ META-INF/MANIFEST.MF	(working copy)
+@@ -27,7 +27,8 @@
+  org.eclipse.ui.views.properties.tabbed,
+  org.talend.commons.ui,
+  org.talend.commons,
+- org.eclipse.gmf.runtime.diagram.ui.properties
++ org.eclipse.gmf.runtime.diagram.ui.properties,
++ org.talend.libraries.sdi;bundle-version="0.0.1"
+ Export-Package: org.talend.core,
+  org.talend.core.context,
+  org.talend.core.database,
+Index: mappings/mapping_Mysql.xml
+===================================================================
+--- mappings/mapping_Mysql.xml	(revision 26217)
++++ mappings/mapping_Mysql.xml	(working copy)
+@@ -110,6 +110,8 @@
+ 					<dbType type="POLYGON" />
+ 					<dbType type="SET" />
+ 					<dbType type="TINYBLOB" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_Oracle.xml
+===================================================================
+--- mappings/mapping_Oracle.xml	(revision 26217)
++++ mappings/mapping_Oracle.xml	(working copy)
+@@ -30,7 +30,8 @@
+ 			<dbType type="RAW" ignoreLen="false" ignorePre="true" />
+ 			<dbType type="LONG RAW" ignoreLen="true" ignorePre="true" />
+ 			<dbType type="ROWID" ignoreLen="true" ignorePre="true"/>
+-			<dbType type="UROWID" ignoreLen="true" ignorePre="true" />
++			<dbType type="UROWID" ignoreLen="true" ignorePre="true" />
++			<dbType type="MDSYS.SDO_GEOMETRY" ignoreLen="true" ignorePre="true" />
+ 		</dbTypes>
+ 
+ 		<language name="java">
+@@ -83,6 +84,9 @@
+ 					<dbType type="XMLTYPE"/>
+ 					<dbType type="ROWID"/>
+ 					<dbType type="UROWID"/>
++				</talendType>
++				<talendType type="id_Geometry">
++					<dbType type="MDSYS.SDO_GEOMETRY" />
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true"/>
+@@ -185,7 +189,10 @@
+ 				</dbType>
+ 				<dbType type="UROWID">
+ 					<talendType type="id_Object" default="true" />				
+-				</dbType>																																
++				</dbType>
++				<dbType type="MDSYS.SDO_GEOMETRY" >
++					<talendType type="id_Geometry" default="true" />
++				</dbType>
+ 			</dbToTalendTypes>
+ 		</language>
+ 		<language name="perl">
+Index: mappings/mapping_Postgres.xml
+===================================================================
+--- mappings/mapping_Postgres.xml	(revision 26217)
++++ mappings/mapping_Postgres.xml	(working copy)
+@@ -54,7 +54,8 @@
+ 			<dbType type="TIMETZ" ignoreLen="true" ignorePre="true"  />
+ 			<dbType type="VARBIT" ignoreLen="true" ignorePre="true"  />			
+ 			<dbType type="VARCHAR" defaultLength="200" ignorePre="true" />
+-			<dbType type="XID" ignoreLen="true" ignorePre="true"  />
++			<dbType type="XID" ignoreLen="true" ignorePre="true"  />
++			<dbType type="GEOMETRY" ignoreLen="true" ignorePre="true"  />
+ 			
+ 			<dbType type="_ABSTIME" ignoreLen="true" ignorePre="true" />
+ 			<dbType type="_ACLITEM" ignoreLen="true" ignorePre="true" />
+@@ -241,6 +242,9 @@
+ 					<dbType type="_OIDVECTOR" />
+ 					<dbType type="_PATH" />
+ 					<dbType type="POINT" default="true" />				
++				</talendType>
++				<talendType type="id_Geometry">
++					<dbType type="GEOMETRY" />
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INT2"   default="true" />
+@@ -502,6 +506,9 @@
+ 				</dbType>							
+ 				<dbType type="_BOOL" >
+ 					<talendType type="id_Object" default="true" />				
++				</dbType>
++				<dbType type="GEOMETRY" >
++					<talendType type="id_Geometry" default="true" />
+ 				</dbType>
+ 				<dbType type="_POINT" >
+ 					<talendType type="id_Object" default="true" />				
+Index: mappings/mapping_MsOdbc.xml
+===================================================================
+--- mappings/mapping_MsOdbc.xml	(revision 26217)
++++ mappings/mapping_MsOdbc.xml	(working copy)
+@@ -358,6 +358,8 @@
+ 					<dbType type="SQL_VARIANT" />
+ 					<dbType type="LINE" />
+ 					<dbType type="G" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="BYTE" />
+Index: mappings/mapping_PostgresPlus.xml
+===================================================================
+--- mappings/mapping_PostgresPlus.xml	(revision 26217)
++++ mappings/mapping_PostgresPlus.xml	(working copy)
+@@ -54,7 +54,8 @@
+ 			<dbType type="TIMETZ" ignoreLen="true" ignorePre="true"  />
+ 			<dbType type="VARBIT" ignoreLen="true" ignorePre="true"  />			
+ 			<dbType type="VARCHAR" defaultLength="200" ignorePre="true" />
+-			<dbType type="XID" ignoreLen="true" ignorePre="true"  />
++			<dbType type="XID" ignoreLen="true" ignorePre="true"  />
++			<dbType type="GEOMETRY" ignoreLen="true" ignorePre="true"  />
+ 			
+ 			<dbType type="_ABSTIME" ignoreLen="true" ignorePre="true" />
+ 			<dbType type="_ACLITEM" ignoreLen="true" ignorePre="true" />
+@@ -241,6 +242,9 @@
+ 					<dbType type="_OIDVECTOR" />
+ 					<dbType type="_PATH" />
+ 					<dbType type="POINT" default="true" />				
++				</talendType>
++				<talendType type="id_Geometry">
++					<dbType type="GEOMETRY" />
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INT2"   default="true" />
+@@ -508,7 +512,10 @@
+ 				</dbType>				
+ 				<dbType type="_POLYGON" >
+ 					<talendType type="id_Object" default="true" />				
+-				</dbType>				
++				</dbType>		
++				<dbType type="GEOMETRY" >
++					<talendType type="id_Geometry" default="true" />
++				</dbType>
+ 				<dbType type="_FLOAT4" >
+ 					<talendType type="id_Object" default="true" />				
+ 				</dbType>				
+Index: mappings/mapping_ParAccel.xml
+===================================================================
+--- mappings/mapping_ParAccel.xml	(revision 26217)
++++ mappings/mapping_ParAccel.xml	(working copy)
+@@ -241,6 +241,8 @@
+ 					<dbType type="_OIDVECTOR" />
+ 					<dbType type="_PATH" />
+ 					<dbType type="POINT" default="true" />				
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INT2"   default="true" />
+Index: mappings/mapping_Interbase.xml
+===================================================================
+--- mappings/mapping_Interbase.xml	(revision 26217)
++++ mappings/mapping_Interbase.xml	(working copy)
+@@ -64,6 +64,8 @@
+ 				</talendType>
+ 				<talendType type="id_Object">
+ 					<dbType type="BLOB" default="true"/>
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true"/>
+Index: mappings/mapping_HSQLDB.xml
+===================================================================
+--- mappings/mapping_HSQLDB.xml	(revision 26217)
++++ mappings/mapping_HSQLDB.xml	(working copy)
+@@ -99,6 +99,8 @@
+ 				<talendType type="id_Object">
+ 					<dbType type="OBJECT" default="true"/>
+ 					<dbType type="OTHER"/>
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 			</talendToDbTypes>
+ 			<dbToTalendTypes>
+Index: mappings/mapping_Netezza.xml
+===================================================================
+--- mappings/mapping_Netezza.xml	(revision 26217)
++++ mappings/mapping_Netezza.xml	(working copy)
+@@ -87,6 +87,8 @@
+ 				</talendType>
+ 				<talendType type="id_Object">
+ 					<dbType type="VARCHAR" default="true"/>
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true"/>
+Index: mappings/mapping_sap.xml
+===================================================================
+--- mappings/mapping_sap.xml	(revision 26217)
++++ mappings/mapping_sap.xml	(working copy)
+@@ -69,6 +69,8 @@
+ 				<talendType type="id_Short">
+ 					<dbType type="INT" default="true" />
+ 				</talendType>
++				<talendType type="id_Geometry">
++				</talendType>
+ 				<talendType type="id_String">
+ 					<dbType type="STRING" default="true" />
+ 					<dbType type="XSTRING" />
+Index: mappings/mapping_Teradata.xml
+===================================================================
+--- mappings/mapping_Teradata.xml	(revision 26217)
++++ mappings/mapping_Teradata.xml	(working copy)
+@@ -71,6 +71,8 @@
+ 					<dbType type="LONG RAW"/>
+ 					<dbType type="ROWID"/>
+ 				</talendType>
++				<talendType type="id_Geometry">
++				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INTEGER" default="true" />
+ 				</talendType>
+Index: mappings/mapping_Sybase.xml
+===================================================================
+--- mappings/mapping_Sybase.xml	(revision 26217)
++++ mappings/mapping_Sybase.xml	(working copy)
+@@ -101,6 +101,8 @@
+ 					<dbType type="BINARY" default="true"/>
+ 					<dbType type="VARBINARY" />
+ 					<dbType type="UNIQUEIDENTIFIER" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_Firebird.xml
+===================================================================
+--- mappings/mapping_Firebird.xml	(revision 26217)
++++ mappings/mapping_Firebird.xml	(working copy)
+@@ -68,6 +68,8 @@
+ 				</talendType>
+ 				<talendType type="id_Object">
+ 					<dbType type="BLOB" default="true"/>
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_Ingres.xml
+===================================================================
+--- mappings/mapping_Ingres.xml	(revision 26217)
++++ mappings/mapping_Ingres.xml	(working copy)
+@@ -94,6 +94,8 @@
+ 					<dbType type="MONEY" default="true"/>
+ 					<dbType type="OBJECT_KEY" />
+ 					<dbType type="TABLE_KEY" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_JavaDB.xml
+===================================================================
+--- mappings/mapping_JavaDB.xml	(revision 26217)
++++ mappings/mapping_JavaDB.xml	(working copy)
+@@ -85,6 +85,8 @@
+ 					<dbType type="BLOB" default="true"/>
+ 					<dbType type="CLOB" />
+ 					<dbType type="XML" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_AS400.xml
+===================================================================
+--- mappings/mapping_AS400.xml	(revision 26217)
++++ mappings/mapping_AS400.xml	(working copy)
+@@ -74,8 +74,10 @@
+ 					<dbType type="SMALLINT" />
+ 					<dbType type="TINYINT" />	
+ 					<dbType type="COUNTER"/>
+-				</talendType>
++				</talendType>
+ 				<talendType type="id_Object">
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_MaxDB.xml
+===================================================================
+--- mappings/mapping_MaxDB.xml	(revision 26217)
++++ mappings/mapping_MaxDB.xml	(working copy)
+@@ -90,6 +90,8 @@
+ 					<dbType type="NCLOB"/>
+ 					<dbType type="BLOB"/>
+ 					<dbType type="LONG BYTE"/>
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true"/>
+Index: mappings/mapping_Informix.xml
+===================================================================
+--- mappings/mapping_Informix.xml	(revision 26217)
++++ mappings/mapping_Informix.xml	(working copy)
+@@ -89,6 +89,8 @@
+ 				<talendType type="id_Object">
+ 					<dbType type="BLOB" default="true"/>
+ 					<dbType type="CLOB" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_Vertica.xml
+===================================================================
+--- mappings/mapping_Vertica.xml	(revision 26217)
++++ mappings/mapping_Vertica.xml	(working copy)
+@@ -51,6 +51,8 @@
+ 					<dbType type="BIGINT" default="true" />
+ 				</talendType>
+ 				<talendType type="id_Object">
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INTEGER" default="true" />
+Index: mappings/mapping_Greenplum.xml
+===================================================================
+--- mappings/mapping_Greenplum.xml	(revision 26217)
++++ mappings/mapping_Greenplum.xml	(working copy)
+@@ -241,6 +241,8 @@
+ 					<dbType type="_OIDVECTOR" />
+ 					<dbType type="_PATH" />
+ 					<dbType type="POINT" default="true" />				
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="INT2"   default="true" />
+Index: mappings/mapping_MSSQL.xml
+===================================================================
+--- mappings/mapping_MSSQL.xml	(revision 26217)
++++ mappings/mapping_MSSQL.xml	(working copy)
+@@ -112,6 +112,8 @@
+ 					<dbType type="IMAGE"></dbType>
+ 					<dbType type="SQL_VARIANT" />
+ 					<dbType type="UNIQUEIDENTIFIER" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="TINYINT" default="true" />
+Index: mappings/mapping_IBMDB2.xml
+===================================================================
+--- mappings/mapping_IBMDB2.xml	(revision 26217)
++++ mappings/mapping_IBMDB2.xml	(working copy)
+@@ -72,7 +72,9 @@
+ 					<dbType type="GRAPHIC"/>
+ 					<dbType type="VARGRAPHIC"/>
+ 					<dbType type="XML"/>
+-				</talendType>			
++				</talendType>
++				<talendType type="id_Geometry">
++				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true"/>
+ 					<dbType type="INTEGER"/>
+Index: mappings/mapping_Access.xml
+===================================================================
+--- mappings/mapping_Access.xml	(revision 26217)
++++ mappings/mapping_Access.xml	(working copy)
+@@ -75,8 +75,10 @@
+ 					<dbType type="SMALLINT" />
+ 					<dbType type="TINYINT" />	
+ 					<dbType type="COUNTER"/>
+-				</talendType>
++				</talendType>
+ 				<talendType type="id_Object">
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />
+Index: mappings/mapping_SQLite.xml
+===================================================================
+--- mappings/mapping_SQLite.xml	(revision 26217)
++++ mappings/mapping_SQLite.xml	(working copy)
+@@ -109,6 +109,8 @@
+ 					<dbType type="POLYGON" />
+ 					<dbType type="SET" />
+ 					<dbType type="TINYBLOB" />
++				</talendType>
++				<talendType type="id_Geometry">
+ 				</talendType>
+ 				<talendType type="id_Short">
+ 					<dbType type="SMALLINT" default="true" />

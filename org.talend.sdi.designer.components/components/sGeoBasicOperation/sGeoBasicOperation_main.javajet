@@ -1,0 +1,317 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils    
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+	org.talend.core.model.metadata.types.JavaType
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.process.EConnectionType
+"
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String operationType = ElementParameterParser.getValue(node, "__OPERATION_TYPE__");
+String bufferDistance = ElementParameterParser.getValue(node, "__BUFFER_DISTANCE__");
+String bufferEndCapStyle = ElementParameterParser.getValue(node, "__BUFFER_END_CAP_STYLE__");
+String bufferQuantization = ElementParameterParser.getValue(node, "__BUFFER_QUANTIZATION__");
+String use_centroid = ElementParameterParser.getValue(node, "__USE_CENTROID_AS_ANCHOR__");
+String rotation = ElementParameterParser.getValue(node, "__ROTATION__");
+    
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        List<IMetadataColumn> columns = metadata.getListColumns();
+        IMetadataColumn geometryColumn = null;
+        for (int j = 0; j < columns.size(); j++) {
+            IMetadataColumn column = columns.get(j);
+            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+            //String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+            if(javaType == JavaTypesManager.GEOMETRY) {
+                geometryColumn = column;
+                break;
+            }
+        }
+        if (geometryColumn == null){
+        	// FIXME
+        	return "error(\"Cannot find a geometry column\");";
+        }
+        String geometryObject = geometryColumn.getLabel();
+
+        List< ? extends IConnection> inConnections = node.getIncomingConnections();
+        if (inConnections != null){
+            if (inConnections.size() > 0){
+                IConnection inConnection =inConnections.get(0);
+                
+                List< ? extends IConnection> outConnections = node.getOutgoingConnections();
+                if (outConnections != null) {
+
+                    final String destField;
+                    if (operationType.equals("LENGTH")) {
+                         destField = operationType.toLowerCase();
+%>
+    double result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getLength();
+<%  
+                    } else if (operationType.equals("AREA")) {
+                         destField = operationType.toLowerCase();
+%>
+    //System.out.println(<%=inConnection.getName()%>.<%=geometryObject%>);
+    double result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getArea();
+<%
+                    } else if (operationType.equals("NUM_POINTS")) {
+                         destField = operationType.toLowerCase();
+%>
+    int result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getNumPoints();
+<%
+                    } else if (operationType.equals("NUM_GEOMS")) {
+                         destField = operationType.toLowerCase();
+%>
+    int result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getNumGeometries();
+<%
+                    } else if (operationType.equals("IS_VALID")) {
+                         destField = operationType.toLowerCase();
+%>
+
+    com.vividsolutions.jts.operation.valid.IsValidOp val_<%=cid %> = 
+        new com.vividsolutions.jts.operation.valid.IsValidOp (
+            ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>)._getInternalGeometry()
+            );
+            
+    String resultDesc_<%=cid %> = "";
+    String result_<%=cid %> = "";
+    
+    if (! val_<%=cid %>.isValid()) {
+        result_<%=cid %> = "Error " +
+            val_<%=cid %>.getValidationError().getErrorType();
+            
+        resultDesc_<%=cid %> = val_<%=cid %>.getValidationError().toString();
+                
+        // TODO : Could create an error location flow using the getCoordinate info.
+    } else {
+        nbFeatureValid_<%=cid %> ++;
+    }
+<%
+                    } else if (operationType.equals("SRID")) {
+                         destField = operationType.toLowerCase();
+%>
+    int result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getSRID();
+<%
+                    } else if (operationType.equals("INTERIOR_POINT")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = ((org.talend.sdi.geometry.Geometry) <%=inConnection.getName()%>.<%=geometryObject%>).getInteriorPoint();
+<%
+                    } else if (operationType.equals("CENTROID")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = ((org.talend.sdi.geometry.Geometry) <%=inConnection.getName()%>.<%=geometryObject%>).getCentroid();
+<%
+                    } else if (operationType.equals("CONVEXHULL")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).convexHull();
+<%
+                    } else if (operationType.equals("ENVELOPE")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = ((Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getEnvelope();
+<%
+                    } else if (operationType.equals("CHANGE_LINE_DIRECTION")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>);
+    String geotype_<%=cid %> = result_<%=cid %>.getGeometryType();
+    
+    
+    if (geotype_<%=cid %>.equals("LineString") ||
+    		geotype_<%=cid %>.equals("MultiLineString")) {
+    	for (int j = 0; j < result_<%=cid %>.getNumGeometries(); j++) {
+			com.vividsolutions.jts.geom.Geometry line = result_<%=cid %>.getGeometryN(j)._getInternalGeometry();
+	        com.vividsolutions.jts.geom.Coordinate[] coords = line.getCoordinates();
+			com.vividsolutions.jts.geom.Coordinate[] newCoords = new com.vividsolutions.jts.geom.Coordinate[coords.length];
+			for (int i = 0; i < coords.length; i++) {
+				newCoords[i] = coords[coords.length - i - 1];
+			}
+			com.vividsolutions.jts.geom.GeometryFactory gf = new com.vividsolutions.jts.geom.GeometryFactory();
+			result_<%=cid %> = new Geometry (gf.createLineString(newCoords));
+	
+		}
+	}
+<%
+                    } else if (operationType.equals("TRANSFORM")) {
+                        destField = geometryObject;
+					
+						if (!rotation.equals("") && use_centroid.equals("true")) {
+%>
+
+	// Define geometry dependant affine transformation
+	com.vividsolutions.jts.geom.Point c_<%=cid %> = 
+		(com.vividsolutions.jts.geom.Point) <%=inConnection.getName()%>.<%=geometryObject%>.getCentroid()._getInternalGeometry();
+	Double x_<%=cid %> = c_<%=cid %>.getX(); 
+	Double y_<%=cid %> = c_<%=cid %>.getY();
+	// CHECKME : this will not allow composition ?
+	com.vividsolutions.jts.geom.util.AffineTransformation atin_<%=cid %> = 
+		new com.vividsolutions.jts.geom.util.AffineTransformation();
+	atin_<%=cid %>.compose(com.vividsolutions.jts.geom.util.AffineTransformation.rotationInstance(
+				Math.toRadians(new Double(<%=rotation %>)),
+				x_<%=cid %>,
+				y_<%=cid %>
+			)
+		);
+	Geometry result_<%=cid %> = <%=inConnection.getName()%>.<%=geometryObject%>;
+    result_<%=cid %>._getInternalGeometry().apply(atin_<%=cid %>);
+<%		
+						} else {
+%>
+    Geometry result_<%=cid %> = <%=inConnection.getName()%>.<%=geometryObject%>;
+    result_<%=cid %>._getInternalGeometry().apply(at_<%=cid %>); 
+<%
+						}
+
+                    } else if (operationType.equals("BOUNDARY")) {
+                        destField = geometryObject;
+%>
+    Geometry result_<%=cid %> = null ;
+    String geotype_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getGeometryType();
+    
+    /* Gets Polygon or MultiPolygon Boundaries otherwise returns input geometries  */
+    if (geotype_<%=cid %>.equals("MultiPolygon") ||
+    		geotype_<%=cid %>.equals("Polygon")) {
+        result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).getBoundary();
+    } else {
+        result_<%=cid %> =  ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>);
+    } 
+<%
+                    } else if (operationType.equals("BUFFER")) {
+                        destField = geometryObject;
+                        // TODO type of buffer
+%>
+    Geometry result_<%=cid %> = ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>)
+                    .buffer(<%=bufferDistance%>, 
+                            <%=bufferQuantization %>, 
+                            com.vividsolutions.jts.operation.buffer.BufferOp.<%=bufferEndCapStyle %>);
+<%
+                    } else if (operationType.equals("PROJ")) {
+                        destField = geometryObject;
+%>
+    org.talend.sdi.geometry.Geometry geom_<%=cid %> = (org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>;
+    
+    /* TODO : Check sourceCRS for current component == CRS of input features */
+     
+    /* Transform */
+    org.talend.sdi.geometry.Geometry geomProj_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                                    org.geotools.geometry.jts.JTS.transform( 
+                                        geom_<%=cid %>._getInternalGeometry (),
+                                        transform_<%=cid %>
+                                    )
+                                );
+                                
+    /* setCRS */
+    geomProj_<%=cid %>.setCRS (targetCRS_<%=cid %>);
+    
+    Geometry result_<%=cid %> = geomProj_<%=cid %>;
+    
+<%
+                    } else if (operationType.equals("DOUGLAS_PEUCKER")) {
+                    
+                        destField = geometryObject;                        
+%>   
+
+    /*DOUGLAS_PEUCKER Geometry Simplification */              
+	Geometry result_<%=cid %> = null;     
+    org.talend.sdi.geometry.Geometry geom_<%=cid %> = (org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>;  
+    result_<%=cid %> = geom_<%=cid%>.simplify("DouglasPeuckerSimplifier", tol_<%=cid %>);
+    
+    
+ <%
+ 
+                    } else if (operationType.equals("TOPOLOGY_PRESERVING")) {
+                    
+                        destField = geometryObject;                        
+%> 
+  
+	/* TOPOLOGY_PRESERVING Geometry Simplification */
+	Geometry result_<%=cid %> = null; 
+    org.talend.sdi.geometry.Geometry geom_<%=cid %> = (org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>;     
+    result_<%=cid %> = geom_<%=cid%>.simplify("TopologyPreservingSimplifier", tol_<%=cid %>);
+
+    
+<%
+                    } else if (operationType.equals("CLIPPER")) {
+                        destField = geometryObject;
+                        
+%>
+    Geometry result_<%=cid %> = null;
+    if (((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).intersects(
+                new org.talend.sdi.geometry.Geometry(clipper_<%=cid %>)))               
+        result_<%=cid %> = 
+            ((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>).intersection(
+                new org.talend.sdi.geometry.Geometry(clipper_<%=cid %>));
+    else
+		continue;
+<%
+                    } else {
+                         destField = operationType.toLowerCase();
+%>
+	// FIXME
+    error("Unknown operation: <%=operationType%>");
+<%
+                    }
+
+                    for(IConnection outConnection : outConnections) {
+                        if ((outConnection.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+                            for (int j = 0; j < columns.size(); j++) {
+                                IMetadataColumn columnout = columns.get(j);
+                                JavaType javaType = JavaTypesManager.getJavaTypeFromId(columnout.getTalendType());
+ 
+                                if (!(operationType.equals("LENGTH") && columnout.getLabel().equals("length")) &&
+                                    !(operationType.equals("AREA") && columnout.getLabel().equals("area")) &&
+                                    !(operationType.equals("SRID") && columnout.getLabel().equals("srid")) &&
+                                    !(operationType.equals("IS_VALID") && (columnout.getLabel().equals("is_valid") || columnout.getLabel().equals("is_valid_desc"))) &&
+                                    !(operationType.equals("NUM_GEOMS") && columnout.getLabel().equals("num_geoms")) &&
+                                    !(operationType.equals("NUM_POINTS") && columnout.getLabel().equals("num_points")) &&
+                                    !(operationType.equals("BOUNDARY") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("ENVELOPE") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("BUFFER") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("CENTROID") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("CLIPPER") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("INTERIOR_POINT") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("DOUGLAS_PEUCKER") && javaType == JavaTypesManager.GEOMETRY) &&
+                                    !(operationType.equals("TOPOLOGY_PRESERVING") && javaType == JavaTypesManager.GEOMETRY)
+                                ) {
+%>
+    <%=outConnection.getName() %>.<%=columnout.getLabel() %> = <%=inConnection.getName() %>.<%=columnout.getLabel() %>;
+<%
+                                }
+                            }                           
+%>
+    <%=outConnection.getName() %>.<%=destField%> = result_<%=cid %>;
+<%
+                            // Add extra field for validation description
+                            if (operationType.equals("IS_VALID")) {
+%>
+    <%=outConnection.getName() %>.<%=destField%>_desc = resultDesc_<%=cid %>;
+<%                          
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+%>
+
+
+nbFeature_<%=cid %> ++;

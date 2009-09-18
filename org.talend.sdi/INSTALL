@@ -1,0 +1,20 @@
+More info available on http://www.talendforge.org/wiki/doku.php?id=sdi:tutorials
+
+====== Installation ======
+===== Linux/unix users =====
+For linux/unix user, installation instruction are : 
+<code>
+unzip SDI-All-V1.0-TOSV2.2.2.zip
+cd SDI-All-V1.0-TOSV2.2.2
+chmod +x SDI-linux-gtk-x86
+./SDI-linux-gtk-x86 &
+</code>
+
+
+===== Windows users =====
+If you are using Windows, do not unzip to your Desktop but directly to your drive (C:\ or other simple path). This is because of a filepath length limitation imposed by the operating system.
+
+
+===== Install Spatial Data Integrator on existing TOS installation =====
+TODO
+

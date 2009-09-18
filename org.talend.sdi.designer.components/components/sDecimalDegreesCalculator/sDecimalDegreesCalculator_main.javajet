@@ -1,0 +1,79 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    java.lang.Float
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+"
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        List<? extends IConnection> inConnections = node.getIncomingConnections();
+        String xd = ElementParameterParser.getValue(node,"__XD__");
+        String xm = ElementParameterParser.getValue(node,"__XM__");
+        String xs = ElementParameterParser.getValue(node,"__XS__");
+        String yd = ElementParameterParser.getValue(node,"__YD__");
+        String ym = ElementParameterParser.getValue(node,"__YM__");
+        String ys = ElementParameterParser.getValue(node,"__YS__");
+        if (inConnections != null) {
+            if (inConnections.size() > 0) {
+                IConnection inConnection =inConnections.get(0);
+                List< ? extends IConnection> outConnections = node.getOutgoingConnections();
+                if (outConnections != null) {
+%>
+                    /* Create point */
+                    // TODO : How to check value and return error to users ? 
+                    // TODO : 0<second<60 and not String
+                    Float X_<%=cid %> = <%=inConnection.getName() %>.<%=xd %> + 
+                    	<%=inConnection.getName() %>.<%=xm %>/60 + 
+                    	<%=inConnection.getName() %>.<%=xs %>/3600 ;
+                    Float Y_<%=cid %> = <%=inConnection.getName() %>.<%=yd %> + 
+                    	<%=inConnection.getName() %>.<%=ym %>/60 + 
+                    	<%=inConnection.getName() %>.<%=ys %>/3600 ;
+<%
+                
+                    for(IConnection outConnection : outConnections) {
+                        if ((outConnection.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+                            List<IMetadataColumn> columns = metadata.getListColumns();
+                            // Out all cols
+                            for (int j = 0; j < columns.size(); j++) {
+                                IMetadataColumn columnout=columns.get(j);
+                                if (!(columnout.getLabel().equals("X")
+                                    || columnout.getLabel().equals("Y")))
+                                {
+%>
+    <%=outConnection.getName() %>.<%=columnout.getLabel() %>=<%=inConnection.getName() %>.<%=columnout.getLabel() %>;
+<%
+                                }
+                            }                
+                        // Out X & Y
+%>
+    <%=outConnection.getName() %>.X = X_<%=cid %>;
+    <%=outConnection.getName() %>.Y = Y_<%=cid %>;
+<%
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+%>
+nbFeature_<%=cid %>++;

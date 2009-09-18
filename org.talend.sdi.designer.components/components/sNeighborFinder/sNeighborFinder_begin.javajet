@@ -1,0 +1,39 @@
+<%@ jet 
+imports="
+
+	org.talend.core.model.process.IConnection
+	org.talend.core.model.process.EConnectionType
+
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+" 
+%>
+
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<IConnection> inputConnections;
+inputConnections = (List<IConnection>) node.getIncomingConnections();
+for (IConnection connection : inputConnections) {
+	if (connection == null) {
+		continue;
+	}
+    EConnectionType connectionType = connection.getLineStyle();
+    if (connectionType == EConnectionType.FLOW_MAIN) {
+        continue;
+    } else if (connectionType == EConnectionType.FLOW_REF) {
+        String connectionName = connection.getName();
+%>
+int nbFeature_<%= cid %> = 0; 
+
+java.util.Set<<%=connectionName %>Struct> tSet_<%=connectionName %>_<%=cid %> =
+	((java.util.Map<<%=connectionName %>Struct, <%=connectionName %>Struct>) globalMap.get("tHash_<%=connectionName %>")).keySet();            
+<%
+	}
+}
+%>

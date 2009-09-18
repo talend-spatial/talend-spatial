@@ -1,0 +1,258 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    java.lang.Float
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+"
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        List< ? extends IConnection> inConnections = node.getIncomingConnections();
+        
+        
+        String op = ElementParameterParser.getValue(node,"__OPERATION_TYPE__");
+        String ws = ElementParameterParser.getValue(node,"__WS__");
+        String country = ElementParameterParser.getValue(node,"__COUNTRY__");
+        String x = ElementParameterParser.getValue(node,"__X__");
+        String y = ElementParameterParser.getValue(node,"__Y__");
+        
+        if (country.equals(""))
+        	ws = ws.replaceAll ("country=\\{COUNTRY\\}", "");
+        else
+        	ws = ws.replaceAll ("\\{COUNTRY\\}", country);
+        
+        
+        if (inConnections != null){
+            if (inConnections.size() > 0){
+                IConnection inConnection =inConnections.get(0);
+                List< ? extends IConnection> outConnections = node.getOutgoingConnections();
+                if (outConnections != null) {
+                
+                	if (!op.equals("ELEVATION")) {
+%>
+                    org.dom4j.Document doc_<%=cid %> = null;
+                    String url_<%=cid %> = <%=ws %>;
+<%
+						if (op.equals("FIND_PLACE_NAME")) {
+%>                    
+                    String rootName_<%=cid %> = "//geoname";
+<%
+						} else if (op.equals("FIND_POSTAL_CODE")) {
+%>                
+					String rootName_<%=cid %> = "//code";
+<%
+						} else {
+%>
+					// Unknown operation
+					String rootName_<%=cid %> = "";
+<%
+						}
+					} else {
+%>
+					String url_<%=cid %> = "<%=ws %>";
+					String doc_<%=cid %> = "";
+<%					
+					}
+%>  
+					
+                    url_<%=cid %> = url_<%=cid %>.replaceAll(
+                    									"\\{LATITUDE\\}", 
+                    									String.valueOf(<%=inConnection.getName()%>.<%=y %>)
+                    								);
+                    url_<%=cid %> = url_<%=cid %>.replaceAll(
+                    									"\\{LONGITUDE\\}", 
+                    									String.valueOf(<%=inConnection.getName()%>.<%=x %>)
+                    								);
+                    
+                    org.apache.commons.httpclient.methods.GetMethod req_<%=cid %> = 
+                     	new org.apache.commons.httpclient.methods.GetMethod(url_<%=cid %>);
+                    
+                    try {
+			            // Connect
+			            int result_<%=cid %> = httpclient_<%=cid %>.executeMethod(req_<%=cid %>);
+<%
+					if (!op.equals("ELEVATION")) {
+%>			            
+			            doc_<%=cid %> = org.dom4j.DocumentHelper.parseText(req_<%=cid %>.getResponseBodyAsString ());
+			        } catch (org.dom4j.DocumentException e){
+			            System.err.println("<%=cid %> | Invalid XML Document '" + e.getMessage() + "'");
+<%
+					} else {
+%>			            
+			            doc_<%=cid %> = req_<%=cid %>.getResponseBodyAsString ();
+<%
+					}
+%>			            
+			        } catch (org.apache.commons.httpclient.HttpException he) {
+			            System.err.println("<%=cid %> | Http error connecting to '" + httpclient_<%=cid %>.toString() + "'");
+			            System.err.println(he.getMessage());
+			            System.exit(-4);
+			        } catch (java.io.IOException ioe){
+			            System.err.println("<%=cid %> | Unable to connect to '" + httpclient_<%=cid %>.toString() + "'");
+			            System.exit(-3);
+			        } finally {
+			            req_<%=cid %>.releaseConnection();
+			        }
+                    
+<%
+					if (!op.equals("ELEVATION")) {
+%>	
+                    // Initialize all postal code information
+                    String name_<%=cid %> = "";
+                    String countryCode_<%=cid %> = "";
+                    Double lat_<%=cid %> = null;
+                    Double lng_<%=cid %> = null;
+                    Double distance_<%=cid %> = null;
+                    
+<%
+						if (op.equals("FIND_PLACE_NAME")) {
+%>                    
+                    String geonameId_<%=cid %> = "";
+                    String countryName_<%=cid %> = "";
+                    String fcl_<%=cid %> = "";
+                    String fcode_<%=cid %> = "";
+<%
+						} else if (op.equals("FIND_POSTAL_CODE")) {
+%>                     
+                    String postalCode_<%=cid %> = "";
+                    String adminCode1_<%=cid %> = "";
+                    String adminName1_<%=cid %> = "";
+                    String adminCode2_<%=cid %> = "";
+                    String adminName2_<%=cid %> = "";
+                    String adminCode3_<%=cid %> = "";
+                    String adminName3_<%=cid %> = "";
+<%
+						} 
+%>                  
+                    if (doc_<%=cid %> != null) {
+                    	org.dom4j.Node root_<%=cid %> = doc_<%=cid %>.selectSingleNode(rootName_<%=cid %>);
+			
+			            if (root_<%=cid %> == null)
+			                System.out.println ("<%=cid %> | No postalcode found.");
+			            else{
+			                name_<%=cid %> = root_<%=cid %>.selectSingleNode("name").getText();
+			                countryCode_<%=cid %> = root_<%=cid %>.selectSingleNode("countryCode").getText();
+			                lat_<%=cid %> = Double.valueOf(root_<%=cid %>.selectSingleNode("lat").getText());
+			                lng_<%=cid %> = Double.valueOf(root_<%=cid %>.selectSingleNode("lng").getText());
+			                distance_<%=cid %> = Double.valueOf(root_<%=cid %>.selectSingleNode("distance").getText());
+			                
+			                                 
+<%
+							if (op.equals("FIND_PLACE_NAME")) {
+%>  
+							geonameId_<%=cid %> = root_<%=cid %>.selectSingleNode("geonameId").getText();
+							countryName_<%=cid %> = root_<%=cid %>.selectSingleNode("countryName").getText();
+							fcl_<%=cid %> = root_<%=cid %>.selectSingleNode("fcl").getText();
+							fcode_<%=cid %> = root_<%=cid %>.selectSingleNode("fcode").getText();     
+<%
+							} else if (op.equals("FIND_POSTAL_CODE")) {
+%>    
+			                postalCode_<%=cid %> = root_<%=cid %>.selectSingleNode("postalcode").getText();
+			                adminCode1_<%=cid %> = root_<%=cid %>.selectSingleNode("adminCode1").getText();
+			                adminName1_<%=cid %> = root_<%=cid %>.selectSingleNode("adminName1").getText();
+			                adminCode2_<%=cid %> = root_<%=cid %>.selectSingleNode("adminCode2").getText();
+			                adminName2_<%=cid %> = root_<%=cid %>.selectSingleNode("adminName2").getText();
+			                adminCode3_<%=cid %> = root_<%=cid %>.selectSingleNode("adminCode3").getText();
+			                adminName3_<%=cid %> = root_<%=cid %>.selectSingleNode("adminName3").getText();
+                 
+<%
+							}
+%>                     
+			            }
+                    }
+                    
+<%
+               			} // End not elevation
+               		
+               		
+                    	for(IConnection outConnection : outConnections) {
+                       		if ((outConnection.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+                            	List<IMetadataColumn> columns = metadata.getListColumns();
+                            	// Out all cols except the last one which the geometry column we're building
+                            	for (int j = 0; j < columns.size() - 1; j++) {
+                                	IMetadataColumn columnout=columns.get(j);
+                                
+	                                
+	                                if (!columnout.getLabel().equals("postalcode") &&
+	                                	!columnout.getLabel().equals("name") &&
+	                                	!columnout.getLabel().equals("countrycode") &&
+	                                	!columnout.getLabel().equals("countryname") &&
+	                                	!columnout.getLabel().equals("fcl") &&
+	                                	!columnout.getLabel().equals("fcode") &&
+	                                	!columnout.getLabel().equals("geonameid") &&
+	                                	!columnout.getLabel().equals("lat") &&
+	                                	!columnout.getLabel().equals("lng") &&
+	                                	!columnout.getLabel().equals("admincode1") &&
+	                                	!columnout.getLabel().equals("adminname1") &&
+	                                	!columnout.getLabel().equals("admincode2") &&
+	                                	!columnout.getLabel().equals("adminname2") &&
+	                                	!columnout.getLabel().equals("admincode3") &&
+	                                	!columnout.getLabel().equals("adminname3") &&
+	                                	!columnout.getLabel().equals("elevation") &&
+	                                	!columnout.getLabel().equals("distance") 
+	                                	){
+%>
+    <%=outConnection.getName() %>.<%=columnout.getLabel() %> = <%=inConnection.getName() %>.<%=columnout.getLabel() %>;
+<%
+									}
+                       		}               
+                        	// Out postal code, place name or elevation information
+                        
+							if (!op.equals("ELEVATION")) {
+%>
+    <%=outConnection.getName() %>.name = name_<%=cid %>;
+    <%=outConnection.getName() %>.countrycode = countryCode_<%=cid %>;
+    <%=outConnection.getName() %>.lat = lat_<%=cid %>;
+    <%=outConnection.getName() %>.lng = lng_<%=cid %>;
+	<%=outConnection.getName() %>.distance = distance_<%=cid %>;
+<%
+								if (op.equals("FIND_PLACE_NAME")) {
+%>  
+	<%=outConnection.getName() %>.countryname = countryName_<%=cid %>;
+	<%=outConnection.getName() %>.geonameid = geonameId_<%=cid %>;
+	<%=outConnection.getName() %>.fcl = fcl_<%=cid %>;
+	<%=outConnection.getName() %>.fcode = fcode_<%=cid %>;
+<%
+								} else if (op.equals("FIND_POSTAL_CODE")) {
+%>    
+    <%=outConnection.getName() %>.postalcode = postalCode_<%=cid %>;
+    <%=outConnection.getName() %>.admincode1 = adminCode1_<%=cid %>;
+    <%=outConnection.getName() %>.adminname1 = adminName1_<%=cid %>;
+    <%=outConnection.getName() %>.admincode2 = adminCode2_<%=cid %>;
+    <%=outConnection.getName() %>.adminname2 = adminName2_<%=cid %>;
+    <%=outConnection.getName() %>.admincode3 = adminCode3_<%=cid %>;
+    <%=outConnection.getName() %>.adminname3 = adminName3_<%=cid %>;
+<%
+								}
+							} else {
+%>
+	<%=outConnection.getName() %>.elevation = Double.valueOf(doc_<%=cid %>);	
+<%							
+							}
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+%>
+nbFeature_<%=cid %>++;

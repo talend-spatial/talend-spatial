@@ -1,0 +1,777 @@
+Index: org.talend.rcp.branding.sdi-feature/feature.xml
+===================================================================
+--- org.talend.rcp.branding.sdi-feature/feature.xml	(revision 29597)
++++ org.talend.rcp.branding.sdi-feature/feature.xml	(working copy)
+@@ -22,11 +22,11 @@
+       <update label="SDI update site for stables" url="http://www.talend.com/sdi/updatesite/stable/"/>
+    </url>
+ 
+-  <includes
++   <includes
+          id="org.epic_feature"
+          version="0.0.0"
+          search-location="self"/>
+-         
++
+    <includes
+          id="org.eclipse.datatools_feature"
+          version="0.0.0"
+@@ -51,12 +51,12 @@
+          id="org.talend.repository_feature"
+          version="0.0.0"
+          search-location="self"/>
+-                
++
+    <includes
+          id="org.talend.designer_feature"
+          version="0.0.0"
+          search-location="self"/>
+-         
++
+    <includes
+          id="org.talend.designer.business_feature"
+          version="0.0.0"
+@@ -75,17 +75,737 @@
+    <includes
+          id="org.talend.spagic_feature"
+          version="0.0.0"
+-         search-location="self"/>
+-                      
+-   <includes
+-         id="org.talend.componentdesigner_feature"
+-         version="0.0.0"
+          search-location="self"/>
+ 
++   <includes
++         id="org.talend.componentdesigner_feature"
++         version="0.0.0"
++         search-location="self"/>
++
+    <plugin
+          id="org.talend.rcp.branding.sdi"
+          download-size="0"
+          install-size="0"
+-         version="0.0.0"/>
++         version="1.0.0.qualifier"/>
+ 
++   <plugin
++         id="org.talend.sdi.designer.components"
++         download-size="0"
++         install-size="0"
++         version="0.0.1"/>
++
++   <plugin
++         id="org.talend.sdi.repository.ui.actions.metadata"
++         download-size="0"
++         install-size="0"
++         version="1.0.0"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.sdi.workspace.spatial"
++         download-size="0"
++         install-size="0"
++         version="1.0.0"/>
++
++   <plugin
++         id="org.talend.commons"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.commons.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.commons.ui"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.commons.ui.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.componentdesigner"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.componentdesigner.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.componentdesigner.rcp"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.componentdesigner.rcp.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.core"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.core.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.core.runtime"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.abstractmap"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.abstractmap.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.alfrescooutput"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.alfrescooutput.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.business.diagram"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.business.diagram.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.codegen"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.codegen.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.components.ecosystem"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.designer.components.ecosystem.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.components.libs"
++         download-size="0"
++         install-size="0"
++         version="1.0.0"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.components.localprovider"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.designer.components.localprovider.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.components.localprovider.test"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.core"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.core.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.dbmap"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.dbmap.mysql"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.dbmap.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.dbmap.oracle"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.filemultischemas"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.fileoutputxml"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.fileoutputxml.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.mapper"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.mapper.advanced"
++         download-size="0"
++         install-size="0"
++         version="2.1.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.mapper.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.rowgenerator"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.rowgenerator.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.runprocess"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.runprocess.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.scd"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.scd.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.designer.spss"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.expressionbuilder"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.expressionbuilder.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.help"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.help.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.helpers"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.internal.utilities"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries"
++         download-size="0"
++         install-size="0"
++         version="2.0.0.qualifier"/>
++
++   <plugin
++         id="org.talend.libraries.apache"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.hibernate"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.javacsv"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.db2"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.hsql"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.informix"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.ingres"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.jtds"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.mysql"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.oracle"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.postgresql"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.sqlite3"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.sybase"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jdbc.teradata"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jfreechart"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.libraries.jung"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"/>
++
++   <plugin
++         id="org.talend.libraries.sdi"
++         download-size="0"
++         install-size="0"
++         version="0.0.1"/>
++
++   <plugin
++         id="org.talend.libraries.ui"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.librariesmanager"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.librariesmanager.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.migrationTool"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.migrationTool.nl"
++         download-size="0"
++         install-size="0"
++         version="1.0.0"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.model"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.model.edit"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.model.edit.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.model.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.platform.logging"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.projectname"
++         download-size="0"
++         install-size="0"
++         version="2.3.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.rcp"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.rcp.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.registration"
++         download-size="0"
++         install-size="0"
++         version="1.0.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.repository"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.repository.localprovider"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.repository.localprovider.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.repository.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.resources"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.resources.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.sbi.engines.client"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"/>
++
++   <plugin
++         id="org.talend.sbi.engines.client.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.scheduler"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.scheduler.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.spagic.engines.client"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.spagic.engines.client.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.sqlbuilder"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.sqlbuilder.nl"
++         download-size="0"
++         install-size="0"
++         version="2.2.0.qualifier"
++         fragment="true"
++         unpack="false"/>
++
++   <plugin
++         id="org.talend.utils"
++         download-size="0"
++         install-size="0"
++         version="2.1.0.qualifier"
++         unpack="false"/>
++
+ </feature>

@@ -1,0 +1,72 @@
+<%@ jet
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+    "
+%>
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();
+    
+    String metadata = ElementParameterParser.getValue(node, "__METADATA__");
+    String host  = ElementParameterParser.getValue(node, "__HOST__");
+    String port = ElementParameterParser.getValue(node, "__PORT__");
+    String catalogueType = ElementParameterParser.getValue(node, "__CATALOGUE_TYPE__");
+    String mef = ElementParameterParser.getValue(node, "__MEF__");
+    String servlet = ElementParameterParser.getValue(node, "__SERVLET__");
+    String login = ElementParameterParser.getValue(node, "__LOGIN__");
+    String username = ElementParameterParser.getValue(node, "__USERNAME__");
+    String password = ElementParameterParser.getValue(node, "__PASSWORD__");
+    String groupType = ElementParameterParser.getValue(node, "__GROUP_TYPE__");
+    String groupId = ElementParameterParser.getValue(node, "__GROUPID__");    
+    String categoryId = ElementParameterParser.getValue(node, "__CATEGORYID__");    
+    String schema = ElementParameterParser.getValue(node, "__SCHEMA__");    
+
+
+%>
+org.talend.sdi.metadata.GeoNetwork cat = new org.talend.sdi.metadata.GeoNetwork (<%=host %>, 
+											<%=port %>,
+											<%=servlet %>,
+<% 
+    if (login.equals("true"))
+    {
+%>
+											<%=username %>,
+											<%=password %>
+<%
+    } else 	{
+%>
+											null,
+											null
+<% 
+    }	
+%>
+											);
+
+<%
+    if (catalogueType.equals("GEONETWORK")) {
+%>
+if (<%=metadata %>.equals("")) {
+    System.out.println ("<%=cid %> | Metadata produced by Geo output component is null. " +
+                    "Can't publish null metadata to a catalogue. " + 
+                    "Check that the selected Output component metadata generation is activated.");
+} else {
+    //cat.publish((String)globalMap.get("MD")
+    if (cat.publish(<%=metadata %>, "<%=schema %>", "<%=groupType %>", "<%=groupId %>", "<%=categoryId %>"))
+        System.out.println ("<%=cid %> | Metadata published.");
+    else
+    	System.out.println ("<%=cid %> | Metadata publish failed.");
+}
+<%
+    } else if (catalogueType.equals("GEONETWORKMEF")) {
+%>
+    // Publish MEF document
+    if (cat.publishMEF(<%=mef %>))
+        System.out.println ("<%=cid %> | Metadata published.");
+    else
+        System.out.println ("<%=cid %> | Metadata publish failed.");
+<%
+    }
+%>

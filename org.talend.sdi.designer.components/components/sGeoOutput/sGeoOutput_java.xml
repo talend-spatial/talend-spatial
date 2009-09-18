@@ -1,0 +1,374 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Camptocamp" RELEASE_DATE="20070521"
+    STARTABLE="false" VISIBLE="false" TECHNICAL="true"
+    DATA_AUTO_PROPAGATE="false" SCHEMA_AUTO_PROPAGATE="true">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="0" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="PROPERTY" FIELD="PROPERTY_TYPE" SHOW="true"
+      NUM_ROW="1" REPOSITORY_VALUE="DELIMITED" />
+    <PARAMETER NAME="FORMAT_TYPE" FIELD="CLOSED_LIST" NUM_ROW="2">
+      <ITEMS DEFAULT="SHAPEFILE">
+        <ITEM NAME="SHAPEFILE" VALUE="SHAPEFILE" />
+        <ITEM NAME="POSTGIS" VALUE="POSTGIS" />
+        <ITEM NAME="MIFMID" VALUE="MIFMID" />
+        <ITEM NAME="GPX" VALUE="GPX" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="FILENAME" FIELD="FILE" NUM_ROW="3" REQUIRED="true"
+      REPOSITORY_VALUE="FILE_PATH"
+      SHOW_IF="(FORMAT_TYPE=='SHAPEFILE') or (FORMAT_TYPE == 'MIFMID')">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/out.shp"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_HOST" FIELD="TEXT" NUM_ROW="4" REQUIRED="true"
+      REPOSITORY_VALUE="DB_HOST" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"localhost"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_PORT" FIELD="TEXT" NUM_ROW="4" REQUIRED="true"
+      REPOSITORY_VALUE="DB_PORT" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"5432"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_USER" FIELD="TEXT" NUM_ROW="5" REQUIRED="true"
+      REPOSITORY_VALUE="DB_USER" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"my_user"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_PASSWD" FIELD="TEXT" NUM_ROW="5" REQUIRED="true"
+      REPOSITORY_VALUE="DB_PASSWD" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"my_passwd"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_NAME" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_NAME" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"my_database_name"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_SCHEMA" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_SCHEMA" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"public"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_TABLE" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_TABLE" SHOW_IF="FORMAT_TYPE=='POSTGIS'">
+      <DEFAULT>"my_table_name"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_COL" FIELD="TEXT" NUM_ROW="7" REQUIRED="true"
+      REPOSITORY_VALUE="DB_COL">
+      <DEFAULT>"the_geom"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="GEOMETRY_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
+      NUM_ROW="7">
+      <ITEMS DEFAULT="GEOMETRY">
+        <ITEM NAME="POINT" VALUE="com.vividsolutions.jts.geom.Point" />
+        <ITEM NAME="LINESTRING"
+          VALUE="com.vividsolutions.jts.geom.LineString" />
+        <ITEM NAME="POLYGON"
+          VALUE="com.vividsolutions.jts.geom.Polygon" />
+        <ITEM NAME="MULTIPOINT"
+          VALUE="com.vividsolutions.jts.geom.MultiPoint" />
+        <ITEM NAME="MULTILINESTRING"
+          VALUE="com.vividsolutions.jts.geom.MultiLineString" />
+        <ITEM NAME="MULTIPOLYGON"
+          VALUE="com.vividsolutions.jts.geom.MultiPolygon" />
+        <ITEM NAME="GEOMETRY"
+          VALUE="com.vividsolutions.jts.geom.Geometry" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
+      NUM_ROW="8">
+      <DEFAULT />
+    </PARAMETER>
+    <PARAMETER NAME="FORCE_CRS" FIELD="CHECK" REQUIRED="true"
+      NUM_ROW="4">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CRS" FIELD="TEXT" NUM_ROW="9" REQUIRED="true"
+      SHOW_IF="FORCE_CRS == 'true'">
+      <DEFAULT>"EPSG:4326"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MIFPROJ" FIELD="CHECK" REQUIRED="true" NUM_ROW="9"
+      SHOW_IF="FORMAT_TYPE=='MIFMID'">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MIFPRJ_FILE" FIELD="FILE" NUM_ROW="9"
+      REQUIRED="true" SHOW_IF="MIFPROJ == 'true'">
+      <DEFAULT>
+        "__COMP_DEFAULT_FILE_DIR__/.spatial/proj/MAPINFOW.PRJ"
+      </DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="NS_URL" FIELD="TEXT" NUM_ROW="5" REQUIRED="true"
+      SHOW_IF="FORMAT_TYPE=='GPX'">
+      <DEFAULT>"http://www.topografix.com/GPX/1/1"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="GPX_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
+      NUM_ROW="3">
+      <ITEMS DEFAULT="TYPE_NAME_POINT">
+        <ITEM NAME="TYPE_NAME_POINT"
+          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_POINT" />
+        <ITEM NAME="TYPE_NAME_TRACK"
+          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_TRACK" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="MD" FIELD="CHECK" REQUIRED="true" NUM_ROW="10">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPL" FIELD="FILE" NUM_ROW="10" REQUIRED="true"
+      SHOW="false">
+      <DEFAULT>
+        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
+      </DEFAULT>
+      <!--  FIXME : COMP_DEFAULT_FILE_DIR is wrong when export/import in talend ! -->
+    </PARAMETER>
+    <PARAMETER NAME="MDTITLE" FIELD="TEXT" NUM_ROW="10" REQUIRED="false"
+      SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata title</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDABSTRACT" FIELD="TEXT" NB_LINES="3" NUM_ROW="11"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata abstract</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDPURPOSE" FIELD="TEXT" NB_LINES="3" NUM_ROW="11"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata Purpose</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTOPICCATEGORY" FIELD="CLOSED_LIST"
+      REQUIRED="true" NUM_ROW="12" SHOW_IF="MD == 'true'">
+      <ITEMS DEFAULT="farming">
+        <ITEM NAME="farming" VALUE="farming" />
+        <ITEM NAME="biota" VALUE="biota" />
+        <ITEM NAME="boundaries" VALUE="boundaries" />
+        <ITEM NAME="climatologyMeteorologyAtmosphere"
+          VALUE="climatologyMeteorologyAtmosphere" />
+        <ITEM NAME="economy" VALUE="economy" />
+        <ITEM NAME="elevation" VALUE="elevation" />
+        <ITEM NAME="environment" VALUE="environment" />
+        <ITEM NAME="geoscientificInformation"
+          VALUE="geoscientificInformation" />
+        <ITEM NAME="health" VALUE="health" />
+        <ITEM NAME="imageryBaseMapsEarthCover"
+          VALUE="imageryBaseMapsEarthCover" />
+        <ITEM NAME="intelligenceMilitary" VALUE="intelligenceMilitary" />
+        <ITEM NAME="inlandWaters" VALUE="inlandWaters" />
+        <ITEM NAME="location" VALUE="location" />
+        <ITEM NAME="oceans" VALUE="oceans" />
+        <ITEM NAME="planningCadastre" VALUE="planningCadastre" />
+        <ITEM NAME="society" VALUE="society" />
+        <ITEM NAME="structure" VALUE="structure" />
+        <ITEM NAME="transportation" VALUE="transportation" />
+        <ITEM NAME="utilitiesCommunication"
+          VALUE="utilitiesCommunication" />
+      </ITEMS>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="ant-optional" MODULE="ant-optional-1.5.1.jar"
+        REQUIRED="true" />
+      <!-- bufr used by netcdf -->
+      <IMPORT NAME="bufr" MODULE="bufr-1.1.00.jar" REQUIRED="true" />
+      <IMPORT NAME="common" MODULE="common-2.2.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-beanutils"
+        MODULE="commons-beanutils-1.7.0.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-cli" MODULE="commons-cli-2.0-gt2-pre1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-codec" MODULE="commons-codec-1.2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-collections"
+        MODULE="commons-collections-3.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-dbcp" MODULE="commons-dbcp-1.2.2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-httpclient"
+        MODULE="commons-httpclient-3.0.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-io" MODULE="commons-io-1.2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-jxpath" MODULE="commons-jxpath-1.2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-lang" MODULE="commons-lang-2.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-logging" MODULE="commons-logging-1.1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-pool" MODULE="commons-pool-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="concurrent" MODULE="concurrent-1.3.4.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="dom4j-1.6.1.jar" MODULE="dom4j-1.6.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="ecore" MODULE="ecore-2.2.2.jar" REQUIRED="true" />
+      <IMPORT NAME="geoapi" MODULE="geoapi-2.2-M1.jar" REQUIRED="true" />
+      <!-- grib used by netcdf -->
+      <IMPORT NAME="grib" MODULE="grib-5.1.03.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-api" MODULE="gt-api-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-arcgrid" MODULE="gt-arcgrid-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-arcsde" MODULE="gt-arcsde-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-brewer" MODULE="gt-brewer-2.5-M3.jar"
+        REQUIRED="true" />
+      <!-- CHECKME if needed -->
+      <IMPORT NAME="gt-coverage" MODULE="gt-coverage-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-coverageio" MODULE="gt-coverageio-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-coverageio-netcdf"
+        MODULE="gt-coverageio-netcdf-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-coveragetools"
+        MODULE="gt-coveragetools-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-cql" MODULE="gt-cql-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-data" MODULE="gt-data-2.5-M3.jar"
+        REQUIRED="true" />
+      <!-- CHECKME if needed -->
+      <IMPORT NAME="gt-db2" MODULE="gt-db2-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-directory" MODULE="gt-directory-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-epsg-wkt" MODULE="gt-epsg-wkt-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-gml" MODULE="gt-gml-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-gpx" MODULE="gt-gpx-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-image" MODULE="gt-image-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-imagemosaic" MODULE="gt-imagemosaic-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-imagemosaic-jdbc"
+        MODULE="gt-imagemosaic-jdbc-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-imagepyramid" MODULE="gt-imagepyramid-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-jdbc" MODULE="gt-jdbc-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-main" MODULE="gt-main-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-metadata" MODULE="gt-metadata-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-mif" MODULE="gt-mif-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-edigeo" MODULE="gt-edigeo-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-postgis" MODULE="gt-postgis-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-referencing" MODULE="gt-referencing-2.5-M3.jar"
+        REQUIRED="true" />
+      <!-- CHECKME if needed -->
+      <IMPORT NAME="gt-referencing3D"
+        MODULE="gt-referencing3D-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-shapefile" MODULE="gt-shapefile-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-shapefile-renderer"
+        MODULE="gt-shapefile-renderer-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-validation" MODULE="gt-validation-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-wfs" MODULE="gt-wfs-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-xml" MODULE="gt-xml-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-xml-gpx" MODULE="gt-xml-gpx-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-core" MODULE="gt-xsd-core-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-filter" MODULE="gt-xsd-filter-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-gml2" MODULE="gt-xsd-gml2-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-gml3" MODULE="gt-xsd-gml3-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-kml" MODULE="gt-xsd-kml-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-ows" MODULE="gt-xsd-ows-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-sld" MODULE="gt-xsd-sld-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-wfs" MODULE="gt-xsd-wfs-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-wps" MODULE="gt-xsd-wps-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="hsqldb" MODULE="hsqldb-1.8.0.7.jar" REQUIRED="true" />
+      <IMPORT NAME="imageio-ext-arcgrid"
+        MODULE="imageio-ext-arcgrid-1.0-SNAPSHOT.jar" REQUIRED="true" />
+      <IMPORT NAME="imageio-ext-customstreams"
+        MODULE="imageio-ext-customstreams-1.0-SNAPSHOT.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai_codec" MODULE="jai_codec-1.1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai_core" MODULE="jai_core.jar" REQUIRED="true" />
+      <IMPORT NAME="jai_imageio" MODULE="jai_imageio-1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxb-api" MODULE="jaxb-api-1.3.jar" REQUIRED="true" />
+      <IMPORT NAME="jaxb-impl" MODULE="jaxb-impl-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxb-libs" MODULE="jaxb-libs-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxen" MODULE="jaxen-1.1.1.jar" REQUIRED="true" />
+      <IMPORT NAME="jdbc-stdext" MODULE="jdbc-stdext-2.0.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jdom" MODULE="jdom-1.0.jar" REQUIRED="true" />
+      <IMPORT NAME="jlfgr" MODULE="jlfgr-1.0.jar" REQUIRED="true" />
+      <IMPORT NAME="jsr-275" MODULE="jsr-275-1.0-beta-2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jta" MODULE="jta-1.0.1B.jar" REQUIRED="true" />
+      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="junit" MODULE="junit-4.4.jar" REQUIRED="true" />
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.12.jar" REQUIRED="true" />
+      <IMPORT NAME="mlibwrapper" MODULE="mlibwrapper_jai.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="netcdf" MODULE="netcdf-2.2.20.jar" REQUIRED="true" />
+      <IMPORT NAME="net.opengis.ows" MODULE="net.opengis.ows-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="net.opengis.wcs" MODULE="net.opengis.wcs-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="net.opengis.wfs" MODULE="net.opengis.wfs-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="net.opengis.wfsv"
+        MODULE="net.opengis.wfsv-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="net.opengis.wps" MODULE="net.opengis.wps-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="org.w3.xlink" MODULE="org.w3.xlink-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="picocontainer" MODULE="picocontainer-1.2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="postgis-driver" MODULE="postgis_1.4.0.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="postgresql" MODULE="postgresql-8.1-407.jdbc3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="relaxngDatatype-X" MODULE="relaxngDatatype-X.jar"
+        REQUIRED="true" />
+      <!-- slf4j used by coverageio-netcdf -->
+      <IMPORT NAME="slf4j-api" MODULE="slf4j-api-1.4.0.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="slf4j-jdk" MODULE="slf4j-jdk14-1.4.0.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="spatialdb" MODULE="spatialdb-0.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="spatialdbbox" MODULE="spatialdbbox-1.0-SNAPSHOT.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="vecmath" MODULE="vecmath-1.3.1.jar" REQUIRED="true" />
+      <IMPORT NAME="velocity" MODULE="velocity-1.4.jar" REQUIRED="true" />
+      <IMPORT NAME="velocity-dep" MODULE="velocity-dep-1.4.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xercesImpl" MODULE="xercesImpl-2.7.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xml-apis" MODULE="xml-apis-1.0.b2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xml-apis-xerces" MODULE="xml-apis-xerces-2.7.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xpp3" MODULE="xpp3-1.1.3.4.O.jar" REQUIRED="true" />
+      <IMPORT NAME="xsd" MODULE="xsd-2.2.2.jar" REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="NB_FEATURE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+    <RETURN NAME="METADATA" TYPE="id_String" AVAILABILITY="AFTER" />
+    <RETURN NAME="UDIG_GEORESOURCEID" TYPE="id_String" AVAILABILITY="AFTER" />
+    <RETURN NAME="UDIG_GEORESOURCE" TYPE="id_String" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

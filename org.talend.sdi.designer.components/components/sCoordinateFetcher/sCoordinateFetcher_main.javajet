@@ -1,0 +1,100 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String idx = ElementParameterParser.getValue(node, "__INDEX__");
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+	IMetadataTable metadata = metadatas.get(0);
+	if (metadata != null) {
+	    List<IMetadataColumn> columns = metadata.getListColumns();
+	    IMetadataColumn geometryColumn = null;
+        for (int j = 0; j < columns.size(); j++) {
+            IMetadataColumn column = columns.get(j);
+            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+            if(typeToGenerate.equals("Geometry")) {
+                geometryColumn = column;
+                break;
+            }
+        }
+        if (geometryColumn == null){
+            return "error(\"Cannot find a geometry column\");";
+        }
+        String geometryObject = geometryColumn.getLabel();
+
+        List< ? extends IConnection> inConnections = node.getIncomingConnections();
+        if (inConnections != null) {
+            if (inConnections.size() > 0) {
+                IConnection inConnection = inConnections.get(0);
+                
+                List< ? extends IConnection> outConnections = node.getOutgoingConnections();
+                if (outConnections != null) {
+                
+%>
+org.talend.sdi.geometry.Geometry geom_<%=cid%> = (org.talend.sdi.geometry.Geometry) <%=inConnection.getName()%>.<%=geometryObject%>;
+int n_<%=cid%> = geom_<%=cid%>.getNumPoints();
+String idx_<%=cid%> = "<%=idx%>";
+int i_<%=cid%> = 0;
+
+if (idx_<%=cid%>.equals("-1")) {    
+    i_<%=cid%> = n_<%=cid%>-1;
+} else {
+    i_<%=cid%> = new Integer(idx_<%=cid%>);
+    if (i_<%=cid%> > n_<%=cid%>) {          // Get last coordinates if index is OutOfBounds 
+        i_<%=cid%> = n_<%=cid%> - 1;
+    }
+}
+
+double x_<%=cid%> = geom_<%=cid%>.getCoordinates()[i_<%=cid%>].x;
+double y_<%=cid%> = geom_<%=cid%>.getCoordinates()[i_<%=cid%>].y;
+double z_<%=cid%> = geom_<%=cid%>.getCoordinates()[i_<%=cid%>].z;
+    
+<%  
+                    for (IConnection outConnection : outConnections) {
+                        if ((outConnection.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+                            for (int j = 0; j < columns.size(); j++) {
+                                IMetadataColumn columnout=columns.get(j);
+                                if (!(columnout.getLabel().equals("X") || 
+                                    columnout.getLabel().equals("Y") || 
+                                    columnout.getLabel().equals("Z"))) {
+%>
+
+<%=outConnection.getName() %>.<%=columnout.getLabel() %> = <%=inConnection.getName() %>.<%=columnout.getLabel() %>;
+
+<%
+                                }
+                            }   
+%>
+
+<%=outConnection.getName() %>.X  = x_<%=cid%>;
+<%=outConnection.getName() %>.Y  = y_<%=cid%>;
+<%=outConnection.getName() %>.Z  = z_<%=cid%>;
+
+<%
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+%>
+
+nbFeature_<%=cid %>++;

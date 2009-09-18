@@ -1,0 +1,38 @@
+=====  Basic instructions to export application  ======
+
+
+First you must export the application using eclipse.
+
+1. If you want to export for multiple platforms you must add the delta pack
+   !!! Make sure you get the correct version otherwise export will not work !!!
+2. Create a Launch configuration in eclipse that runs correctly
+3. Create a new product file:
+   1. File -> New -> Other (CTRL-N)
+   2. Select Product Configuration
+   3. Press Next
+   4. Enter name and select a folder (doesn't matter what name or where)
+   5. Select the "Use a launch configuration" radio button
+   6. Select the Launch Configuration you created earlier
+   7. Finish
+4. Have Scala installed on your class path  (http://www.scala-lang.org/)
+5. Run the create-export-product.sh shell script with the path to the new product and the exiting sdi.product file
+     Example ./create-export-product.sh ../../tos_src/org.talend.rcp.branding.sdi/template.product ../../tos_src/org.talend.rcp.branding.sdi/sdi.product
+   - This will create a new product in the same plugin as sdi.product called exportable.product.  
+6. Open the exportable.product file in the "Product Configuration Editor"
+7. In the "Overview" tab 
+8. Click the "Synchronize" link
+9. Click the "Launch an Eclipse application" link and verify that the app still runs correctly
+   - You may have to remove and add the feature to the sdi.product in order to make it run correctly.  I 
+     don't know why but it worked for me
+10. Click the "Eclipse Product export wizard"
+11.Configure the wizard
+   Make sure that you export to a directory and not to archives
+12.Run package.sh with the directory that the application was exported to
+   Example: ./package /tmp/talend-export
+
+
+===== Notes about update-feature script ======
+
+The update-feature script simply a scala script with a thin shell wrapper around it.  
+The reason I chose scala is because (for me) I could do XML manipulation the quickest.
+

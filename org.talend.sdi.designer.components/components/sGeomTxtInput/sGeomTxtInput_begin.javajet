@@ -1,0 +1,67 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.process.EConnectionType
+"
+%>
+
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    boolean stats=codeGenArgument.isStatistics();
+    List<IMetadataTable> metadatas = node.getMetadataList();
+    String cid = node.getUniqueName();
+    if ((metadatas != null) && (metadatas.size() > 0)) {
+       IMetadataTable metadata = metadatas.get(0);
+       if (metadata != null) {
+               String geometry = ElementParameterParser.getValue(node,"__GEOM__"); 
+%>
+
+/* initialize feature count */
+int nbFeature_<%=cid %> = 0;
+
+boolean loop = false;
+
+com.vividsolutions.jts.io.WKTReader object_<%=cid %> = new com.vividsolutions.jts.io.WKTReader();
+org.talend.sdi.geometry.Geometry geometry_<%=cid %> = null;
+try {   
+    geometry_<%=cid %> = new org.talend.sdi.geometry.Geometry(object_<%=cid %>.read(<%=geometry %>));
+    loop = true;
+} catch (Exception e) {
+    throw new RuntimeException(e.getMessage() + "\n Geometry creation failed please correct your text entry");
+}
+         
+while(loop) {
+
+<%  
+    List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+        String firstConnName = "";
+        if (conns!=null) {
+            if (conns.size()>0) {
+                for (int i = 0; i < conns.size(); i++) {
+                    IConnection conn = conns.get(i);
+                    firstConnName = conn.getName();                    
+            if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {          
+%>
+
+    <%=conn.getName()%>.the_geom = geometry_<%=cid %>;
+
+<% 
+                  
+            }     
+          }
+       }
+    }
+    }
+}
+%>

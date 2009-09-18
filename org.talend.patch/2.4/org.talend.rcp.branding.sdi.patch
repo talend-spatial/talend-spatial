@@ -1,0 +1,271 @@
+Index: content/root.xhtml
+===================================================================
+--- content/root.xhtml	(revision 16133)
++++ content/root.xhtml	(working copy)
+@@ -8,34 +8,49 @@
+ </head>
+ <body>
+ <div id="cadre">
+-<div id="tophead"> <img src="imgs/corner1.gif" alt="" width="22" height="81" /> <img src="imgs/talend-open-data-solution.gif" alt="Spatial Data Integrator" width="165" height="81" /> <img src="imgs/fondHeader.gif" height="81" width="563" alt="" /> <img src="imgs/corner2_002.gif" width="19" height="81" alt="" /> </div>
++<div id="tophead"><img src="imgs/corner1.gif" alt="" width="22"
++	height="81" /> <img src="imgs/talend-open-data-solution.gif"
++	alt="Spatial Data Integrator" width="165" height="81" /> <img
++	src="imgs/fondHeader.gif" height="81" width="563" alt="" /> <img
++	src="imgs/corner2_002.gif" width="19" height="81" alt="" /></div>
+ <div id="Content">
+-  <h1>Welcome to Spatial Data Integrator</h1>
+-  <div id="cadreInner">
+-  <div id="innercorps">
+-    <div class="item"><h2>Website</h2>
+-    <ul>
+-      <li><a id="newsb" href="http://www.camptocamp.com/" onmouseover="document.getElementById('newsb').style.textDecoration='underline'" onmouseout="document.getElementById('newsb').style.textDecoration='none'" class="lienArianne" target="_blank">Camptocamp</a></li>
+-    </ul></div>
+-    
+-    
+-    <div class="item"><h2>Support</h2>
+-    <ul>
+-      <li><a id="tutorialsb" onmouseover="document.getElementById('tutorialsb').style.textDecoration='underline'" onmouseout="document.getElementById('tutorialsb').style.textDecoration='none'" href="http://www.talendforge.org/" class="lienArianne" target="_blank">TalendForge</a></li>
+-    </ul>
+-    </div>
+-   
+-    <div class="item"><p id="Start"><a id="product" onmouseover="document.getElementById('product').style.textDecoration='underline'" onmouseout="document.getElementById('product').style.textDecoration='none'" href="http://org.eclipse.ui.intro/switchToLaunchBar" class="titreJob">Start using Spatial Data Integrator now !</a></p></div>
+-    
+-    
+-    </div>
+-    </div>
+-    </div>
+-   
+-    
+-    
+-    
+-    <div id="cadreFoot"></div>
+-    </div>
++	<h1>Welcome to Spatial Data Integrator</h1>
++	<div id="cadreInner">
++		<div id="innercorps" style="height:350px;">
++			<div class="item" style="float:left;width:45%;">
++				<h2>Support</h2>
++				<ul>
++				   <li><a href="http://www.talendforge.org/" class="lienArianne">TalendForge</a></li>
++				   <li/>
++				   <li><a href="http://www.talendforge.org/wiki/doku.php?id=sdi:mainpage"
++		                class="lienArianne">Documentation</a></li>
++	              <li><a href="http://www.talendforge.org/wiki/doku.php?id=sdi:migrate1.2to1.3"
++		                class="lienArianne">Migration procedure from 1.2 to 1.3</a></li>
++				</ul>
++	            <h2>Community</h2>
++	            <ul>
++	              <li><a class="lienArianne" href="http://www.talendforge.org/bugs">Use Talend BugTracker to report any bugs, issues</a></li>
++	              <li><a class="lienArianne" href="http://www.talendforge.org/forum/">Connect to the Forum</a></li>
++	            </ul>
++                <h2>Website</h2>
++                <ul>
++                    <li><a href="http://www.camptocamp.com/"
++                        class="lienArianne" target="_blank">Camptocamp</a></li>
++                </ul>
++			</div>
++			
++			<div class="item"  style="float:right;width:45%;">
++			<p id="Start"><a id="product"
++				onmouseover="document.getElementById('product').style.textDecoration='underline'"
++				onmouseout="document.getElementById('product').style.textDecoration='none'"
++				href="http://org.eclipse.ui.intro/switchToLaunchBar" class="titreJob">Start
++			using<br/> Spatial Data Integrator now !</a></p>
++			</div>
++		
++		</div>
++	</div>
++</div>
++<div id="cadreFoot"></div>
++</div>
+ </body>
+ </html>
+Index: plugin.properties
+===================================================================
+--- plugin.properties	(revision 16133)
++++ plugin.properties	(working copy)
+@@ -1,2 +1,2 @@
+ productBlurb = {2}\n\nVersion: {1}\nBuild id: {0}\n\n\n(c) Copyright 2006 Talend Inc.  All rights reserved.\nVisit {3}
+-productName=Spatial Data Integrator
+\ No newline at end of file
++productName=Spatial Data Integrator 1.3.0RC1
+\ No newline at end of file
+Index: sdi.product
+===================================================================
+--- sdi.product	(revision 16133)
++++ sdi.product	(working copy)
+@@ -1,87 +1,87 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<?pde version="3.1"?>
+-
+-<product name="%productName" id="org.talend.rcp.branding.sdi.product" application="org.talend.rcp.branding.sdi.application" useFeatures="true">
+-
+-   <aboutInfo>
+-      <image path="icons/about.gif"/>
+-      <text>
+-         %productBlurb
+-      </text>
+-   </aboutInfo>
+-
+-   <configIni use="default"/>
+-
+-   <launcherArgs>
+-   </launcherArgs>
+-
+-   <windowImages i16="/org.talend.rcp/icons/appli_16x16.gif" i32="/org.talend.rcp/icons/appli_32x32.gif" i48="/org.talend.rcp/icons/appli_48x48.gif"/>
+-
+-   <splash
+-      startupProgressRect="7,202,441,15"
+-      startupMessageRect="7,222,441,20"
+-      startupForegroundColor="FFFFFF" />
+-   <launcher name="TalendOpenStudio">
+-      <linux icon="/org.talend.rcp/icons/appli_48x48.xpm"/>
+-      <solaris/>
+-      <win useIco="true">
+-         <ico path="/org.talend.rcp/icons/designer.ico"/>
+-         <bmp/>
+-      </win>
+-   </launcher>
+-
+-   <intro introId="org.talend.rcp.sdi.intro"/>
+-
+-   <plugins>
+-      <plugin id="com.ibm.icu"/>
+-      <plugin id="org.apache.lucene"/>
+-      <plugin id="org.eclipse.ant.core"/>
+-      <plugin id="org.eclipse.core.commands"/>
+-      <plugin id="org.eclipse.core.contenttype"/>
+-      <plugin id="org.eclipse.core.expressions"/>
+-      <plugin id="org.eclipse.core.filesystem"/>
+-      <plugin id="org.eclipse.core.filesystem.win32.x86" fragment="true"/>
+-      <plugin id="org.eclipse.core.jobs"/>
+-      <plugin id="org.eclipse.core.resources"/>
+-      <plugin id="org.eclipse.core.resources.compatibility" fragment="true"/>
+-      <plugin id="org.eclipse.core.resources.win32" fragment="true"/>
+-      <plugin id="org.eclipse.core.runtime"/>
+-      <plugin id="org.eclipse.core.runtime.compatibility"/>
+-      <plugin id="org.eclipse.core.runtime.compatibility.auth"/>
+-      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
+-      <plugin id="org.eclipse.core.variables"/>
+-      <plugin id="org.eclipse.equinox.common"/>
+-      <plugin id="org.eclipse.equinox.preferences"/>
+-      <plugin id="org.eclipse.equinox.registry"/>
+-      <plugin id="org.eclipse.help"/>
+-      <plugin id="org.eclipse.help.appserver"/>
+-      <plugin id="org.eclipse.help.base"/>
+-      <plugin id="org.eclipse.jface"/>
+-      <plugin id="org.eclipse.jface.text"/>
+-      <plugin id="org.eclipse.osgi"/>
+-      <plugin id="org.eclipse.swt"/>
+-      <plugin id="org.eclipse.swt.win32.win32.x86" fragment="true"/>
+-      <plugin id="org.eclipse.text"/>
+-      <plugin id="org.eclipse.ui"/>
+-      <plugin id="org.eclipse.ui.forms"/>
+-      <plugin id="org.eclipse.ui.ide"/>
+-      <plugin id="org.eclipse.ui.intro"/>
+-      <plugin id="org.eclipse.ui.navigator"/>
+-      <plugin id="org.eclipse.ui.navigator.resources"/>
+-      <plugin id="org.eclipse.ui.views"/>
+-      <plugin id="org.eclipse.ui.views.properties.tabbed"/>
+-      <plugin id="org.eclipse.ui.win32" fragment="true"/>
+-      <plugin id="org.eclipse.ui.workbench"/>
+-      <plugin id="org.eclipse.ui.workbench.texteditor"/>
+-      <plugin id="org.eclipse.update.configurator"/>
+-      <plugin id="org.eclipse.update.core"/>
+-      <plugin id="org.eclipse.update.core.win32" fragment="true"/>
+-      <plugin id="org.eclipse.update.ui"/>
+-      <plugin id="org.talend.rcp"/>
+-   </plugins>
+-
+-   <features>
+-      <feature id="org.talend.rcp.branding.sdi_feature" version="1.0.0"/>
+-   </features>
+-
+-</product>
++<?xml version="1.0" encoding="UTF-8"?>
++<?pde version="3.1"?>
++
++<product name="%productName" id="org.talend.rcp.branding.sdi.product" application="org.talend.rcp.branding.sdi.application" useFeatures="true">
++
++   <aboutInfo>
++      <image path="icons/about.jpg"/>
++      <text>
++         %productBlurb
++      </text>
++   </aboutInfo>
++
++   <configIni use="default"/>
++
++   <launcherArgs>
++   </launcherArgs>
++
++   <windowImages i16="/org.talend.rcp/icons/appli_16x16.gif" i32="/org.talend.rcp/icons/appli_32x32.gif" i48="/org.talend.rcp/icons/appli_48x48.gif"/>
++
++   <splash
++      startupProgressRect="7,202,441,15"
++      startupMessageRect="7,222,441,20"
++      startupForegroundColor="FFFFFF" />
++   <launcher name="TalendOpenStudio">
++      <linux icon="/org.talend.rcp/icons/appli_48x48.xpm"/>
++      <solaris/>
++      <win useIco="true">
++         <ico path="/org.talend.rcp/icons/designer.ico"/>
++         <bmp/>
++      </win>
++   </launcher>
++
++   <intro introId="org.talend.rcp.sdi.intro"/>
++
++   <plugins>
++      <plugin id="com.ibm.icu"/>
++      <plugin id="org.apache.lucene"/>
++      <plugin id="org.eclipse.ant.core"/>
++      <plugin id="org.eclipse.core.commands"/>
++      <plugin id="org.eclipse.core.contenttype"/>
++      <plugin id="org.eclipse.core.expressions"/>
++      <plugin id="org.eclipse.core.filesystem"/>
++      <plugin id="org.eclipse.core.filesystem.win32.x86"/>
++      <plugin id="org.eclipse.core.jobs"/>
++      <plugin id="org.eclipse.core.resources"/>
++      <plugin id="org.eclipse.core.resources.compatibility" fragment="true"/>
++      <plugin id="org.eclipse.core.resources.win32"/>
++      <plugin id="org.eclipse.core.runtime"/>
++      <plugin id="org.eclipse.core.runtime.compatibility"/>
++      <plugin id="org.eclipse.core.runtime.compatibility.auth"/>
++      <plugin id="org.eclipse.core.runtime.compatibility.registry" fragment="true"/>
++      <plugin id="org.eclipse.core.variables"/>
++      <plugin id="org.eclipse.equinox.common"/>
++      <plugin id="org.eclipse.equinox.preferences"/>
++      <plugin id="org.eclipse.equinox.registry"/>
++      <plugin id="org.eclipse.help"/>
++      <plugin id="org.eclipse.help.appserver"/>
++      <plugin id="org.eclipse.help.base"/>
++      <plugin id="org.eclipse.jface"/>
++      <plugin id="org.eclipse.jface.text"/>
++      <plugin id="org.eclipse.osgi"/>
++      <plugin id="org.eclipse.swt"/>
++      <plugin id="org.eclipse.swt.win32.win32.x86"/>
++      <plugin id="org.eclipse.text"/>
++      <plugin id="org.eclipse.ui"/>
++      <plugin id="org.eclipse.ui.forms"/>
++      <plugin id="org.eclipse.ui.ide"/>
++      <plugin id="org.eclipse.ui.intro"/>
++      <plugin id="org.eclipse.ui.navigator"/>
++      <plugin id="org.eclipse.ui.navigator.resources"/>
++      <plugin id="org.eclipse.ui.views"/>
++      <plugin id="org.eclipse.ui.views.properties.tabbed"/>
++      <plugin id="org.eclipse.ui.win32"/>
++      <plugin id="org.eclipse.ui.workbench"/>
++      <plugin id="org.eclipse.ui.workbench.texteditor"/>
++      <plugin id="org.eclipse.update.configurator"/>
++      <plugin id="org.eclipse.update.core"/>
++      <plugin id="org.eclipse.update.core.win32"/>
++      <plugin id="org.eclipse.update.ui"/>
++      <plugin id="org.talend.rcp"/>
++   </plugins>
++
++   <features>
++      <feature id="org.talend.rcp.branding.sdi_feature" version="1.0.0"/>
++   </features>
++
++</product>

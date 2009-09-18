@@ -1,0 +1,119 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.process.IConnectionCategory
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+    java.util.List
+    java.util.Map
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String operation = "";
+String distance = ElementParameterParser.getValue(node, "__DISTANCE__");
+String min = ElementParameterParser.getValue(node, "__MIN__");
+String max = ElementParameterParser.getValue(node, "__MAX__");
+String destination = cid.substring(0, cid.length() - 4);
+
+
+List< ? extends IConnection> conns = node.getIncomingConnections();
+for (IConnection conn : conns) {
+    if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+        operation = ElementParameterParser.getValue(node,"__OPERATION__");
+		
+        /* 
+         * Geom operation according to component flavor.
+         */
+        if (operation.equals("contour")) {
+%>
+// Compute contour
+
+es.unex.sextante.geotools25.GTRasterLayer layer_<%=cid %> = 
+    new es.unex.sextante.geotools25.GTRasterLayer();
+layer_<%=cid %>.create(
+	(org.geotools.coverage.grid.GridCoverage2D) <%=conn.getName() %>.RASTER
+	);
+layer_<%=cid %>.setName("ELEVATION");
+
+/*
+ * Now we will calculate contour lines from that DEM
+ */
+es.unex.sextante.extVectorize.contourLines.ContourLinesAlgorithm alg_<%=cid %> = 
+    new es.unex.sextante.extVectorize.contourLines.ContourLinesAlgorithm();
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+params_<%=cid %>.getParameter("LAYER").setParameterValue(layer_<%=cid %>);
+params_<%=cid %>.getParameter("DISTANCE").setParameterValue(new Double(<%=distance %>));
+params_<%=cid %>.getParameter("MIN").setParameterValue(new Double(<%=min %>));
+params_<%=cid %>.getParameter("MAX").setParameterValue(new Double(<%=max %>));
+
+
+/*
+ *  This algorithm will generate a new vector layer.
+ * We can select the file to use for that layer with the
+ * following lines, retrieving the output container and
+ * setting a new filename. If we omit this, it will be saved to the
+ * temporary folder returned by the output factory.
+ */
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output contours_<%=cid %> = outputs_<%=cid %>.getOutput("RESULT");
+//contours.setFilename(out);
+
+es.unex.sextante.geotools25.GTOutputFactory outputFactory_<%=cid %> = 
+    new es.unex.sextante.geotools25.GTOutputFactory();
+try { 
+    alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (es.unex.sextante.exceptions.GeoAlgorithmExecutionException e) {
+    throw new RuntimeException("GeoAlgorithmExecutionException " + e.getMessage());
+}
+/*
+ * Now the result can be taken from the output container
+ */
+es.unex.sextante.dataObjects.IVectorLayer result_<%=cid %> = 
+    (es.unex.sextante.dataObjects.IVectorLayer) contours_<%=cid %>.getOutputObject();
+
+
+org.geotools.data.FeatureSource
+	<org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> fs_<%=cid %> = 
+		(org.geotools.data.FeatureSource) result_<%=cid %>.getBaseDataObject();
+org.geotools.feature.FeatureCollection
+	<org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> fc_<%=cid %> = 
+		fs_<%=cid %>.getFeatures();
+org.geotools.feature.FeatureIterator
+	<org.opengis.feature.simple.SimpleFeature> reader_<%=cid %> = 
+		fc_<%=cid %>.features();
+
+while(reader_<%=cid %>.hasNext()) {
+
+    org.opengis.feature.simple.SimpleFeature feature_<%=cid %> = reader_<%=cid %>.next();
+    org.talend.sdi.geometry.Geometry geometry_<%=cid %> =
+        new org.talend.sdi.geometry.Geometry(
+            (com.vividsolutions.jts.geom.Geometry) feature_<%=cid %>.getDefaultGeometry()
+            );
+    
+    Integer id_<%=cid %> = (Integer) feature_<%=cid %>.getAttribute("ID");
+    Double value_<%=cid %> = Double.parseDouble (feature_<%=cid %>.getAttribute("ELEVATION").toString());
+
+	// Load in temp collection
+	OperationStruct<%=cid %> operation_result_<%=cid %> = new OperationStruct<%=cid %>();
+	operation_result_<%=cid %>.id = id_<%=cid %>;
+	operation_result_<%=cid %>.value = value_<%=cid %>;
+	operation_result_<%=cid %>.the_geom = geometry_<%=cid %>;
+	
+	hash_coverage_<%=cid %>.put(id_<%=cid %>, operation_result_<%=cid %>);
+}
+<%
+		}
+    }
+}
+%>
+globalMap.put("<%=destination %>", hash_coverage_<%=cid %>);
+

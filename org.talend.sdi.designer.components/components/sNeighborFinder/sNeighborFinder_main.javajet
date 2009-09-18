@@ -1,0 +1,168 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.core.model.metadata.IMetadataColumn 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.LinkedList
+    java.util.Iterator
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+    
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    
+    List<IMetadataColumn> columns = metadata.getListColumns();
+    IMetadataColumn geometryColumn = null;
+    for (int j = 0; j < columns.size(); j++) {
+        IMetadataColumn column = columns.get(j);
+        String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+        if(typeToGenerate.equals("Geometry")) {
+            geometryColumn = column;
+            break;
+        }
+    }
+    if (geometryColumn == null){
+        return "error(\"Cannot find a geometry column\");";
+    }
+    String colName = geometryColumn.getLabel();
+
+    String maxDistanceStr = ElementParameterParser.getValue(node, "__MAX_DISTANCE__");
+    double maxDistance = -1.0;
+    boolean maxDistanceSpecified = false;
+
+    if (!maxDistanceStr.equals("")) {
+        maxDistance = Math.abs(Double.parseDouble(maxDistanceStr)); // FIXME
+        maxDistanceSpecified = true;
+    }
+
+    List< ? extends IConnection> inConns = node.getIncomingConnections();
+    List< ? extends IConnection> outConns = node.getOutgoingSortedConnections();
+
+    if (outConns != null && outConns.size() > 0) {
+        IConnection outConn = outConns.get(0);
+    
+        IConnection inRefCon = null;
+        IConnection inMainCon = null;
+        
+        String keyName = "Setting a key is mandatory in lookup Schema";
+        LinkedList<String> refColumnsOfInterest = new LinkedList<String>();
+        
+        for (IConnection inConn : inConns) {
+            if (inConn == null) {
+                continue;
+            }
+            EConnectionType connectionType = inConn.getLineStyle();
+            if (connectionType == EConnectionType.FLOW_MAIN) {
+                inMainCon = inConn;
+            } else if (connectionType == EConnectionType.FLOW_REF) {
+                inRefCon = inConn;
+                List<IMetadataColumn> inListColumns = inRefCon.getMetadataTable().getListColumns();
+                int inSizeListColumns = inListColumns.size();
+                for (int i = 0; i < inSizeListColumns; i++) {
+                    IMetadataColumn inColumn = inListColumns.get(i);
+                    if (inColumn.isKey()) {
+                        keyName = inColumn.getLabel();
+                    }
+                    List<IMetadataColumn> outListColumns = outConn.getMetadataTable().getListColumns();
+                    int outSizeListColumns = outListColumns.size();
+                    for (int j = 0; j < outSizeListColumns; j++) {
+                        IMetadataColumn outColumn = outListColumns.get(j);
+                        if (outColumn.getLabel().equals(inColumn.getLabel())) {
+                            refColumnsOfInterest.add(outColumn.getLabel());
+                        }
+                    }
+                }
+            }
+        }
+        
+        if ((outConn.getLineStyle().equals(EConnectionType.FLOW_MAIN)) ||
+            (outConn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+            List<IMetadataColumn> listColumns = inMainCon.getMetadataTable().getListColumns();
+            int sizeListColumns = listColumns.size();
+            for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                IMetadataColumn column = listColumns.get(valueN);
+%>
+
+<%=outConn.getName() %>.<%=column.getLabel() %> = <%=inMainCon.getName() %>.<%=column.getLabel() %>;
+
+<%              
+            }
+%>
+
+java.util.Iterator<<%=inRefCon.getName() %>Struct> tItr_<%=inRefCon.getName() %>_<%=cid %> = tSet_<%=inRefCon.getName() %>_<%=cid %>.iterator();
+
+if (<%=outConn.getName() %>.distance != null) { 
+    <%=outConn.getName() %>.distance = null;
+}
+
+// Results are stored in the two data structures below
+double value_<%=cid %> = -1;
+<%=inRefCon.getName() %>Struct resultFields_<%=cid %> = null;
+
+org.talend.sdi.geometry.Geometry tomatch_<%=cid %> = (org.talend.sdi.geometry.Geometry) <%=inMainCon.getName() %>.<%=colName %>;
+
+while (tItr_<%=inRefCon.getName() %>_<%=cid %>.hasNext()) {
+    <%=inRefCon.getName() %>Struct fields = tItr_<%=inRefCon.getName() %>_<%=cid %>.next();
+    org.talend.sdi.geometry.Geometry geom = (org.talend.sdi.geometry.Geometry) fields.<%=keyName %>;
+
+    double distance = tomatch_<%=cid %>.distance(geom);
+    
+    if ((distance < value_<%=cid %>) || (value_<%=cid %> == -1)) {
+        value_<%=cid %> = distance;
+        resultFields_<%=cid %> = fields;
+    }
+}
+
+<%
+            if (maxDistanceSpecified) {
+%>
+
+if (value_<%=cid %> < <%=maxDistance %>) {
+
+<%
+            }
+%>
+
+    <%=outConn.getName() %>.distance = value_<%=cid %>;
+
+<%
+            Iterator<String> it = refColumnsOfInterest.iterator();
+            while (it.hasNext()) {
+                String columnLabel = it.next();
+%>
+
+    <%=outConn.getName() %>.<%=columnLabel %> = resultFields_<%=cid %>.<%=columnLabel %>;
+
+<%
+            }
+
+            if (maxDistanceSpecified) {
+%>
+
+} else {
+    continue; 
+}
+
+<%
+            }
+%>
+
+nbFeature_<%=cid%>++;
+    
+<%
+        }
+    }
+}
+%>

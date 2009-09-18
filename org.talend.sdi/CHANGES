@@ -1,0 +1,112 @@
+----
+= Spatial Data Integrator 1.3.0 : List of changes =
+ * Fixed #: Added Geometry type (Use it instead of Object type)
+ * Fixed #: Input components only allowed one output link (following TOS rules, use tReplicate create one to many relations)
+ * Update to TOS 2.4.1
+ * Update to GeoTools 2.5
+ * 7 new Components
+ ** sWfsInput:
+ ** sGpxInput:
+ ** sSimplify: Use DouglasPeuckerSimplifier and TopologyPreservingSimplifier algorithme to simplify geometries
+ ** sSimpleGeomToMulti: Convert simple geometry (POINT, LINESTRING, POLYGON) to collection (MULTIPOINT, MULTILINESTRING, MULTIPOLYGON).
+ ** sGraticuleBuilder: Create grid
+ ** sChangeLineDirection: Invert line direction
+ ** sTransform: Compute affine transformation (translation, rotation and scaling)
+ 
+  
+  
+----
+= Spatial Data Integrator 1.2.0 : List of changes =
+== New == 
+ * 5 new Components
+ ** sMetadataCrator: Create an XML metadata file using the ISO19139 standard
+ ** sMEFCreator: Create a file conforming to the Metadata Exchange Format (MEF) spec
+ ** sEdigeoInput : Added support for EDIGeO format in input
+ ** sConvexHullCalculator : Added Convex hull calculator
+ ** sGeomTxtInput : Added a geometry text input component
+ * Added GeoOperation support for 9IM operators
+
+== Changes ==
+ * sCataloguePublisher: Add MEF support
+ * sGeoOutput* : Set Geometry as default type
+ * Updated all components for TOS 2.3.2 version (*_java.xml and virtual component)
+ * Updated demo workspace for compatibility with TOS 2.3.2
+ * Fixed sPostgisInput/sPostgisOutput: support for column not named "the_geom"
+ * Fixed the possibility to load xml schemas in geo components
+ * Added Input/Output repository for Geo/File category
+
+== Bugs fixed ==
+ * Fixed #0003091: sMapInfoInput/Output : var params is not unique
+ * Fixed #0003088: PostGIS schema support
+ * Fixed #0003092: sMapInfoInput does not support quote into String
+ * Fixed Talend 2.3.x template mechanism change (ie. CTYPE="THEN_RUN" by CTYPE="ROWS_END")
+ * Fixed #0003459 : sCataloguePublisher missing lib
+ * Fixed #0003090: Java 1.5 support
+----
+= Spatial Data Integrator 1.1 : List of changes =
+ 
+== New ==  
+ * 2 new Families
+ ** Geocoding with sFindPostalCode and sFindPlaceName components
+ ** DataQuality with sGeomValidator component
+ * 12 new Components
+ ** sGeomValidator : Return info on if geometry is valid or not
+ ** sInsidePointExtrator : Generate a point which are guaranteed to be on the feature area.
+ ** sPointsCounter : Retrieve the number of points of the geometry.
+ ** sBoundaryReplacer : Replace the geometry of a polygon by the boundary of the feature (ie. line)
+ ** sClipperBox : Clip geometries from the input to the box. Resulting geometries are the intersection of all features with the box defined.
+ ** sGetGeomSRID : Get SRID for each geometry feature and add the identifier of the SRID in a new column
+ ** sProj : Reproject geometry
+ ** sGeoNames : Contact GeoNames webservices (thanks to the GeoNames.org team http://www.geonames.org)
+ ** sFindPostalCode : Use GeoNames webservice to find nearby postal codes / reverse geocoding
+ ** sFindPlaceName : Use GeoNames webservice to find nearby place name / reverse geocoding
+ ** sGetElevation : Use GeoNames webservice to get elevation from SRTM or GTOPO30 datasets
+ ** sCataloguePublisher : Publish metadata produce by an sGeoOutput (eg. Shapefile, MIFMID, ...) component to a catalogue (ie. GeoNetwork)
+ * Added ant script to install/compile/packFromSDI 
+ * Added demo geodata and demo workspace in SVN
+ 
+== Changes ==
+ * Simplify schema definition for the geometry column. Added the_geom column by default for input and output components.
+ * sShapefileOutput : Added force output CRS using epsg code
+ * sMapinfoOutput : Added force output CRS using epsg code
+ * sPostGISOutput : Added output CRS using epsg code
+ * sBufferCalculator : Added buffer parameters End cap style and Curve approximation 
+ * Migration from JTS 1.7 to 1.9
+ 
+== Bugs fixed ==
+ * Geom needs to be the first schema element for MIF output
+ * sGeoRssOutput : Fixed issue with namespaces
+  
+  
+  
+  
+----
+= Spatial Data Integrator v1.0  (branch-2_2) : List of changes = 
+
+ * First developement by campToCamp
+ * 24 first Components
+ ** sShapefileInput
+ ** sShapefileOuput
+ ** sMapinfoInput
+ ** sMapinfoOutput
+ ** sGeoRSSOutput
+ ** sPostgisInput
+ ** sPostgisOutput
+ ** sAreaCalculator
+ ** sBufferCalculator
+ ** sCentroidCalculator
+ ** sCoordinateFetcher
+ ** sDecimalDegreesCalculator
+ ** sEnvelopeCalculator
+ ** sLengthCalculator
+ ** sBoundingBoxAccumulator
+ ** sConvexHullAccumulator
+ ** sNeighborFinder
+ ** sDissolver
+ ** s2DPointReplacer
+ ** sESRIArcCatalog_to_ISO19115
+ ** sISO19115_to_ISO19139FR
+ ** sISO19139_to_ISO19139FR
+ ** sISO19139FR_to_ISO19139
+ 
+ 

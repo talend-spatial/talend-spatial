@@ -1,0 +1,106 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="CampToCamp" RELEASE_DATE="20071024"
+    STARTABLE="true" DATA_AUTO_PROPAGATE="false"
+    SCHEMA_AUTO_PROPAGATE="false">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Metadata</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <!-- Host information -->
+    <PARAMETER NAME="HOST" FIELD="TEXT" REQUIRED="true" NUM_ROW="1">
+      <DEFAULT>"http://localhost"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="PORT" FIELD="TEXT" REQUIRED="true" NUM_ROW="1">
+      <DEFAULT>8080</DEFAULT>
+    </PARAMETER>
+    <!-- Login information -->
+    <PARAMETER NAME="LOGIN" FIELD="CHECK" REQUIRED="true" NUM_ROW="2">
+      <DEFAULT>true</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="USERNAME" FIELD="TEXT" NUM_ROW="2" REQUIRED="false"
+      SHOW_IF="LOGIN == 'true'">
+      <DEFAULT>"admin"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="PASSWORD" FIELD="TEXT" NUM_ROW="2" REQUIRED="false"
+      SHOW_IF="LOGIN == 'true'">
+      <DEFAULT>"admin"</DEFAULT>
+    </PARAMETER>
+    <!-- Catalogue type -->
+    <PARAMETER NAME="CATALOGUE_TYPE" FIELD="CLOSED_LIST" NUM_ROW="3">
+      <ITEMS DEFAULT="GEONETWORK">
+        <ITEM NAME="GEONETWORK" VALUE="GEONETWORK" />
+        <ITEM NAME="GEONETWORKMEF" VALUE="GEONETWORKMEF" />
+        <!--          <ITEM NAME="CSW2"   VALUE="CSW2" />-->
+      </ITEMS>
+    </PARAMETER>
+    <!-- Metadata information could be an XML String or a MEF document -->
+    <PARAMETER NAME="METADATA" FIELD="TEXT" REQUIRED="true" NUM_ROW="4"
+      SHOW_IF="CATALOGUE_TYPE == 'GEONETWORK'">
+      <DEFAULT></DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MEF" FIELD="FILE" REQUIRED="true" NUM_ROW="4"
+      SHOW_IF="CATALOGUE_TYPE == 'GEONETWORKMEF'">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/metadata.mef"</DEFAULT>
+    </PARAMETER>
+    <!-- GeoNetwork information / start -->
+    <PARAMETER NAME="SERVLET" FIELD="TEXT" REQUIRED="true" NUM_ROW="5"
+      SHOW_IF="(CATALOGUE_TYPE == 'GEONETWORK') or (CATALOGUE_TYPE == 'GEONETWORKMEF')">
+      <DEFAULT>"geonetwork"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="SCHEMA" FIELD="CLOSED_LIST" NUM_ROW="6"
+      SHOW_IF="(CATALOGUE_TYPE == 'GEONETWORK')">
+      <ITEMS DEFAULT="iso19139">
+        <ITEM NAME="iso19139" VALUE="iso19139" />
+        <!--      <ITEM NAME="dcl4g"   VALUE="dcl4g" />-->
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="GROUP_TYPE" FIELD="CLOSED_LIST" NUM_ROW="7"
+      SHOW_IF="(CATALOGUE_TYPE == 'GEONETWORK')">
+      <ITEMS DEFAULT="1">
+        <ITEM NAME="INTERNET" VALUE="1" />
+        <ITEM NAME="INTRANET" VALUE="0" />
+        <ITEM NAME="OTHER" VALUE="99" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="GROUPID" FIELD="TEXT" REQUIRED="true" NUM_ROW="7"
+      SHOW_IF="(GROUP_TYPE == 'OTHER') and (CATALOGUE_TYPE == 'GEONETWORK')">
+      <DEFAULT>2</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CATEGORYID" FIELD="TEXT" REQUIRED="true"
+      NUM_ROW="8" SHOW_IF="(CATALOGUE_TYPE == 'GEONETWORK')">
+    </PARAMETER>
+    <!-- GeoNetwork information / end -->
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="dom4j-1.6.1" MODULE="dom4j-1.6.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxen-1.1.1" MODULE="jaxen-1.1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-httpclient"
+        MODULE="commons-httpclient-3.0.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-logging"
+        MODULE="commons-logging-1.1.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-codec" MODULE="commons-codec-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.12.jar"
+        REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS />
+</COMPONENT>

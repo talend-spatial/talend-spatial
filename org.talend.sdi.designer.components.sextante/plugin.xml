@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.talend.core.components_provider">
+      <ComponentsProvider
+            class="org.talend.sdi.designer.components.sextante.SextanteComponentsProvider"
+            folderName="sdisextante"
+            id="org.talend.sdi.designer.components.sextante.SextanteComponentsProvider">
+      </ComponentsProvider>
+   </extension>
+
+</plugin>

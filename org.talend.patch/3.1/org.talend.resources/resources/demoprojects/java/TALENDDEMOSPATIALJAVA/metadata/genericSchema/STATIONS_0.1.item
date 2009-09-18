@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ASCII"?>
+<TalendMetadata:GenericSchemaConnection xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendMetadata="http://www.talend.org" comment="connectionComment" label="connectionLabel">
+  <tables label="metadata">
+    <columns id="732" label="ID" sourceType="" talendType="id_String" key="true" nullable="false" originalField="newColumn"/>
+    <columns id="733" label="NAME" sourceType="" talendType="id_String" nullable="false" originalField="newColumn1"/>
+    <columns id="734" label="X" sourceType="" talendType="id_Float" nullable="false" originalField="newColumn2"/>
+    <columns id="735" label="Y" sourceType="" talendType="id_Float" nullable="false" originalField="newColumn3"/>
+    <columns id="736" label="the_geom" sourceType="" talendType="id_Geometry" length="0" precision="0" originalField="the_geom"/>
+  </tables>
+</TalendMetadata:GenericSchemaConnection>

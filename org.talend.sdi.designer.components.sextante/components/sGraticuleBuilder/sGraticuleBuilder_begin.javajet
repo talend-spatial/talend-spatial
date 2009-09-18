@@ -1,0 +1,84 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String xmin = ElementParameterParser.getValue(node, "__XMIN__");
+String ymin = ElementParameterParser.getValue(node, "__YMIN__");
+String xmax = ElementParameterParser.getValue(node, "__XMAX__");
+String ymax = ElementParameterParser.getValue(node, "__YMAX__");
+String ix = ElementParameterParser.getValue(node, "__INTERVALX__");
+String iy = ElementParameterParser.getValue(node, "__INTERVALY__");
+String type = ElementParameterParser.getValue(node, "__TYPE__");
+%>
+
+es.unex.sextante.geotools.GTOutputFactory m_OutputFactory_<%=cid %> = 
+    new es.unex.sextante.geotools.GTOutputFactory();
+
+/* Graticule builder */
+es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm alg_<%=cid %> =
+    new es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm();
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.XMIN).setParameterValue(new Double(<%=xmin %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.XMAX).setParameterValue(new Double(<%=xmax %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.YMIN).setParameterValue(new Double(<%=ymin %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.YMAX).setParameterValue(new Double(<%=ymax %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.INTERVALX).setParameterValue(new Double(<%=ix %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.INTERVALY).setParameterValue(new Double(<%=iy %>));
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.TYPE).setParameterValue(<%=type %>);
+
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output grid_<%=cid %> = outputs_<%=cid %>.getOutput(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.GRATICULE);
+String shpFilename_<%=cid %> = System.getProperty("java.io.tmpdir") + "/" + java.util.UUID.randomUUID().toString() + ".shp";
+grid_<%=cid %>.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(shpFilename_<%=cid %>));
+
+
+/* Run */
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> =
+    new es.unex.sextante.geotools.GTOutputFactory();
+try {
+    alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (es.unex.sextante.exceptions.GeoAlgorithmExecutionException e) {
+    throw new RuntimeException("GeoAlgorithmExecutionException " + e.getMessage());
+}
+
+
+/* Get results 
+es.unex.sextante.dataObjects.IVectorLayer result_<%=cid %> =
+    (es.unex.sextante.dataObjects.IVectorLayer) grid_<%=cid %>.getOutputObject();
+*/
+
+java.io.File shpFile_<%=cid %> = new java.io.File(shpFilename_<%=cid %>);
+org.geotools.data.shapefile.ShapefileDataStore result_<%=cid %> = new org.geotools.data.shapefile.ShapefileDataStore(shpFile_<%=cid %>.toURL());
+
+/* Produce output flow */
+org.geotools.data.FeatureSource
+    <org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> fs_<%=cid %> =
+        (org.geotools.data.FeatureSource) result_<%=cid %>.getFeatureSource();
+org.geotools.feature.FeatureCollection
+    <org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> fc_<%=cid %> =
+        fs_<%=cid %>.getFeatures();
+org.geotools.feature.FeatureIterator
+    <org.opengis.feature.simple.SimpleFeature> reader_<%=cid %> =
+        fc_<%=cid %>.features();
+
+
+while(reader_<%=cid %>.hasNext()) {
+
+

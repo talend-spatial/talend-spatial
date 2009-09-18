@@ -1,0 +1,122 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.IConnection    
+    org.talend.core.model.process.IConnectionCategory
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+List<IMetadataTable> metadatas = node.getMetadataList();
+String colAgg = ElementParameterParser.getValue(node,"__COL__");
+
+IMetadataColumn geometryColumn = null;
+if ((metadatas != null) && (metadatas.size() > 0)) {
+	IMetadataTable metadata = metadatas.get(0);
+	if (metadata != null) {
+        List<IMetadataColumn> columns = metadata.getListColumns();
+        for (int j = 0; j < columns.size(); j++) {
+            IMetadataColumn column = columns.get(j);
+            //String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+            %>
+            // echo <%=javaType %>
+            <%
+            if(javaType == JavaTypesManager.GEOMETRY) {
+                geometryColumn = column;
+                break;
+            }
+        }
+    }
+}
+if (geometryColumn == null){
+    return "error(\"Cannot find a geometry column\");";
+}
+String colGeo = geometryColumn.getLabel();
+
+if ((metadatas != null) && (metadatas.size()>0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        String colAggType = "String";
+
+        List<? extends IConnection> incomingConnections = node.getIncomingConnections();
+        if (incomingConnections != null && !incomingConnections.isEmpty()) {
+            for (IConnection conn : incomingConnections) {
+                if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+                    IMetadataTable inMetadata = conn.getMetadataTable();
+                    for (IMetadataColumn column: inMetadata.getListColumns()) {
+                        if(column.getLabel().equals(colAgg)){
+                            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+                            if(javaType == JavaTypesManager.BOOLEAN) {
+                                colAggType = "Boolean";
+                            } else if(javaType == JavaTypesManager.BYTE) {
+                                colAggType = "Byte";
+                            } else if(javaType == JavaTypesManager.BYTE_ARRAY) {
+                                colAggType = "byte[]";
+                            } else if(javaType == JavaTypesManager.CHARACTER) {
+                                colAggType = "Character";
+                            } else if(javaType == JavaTypesManager.DATE) {
+                                colAggType = "java.util.Date";
+                            } else if(javaType == JavaTypesManager.DOUBLE) {
+                                colAggType = "Double";
+                            } else if(javaType == JavaTypesManager.FLOAT) {
+                                colAggType = "Float";
+                            } else if(javaType == JavaTypesManager.INTEGER) {
+                                colAggType = "Integer";
+                            } else if(javaType == JavaTypesManager.LONG) {
+                                colAggType = "Long";
+                            } else if(javaType == JavaTypesManager.SHORT) {
+                                colAggType = "Short";
+                            } else if(javaType == JavaTypesManager.STRING) {
+                                colAggType = "String";
+                            } else if(javaType == JavaTypesManager.OBJECT) {
+                                colAggType = "Object";
+                            } else if(javaType == JavaTypesManager.GEOMETRY) {
+                                colAggType = "Geometry";
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }   
+        // Remove _AGG to get main component cid
+        // TODO : remove DESTINATION parameter for agg components
+        String destination = cid.substring(0, cid.length() - 4);
+%>
+int nb_line_<%=cid %> = 0;
+java.util.List<OnRowsEndStruct<%=destination %>> result_list_<%=cid %> = new java.util.ArrayList<OnRowsEndStruct<%=destination %>>();
+
+java.util.Iterator<<%=colAggType %>> <%=colAgg%>_iterator_<%=cid %> = hash_<%=colAgg %>_<%=cid %>.keySet().iterator();
+while(<%=colAgg%>_iterator_<%=cid %>.hasNext()){
+    <%=colAggType %> <%=colAgg %>_<%=colAgg %> = <%=colAgg %>_iterator_<%=cid %>.next();
+    operation_result_<%=cid %> = hash_<%=colAgg%>_<%=cid %>.get(<%=colAgg %>_<%=colAgg %>);
+
+    //in the deepest begin
+    OnRowsEndStruct<%=destination %> aggregated_row_<%=cid %> = new OnRowsEndStruct<%=destination %>();
+    aggregated_row_<%=cid %>.<%=colAgg %> = <%=colAgg %>_<%=colAgg %>;
+
+    aggregated_row_<%=cid %>.<%=colGeo %> = operation_result_<%=cid %>.<%=colGeo %>;
+
+    //in the deepest end
+    result_list_<%=cid %>.add(aggregated_row_<%=cid %>);
+    nb_line_<%=cid %>++;
+}
+//generate result end
+globalMap.put("<%=destination %>",result_list_<%=cid %>);
+globalMap.put("<%=cid %>_NB_LINE",nb_line_<%=cid %>);
+<%
+    }
+}
+%>

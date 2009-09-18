@@ -1,0 +1,138 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Camptocamp" RELEASE_DATE="20070914"
+    STARTABLE="false" SCHEMA_AUTO_PROPAGATE="false"
+    DATA_AUTO_PROPAGATE="false" VISIBLE="false" TECHNICAL="true">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MAX_OUTPUT="1" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="0" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="PROPERTY" FIELD="PROPERTY_TYPE" SHOW="true"
+      NUM_ROW="1" REPOSITORY_VALUE="DELIMITED" />
+    <PARAMETER NAME="FILENAME" FIELD="FILE" NUM_ROW="2" REQUIRED="true"
+      REPOSITORY_VALUE="FILE_PATH">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/out.shp"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="GEOMETRY_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
+      NUM_ROW="3">
+      <ITEMS DEFAULT="POINT">
+        <ITEM NAME="POINT" VALUE="com.vividsolutions.jts.geom.Point" />
+        <ITEM NAME="LINESTRING"
+          VALUE="com.vividsolutions.jts.geom.LineString" />
+        <ITEM NAME="POLYGON"
+          VALUE="com.vividsolutions.jts.geom.Polygon" />
+        <ITEM NAME="MULTIPOINT"
+          VALUE="com.vividsolutions.jts.geom.MultiPoint" />
+        <ITEM NAME="MULTILINESTRING"
+          VALUE="com.vividsolutions.jts.geom.MultiLineString" />
+        <ITEM NAME="MULTIPOLYGON"
+          VALUE="com.vividsolutions.jts.geom.MultiPolygon" />
+        <ITEM NAME="GEOMETRY"
+          VALUE="com.vividsolutions.jts.geom.Geometry" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
+      NUM_ROW="4">
+      <TABLE>
+        <COLUMN NAME="the_geom" TYPE="id_Geometry" CUSTOM="true"
+          READONLY="false" />
+      </TABLE>
+    </PARAMETER>
+    <PARAMETER NAME="FORMAT_TYPE" FIELD="TEXT" NUM_ROW="5" SHOW="false"
+      REQUIRED="true">
+      <DEFAULT>SHAPEFILE</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="FORCE_CRS" FIELD="CHECK" REQUIRED="true"
+      NUM_ROW="5">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CRS" FIELD="TEXT" NUM_ROW="5" REQUIRED="true"
+      SHOW_IF="FORCE_CRS == 'true'">
+      <DEFAULT>"EPSG:4326"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="NS_URL" FIELD="TEXT" NUM_ROW="5" REQUIRED="true">
+      <DEFAULT>"http://www.topografix.com/GPX/1/1"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="GPX_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
+      NUM_ROW="3">
+      <ITEMS DEFAULT="TYPE_NAME_POINT">
+        <ITEM NAME="TYPE_NAME_POINT"
+          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_POINT" />
+        <ITEM NAME="TYPE_NAME_TRACK"
+          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_TRACK" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="MD" FIELD="CHECK" REQUIRED="true" NUM_ROW="9">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTITLE" FIELD="TEXT" NUM_ROW="11" REQUIRED="false"
+      SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata title</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDABSTRACT" FIELD="TEXT" NB_LINES="3" NUM_ROW="12"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata abstract</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDPURPOSE" FIELD="TEXT" NB_LINES="3" NUM_ROW="13"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata Purpose</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTOPICCATEGORY" FIELD="CLOSED_LIST"
+      REQUIRED="true" NUM_ROW="14" SHOW_IF="MD == 'true'">
+      <ITEMS DEFAULT="">
+        <ITEM NAME="" VALUE="" />
+        <ITEM NAME="farming" VALUE="farming" />
+        <ITEM NAME="biota" VALUE="biota" />
+        <ITEM NAME="boundaries" VALUE="boundaries" />
+        <ITEM NAME="climatologyMeteorologyAtmosphere"
+          VALUE="climatologyMeteorologyAtmosphere" />
+        <ITEM NAME="economy" VALUE="economy" />
+        <ITEM NAME="elevation" VALUE="elevation" />
+        <ITEM NAME="environment" VALUE="environment" />
+        <ITEM NAME="geoscientificInformation"
+          VALUE="geoscientificInformation" />
+        <ITEM NAME="health" VALUE="health" />
+        <ITEM NAME="imageryBaseMapsEarthCover"
+          VALUE="imageryBaseMapsEarthCover" />
+        <ITEM NAME="intelligenceMilitary" VALUE="intelligenceMilitary" />
+        <ITEM NAME="inlandWaters" VALUE="inlandWaters" />
+        <ITEM NAME="location" VALUE="location" />
+        <ITEM NAME="oceans" VALUE="oceans" />
+        <ITEM NAME="planningCadastre" VALUE="planningCadastre" />
+        <ITEM NAME="society" VALUE="society" />
+        <ITEM NAME="structure" VALUE="structure" />
+        <ITEM NAME="transportation" VALUE="transportation" />
+        <ITEM NAME="utilitiesCommunication"
+          VALUE="utilitiesCommunication" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPLCK" FIELD="CHECK" REQUIRED="true" NUM_ROW="15"
+      SHOW_IF="MD == 'true'">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPL" FIELD="FILE" NUM_ROW="15" REQUIRED="true"
+      SHOW_IF="MDTPLCK == 'true'">
+      <DEFAULT>
+        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
+      </DEFAULT>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION></CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="NB_LINE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

@@ -1,0 +1,109 @@
+<%@ jet
+imports="
+	org.talend.core.model.process.INode
+	org.talend.core.model.process.ElementParameterParser
+	org.talend.core.model.metadata.IMetadataTable 
+	org.talend.designer.codegen.config.CodeGeneratorArgument
+	java.util.List
+	java.util.Map
+	java.util.ArrayList
+	java.lang.Float
+	org.talend.commons.utils.StringUtils
+	org.talend.core.model.process.IConnection
+	org.talend.core.model.metadata.IMetadataColumn
+	org.talend.core.model.metadata.types.JavaTypesManager
+	org.talend.core.model.process.EConnectionType
+	"
+	%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+	IMetadataTable metadata = metadatas.get(0);
+	if (metadata != null) {
+		List<IMetadataColumn> columns = metadata.getListColumns();
+		IMetadataColumn geometryColumn = null;
+		for (int j = 0; j < columns.size(); j++) {
+			IMetadataColumn column = columns.get(j);
+			String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+			if(typeToGenerate.equals("Geometry")) {
+				geometryColumn = column;
+				break;
+			}
+		}
+		if (geometryColumn == null){			
+			return "error(\"Cannot find a geometry column\");";
+		}
+		String geometryObject = geometryColumn.getLabel();
+
+		List< ? extends IConnection> inConnections = node.getIncomingConnections();
+		if (inConnections != null){
+			if (inConnections.size() > 0){
+				IConnection inConnection =inConnections.get(0);
+
+				List< ? extends IConnection> outConnections = node.getOutgoingConnections();
+				if (outConnections != null) {
+					%>                   
+					com.vividsolutions.jts.geom.GeometryFactory gFact_<%=cid %> = 
+						new com.vividsolutions.jts.geom.GeometryFactory();
+
+					org.talend.sdi.geometry.Geometry geom_<%=cid %> = null;
+					com.vividsolutions.jts.geom.Geometry geometry_<%=cid %> = 
+						((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>)._getInternalGeometry();                          
+
+
+					if (geometry_<%=cid %>.getGeometryType().equals("Point")) {
+						com.vividsolutions.jts.geom.Point[] pointArray = new com.vividsolutions.jts.geom.Point[1];
+						pointArray[0]= (com.vividsolutions.jts.geom.Point) geometry_<%=cid %>;                                   
+						com.vividsolutions.jts.geom.MultiPoint mpt_<%=cid %> =
+							new com.vividsolutions.jts.geom.MultiPoint(pointArray,new com.vividsolutions.jts.geom.GeometryFactory());
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mpt_<%=cid %>);
+					} else if (geometry_<%=cid %>.getGeometryType().equals("LineString")) {  
+						com.vividsolutions.jts.geom.LineString[] lineArray = new com.vividsolutions.jts.geom.LineString[1];
+						lineArray[0] = (com.vividsolutions.jts.geom.LineString) geometry_<%=cid %>; 
+						com.vividsolutions.jts.geom.MultiLineString mls_<%=cid %> =
+							new com.vividsolutions.jts.geom.MultiLineString(lineArray,new com.vividsolutions.jts.geom.GeometryFactory());
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mls_<%=cid %>); 
+					} else if (geometry_<%=cid %>.getGeometryType().equals("Polygon")) {
+						com.vividsolutions.jts.geom.Polygon[] polygonArray = new com.vividsolutions.jts.geom.Polygon[1];
+						polygonArray[0] = (com.vividsolutions.jts.geom.Polygon) geometry_<%=cid %>; 
+						com.vividsolutions.jts.geom.MultiPolygon mpl_<%=cid %> = 
+							new com.vividsolutions.jts.geom.MultiPolygon(polygonArray, new com.vividsolutions.jts.geom.GeometryFactory());                                  
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mpl_<%=cid %>);       	
+					} else if (geometry_<%=cid %>.getGeometryType().equals("MultiPolygon")
+							|| geometry_<%=cid %>.getGeometryType().equals("MultiLineString")
+							|| geometry_<%=cid %>.getGeometryType().equals("MultiPoint")
+							|| geometry_<%=cid %>.getGeometryType().equals("GeometryCollection")
+							|| geometry_<%=cid %>.getGeometryType().equals("Geometry")
+					) {
+						geom_<%=cid %> = <%=inConnection.getName()%>.<%=geometryObject%>;
+					}
+					<%
+
+					for (IConnection outConnection : outConnections) {
+						if ((outConnection.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {                          
+							for (int j = 0; j < columns.size(); j++) {
+								IMetadataColumn columnout = columns.get(j);
+								String typeToGenerate = JavaTypesManager.getTypeToGenerate(columnout.getTalendType(), columnout.isNullable());
+								if (typeToGenerate.equals("Geometry")) {
+									%>
+									<%=outConnection.getName() %>.<%=columnout.getLabel() %> = geom_<%=cid %>;
+									<%
+								} else {
+									%>
+									<%=outConnection.getName() %>.<%=columnout.getLabel() %> = <%=inConnection.getName() %>.<%=columnout.getLabel() %>;
+									<%
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+%>
+nbFeature_<%=cid %>++;

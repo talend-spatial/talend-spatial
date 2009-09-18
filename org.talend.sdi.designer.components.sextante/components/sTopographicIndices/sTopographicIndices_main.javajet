@@ -1,0 +1,154 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+//String inSlope = ElementParameterParser.getValue(node, "__INPUT_SLOPE__");
+//String inFlowAcc = ElementParameterParser.getValue(node, "__INPUT_FLOWACC__");
+
+%>
+
+es.unex.sextante.geotools.GTOutputFactory m_OutputFactory_<%=cid %> = 
+    new es.unex.sextante.geotools.GTOutputFactory();
+
+
+<%
+List< ? extends IConnection> conns = node.getIncomingConnections();
+for (IConnection conn : conns) {
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+%>
+es.unex.sextante.geotools.GTRasterLayer slope_<%=cid %> = 
+    new es.unex.sextante.geotools.GTRasterLayer();
+slope_<%=cid %>.create((org.geotools.coverage.grid.GridCoverage2D) 
+	<%=conn.getName() %>.RASTER);
+slope_<%=cid %>.setName("SLOPE");
+<%
+	}
+}
+
+
+// If flowAcc comes from lookup
+for (IConnection conn : conns) {
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+%>
+java.util.Map<<%=conn.getName() %>Struct, <%=conn.getName() %>Struct> tHash_<%=cid %>
+	 = (java.util.Map<<%=conn.getName() %>Struct, <%=conn.getName() %>Struct>)globalMap.get("tHash_<%=conn.getName() %>");
+
+// FIXME : how to get first key in map ?
+<%=conn.getName() %>Struct struct_<%=cid %> = (<%=conn.getName() %>Struct)tHash_<%=cid %>.values().toArray()[0];
+
+es.unex.sextante.geotools.GTRasterLayer flowacc_<%=cid %> = 
+    new es.unex.sextante.geotools.GTRasterLayer();
+flowacc_<%=cid %>.create((org.geotools.coverage.grid.GridCoverage2D) 
+	struct_<%=cid %>.RASTER);
+flowacc_<%=cid %>.setName("FLOWACC");
+<%
+	}
+}
+/* if flow could comes from merge ?
+es.unex.sextante.geotools.GTRasterLayer flowacc_ = 
+    new es.unex.sextante.geotools.GTRasterLayer();
+flowacc_.create((org.geotools.coverage.grid.GridCoverage2D) 
+	inFlowAcc .RASTER);
+flowacc_.setName("FLOWACC");
+*/
+
+%>
+
+/*
+ * Now we will calculate topographic indice
+ */
+es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm alg_<%=cid %> = 
+    new es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm();
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm.SLOPE).setParameterValue(slope_<%=cid %>);
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm.ACCFLOW).setParameterValue(flowacc_<%=cid %>);
+
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output twi_<%=cid %> = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm.TWI);
+es.unex.sextante.outputs.Output ls_<%=cid %> = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm.LS);
+es.unex.sextante.outputs.Output spi_<%=cid %> = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.topographicIndices.TopographicIndicesAlgorithm.SPI);
+String imgFilename_<%=cid %> = System.getProperty("java.io.tmpdir") + "/" + java.util.UUID.randomUUID().toString();
+twi_<%=cid %>.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(imgFilename_<%=cid %>  + "_twi.asc"));
+ls_<%=cid %>.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(imgFilename_<%=cid %>  + "_ls.asc"));
+spi_<%=cid %>.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(imgFilename_<%=cid %>  + "_spi.asc"));
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = 
+    new es.unex.sextante.geotools.GTOutputFactory();
+try { 
+    alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (es.unex.sextante.exceptions.GeoAlgorithmExecutionException e) {
+    System.out.println("GeoAlgorithmExecutionException " + e.getMessage());
+}
+/*
+ * Now the result can be taken from the output container
+es.unex.sextante.dataObjects.IRasterLayer lsResult_<%=cid %> = 
+    (es.unex.sextante.dataObjects.IRasterLayer) ls_<%=cid %>.getOutputObject();
+es.unex.sextante.dataObjects.IRasterLayer spiResult_<%=cid %> = 
+    (es.unex.sextante.dataObjects.IRasterLayer) spi_<%=cid %>.getOutputObject();
+es.unex.sextante.dataObjects.IRasterLayer twiResult_<%=cid %> = 
+    (es.unex.sextante.dataObjects.IRasterLayer) twi_<%=cid %>.getOutputObject();
+ */
+
+org.geotools.gce.arcgrid.ArcGridReader agrtwi_<%=cid %> = new org.geotools.gce.arcgrid.ArcGridReader(
+		new java.io.File(imgFilename_<%=cid %> + "_twi.asc").toURL());
+org.geotools.coverage.grid.GridCoverage2D gctwi_<%=cid %> = (org.geotools.coverage.grid.GridCoverage2D) agrtwi_<%=cid %>
+		.read(null); 
+org.geotools.gce.arcgrid.ArcGridReader agrls_<%=cid %> = new org.geotools.gce.arcgrid.ArcGridReader(
+		new java.io.File(imgFilename_<%=cid %> + "_ls.asc").toURL());
+org.geotools.coverage.grid.GridCoverage2D gcls_<%=cid %> = (org.geotools.coverage.grid.GridCoverage2D) agrls_<%=cid %>
+		.read(null); 
+org.geotools.gce.arcgrid.ArcGridReader agrspi_<%=cid %> = new org.geotools.gce.arcgrid.ArcGridReader(
+		new java.io.File(imgFilename_<%=cid %> + "_spi.asc").toURL());
+org.geotools.coverage.grid.GridCoverage2D gcspi_<%=cid %> = (org.geotools.coverage.grid.GridCoverage2D) agrspi_<%=cid %>
+		.read(null); 
+
+/*
+ * Set output filename for further processing
+ */
+<%
+List<? extends IConnection> lsConns = node.getOutgoingConnections("LS");
+if(lsConns != null && lsConns.size() > 0) {
+    IConnection lsConn = lsConns.get(0);
+    String lsConnName = lsConn.getName();
+%>
+<%=lsConnName %>.RASTER = gcls_<%=cid %>; //(org.geotools.coverage.grid.GridCoverage2D) lsResult_<%=cid %>.getBaseDataObject();;
+<%
+}
+
+
+List<? extends IConnection> twiConns = node.getOutgoingConnections("TWI");
+if(twiConns != null && twiConns.size() > 0) {
+    IConnection twiConn = twiConns.get(0);
+    String twiConnName = twiConn.getName();
+%>
+<%=twiConnName %>.RASTER = gctwi_<%=cid %>; //(org.geotools.coverage.grid.GridCoverage2D) twiResult_<%=cid %>.getBaseDataObject();;
+<%
+}
+
+
+List<? extends IConnection> spiConns = node.getOutgoingConnections("SPI");
+if(spiConns != null && spiConns.size() > 0) {
+    IConnection spiConn = spiConns.get(0);
+    String spiConnName = spiConn.getName();
+%>
+<%=spiConnName %>.RASTER = gcspi_<%=cid %>; //(org.geotools.coverage.grid.GridCoverage2D) spiResult_<%=cid %>.getBaseDataObject();;
+<%
+}
+%>

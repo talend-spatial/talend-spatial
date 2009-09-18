@@ -1,0 +1,68 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String file = ElementParameterParser.getValue(node, "__FILENAME__");
+%>
+try {
+    java.io.File file_<%=cid %> = 
+    	new java.io.File(<%=file %>);
+    org.openstreetmap.josm.data.osm.DataSet dataSet_<%=cid %> = 
+    	org.openstreetmap.josm.io.OsmReader.parseDataSet(new java.io.FileInputStream(file_<%=cid %>), org.openstreetmap.josm.gui.progress.NullProgressMonitor.INSTANCE);
+    
+	if (dataSet_<%=cid %>.allPrimitives().isEmpty()) {
+		System.out.println("OSM:no features.");
+	}else{
+		for (java.util.Iterator iterator = dataSet_<%=cid %>.nodes.iterator(); iterator.hasNext();){
+	        org.openstreetmap.josm.data.osm.Node node_<%=cid %> = (org.openstreetmap.josm.data.osm.Node) iterator.next();
+                
+	        // Read attributes
+	        String tags_<%=cid %> = "";
+	        String id_<%=cid %> = String.valueOf(node_<%=cid %>.getId());
+	        String username_<%=cid %> = (node_<%=cid %>.user != null?node_<%=cid %>.user.getName():"");
+	        String timestamp_<%=cid %> = "";
+	        try {
+	        	String time = node_<%=cid %>.getTimestamp().toString();
+	        	timestamp_<%=cid %> = (time != null?time:"");
+	        } catch (Exception e) {
+	        	// Do nothing, fail to get time stamp from file
+	        }
+	        
+	        if (node_<%=cid %>.isTagged()) {
+                java.util.Iterator tags = node_<%=cid %>.getKeys().entrySet().iterator();
+                while (tags.hasNext()) {
+                    java.util.Map.Entry<String, String> t = (java.util.Map.Entry<String, String>) tags.next();
+                    tags_<%=cid %> += t.getKey() + ":" + t.getValue() + ";";
+                    
+                }
+            }
+            
+            if (node_<%=cid %>.getCoor() == null)
+            	continue;
+            	
+            // Create point
+            com.vividsolutions.jts.geom.GeometryFactory gFact_<%=cid %> = new com.vividsolutions.jts.geom.GeometryFactory();
+            com.vividsolutions.jts.geom.Coordinate coord_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate(
+                            node_<%=cid %>.getCoor().getX(), 
+                            node_<%=cid %>.getCoor().getY());
+
+            org.talend.sdi.geometry.Geometry geometry_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+            	(com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPoint(coord_<%=cid %>));
+	        

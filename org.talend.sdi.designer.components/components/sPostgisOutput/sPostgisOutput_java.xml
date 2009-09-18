@@ -1,0 +1,176 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.102" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Camptocamp" RELEASE_DATE="20070521"
+    STARTABLE="false" SCHEMA_AUTO_PROPAGATE="true"
+    DATA_AUTO_PROPAGATE="false">
+    <SIGNATURE />
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Database</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MAX_OUTPUT="0" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="0" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="FORMAT_TYPE" FIELD="TEXT" NUM_ROW="2" SHOW="false"
+      REQUIRED="true">
+      <DEFAULT>POSTGIS</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_HOST" FIELD="TEXT" NUM_ROW="3" REQUIRED="true"
+      REPOSITORY_VALUE="DB_HOST">
+      <DEFAULT>"localhost"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_PORT" FIELD="TEXT" NUM_ROW="3" REQUIRED="true"
+      REPOSITORY_VALUE="DB_PORT">
+      <DEFAULT>"5432"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_USER" FIELD="TEXT" NUM_ROW="4" REQUIRED="true"
+      REPOSITORY_VALUE="DB_USER">
+      <DEFAULT>"my_user"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_PASSWD" FIELD="TEXT" NUM_ROW="4" REQUIRED="true"
+      REPOSITORY_VALUE="DB_PASSWD">
+      <DEFAULT>"my_passwd"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_NAME" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_NAME">
+      <DEFAULT>"my_database_name"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_SCHEMA" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_SCHEMA">
+      <DEFAULT>"public"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_TABLE" FIELD="TEXT" NUM_ROW="6" REQUIRED="true"
+      REPOSITORY_VALUE="DB_TABLE">
+      <DEFAULT>"my_table_name"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="DB_COL" FIELD="TEXT" NUM_ROW="7" REQUIRED="true"
+      REPOSITORY_VALUE="DB_COL">
+      <DEFAULT>"the_geom"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="GEOMETRY_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
+      NUM_ROW="7">
+      <ITEMS DEFAULT="GEOMETRY">
+        <ITEM NAME="POINT" VALUE="com.vividsolutions.jts.geom.Point" />
+        <ITEM NAME="LINESTRING"
+          VALUE="com.vividsolutions.jts.geom.LineString" />
+        <ITEM NAME="POLYGON"
+          VALUE="com.vividsolutions.jts.geom.Polygon" />
+        <ITEM NAME="MULTIPOINT"
+          VALUE="com.vividsolutions.jts.geom.MultiPoint" />
+        <ITEM NAME="MULTILINESTRING"
+          VALUE="com.vividsolutions.jts.geom.MultiLineString" />
+        <ITEM NAME="MULTIPOLYGON"
+          VALUE="com.vividsolutions.jts.geom.MultiPolygon" />
+        <ITEM NAME="GEOMETRY"
+          VALUE="com.vividsolutions.jts.geom.Geometry" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
+      NUM_ROW="8">
+    </PARAMETER>
+    <PARAMETER NAME="FORCE_CRS" FIELD="CHECK" REQUIRED="true"
+      SHOW="false" NUM_ROW="8">
+      <DEFAULT>true</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CRS" FIELD="TEXT" NUM_ROW="8" REQUIRED="true">
+      <DEFAULT>"-1"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MD" FIELD="CHECK" REQUIRED="true" NUM_ROW="9">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTITLE" FIELD="TEXT" NUM_ROW="11" REQUIRED="false"
+      SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata title</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDABSTRACT" FIELD="TEXT" NB_LINES="3" NUM_ROW="12"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata abstract</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDPURPOSE" FIELD="TEXT" NB_LINES="3" NUM_ROW="13"
+      REQUIRED="false" SHOW_IF="MD == 'true'">
+      <DEFAULT>Metadata Purpose</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTOPICCATEGORY" FIELD="CLOSED_LIST"
+      REQUIRED="true" NUM_ROW="14" SHOW_IF="MD == 'true'">
+      <ITEMS DEFAULT="">
+        <ITEM NAME="" VALUE="" />
+        <ITEM NAME="farming" VALUE="farming" />
+        <ITEM NAME="biota" VALUE="biota" />
+        <ITEM NAME="boundaries" VALUE="boundaries" />
+        <ITEM NAME="climatologyMeteorologyAtmosphere"
+          VALUE="climatologyMeteorologyAtmosphere" />
+        <ITEM NAME="economy" VALUE="economy" />
+        <ITEM NAME="elevation" VALUE="elevation" />
+        <ITEM NAME="environment" VALUE="environment" />
+        <ITEM NAME="geoscientificInformation"
+          VALUE="geoscientificInformation" />
+        <ITEM NAME="health" VALUE="health" />
+        <ITEM NAME="imageryBaseMapsEarthCover"
+          VALUE="imageryBaseMapsEarthCover" />
+        <ITEM NAME="intelligenceMilitary" VALUE="intelligenceMilitary" />
+        <ITEM NAME="inlandWaters" VALUE="inlandWaters" />
+        <ITEM NAME="location" VALUE="location" />
+        <ITEM NAME="oceans" VALUE="oceans" />
+        <ITEM NAME="planningCadastre" VALUE="planningCadastre" />
+        <ITEM NAME="society" VALUE="society" />
+        <ITEM NAME="structure" VALUE="structure" />
+        <ITEM NAME="transportation" VALUE="transportation" />
+        <ITEM NAME="utilitiesCommunication"
+          VALUE="utilitiesCommunication" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPLCK" FIELD="CHECK" REQUIRED="true" NUM_ROW="15"
+      SHOW_IF="MD == 'true'">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPL" FIELD="FILE" NUM_ROW="15" REQUIRED="true"
+      SHOW_IF="MDTPLCK == 'true'">
+      <DEFAULT>
+        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
+      </DEFAULT>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <TEMPLATES INPUT="FI" OUTPUT="SO">
+      <TEMPLATE NAME="FI" COMPONENT="sFlowForwarder">
+        <LINK_TO NAME="SO" CTYPE="FLOW" />
+      </TEMPLATE>
+      <TEMPLATE NAME="SO" COMPONENT="sGeoOutput" />
+      <TEMPLATE_PARAM SOURCE="self.SCHEMA" TARGET="FI.SCHEMA" />
+      <TEMPLATE_PARAM SOURCE="self.PROPERTY" TARGET="SO.PROPERTY" />
+      <TEMPLATE_PARAM SOURCE="self.FORMAT_TYPE" TARGET="SO.FORMAT_TYPE" />
+      <TEMPLATE_PARAM SOURCE="self.DB_HOST" TARGET="SO.DB_HOST" />
+      <TEMPLATE_PARAM SOURCE="self.DB_PORT" TARGET="SO.DB_PORT" />
+      <TEMPLATE_PARAM SOURCE="self.DB_USER" TARGET="SO.DB_USER" />
+      <TEMPLATE_PARAM SOURCE="self.DB_PASSWD" TARGET="SO.DB_PASSWD" />
+      <TEMPLATE_PARAM SOURCE="self.DB_NAME" TARGET="SO.DB_NAME" />
+      <TEMPLATE_PARAM SOURCE="self.DB_SCHEMA" TARGET="SO.DB_SCHEMA" />
+      <TEMPLATE_PARAM SOURCE="self.DB_TABLE" TARGET="SO.DB_TABLE" />
+      <TEMPLATE_PARAM SOURCE="self.DB_COL" TARGET="SO.DB_COL" />
+      <TEMPLATE_PARAM SOURCE="self.GEOMETRY_TYPE"
+        TARGET="SO.GEOMETRY_TYPE" />
+      <TEMPLATE_PARAM SOURCE="self.SCHEMA" TARGET="SO.SCHEMA" />
+      <TEMPLATE_PARAM SOURCE="self.FORCE_CRS" TARGET="SO.FORCE_CRS" />
+      <TEMPLATE_PARAM SOURCE="self.CRS" TARGET="SO.CRS" />
+      <TEMPLATE_PARAM SOURCE="self.MD" TARGET="SO.MD" />
+      <TEMPLATE_PARAM SOURCE="self.MDTPL" TARGET="SO.MDTPL" />
+      <TEMPLATE_PARAM SOURCE="self.MDTITLE" TARGET="SO.MDTITLE" />
+      <TEMPLATE_PARAM SOURCE="self.MDABSTRACT" TARGET="SO.MDABSTRACT" />
+      <TEMPLATE_PARAM SOURCE="self.MDPURPOSE" TARGET="SO.MDPURPOSE" />
+      <TEMPLATE_PARAM SOURCE="self.MDTOPICCATEGORY"
+        TARGET="SO.MDTOPICCATEGORY" />
+    </TEMPLATES>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="NB_FEATURE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+    <RETURN NAME="METADATA" TYPE="id_String" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

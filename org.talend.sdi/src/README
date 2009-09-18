@@ -1,0 +1,3 @@
+javac -classpath ../lib/jts-1.9.jar com/c2c/geometry/Geometry.java
+jar cf c2c-geom.jar com/c2c/geometry/Geometry.class
+

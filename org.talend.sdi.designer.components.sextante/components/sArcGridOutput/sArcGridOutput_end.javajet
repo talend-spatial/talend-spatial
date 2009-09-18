@@ -1,0 +1,66 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String out = ElementParameterParser.getValue(node, "__OUTPUT__");
+
+List< ? extends IConnection> conns = node.getIncomingConnections();
+for (IConnection conn : conns) {
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))) {
+%>
+		try{
+		
+			java.io.File f_<%=cid %> = new java.io.File(<%=out %>);
+			org.geotools.gce.arcgrid.ArcGridWriter writer_<%=cid %> = 
+				new org.geotools.gce.arcgrid.ArcGridWriter(f_<%=cid %>);
+			
+			// setting write parameters
+	        org.opengis.parameter.ParameterValueGroup params_<%=cid %>;
+	        params_<%=cid %> = writer_<%=cid %>.getFormat().getWriteParameters();
+	        //params_<%=cid %>.parameter("GRASS").setValue(true);
+	        final org.geotools.gce.arcgrid.ArcGridWriteParams wp_<%=cid %> 
+	        	= new org.geotools.gce.arcgrid.ArcGridWriteParams();
+	        wp_<%=cid %>.setSourceBands(new int[] { 0 });
+	        params_<%=cid %>.parameter(
+	                org.geotools.coverage.grid.io.AbstractGridFormat.GEOTOOLS_WRITE_PARAMS.getName().toString())
+	                .setValue(wp_<%=cid %>);
+	        // params.parameter("compressed").setValue(false);
+	        org.opengis.parameter.GeneralParameterValue[] gpv_<%=cid %> = {
+	                //params_<%=cid %>.parameter("GRASS"),
+	                params_<%=cid %>.parameter(org.geotools.coverage.grid.io.AbstractGridFormat.GEOTOOLS_WRITE_PARAMS
+	                        .getName().toString()) };
+	        	
+	        
+	        writer_<%=cid %>.write((org.geotools.coverage.grid.GridCoverage2D) <%=conn.getName() %>.RASTER, gpv_<%=cid %>);
+        	writer_<%=cid %>.dispose();
+				
+		}catch(Exception e){
+			System.out.println (e.getMessage());
+			e.printStackTrace();
+		}
+<%
+  	}
+}
+%>
+
+/*
+ * Set output filename for further processing
+ */
+globalMap.put("<%=cid %>_OUTPUT_FILE", <%=out %>);

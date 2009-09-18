@@ -1,0 +1,106 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Camptocamp" RELEASE_DATE="20080811"
+    STARTABLE="true">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Raster File/Output</FAMILY>
+  </FAMILIES> 
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_OUTPUT="0" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="OUTPUT" FIELD="FILE" REQUIRED="true"
+      REPOSITORY_VALUE="FILE_PATH" NUM_ROW="1">
+      <DEFAULT>"/tmp/elevation.asc"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER
+      NAME="SCHEMA"
+      FIELD="SCHEMA_TYPE"
+      REQUIRED="true"
+      NUM_ROW="2"
+      READONLY="true"
+    >
+      <TABLE READONLY="false">
+        <COLUMN NAME="RASTER" TYPE="id_Object" READONLY="true" CUSTOM="true"/>
+      </TABLE>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="bsh" MODULE="bsh-2.0b4.jar" REQUIRED="true" />
+      <IMPORT NAME="jcommon" MODULE="jcommon-1.0.14.jar" REQUIRED="true" />
+      <IMPORT NAME="jep" MODULE="jep-2.4.0.jar" REQUIRED="true" />
+      <IMPORT NAME="jfreechart" MODULE="jfreechart-1.0.11.jar" REQUIRED="true" />
+      <IMPORT NAME="jgraph" MODULE="jgraph.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="kxml" MODULE="kxml2.jar" REQUIRED="true" />
+      <IMPORT NAME="libDocEngines" MODULE="libDocEngines-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="libMath" MODULE="libMath-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante" MODULE="sextante-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridAnalysis" MODULE="sextante_gridAnalysis-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridCalculus" MODULE="sextante_gridCalculus-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridCategorical" MODULE="sextante_gridCategorical-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridStatistics" MODULE="sextante_gridStatistics-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridTools" MODULE="sextante_gridTools-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gt25" MODULE="sextante_gt25_bindings.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gui" MODULE="sextante_gui-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_hydrology" MODULE="sextante_hydrology-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_imageAnalysis" MODULE="sextante_imageAnalysis-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_lighting" MODULE="sextante_lighting-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_locate" MODULE="sextante_locate-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_morphometry" MODULE="sextante_morphometry-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_pointAnalysis" MODULE="sextante_pointAnalysis-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_profiles" MODULE="sextante_profiles-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_rasterize" MODULE="sextante_rasterize-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_statisticalMethods" MODULE="sextante_statisticalMethods-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_tables" MODULE="sextante_tables-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vectorize" MODULE="sextante_vectorize-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vectorTools" MODULE="sextante_vectorTools-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vegetationIndices" MODULE="sextante_vegetationIndices-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="TableLayout" MODULE="TableLayout-bin-jdk1.5-2007-04-21.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-arcgrid" MODULE="gt-arcgrid-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai-codec" MODULE="jai_codec-1.1.3.jar" REQUIRED="true" />
+      <IMPORT NAME="jai-core" MODULE="jai_core.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-coverage" MODULE="gt-coverage-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-coverageio" MODULE="gt-coverageio-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-arcgrid" MODULE="gt-arcgrid-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-image" MODULE="gt-image-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-geotiff" MODULE="gt-geotiff-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-api" MODULE="gt-api-2.5-M3.jar" REQUIRED="true" />
+      <IMPORT NAME="geoapi" MODULE="geoapi-2.2-M1.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-main" MODULE="gt-main-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-xml" MODULE="gt-xml-filter-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="imageio-ext-arcgrid"
+        MODULE="imageio-ext-arcgrid-1.0-SNAPSHOT.jar" REQUIRED="true" />
+      <IMPORT NAME="imageio-ext-customstreams"
+        MODULE="imageio-ext-customstreams-1.0-SNAPSHOT.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai_imageio" MODULE="jai_imageio-1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="clibwrapper_jiio" MODULE="clibwrapper_jiio.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="mlibwrapper_jai" MODULE="mlibwrapper_jai.jar"
+        REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="OUTPUT_FILE" TYPE="id_String" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

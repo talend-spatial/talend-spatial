@@ -1,0 +1,188 @@
+<%@ jet 
+	imports="
+		org.talend.core.model.process.INode
+		org.talend.designer.codegen.config.CodeGeneratorArgument
+		org.talend.core.model.process.ElementParameterParser
+		java.util.List
+		java.util.Map
+	"
+%>
+<%
+	CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+	INode node = (INode)codeGenArgument.getArgument();
+	String cid = node.getUniqueName();	
+
+	String zipFile = ElementParameterParser.getValue(node, "__TARGET__");
+	String metadataFile = ElementParameterParser.getValue(node, "__METADATA__");
+	String infoFile = ElementParameterParser.getValue(node, "__INFO__");
+	String thumbnailFile = ElementParameterParser.getValue(node, "__THUMBNAIL__");
+	String thumbnailsFile = ElementParameterParser.getValue(node, "__THUMBNAIL_S__");
+%>
+    /*
+     * MEF File structure is
+     *  | 
+     *  +-- metadata.xml
+     *  +-- info.xml with privileges and GeoNetwork opensource info
+     *  +-- public
+     *  |     +-- all public items (thumbnails, ...)
+     *  |
+     *  +-- private
+     *        +-- all private items (thumbnails, ...) - not supported by SDI
+     *
+     *  TODO: add support for cat, op and file 
+     *     <category name="datasets"/>
+     *     <operation name="view"/>
+     *     <file name="thumbnail.gif" changeDate="2007-07-19T15:27:10"/>
+     */
+
+    String uuid_<%=cid %> = java.util.UUID.randomUUID().toString();
+    String zipFile_<%=cid %> = <%=zipFile %>;
+    String public_<%=cid %> = "public/";
+    String private_<%=cid %> = "private/";
+
+    java.io.FileOutputStream fos_<%=cid %> = new java.io.FileOutputStream(zipFile_<%=cid %>);
+    java.util.zip.ZipOutputStream  zos_<%=cid %> = new java.util.zip.ZipOutputStream(fos_<%=cid %>);
+
+
+
+    /*
+     *  Private & public dir : contains thumbnails 
+     *
+     */    
+    java.util.zip.ZipEntry entry_<%=cid %> = new java.util.zip.ZipEntry(public_<%=cid %>);
+    zos_<%=cid %>.putNextEntry(entry_<%=cid %>);
+    zos_<%=cid %>.closeEntry();
+    java.util.zip.ZipEntry entryP_<%=cid %> = new java.util.zip.ZipEntry(private_<%=cid %>);
+    zos_<%=cid %>.putNextEntry(entryP_<%=cid %>);
+    zos_<%=cid %>.closeEntry();
+
+
+
+    /*
+     * metadata.xml : ISO19139 metadata file 
+     *
+     */    
+    java.util.zip.ZipEntry entryX_<%=cid %> = new java.util.zip.ZipEntry("metadata.xml");
+    zos_<%=cid %>.putNextEntry(entryX_<%=cid %>);
+    java.io.File metadataInFile_<%=cid %> = new java.io.File(<%=metadataFile %>);
+    java.io.FileInputStream md_<%=cid %> = new java.io.FileInputStream (metadataInFile_<%=cid %>);
+    java.io.BufferedInputStream input_<%=cid %> = new java.io.BufferedInputStream(md_<%=cid %>);
+    try
+    {
+        byte buffer[] = new byte[1024];
+        int nRead;
+        
+        while ((nRead = input_<%=cid %>.read(buffer)) > 0)
+            zos_<%=cid %>.write(buffer, 0, nRead);
+    }
+    finally
+    {
+            input_<%=cid %>.close();
+    }
+    zos_<%=cid %>.closeEntry();
+
+
+    
+    /*
+     * info.xml : Info file set privileges and declare thumbnails (large and small) 
+     *
+     * Info.xml file should be in synch with metadata.xml and thumbnails declared in the UI
+     * Update info.xml template file if needed.
+     *
+     */
+    java.util.zip.ZipEntry entryInfo_<%=cid %> = new java.util.zip.ZipEntry("info.xml");
+    zos_<%=cid %>.putNextEntry(entryInfo_<%=cid %>);
+    java.io.File infoInFile_<%=cid %> = new java.io.File(<%=infoFile %>);
+    java.io.FileInputStream info_<%=cid %> = new java.io.FileInputStream (infoInFile_<%=cid %>);
+    java.io.BufferedInputStream inputInfo_<%=cid %> = new java.io.BufferedInputStream(info_<%=cid %>);
+    try
+    {
+        byte buffer[] = new byte[1024];
+        int nRead;
+        
+        while ((nRead = inputInfo_<%=cid %>.read(buffer)) > 0)
+            zos_<%=cid %>.write(buffer, 0, nRead);
+    }
+    finally
+    {
+            inputInfo_<%=cid %>.close();
+    }
+    zos_<%=cid %>.closeEntry();
+    
+
+
+
+<%
+    if (!thumbnailFile.equals("")) {
+%>
+    // Thumbnail
+    String thumbnailFile_<%=cid %> = <%=thumbnailFile %>;
+    // TODO : allow private thumbnails 
+    java.util.zip.ZipEntry entryThumb_<%=cid %> = 
+                new java.util.zip.ZipEntry("public" + 
+                        thumbnailFile_<%=cid %>.substring(
+                            thumbnailFile_<%=cid %>.lastIndexOf("/"), 
+                            thumbnailFile_<%=cid %>.length())); // FIXME : on Windows ?
+                            
+    zos_<%=cid %>.putNextEntry(entryThumb_<%=cid %>);
+    java.io.File thumbnailInFile_<%=cid %> = new java.io.File(<%=thumbnailFile %>);
+    java.io.FileInputStream thumbnail_<%=cid %> = new java.io.FileInputStream (thumbnailInFile_<%=cid %>);
+    java.io.BufferedInputStream inputThumbnail_<%=cid %> = new java.io.BufferedInputStream(thumbnail_<%=cid %>);
+    try
+    {
+        byte buffer[] = new byte[1024];
+        int nRead;
+        
+        while ((nRead = inputThumbnail_<%=cid %>.read(buffer)) > 0)
+            zos_<%=cid %>.write(buffer, 0, nRead);
+    }
+    finally
+    {
+            inputThumbnail_<%=cid %>.close();
+    }
+    zos_<%=cid %>.closeEntry();
+<% 
+    }
+%>  
+    
+
+
+
+<%
+    if (!thumbnailsFile.equals("")) {
+%>
+    // Small Thumbnail
+    String thumbnailsFile_<%=cid %> = <%=thumbnailsFile %>;
+    java.util.zip.ZipEntry entryThumbs_<%=cid %> = 
+                new java.util.zip.ZipEntry("public" + 
+                        thumbnailsFile_<%=cid %>.substring(
+                            thumbnailsFile_<%=cid %>.lastIndexOf("/"), 
+                            thumbnailsFile_<%=cid %>.length())); // FIXME : on Windows ?
+                            
+    zos_<%=cid %>.putNextEntry(entryThumbs_<%=cid %>);
+    java.io.File thumbnailsInFile_<%=cid %> = new java.io.File(<%=thumbnailsFile %>);
+    java.io.FileInputStream thumbnails_<%=cid %> = new java.io.FileInputStream (thumbnailsInFile_<%=cid %>);
+    java.io.BufferedInputStream inputThumbnails_<%=cid %> = new java.io.BufferedInputStream(thumbnails_<%=cid %>);
+    try
+    {
+        byte buffer[] = new byte[1024];
+        int nRead;
+        
+        while ((nRead = inputThumbnails_<%=cid %>.read(buffer)) > 0)
+            zos_<%=cid %>.write(buffer, 0, nRead);
+    }
+    finally
+    {
+            inputThumbnails_<%=cid %>.close();
+    }
+    zos_<%=cid %>.closeEntry();
+<% 
+    }
+%>  
+
+
+
+    
+    zos_<%=cid %>.close();
+    
+    

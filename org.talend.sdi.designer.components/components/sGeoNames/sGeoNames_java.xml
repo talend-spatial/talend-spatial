@@ -1,0 +1,67 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Camptocamp" RELEASE_DATE="20071226"
+    STARTABLE="false" VISIBLE="false" DATA_AUTO_PROPAGATE="false"
+    SCHEMA_AUTO_PROPAGATE="false">
+    <SIGNATURE />
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Geocoding</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="0" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
+      NUM_ROW="1">
+    </PARAMETER>
+    <PARAMETER NAME="WS" FIELD="TEXT" REQUIRED="true" NUM_ROW="2"
+      SHOW="false">
+    </PARAMETER>
+    <PARAMETER NAME="COUNTRY" FIELD="TEXT" REQUIRED="false"
+      NUM_ROW="2">
+      <DEFAULT></DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="X" FIELD="PREV_COLUMN_LIST" REQUIRED="true"
+      NUM_ROW="3" />
+    <PARAMETER NAME="Y" FIELD="PREV_COLUMN_LIST" REQUIRED="true"
+      NUM_ROW="3" />
+    <PARAMETER NAME="OPERATION_TYPE" FIELD="CLOSED_LIST" NUM_ROW="1">
+      <ITEMS DEFAULT="FIND_POSTAL_CODE">
+        <ITEM NAME="FIND_POSTAL_CODE" VALUE="FIND_POSTAL_CODE" />
+        <ITEM NAME="FIND_PLACE_NAME" VALUE="FIND_PLACE_NAME" />
+      </ITEMS>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="Java-DOM4J" MODULE="dom4j-1.6.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="Java-JAXEN" MODULE="jaxen-1.1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-httpclient-3.0.1.jar"
+        MODULE="commons-httpclient-3.0.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-logging"
+        MODULE="commons-logging-1.1.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-codec-1.3" MODULE="commons-codec-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.12.jar"
+        REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="NB_FEATURE" TYPE="INTEGER" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

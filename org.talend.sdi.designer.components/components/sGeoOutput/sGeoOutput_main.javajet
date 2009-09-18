@@ -1,0 +1,110 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.metadata.IMetadataTable
+        org.talend.core.model.metadata.IMetadataColumn
+        org.talend.core.model.metadata.types.JavaType
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType 
+        org.talend.core.model.process.ElementParameterParser
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List
+    "
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+
+String dbCol = ElementParameterParser.getValue(node,"__DB_COL__");
+String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+String md = ElementParameterParser.getValue(node,"__MD__");
+String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
+
+
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas!=null)&&(metadatas.size()>0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata!=null) {
+        String cid = node.getUniqueName();
+
+        List< ? extends IConnection> conns = node.getIncomingConnections();
+        for (IConnection conn : conns) {
+            if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)) || (conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+%>
+
+org.opengis.feature.simple.SimpleFeature outFeature_<%=cid%> = writer_<%=cid%>.next();                  
+
+<%  
+                for (IMetadataColumn column : metadata.getListColumns()) {
+                    String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+                    
+                    
+                    if (typeToGenerate.equals("Geometry")) {
+%>
+
+// TODO: don't we want to accept null geometries for PostGIS
+if (<%=conn.getName() %>.<%=column.getLabel() %> == null) 
+    continue;
+    
+if (((org.talend.sdi.geometry.Geometry)<%=conn.getName() %>.<%=column.getLabel() %>).isEmpty())
+    continue;
+<%
+                        if (formatType.equals("POSTGIS")) {
+%>
+
+outFeature_<%=cid%>.setAttribute(
+    map_<%=cid %>.get(<%=dbCol %>),
+        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>))._getInternalGeometry());
+<%
+                        } else {
+%>
+outFeature_<%=cid%>.setAttribute(
+    map_<%=cid %>.get("<%=column.getLabel() %>"),
+        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>))._getInternalGeometry());
+<%
+                         }
+                         
+                         
+                        if (formatType.equals("SHAPEFILE") && !forceCRS.equals("true")) {
+%>        
+/* Projection for shapefile - if not forced, set using feature CRS*/
+if (nbFeature_<%=cid%> == 0) {
+    org.opengis.referencing.crs.CoordinateReferenceSystem crs_<%=cid %> = 
+        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>)).getCRS();
+    if (crs_<%=cid %> != null)
+        ((org.geotools.data.shapefile.ShapefileDataStore)store_<%=cid %>).forceSchemaCRS(crs_<%=cid %>);
+}
+<%
+                        }
+                        
+                        
+                        
+                    } else {
+                    
+%>
+
+outFeature_<%=cid%>.setAttribute(
+    map_<%=cid %>.get("<%=column.getLabel()%>"), <%=conn.getName() %>.<%=column.getLabel() %>);
+
+<%
+                    }
+                }
+                if (md.equals("true")) {
+%>
+/* Computing extent for metadata */
+bbox<%=cid %>.expandToInclude(new org.geotools.geometry.jts.ReferencedEnvelope(outFeature_<%=cid%>.getBounds()));
+<%
+                }
+%>
+writer_<%=cid%>.write();
+<%
+            }
+%>      
+nbFeature_<%=cid%> ++;
+<%
+        }
+    }
+}
+%>

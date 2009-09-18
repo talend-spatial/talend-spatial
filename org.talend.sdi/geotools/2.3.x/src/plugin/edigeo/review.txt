@@ -1,0 +1,12 @@
+PLUGIN EDIGEO
+=============
+
+EDIGEO DataStore access.
+
+
+org.geotools.data.edigeo
+------------------------
+
+
+org.geotools.data.edigeo (test)
+------------------------------

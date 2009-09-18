@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SDI Sextante components Plug-in
+Bundle-SymbolicName: org.talend.sdi.designer.components.sextante;singleton:=true
+Bundle-Version: 0.0.1
+Bundle-Localization: plugin
+Bundle-Activator: org.talend.sdi.designer.components.sextante.SextantePlugin
+Bundle-Vendor: .fxp.
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.talend.commons,
+ org.talend.libraries,
+ org.talend.designer.core,
+ org.talend.core,
+ org.eclipse.gmf.runtime.common.ui,
+ org.talend.commons.ui
+Eclipse-LazyStart: true
+Export-Package: org.talend.sdi.designer.components.sextante
+Bundle-ClassPath: .

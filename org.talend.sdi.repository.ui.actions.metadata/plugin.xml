@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="rep.actions"
+         name="Actions"
+         point="org.talend.core.repositoryContextualsActions">
+      <Action
+            class="org.talend.sdi.repository.ui.actions.metadata.CreateGeoMetadata"
+            id="org.talend.sdi.repository.ui.actions.CreateGeoMetadata"
+            isEditAction="true"
+            isPropertiesAction="false"
+            isReadAction="true"
+            level="100"
+            name="Metadata/Create generic schema from ESRI Shapefile, MIF/MID file">
+      </Action>
+      <Action
+            class="org.talend.sdi.repository.ui.actions.metadata.CreateGeoWFSMetadata"
+            id="org.talend.sdi.repository.ui.actions.CreateGeoWfsMetadata"
+            isEditAction="true"
+            isPropertiesAction="false"
+            isReadAction="true"
+            level="101"
+            name="Metadata/Create generic schema from WFS">
+      </Action>
+      <Action
+            class="org.talend.sdi.repository.ui.actions.metadata.CreateGeoEdigeoMetadata"
+            id="org.talend.sdi.repository.ui.actions.CreateGeoEdigeoMetadata"
+            isEditAction="true"
+            isPropertiesAction="false"
+            isReadAction="true"
+            level="102"
+            name="Metadata/Create generic schema from EDIGEO Files">
+      </Action>
+   </extension>
+
+</plugin>

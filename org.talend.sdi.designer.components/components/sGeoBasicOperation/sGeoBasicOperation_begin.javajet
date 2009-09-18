@@ -1,0 +1,117 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+"
+%>
+
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    
+    String operationType = ElementParameterParser.getValue(node, "__OPERATION_TYPE__");    
+    String clipperXmin = ElementParameterParser.getValue(node, "__CLIPPER_XMIN__");
+    String clipperYmin = ElementParameterParser.getValue(node, "__CLIPPER_YMIN__");
+    String clipperXmax = ElementParameterParser.getValue(node, "__CLIPPER_XMAX__");
+    String clipperYmax = ElementParameterParser.getValue(node, "__CLIPPER_YMAX__");
+    String sourceCRS = ElementParameterParser.getValue(node, "__SOURCE_CRS__");
+    String targetCRS = ElementParameterParser.getValue(node, "__TARGET_CRS__");
+    String simplificationTolerence = ElementParameterParser.getValue(node, "__TOLERANCE__");
+    String tx = ElementParameterParser.getValue(node, "__TX__");
+    String ty = ElementParameterParser.getValue(node, "__TY__");
+    String rotation = ElementParameterParser.getValue(node, "__ROTATION__");
+    String ax = ElementParameterParser.getValue(node, "__AX__");
+    String ay = ElementParameterParser.getValue(node, "__AY__");
+    String sx = ElementParameterParser.getValue(node, "__SX__");
+    String sy = ElementParameterParser.getValue(node, "__SY__");
+    String use_centroid = ElementParameterParser.getValue(node, "__USE_CENTROID_AS_ANCHOR__");
+    
+    String cid = node.getUniqueName(); 
+ 
+    
+   
+    
+    if (operationType.equals("CLIPPER")) {
+%>
+com.vividsolutions.jts.geom.GeometryFactory f_<%=cid %> = new com.vividsolutions.jts.geom.GeometryFactory();
+com.vividsolutions.jts.geom.Envelope e_<%=cid %> = new 
+		com.vividsolutions.jts.geom.Envelope (
+				<%=clipperXmin %>, <%=clipperXmax %>,
+				<%=clipperYmin %>, <%=clipperYmax %>
+		);
+com.vividsolutions.jts.geom.Geometry clipper_<%=cid %> = f_<%=cid %>.toGeometry(e_<%=cid %>);
+System.out.println("Clipper: " + clipper_<%=cid %>.toString());
+
+<%
+
+	}else if (operationType.equals("DOUGLAS_PEUCKER") || operationType.equals("TOPOLOGY_PRESERVING")){	
+%>		 
+	double tol_<%=cid %> = java.lang.Double.valueOf(<%=simplificationTolerence%>);
+<%
+
+
+
+	}else if (operationType.equals("TRANSFORM")){	
+%>	
+	com.vividsolutions.jts.geom.util.AffineTransformation at_<%=cid %> = 
+		new com.vividsolutions.jts.geom.util.AffineTransformation();
+<%
+		if (!tx.equals("") && !ty.equals("")) {
+%>		
+	at_<%=cid %>.compose(com.vividsolutions.jts.geom.util.AffineTransformation.translationInstance(
+			new Double(<%=tx %>), new Double(<%=ty %>)));
+<%
+		}
+	
+		if (!rotation.equals("") && !ax.equals("") && !ay.equals("") && use_centroid.equals("false")) {
+%>			
+	at_<%=cid %>.compose(com.vividsolutions.jts.geom.util.AffineTransformation.rotationInstance(
+				Math.toRadians(new Double(<%=rotation %>)),
+				new Double(<%=ax %>), 
+				new Double(<%=ay %>)
+				)
+			);
+<%
+		} else if (!rotation.equals("") && use_centroid.equals("false")) {
+%>
+	at_<%=cid %>.compose(com.vividsolutions.jts.geom.util.AffineTransformation.rotationInstance(
+			Math.toRadians(new Double(<%=rotation %>))));
+<%		
+		}
+
+		if (!sx.equals("") && !sy.equals("")) {
+%>		
+	at_<%=cid %>.compose(com.vividsolutions.jts.geom.util.AffineTransformation.scaleInstance(
+			new Double(<%=sx %>), new Double(<%=sy %>)));
+<%
+		}
+
+
+    } else if (operationType.equals("PROJ")) {
+%>
+
+// Define CRS and transformation    
+org.opengis.referencing.crs.CoordinateReferenceSystem sourceCRS_<%=cid %> = null;
+org.opengis.referencing.crs.CoordinateReferenceSystem targetCRS_<%=cid %> = null;
+org.opengis.referencing.operation.MathTransform transform_<%=cid %> = null;
+try {
+     sourceCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=sourceCRS %>);
+     targetCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=targetCRS %>);
+     transform_<%=cid %> = org.geotools.referencing.CRS.findMathTransform(
+     								sourceCRS_<%=cid %>,
+			     					targetCRS_<%=cid %>);
+} catch (Exception e) {
+    System.out.println (e.getMessage());
+}
+        
+<%
+    }   
+    
+    
+%>
+
+int nbFeature_<%=cid %> = 0;
+int nbFeatureValid_<%=cid %> = 0;

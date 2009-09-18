@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+==============================================================================
+=== This Ant build file is used to build the Spatial Data Integrator
+==============================================================================
+-->
+
+<project name="SpatialDataIntegrator" default="compile" basedir=".">
+
+    <!-- Read properties -->
+    <property  file="sdi.properties"/>
+
+	
+	
+	<!-- ================================= 
+	          target: compile              
+	         ================================= -->
+	<target name="compile"
+        description="Compile the source.">
+
+        <delete file="src/org/talend/sdi/*/*.class" />
+        <delete file="lib/org.talend.sdi.jar" />
+
+        <javac srcdir="src/org/talend/sdi" 
+            classpath="src/.;lib/jts-1.9.jar;lib/jdom-1.0.jar;lib/dom4j-1.6.1.jar;lib/commons-httpclient-3.0.1.jar;lib/geoapi-2.2-M1.jar" 
+            target="1.5"
+            debug="true" />
+        
+        <jar jarfile="lib/org.talend.sdi.jar" 
+            basedir="src" 
+            includes="org/talend/sdi/**/*.class" />
+        
+        <delete file="src/org/talend/sdi/*/*.class" />
+
+		<!-- Publish in projects -->
+		<copy todir="../org.talend.sdi.repository.ui.actions.metadata/lib">
+            <fileset dir="lib"><include name="org.talend.sdi.jar"/></fileset>
+        </copy>
+		<copy todir="../org.talend.sdi/components/sGeoInput">
+            <fileset dir="lib"><include name="org.talend.sdi.jar"/></fileset>
+        </copy>
+		<copy todir="../org.talend.designer.components.localprovider/components/tPostgresqlInput">
+            <fileset dir="lib"><include name="org.talend.sdi.jar"/></fileset>
+        </copy>
+		<copy todir="../org.talend.libraries">
+            <fileset dir="lib"><include name="org.talend.sdi.jar"/></fileset>
+        </copy>
+    </target>
+    
+	
+	
+	<!-- ================================= 
+          target: xsd-validation              
+         ================================= -->
+    <target name="xsd-validation"
+    	description="Parse *_java.xml with components.xsd">
+        <schemavalidate nonamespacefile="util/Component.xsd">
+            <fileset dir="components">
+                <include name="s*/*_java.xml"/>
+        	</fileset>
+        </schemavalidate>
+    </target>
+
+	
+	
+	<!-- ================================= 
+	          target: install              
+	         ================================= -->
+    <target name="install" depends="compile,xsd-validation"
+        description="Install current workspace into existing TOS directory.">
+        <copy todir="${talend.dir}/lib/java">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+    
+        <copy todir="${talend.dir}/plugins/org.talend.designer.components.localprovider_${tos.version}.${tos.revision}/components" overwrite="true">
+                <fileset dir="components">
+                    <include name="s*/**"/>
+                	<exclude name="src"/>
+                </fileset>
+        </copy>
+    	
+    	<copy todir="${talend.dir}/plugins/org.talend.librariesmanager_${tos.version}.${tos.revision}/resources/java/routines" overwrite="true">
+    	                    <fileset dir="src/routines"/>
+    	</copy>
+    	
+        <copy todir="${talend.dir}/workspace/.spatial">
+                    <fileset dir=".spatial">
+                    </fileset>
+        </copy>
+            
+    </target>
+    
+	
+	<target name="UpdateTOSSVN"
+		description="Copy components to TOS svn." depends="compile,xsd-validation">
+		<!-- Remove old components and templates -->
+        <delete includeemptydirs="true">
+            <fileset 
+                dir="../org.talend.designer.components.localprovider/components" 
+                includes="s*"
+                excludes="t*">
+            </fileset>
+        </delete>
+        
+		<!-- Copy JAR to components dir -->
+        <exec dir="." executable="perl">
+            <arg line="util/addjars.pl"/>
+        </exec>
+        
+        <!-- Copy components -->
+        <copy todir="../org.talend.designer.components.localprovider/components" overwrite="true">
+            <fileset dir="components"
+                includes="s*/*">
+            </fileset>
+        </copy>
+		        
+	</target>
+	
+	
+    
+    <target name="packFromSDI" 
+        description="From an existing SDI zip package build a new one using the current project.">
+
+        <!--Remove existing build and package and unzip -->
+        <delete dir =".pack" failonerror="false"/>
+        <delete file ="${sdi.dir}/SDI-All-V${sdi.version}-TOSV${tos.version}.zip" failonerror="false"/>
+        
+        <mkdir  dir =".pack" />
+        <unzip src="${sdi.dir}/${sdi.file}.zip"
+               dest=".pack">
+        </unzip>
+        
+        
+        <!-- Remove old components and templates -->
+        <delete includeemptydirs="true">
+            <fileset 
+                dir=".pack/${sdi.file}/plugins/org.talend.designer.components.localprovider_${tos.version}.${tos.revision}/components" 
+                includes="s*"
+                excludes="t*">
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset 
+                dir=".pack/${sdi.file}/workspace/conversion">
+            </fileset>
+        </delete>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset 
+                dir=".pack/${sdi.file}/workspace/.spatial">
+            </fileset>
+        </delete>
+                
+        
+        <!-- Copy JAR to components dir -->
+        <exec dir="." executable="perl">
+            <arg line="util/addjars.pl"/>
+        </exec>
+        
+        <!-- Copy components -->
+        <copy todir=".pack/${sdi.file}/plugins/org.talend.designer.components.localprovider_${tos.version}.${tos.revision}/components" overwrite="true">
+            <fileset dir="components"
+                includes="s*/*">
+            </fileset>
+        </copy>
+        
+        <!-- Remove JAR to components dir to have a clean repository -->
+        <exec dir="." executable="perl">
+            <arg line="util/removejars.pl"/>
+        </exec>
+                
+        
+        <!-- REMOVE : this is done by perl script / Copy all geolibs to sGeoInput   
+        <copy todir=".pack/${sdi.file}/plugins/${sdi.cpt}/components/sGeoInput" overwrite="true">
+                    <fileset dir="lib"
+                        includes="*.jar">
+                    </fileset>
+        </copy>-->
+        
+        
+        <!-- Copy templates -->
+        <copy todir=".pack/${sdi.file}/workspace/.spatial" overwrite="true">
+                    <fileset dir=".spatial"/>
+        </copy>
+        
+        <!-- Copy routines -->
+        <copy todir=".pack/${sdi.file}/plugins/org.talend.librariesmanager_${tos.version}.${tos.revision}/resources/java/routines" overwrite="true">
+                    <fileset dir="src/routines"/>
+        </copy>
+
+
+        <!-- Copy docs -->
+        <copy todir=".pack/${sdi.file}" overwrite="true">
+                    <fileset dir=".">
+                        <include name="CHANGES" />
+                        <include name="INSTALL" />
+                    </fileset>
+        </copy>
+        
+        <!-- Chmod for unix users -->
+        <chmod perm="ugo+rx">
+            <fileset dir=".pack/${sdi.file}">
+                <include name="SDI-linux*" />
+                <include name="SDI-solaris*" />
+            </fileset>
+        </chmod>
+        
+        <move todir=".pack/SDI-All-V${sdi.version}-TOSV${tos.version}">
+            <fileset dir=".pack/${sdi.file}"/>
+        </move>
+        
+        <delete dir =".pack/${sdi.file}" />
+        
+        <!--Zip all -->     
+        <zip basedir=".pack"
+                       destfile="${sdi.dir}/SDI-All-V${sdi.version}-TOSV${tos.version}.zip">
+        </zip>
+        
+        <delete dir =".pack" />
+                
+    </target>
+        
+
+    <target name="packFromTOS"
+        description="TODO : Generate SDI from TOS svn">
+        
+    </target>
+        
+</project>

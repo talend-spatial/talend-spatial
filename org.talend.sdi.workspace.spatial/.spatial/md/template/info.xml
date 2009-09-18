@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info version="1.0">
+  <general>
+    <createDate>__CREATE_DATE__</createDate>
+    <changeDate>__CHANGE_DATE__</changeDate>
+    <schema>iso19139</schema>
+    <isTemplate>false</isTemplate>
+    <localId></localId>
+    <format>full</format>
+  </general>
+  <categories>
+    <category name="datasets"/>
+  </categories>
+  <privileges>
+    <group name="all">
+      <operation name="view"/>
+      <operation name="download"/>
+      <operation name="dynamic"/>
+      <operation name="featured"/>
+    </group>
+    <group name="intranet">
+      <operation name="view"/>
+      <operation name="download"/>
+      <operation name="dynamic"/>
+      <operation name="featured"/>
+    </group>
+  </privileges>
+  <public>
+    <file name="thumbnail.png" changeDate="2007-07-19T15:27:10"/>
+  </public>
+  <private>
+  </private>
+</info>

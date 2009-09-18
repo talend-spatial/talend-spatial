@@ -1,0 +1,101 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+" 
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+
+String cid = node.getUniqueName();
+
+String mdFile = ElementParameterParser.getValue(node,"__MDFILE__");
+String mdTpl = ElementParameterParser.getValue(node,"__MDTPL__");
+String mdTitle = ElementParameterParser.getValue(node,"__MDTITLE__");
+String mdAbstract = ElementParameterParser.getValue(node,"__MDABSTRACT__");
+String mdPurpose = ElementParameterParser.getValue(node,"__MDPURPOSE__");
+String mdTopicCategory = ElementParameterParser.getValue(node,"__MDTOPICCATEGORY__");
+String mdCreationDate = ElementParameterParser.getValue(node,"__MDCREATIONDATE__");
+String mdAuthor = ElementParameterParser.getValue(node,"__MDAUTHOR__");
+String targetCRS = ElementParameterParser.getValue(node,"__CRS__");
+String mdKeywords = ElementParameterParser.getValue(node,"__KEYWORDS__");
+String mdOnlineSrc = ElementParameterParser.getValue(node,"__ONLINESRCWWW__");
+String xmin = ElementParameterParser.getValue(node,"__XMIN__");
+String ymin = ElementParameterParser.getValue(node,"__YMIN__");
+String xmax = ElementParameterParser.getValue(node,"__XMAX__");
+String ymax = ElementParameterParser.getValue(node,"__YMAX__");
+%>
+/* Initialize metadata (ie. Load template and set main element) */
+org.talend.sdi.metadata.Metadata md_<%=cid %> = new org.talend.sdi.metadata.Metadata (
+                                            org.talend.sdi.metadata.Metadata.Standard.ISO,
+                                            <%=mdTitle %>,
+                                            <%=mdPurpose %>,
+                                            <%=mdAbstract %>,
+                                            "<%=mdTopicCategory %>",
+                                            <%=mdTpl %>
+                                            // TODO : thumbnails + OnLineSrc
+                                            );
+if (! md_<%=cid %>.setDateStamp ())
+    System.out.println ("<%=cid %> | Metadata | Can't set date stamp");
+
+/* Bbox info */ 
+if (! md_<%=cid %>.setEX_GeographicBoundingBox (
+            Double.parseDouble(<%=xmin %>),
+            Double.parseDouble(<%=ymin %>),
+            Double.parseDouble(<%=xmax %>),
+            Double.parseDouble(<%=ymax %>)
+            ))
+        System.out.println ("<%=cid %> | Metadata | Can't set extent");
+
+<%
+    if (!mdOnlineSrc.equals("")) {
+%>
+if (! md_<%=cid %>.setOnlineResource (<%=mdOnlineSrc %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set onlineSrc");
+<%
+    }
+%>
+
+<%
+    if (!mdCreationDate.equals("")) {
+%>
+if (! md_<%=cid %>.setCI_Date (<%=mdCreationDate %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set CI_Date");
+<%
+    }
+%>
+
+<%
+    if (!mdAuthor.equals("")) {
+%>
+if (! md_<%=cid %>.setCI_Contact (<%=mdAuthor %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set CI_Contact");
+<%
+    }
+%>
+
+<%
+    if (!mdKeywords.equals("")) {
+%>
+if (! md_<%=cid %>.setMD_Keywords (<%=mdKeywords %>))
+        System.out.println ("<%=cid %> | Metadata | Can't set MD_Keywords");
+<%
+    }
+%>
+ 
+md_<%=cid %>.write(<%=mdFile %>, null);
+globalMap.put("<%=cid %>_METADATA", md_<%=cid %>.toString());
+
+if (!(<%=mdFile %>).endsWith(".xml"))
+    globalMap.put("<%=cid %>_METADATA_FILE", <%=mdFile %> + ".xml");
+ else
+    globalMap.put("<%=cid %>_METADATA_FILE", <%=mdFile %>);
+ 

@@ -1,0 +1,126 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="Fxp" RELEASE_DATE="20050320A"
+    STARTABLE="true">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Metadata</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_OUTPUT="0" MAX_INPUT="0" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <PARAMETER NAME="MDTITLE" FIELD="TEXT" NUM_ROW="1"
+      REQUIRED="false">
+      <DEFAULT>"Metadata title"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDABSTRACT" FIELD="TEXT" NB_LINES="3" NUM_ROW="2"
+      REQUIRED="false">
+      <DEFAULT>"Metadata abstract"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDPURPOSE" FIELD="TEXT" NB_LINES="3" NUM_ROW="3"
+      REQUIRED="false">
+      <DEFAULT>"Metadata Purpose"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTOPICCATEGORY" FIELD="CLOSED_LIST"
+      REQUIRED="false" NUM_ROW="4">
+      <ITEMS>
+        <ITEM NAME="" VALUE="" />
+        <ITEM NAME="farming" VALUE="farming" />
+        <ITEM NAME="biota" VALUE="biota" />
+        <ITEM NAME="boundaries" VALUE="boundaries" />
+        <ITEM NAME="climatologyMeteorologyAtmosphere"
+          VALUE="climatologyMeteorologyAtmosphere" />
+        <ITEM NAME="economy" VALUE="economy" />
+        <ITEM NAME="elevation" VALUE="elevation" />
+        <ITEM NAME="environment" VALUE="environment" />
+        <ITEM NAME="geoscientificInformation"
+          VALUE="geoscientificInformation" />
+        <ITEM NAME="health" VALUE="health" />
+        <ITEM NAME="imageryBaseMapsEarthCover"
+          VALUE="imageryBaseMapsEarthCover" />
+        <ITEM NAME="intelligenceMilitary" VALUE="intelligenceMilitary" />
+        <ITEM NAME="inlandWaters" VALUE="inlandWaters" />
+        <ITEM NAME="location" VALUE="location" />
+        <ITEM NAME="oceans" VALUE="oceans" />
+        <ITEM NAME="planningCadastre" VALUE="planningCadastre" />
+        <ITEM NAME="society" VALUE="society" />
+        <ITEM NAME="structure" VALUE="structure" />
+        <ITEM NAME="transportation" VALUE="transportation" />
+        <ITEM NAME="utilitiesCommunication"
+          VALUE="utilitiesCommunication" />
+      </ITEMS>
+    </PARAMETER>
+    <PARAMETER NAME="KEYWORDS" FIELD="TEXT" NUM_ROW="5"
+      REQUIRED="false">
+      <DEFAULT>""</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDCREATIONDATE" FIELD="TEXT" NUM_ROW="5"
+      REQUIRED="false">
+      <DEFAULT>"yyyy-MM-ddTHH:mm:ss"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CRS" FIELD="TEXT" NUM_ROW="6" REQUIRED="true">
+      <DEFAULT>"EPSG:4326"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDAUTHOR" FIELD="TEXT" NUM_ROW="7"
+      REQUIRED="false">
+      <DEFAULT>""</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="ONLINESRCWWW" FIELD="TEXT" NUM_ROW="8"
+      REQUIRED="false">
+      <DEFAULT>""</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="XMIN" FIELD="TEXT" NUM_ROW="9" REQUIRED="false">
+      <DEFAULT>"-180"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="YMIN" FIELD="TEXT" NUM_ROW="9" REQUIRED="false">
+      <DEFAULT>"-90"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="XMAX" FIELD="TEXT" NUM_ROW="9" REQUIRED="false">
+      <DEFAULT>"180"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="YMAX" FIELD="TEXT" NUM_ROW="9" REQUIRED="false">
+      <DEFAULT>"90"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDFILE" FIELD="FILE" NUM_ROW="11"
+      REQUIRED="true">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/metadata.xml"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="MDTPL" FIELD="FILE" NUM_ROW="12" REQUIRED="true">
+      <DEFAULT>
+        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
+      </DEFAULT>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="xercesImpl" MODULE="xercesImpl-2.7.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xml-apis" MODULE="xml-apis-1.0.b2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="xml-apis-xerces"
+        MODULE="xml-apis-xerces-2.7.1.jar" REQUIRED="true" />
+      <IMPORT NAME="xsd" MODULE="xsd-2.2.2.jar" REQUIRED="true" />
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="dom4j" MODULE="dom4j-1.6.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxen" MODULE="jaxen-1.1.1.jar"
+        REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="METADATA_FILE" TYPE="id_String" AVAILABILITY="AFTER" />
+    <RETURN NAME="METADATA" TYPE="id_String" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

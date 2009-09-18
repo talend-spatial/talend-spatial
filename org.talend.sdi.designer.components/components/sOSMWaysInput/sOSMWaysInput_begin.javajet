@@ -1,0 +1,83 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+String file = ElementParameterParser.getValue(node, "__FILENAME__");
+%>
+try {
+    java.io.File file_<%=cid %> = 
+    	new java.io.File(<%=file %>);
+    org.openstreetmap.josm.data.osm.DataSet dataSet_<%=cid %> = 
+    	org.openstreetmap.josm.io.OsmReader.parseDataSet(new java.io.FileInputStream(file_<%=cid %>), org.openstreetmap.josm.gui.progress.NullProgressMonitor.INSTANCE);
+    
+	if (dataSet_<%=cid %>.allPrimitives().isEmpty()) {
+		System.out.println("OSM:no features.");
+	}else{
+		for (java.util.Iterator iterator = dataSet_<%=cid %>.ways.iterator(); iterator.hasNext();) {
+            org.openstreetmap.josm.data.osm.Way way_<%=cid %> = (org.openstreetmap.josm.data.osm.Way) iterator.next();
+                
+                
+	        // Read attributes
+	        String tags_<%=cid %> = "";
+	        String id_<%=cid %> = String.valueOf(way_<%=cid %>.getId());
+	        String username_<%=cid %> = (way_<%=cid %>.user != null?way_<%=cid %>.user.getName():"");
+	        String timestamp_<%=cid %> = "";
+	        try {
+	        	String time = way_<%=cid %>.getTimestamp().toString();
+	        	timestamp_<%=cid %> = (time != null?time:"");
+	        } catch (Exception e) {
+	        	// Do nothing, fail to get time stamp from file
+	        }
+	        
+	        if (way_<%=cid %>.isTagged()) {
+                java.util.Iterator tags = way_<%=cid %>.getKeys().entrySet().iterator();
+                while (tags.hasNext()) {
+                    java.util.Map.Entry<String, String> t = (java.util.Map.Entry<String, String>) tags.next();
+                    tags_<%=cid %> += t.getKey() + ":" + t.getValue() + ";";
+                    // FIXME : using ":" and ";" for KVP separator is a bit dangerous.
+                }
+            }
+            
+            
+            // Create lineString
+            com.vividsolutions.jts.geom.Coordinate[] coordinates_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[way_<%=cid %>.getNodes().size()];
+            int i_<%=cid %> = 0;
+            boolean empty_<%=cid %> = false;
+            
+            for (java.util.Iterator iterator2 = way_<%=cid %>.getNodes().iterator(); iterator2.hasNext();) {
+                org.openstreetmap.josm.data.osm.Node node = (org.openstreetmap.josm.data.osm.Node) iterator2.next();
+                
+                if (node.getCoor() == null)
+                	empty_<%=cid %> = true;
+                	
+                coordinates_<%=cid %>[i_<%=cid %> ++] = new com.vividsolutions.jts.geom.Coordinate(node.getCoor().getX(), node.getCoor().getY());
+            }
+            
+            org.talend.sdi.geometry.Geometry geometry_<%=cid %> = null;
+            
+            if (!empty_<%=cid %>) { 
+            	com.vividsolutions.jts.geom.GeometryFactory gFact_<%=cid %> = new com.vividsolutions.jts.geom.GeometryFactory();
+	            
+	            geometry_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+	            	(com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createLineString(coordinates_<%=cid %>));
+	        } else {
+	        	continue;
+	        	// Do not add empty ways
+	        }

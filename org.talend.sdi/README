@@ -1,0 +1,51 @@
+------------------------------------------------------------ 
+		 Spatial Data Integrator
+------------------------------------------------------------ 
+ * Community website : http://spatialdataintegrator.com
+ * Wiki : http://www.talendforge.org/wiki/doku.php?id=sdi:MainPage
+ * Forum : http://www.talendforge.org/forum/viewforum.php?id=9
+
+
+------------------------------------------------------------ 
+ Build SDI
+--
+In order to build SpatialDataIntegrator jar file run from the 
+command line: 
+ant
+
+
+------------------------------------------------------------ 
+ Install SDI into an existing TOS directory 
+--
+In order to install SpatialDataIntegrator (all components, librairies
+and templates) in an existing Talend Open Studio installation: 
+ * edit the sdi.properties file
+ * change talend.dir and talend.cpt properties
+ * then run from the command line:
+ant install
+
+This will copy all geospatial components into the TOS installation 
+directory.
+
+
+
+------------------------------------------------------------ 
+ Create SDI package from an existing SDI installer 
+--
+In order to build a new SpatialDataIntegrator package including 
+all components, librairies and templates download a previous 
+SDI installer from spatialdataintegrator.com. Then: 
+ * edit the sdi.properties file
+ * change sdi.dir, sdi.file and sdi.cpt properties
+ * then run from the command line:
+ant packFromSDI
+
+
+
+------------------------------------------------------------ 
+ Demo geodata and workspace 
+-- 
+ * Demo data are available under the geodata directory.
+ * Workspace used for unit testing is the workspace directory.
+
+

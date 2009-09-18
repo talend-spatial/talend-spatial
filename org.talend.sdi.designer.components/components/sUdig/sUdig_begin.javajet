@@ -1,0 +1,99 @@
+<%@ jet 
+	imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.metadata.IMetadataColumn
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        java.util.Map		
+	" 
+%>
+<% 
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();	
+
+	String file = ElementParameterParser.getValue(node,"__FILE__");
+	String type = ElementParameterParser.getValue(node,"__TYPE__");
+    String port = ElementParameterParser.getValue(node,"__PORT__");
+    String host = ElementParameterParser.getValue(node,"__HOST__");
+    String retry = ElementParameterParser.getValue(node,"__RETRY__");
+    String timeout = ElementParameterParser.getValue(node,"__TIMEOUT__");
+%>    
+
+java.net.Socket socket<%=cid%> = null;
+int nb_line_<%=cid%> = 0;
+boolean retry<%=cid%> = true;
+
+for(int i=0;i<<%=retry%>-1;i++){
+    if(retry<%=cid%>){
+        try{
+            socket<%=cid%> = new java.net.Socket(<%=host %>,<%=port %>);
+            retry<%=cid%> = false;
+        }catch(java.net.ConnectException e<%=cid%>){
+            Thread.sleep(<%=timeout%>);
+        }
+    }
+}
+
+if (socket<%=cid %> != null){   
+	/*************
+	 * 
+	 * DisplayLayer version:1.0
+	 * geoResourceId;URI
+	 * paramName;paramType;paramValue
+	 * * ';' must be escaped
+	 * * paramType must be one of Types
+	 *
+	 * For example:
+	 * DisplayLayer version:1.0
+	 *  geoResourceId;file:/home/user/data/myshp.shp#myshp
+	 *  url;java.net.URL;file:/home/user/data/myshp.shp
+	 *  url;java.net.URL;jdbc:
+	 *
+	 */
+<%
+
+	List< ? extends IConnection> inconns = node.getIncomingConnections();
+	for (IConnection inconn : inconns) {
+	    if ((inconn.getLineStyle().equals(EConnectionType.ON_COMPONENT_OK))) {
+	
+	 String cidu = inconn.getSource().getUniqueName();
+	 String cidForward = "";
+	 if (cidu.endsWith ("_SO")) {
+        cidForward = cidu.substring(0, cidu.length() - 3); // Using a forwarded component
+     } else {
+        cidForward = cidu; // Using uGeoOutput directly
+     }  	
+%>
+     
+	String udigFile_<%=cid %> = (String) globalMap.get("<%=cidForward %>_UDIG_GEORESOURCE");
+	String udigResourceId_<%=cid %> = (String) globalMap.get("<%=cidForward %>_UDIG_GEORESOURCEID");
+	
+	if (udigFile_<%=cid %> != null && udigResourceId_<%=cid %> != null) {
+		java.io.PrintWriter out_<%=cid %> = new java.io.PrintWriter(socket<%=cid %>.getOutputStream(), true);
+		out_<%=cid %>.println("DisplayLayer version:1.0");  
+		out_<%=cid %>.println(" geoResourceId;file:" + udigResourceId_<%=cid %>);  
+		out_<%=cid %>.println(" url;java.net.URL;file:" + udigFile_<%=cid %>);  
+		out_<%=cid %>.close();
+	}
+<%
+		}
+	}
+	
+	if (!file.equals("\"\"") && !type.equals("\"\"")) {
+%>	
+	java.io.PrintWriter outAdv_<%=cid %> = new java.io.PrintWriter(socket<%=cid %>.getOutputStream(), true);
+	outAdv_<%=cid %>.println("DisplayLayer version:1.0");  
+	outAdv_<%=cid %>.println(" geoResourceId;file:" + udigResourceId_<%=cid %>);  
+	outAdv_<%=cid %>.println(" url;java.net.URL;file:" + udigFile_<%=cid %>);  
+	outAdv_<%=cid %>.close();
+<%
+	}
+%> 
+	socket<%=cid %>.close(); 
+}

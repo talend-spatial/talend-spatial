@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: WorkspaceSpatial Plug-in
+Bundle-SymbolicName: org.talend.sdi.workspace.spatial;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.talend.sdi.workspace.spatial.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui
+Eclipse-LazyStart: true
+Bundle-Vendor: Camptocamp

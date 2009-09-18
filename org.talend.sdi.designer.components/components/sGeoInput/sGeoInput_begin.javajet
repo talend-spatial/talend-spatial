@@ -1,0 +1,336 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+        
+    " 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+        String filename = ElementParameterParser.getValue(node,"__FILENAME__");
+        String dbHost = ElementParameterParser.getValue(node,"__DB_HOST__");
+        String dbPort = ElementParameterParser.getValue(node,"__DB_PORT__");
+        String dbUser = ElementParameterParser.getValue(node,"__DB_USER__");
+        String dbPasswd = ElementParameterParser.getValue(node,"__DB_PASSWD__");
+        String dbName = ElementParameterParser.getValue(node,"__DB_NAME__");
+        String dbSchema = ElementParameterParser.getValue(node,"__DB_SCHEMA__");
+        String dbTable = ElementParameterParser.getValue(node,"__DB_TABLE__");
+        String dbCol = ElementParameterParser.getValue(node,"__DB_COL__");
+        String sourceCRS = ElementParameterParser.getValue(node,"__CRS__");
+        String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
+        String edigeoObj = ElementParameterParser.getValue(node,"__EDIGEO_OBJ__");
+        String gpxType = ElementParameterParser.getValue(node,"__GPX_TYPE__"); 
+        String Namespace = ElementParameterParser.getValue(node,"__NS_URL__");      
+      
+        String cql_filter = ElementParameterParser.getValue(node,"__CQL__");
+        String wfs_str = ElementParameterParser.getValue(node,"__WFS_URL__");
+        String wfs_version = ElementParameterParser.getValue(node,"__WFS_VERSION__");
+	    boolean protocol = ElementParameterParser.getValue(node,"__USE_METHOD__").equals("true");
+	    String username = ElementParameterParser.getValue(node,"__USERNAME__");
+	    String password = ElementParameterParser.getValue(node,"__PASSWORD__");
+	    String timeout = ElementParameterParser.getValue(node,"__TIMEOUT__");
+	    String buffer = ElementParameterParser.getValue(node,"__BUFFER_SIZE__");
+	    boolean lenient = ElementParameterParser.getValue(node,"__LENIENT__").equals("true");
+	    boolean try_gzip = ElementParameterParser.getValue(node,"__TRY_GZIP__").equals("true");
+        String userTypeName = ElementParameterParser.getValue(node,"__TYPE_NAME__");
+        	
+	
+%>
+
+/* initialize feature count */
+int nbFeature_<%=cid %> = 0;
+
+<%
+
+        if (formatType.equals("SHAPEFILE")) {
+%>
+
+/* create Shapefile store */
+java.io.File shapefile_<%=cid %> = new java.io.File(<%=filename %>);
+org.geotools.data.DataStore store_<%=cid %> =
+    new org.geotools.data.shapefile.ShapefileDataStore(shapefile_<%=cid %>.toURL());
+    
+String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0] ;
+
+
+<%
+
+        } else if (formatType.equals("WFS")) {
+%>
+
+			/* create WFS store */
+
+			java.net.URL wfs_url_<%=cid %> = new java.net.URL(<%=wfs_str %>);
+    
+            java.util.Map m_<%=cid %> = new java.util.HashMap();
+            m_<%=cid %>.put(
+            	org.geotools.data.wfs.WFSDataStoreFactory.URL.key,
+            	org.geotools.data.wfs.WFSDataStoreFactory.
+            		createGetCapabilitiesRequest(wfs_url_<%=cid %>, <%=wfs_version %>)
+            );          
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.PROTOCOL.key,<%=protocol %>);
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.TRY_GZIP.key,<%=try_gzip %>);
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.USERNAME.key,String.valueOf(<%=username %>));
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.PASSWORD.key,String.valueOf(<%=password %>));             
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.TIMEOUT.key,Integer.valueOf(<%=timeout %>));
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.BUFFER_SIZE.key,Integer.valueOf(<%=buffer %>));            
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.LENIENT.key,<%=lenient %>);
+                        
+            
+            
+            org.geotools.data.DataStore store_<%=cid %> = 
+            	(new org.geotools.data.wfs.WFSDataStoreFactory()).createDataStore(m_<%=cid %>);    
+            String typeName_<%=cid %> = null;       
+            String[] typeNames_<%=cid %> = store_<%=cid %>.getTypeNames();
+                
+		    for (int i=0; i< typeNames_<%=cid %>.length; i++) {
+		        if (typeNames_<%=cid %>[i].trim().equalsIgnoreCase(<%=userTypeName %>.trim()))
+                {            
+            	     typeName_<%=cid %> = typeNames_<%=cid %>[i];
+                } 
+            }            
+            if (typeName_<%=cid %> ==  null) {
+            	throw new RuntimeException("Feature "+ <%=userTypeName %> +" not found !");
+            }	
+
+<%
+         } else if (formatType.equals("GPX")) {
+%>
+
+/* create GPX store */
+		
+          java.io.File gpx_<%=cid %> = new java.io.File(<%=filename %>);           
+          String typeName_<%=cid %>=null; 
+          org.geotools.data.DataStore store_<%=cid %> = new org.geotools.data.gpx.GpxDataStore(gpx_<%=cid %>.toURI().toURL(), <%=Namespace %>);
+          String[] typeNames_<%=cid %> = store_<%=cid %>.getTypeNames();               
+	         for (int i=0; i< typeNames_<%=cid %>.length; i++) {	          
+			      if (typeNames_<%=cid %>[i].equals(<%=gpxType %>)) 
+				      typeName_<%=cid %> = typeNames_<%=cid %>[i];				                              
+		          }		                                  
+			      if (typeName_<%=cid %>==null) {
+		          	   throw new RuntimeException("Feature not found in gpx entry!");
+		          }
+<%
+        } else if (formatType.equals("POSTGIS")) {
+%>
+
+java.util.Map params_<%=cid %> = new java.util.HashMap();
+params_<%=cid %>.put("dbtype", "postgis");               //must be postgis
+params_<%=cid %>.put("host", <%=dbHost%>);               //the name or ip address of the machine running PostGIS
+params_<%=cid %>.put("port", new Integer(<%=dbPort%>));  //the port that PostGIS is running on (generally 5432)
+params_<%=cid %>.put("database", <%=dbName %>);          //the name of the database to connect to.
+params_<%=cid %>.put("user", <%=dbUser%>);               //the user to connect with
+params_<%=cid %>.put("passwd", <%=dbPasswd%>);           //the password of the user.
+params_<%=cid %>.put("schema", <%=dbSchema %>);          //the schema.
+        
+/* create postgis database store */
+org.geotools.data.DataStore store_<%=cid %> = org.geotools.data.DataStoreFinder.getDataStore(params_<%=cid %>);
+
+String typeName_<%=cid %> = <%=dbTable %>;
+
+<%
+        } else  if (formatType.equals("MIFMID")) {
+%>
+
+/* create MIF store */
+java.io.File mifmid_<%=cid %> = new java.io.File(<%=filename %>);
+java.util.HashMap params_<%=cid %> = new java.util.HashMap();
+// note: a MIFDataStore can have a dir in input
+org.geotools.data.DataStore store_<%=cid %> =
+    new org.geotools.data.mif.MIFDataStore(mifmid_<%=cid %>.getPath(), params_<%=cid %>);
+    
+String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0];
+
+<%
+        } else if (formatType.equals("EDIGEO")) {
+%>
+org.geotools.data.edigeo.EdigeoDataStore store_<%=cid %> = 
+	new org.geotools.data.edigeo.EdigeoDataStore(<%=filename %>,<%=edigeoObj %>);
+	
+String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0];
+
+<%
+		}
+%>
+
+/* get feature source from store */
+org.geotools.data.FeatureSource<org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> source_<%=cid %> = 
+    store_<%=cid %>.getFeatureSource(typeName_<%=cid %>);
+
+org.opengis.filter.Filter filter_<%=cid %> = null;
+
+<%
+    if (!cql_filter.equals("\"\"") && !cql_filter.equals("")) {
+%>
+    // CHECKME : could we apply CQL to all input datastore
+    try {
+    	filter_<%=cid %> = org.geotools.filter.text.cql2.CQL.toFilter(<%=cql_filter %>);
+    } catch (org.geotools.filter.text.cql2.CQLException e) {
+    	System.out.println (e.getMessage());
+    }  
+<%
+    }
+%>          
+
+
+/* get features from source */
+org.geotools.feature.FeatureCollection<org.opengis.feature.simple.SimpleFeatureType, org.opengis.feature.simple.SimpleFeature> features_<%=cid %> = null;
+if (filter_<%=cid %> == null)
+	features_<%=cid %> = source_<%=cid %>.getFeatures();
+else
+	features_<%=cid %> = source_<%=cid %>.getFeatures(filter_<%=cid %>);
+
+/* get feature type from source */  
+org.opengis.feature.simple.SimpleFeatureType featureType_<%=cid %> =
+    source_<%=cid %>.getSchema();
+
+/* initialize source CRS */
+org.opengis.referencing.crs.CoordinateReferenceSystem sourceCRS_<%=cid %> = source_<%=cid %>.getSchema().getCoordinateReferenceSystem();
+
+<%
+
+		if (!sourceCRS.equals("") && forceCRS.equals("true")) {
+%>
+/* Force CRS from user input using EPSG code */
+org.opengis.referencing.crs.CoordinateReferenceSystem forceCRS_<%=cid %> = null;
+try {
+	 forceCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=sourceCRS %>);
+} catch (Exception e) {
+	System.out.println (e.getMessage());
+}
+
+if (forceCRS_<%=cid %> != null)
+	sourceCRS_<%=cid %> = forceCRS_<%=cid %>;
+else
+	System.out.println ("Could not force CRS to '" + <%=sourceCRS %> + "'.");
+<%
+		}
+		
+%>
+
+/* Projection info */
+if (sourceCRS_<%=cid %> != null)
+	System.out.println ("Source CRS is: " + sourceCRS_<%=cid %>.toWKT());
+else
+	System.out.println ("No source CRS found nor forced.");	
+	
+
+
+/* create a map of columns for later use */
+java.util.Map<String, Integer> map_<%=cid %> = new java.util.HashMap<String, Integer>();
+for (int i = 0; i < featureType_<%=cid %>.getAttributeCount(); i++) {
+    org.opengis.feature.type.AttributeDescriptor attributeType_<%=cid %> = featureType_<%=cid %>.getDescriptor(i);    
+    map_<%=cid %>.put(attributeType_<%=cid %>.getName().getLocalPart(), i);
+}
+
+
+/* loop over the feature collection and fill up the columns */
+org.geotools.feature.FeatureIterator<org.opengis.feature.simple.SimpleFeature> reader_<%=cid %> = features_<%=cid %>.features();
+while(reader_<%=cid %>.hasNext()) {
+    org.opengis.feature.simple.SimpleFeature feature_<%=cid %> = reader_<%=cid %>.next();
+<%  
+        List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+        String firstConnName = "";
+        if (conns!=null) {
+            if (conns.size()>0) {
+                for (int i = 0; i < conns.size(); i++) {
+                    IConnection conn = conns.get(i);
+                    firstConnName = conn.getName();
+        
+                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+                        List<IMetadataColumn> listColumns = metadata.getListColumns();
+                        int sizeListColumns = listColumns.size();
+                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+
+                            //Just to get a non-primitive type we can cast an Object instance to.
+                            String objectType = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
+
+                            if (column.isKey() && formatType.equals("POSTGIS")) {
+                                if (typeToGenerate.equals("String")) {
+%>
+    <%=conn.getName() %>.<%=column.getLabel() %> = feature_<%=cid%>.getID()
+        .substring(feature_<%=cid%>.getID().lastIndexOf(".")+1);
+
+<%
+                                } else if (typeToGenerate.equals("Geometry")) {
+%>
+    error("Field of type Geometry not supported in primary key");
+<%
+                                } else {
+%>
+    {
+        String id=feature_<%=cid%>.getID();
+        <%=conn.getName() %>.<%=column.getLabel() %> = <%=objectType%>
+            .decode(id.substring(id.lastIndexOf(".")+1));
+    }
+<%
+                                }
+                            } else {
+                            
+                            
+                                if (typeToGenerate.equals("Geometry")) {
+                                    if (formatType.equals("POSTGIS")) {
+%>
+    if (map_<%=cid %>.get(<%=dbCol %>) != null) {
+        org.talend.sdi.geometry.Geometry geometry =
+            new org.talend.sdi.geometry.Geometry(
+                (com.vividsolutions.jts.geom.Geometry) feature_<%=cid %>.getAttribute(<%=dbCol %>));
+        
+        <%=conn.getName() %>.<%=column.getLabel() %> = (<%=typeToGenerate%>) geometry;
+        
+        geometry.setCRS (sourceCRS_<%=cid %>); // Set CRS in geom
+    }   
+
+<%                                    
+                                    }
+                                    else {
+%>
+    if (map_<%=cid %>.get("<%=column.getLabel() %>") != null) {
+        org.talend.sdi.geometry.Geometry geometry =
+            new org.talend.sdi.geometry.Geometry(
+                (com.vividsolutions.jts.geom.Geometry) feature_<%=cid %>.getAttribute(map_<%=cid %>.get("<%=column.getLabel() %>")));
+        
+        <%=conn.getName() %>.<%=column.getLabel() %> = (<%=typeToGenerate%>) geometry;
+        
+        geometry.setCRS (sourceCRS_<%=cid %>); // Set CRS in geom
+    }
+<%                                    
+                                    }
+                                } else {
+%>
+    if (map_<%=cid %>.get("<%=column.getLabel() %>") != null) {
+         <%=conn.getName() %>.<%=column.getLabel() %> = (<%=objectType%>)
+            feature_<%=cid %>.getAttribute(map_<%=cid %>.get("<%=column.getLabel() %>"));
+    }            
+<%
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+%>
+    nbFeature_<%=cid %>++;
+<%
+    }
+}
+%>
