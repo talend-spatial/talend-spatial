@@ -17,3 +17,4 @@ Require-Bundle: org.eclipse.ui,
 Eclipse-LazyStart: true
 Export-Package: org.talend.sdi.designer.components.sextante
 Bundle-ClassPath: .
+Eclipse-BundleShape: dir

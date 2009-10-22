@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Sdi lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi
-Bundle-Version: 0.0.1
+Bundle-Version: 2.2.0.qualifier
 Bundle-ClassPath: .,
  lib/geoapi-2.2-M1.jar,
  lib/gt-api-2.5.0.jar,
@@ -90,7 +90,6 @@ Bundle-ClassPath: .,
  lib/jsqlparser-0.3.14.jar,
  lib/gt-edigeo-2.5-0.jar
 Eclipse-BuddyPolicy: dependent
-Bundle-Vendor: .Camptocamp.
 Export-Package: com.sun.media.imageio.plugins.bmp,
  com.sun.media.imageio.plugins.jpeg2000,
  com.sun.media.imageio.plugins.pnm,
@@ -857,3 +856,4 @@ Export-Package: com.sun.media.imageio.plugins.bmp,
  org.xmlpull.v1.util,
  org.xmlpull.v1.wrapper,
  org.xmlpull.v1.wrapper.classic
+Eclipse-BundleShape: dir
