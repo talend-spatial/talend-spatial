@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TalendMetadata:GenericSchemaConnection xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:TalendMetadata="http://www.talend.org">
+  <tables id="_dd6_YZIeEd6SPJG6bt9bdg" label="metadata">
+    <columns label="msGeometry" talendType="id_Geometry"/>
+    <columns label="ID" talendType="id_String"/>
+    <columns label="CODE" talendType="id_String"/>
+    <columns label="LIBELLE" talendType="id_String"/>
+    <columns label="FOURNISSEU" talendType="id_String"/>
+    <columns label="FILTER" talendType="id_String"/>
+  </tables>
+</TalendMetadata:GenericSchemaConnection>
