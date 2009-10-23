@@ -36,10 +36,10 @@
   </PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>
-      <IMPORT NAME="sextante" MODULE="sextante-0.1.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante-binding" MODULE="sextante_gt25_bindings-0.1.jar"
+      <IMPORT NAME="sextante" MODULE="sextante-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante-binding" MODULE="sextante_gt25_bindings-0.3.jar"
         REQUIRED="true" />
-      <IMPORT NAME="sextante-vectorize" MODULE="sextante_vectorize-0.1.jar"
+      <IMPORT NAME="sextante-vectorize" MODULE="sextante_vectorize-0.3.jar"
         REQUIRED="true" />
      <IMPORT NAME="gt-arcgrid" MODULE="gt-arcgrid-2.5-M3.jar"
         REQUIRED="true" />

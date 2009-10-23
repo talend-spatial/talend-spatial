@@ -70,29 +70,29 @@
       <IMPORT NAME="jgraph" MODULE="jgraph.jar" REQUIRED="true" />
       <IMPORT NAME="jts" MODULE="jts-1.9.jar" REQUIRED="true" />
       <IMPORT NAME="kxml" MODULE="kxml2.jar" REQUIRED="true" />
-      <IMPORT NAME="libDocEngines" MODULE="libDocEngines-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="libMath" MODULE="libMath-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante" MODULE="sextante-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gridAnalysis" MODULE="sextante_gridAnalysis-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gridCalculus" MODULE="sextante_gridCalculus-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gridCategorical" MODULE="sextante_gridCategorical-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gridStatistics" MODULE="sextante_gridStatistics-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gridTools" MODULE="sextante_gridTools-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gt25" MODULE="sextante_gt25_bindings.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_gui" MODULE="sextante_gui-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_hydrology" MODULE="sextante_hydrology-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_imageAnalysis" MODULE="sextante_imageAnalysis-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_lighting" MODULE="sextante_lighting-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_locate" MODULE="sextante_locate-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_morphometry" MODULE="sextante_morphometry-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_pointAnalysis" MODULE="sextante_pointAnalysis-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_profiles" MODULE="sextante_profiles-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_rasterize" MODULE="sextante_rasterize-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_statisticalMethods" MODULE="sextante_statisticalMethods-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_tables" MODULE="sextante_tables-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_vectorize" MODULE="sextante_vectorize-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_vectorTools" MODULE="sextante_vectorTools-0.15.jar" REQUIRED="true" />
-      <IMPORT NAME="sextante_vegetationIndices" MODULE="sextante_vegetationIndices-0.15.jar" REQUIRED="true" />
+      <IMPORT NAME="libDocEngines" MODULE="libDocEngines-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="libMath" MODULE="libMath-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante" MODULE="sextante-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridAnalysis" MODULE="sextante_gridAnalysis-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridCalculus" MODULE="sextante_gridCalculus-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridCategorical" MODULE="sextante_gridCategorical-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridStatistics" MODULE="sextante_gridStatistics-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gridTools" MODULE="sextante_gridTools-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gt25" MODULE="sextante_gt25_bindings-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_gui" MODULE="sextante_gui-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_hydrology" MODULE="sextante_hydrology-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_imageAnalysis" MODULE="sextante_imageAnalysis-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_lighting" MODULE="sextante_lighting-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_locate" MODULE="sextante_locate-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_morphometry" MODULE="sextante_morphometry-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_pointAnalysis" MODULE="sextante_pointAnalysis-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_profiles" MODULE="sextante_profiles-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_rasterize" MODULE="sextante_rasterize-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_statisticalMethods" MODULE="sextante_statisticalMethods-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_tables" MODULE="sextante_tables-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vectorize" MODULE="sextante_vectorize-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vectorTools" MODULE="sextante_vectorTools-0.3.jar" REQUIRED="true" />
+      <IMPORT NAME="sextante_vegetationIndices" MODULE="sextante_vegetationIndices-0.3.jar" REQUIRED="true" />
       <IMPORT NAME="TableLayout" MODULE="TableLayout-bin-jdk1.5-2007-04-21.jar" REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
