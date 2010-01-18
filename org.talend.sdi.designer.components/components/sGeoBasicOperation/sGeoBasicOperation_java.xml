@@ -111,6 +111,12 @@
       <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
+      <IMPORT NAME="gt-api" MODULE="gt-api-2.5-M3.jar" REQUIRED="true" />
+  	  <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-2.5-M3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai_core" MODULE="jai_core.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-referencing" MODULE="gt-referencing-2.5-M3.jar"
+        	REQUIRED="true" />
     </IMPORTS>
   </CODEGENERATION>
   <RETURNS>
