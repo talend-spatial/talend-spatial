@@ -28,7 +28,7 @@
     <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
       NUM_ROW="3">
       <TABLE>
-        <COLUMN NAME="the_geom" TYPE="id_Object" CUSTOM="false"
+        <COLUMN NAME="the_geom" TYPE="id_Geometry" CUSTOM="false"
           READONLY="false" />
       </TABLE>
     </PARAMETER>
