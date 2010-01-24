@@ -69,9 +69,9 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         /* Initialize metadata (ie. Load template and set main element) */
         org.talend.sdi.metadata.Metadata md_<%=cid %> = new org.talend.sdi.metadata.Metadata (
                                                     org.talend.sdi.metadata.Metadata.Standard.ISO,
-                                                    "<%=mdTitle %>",
-                                                    "<%=mdPurpose %>",
-                                                    "<%=mdAbstract %>",
+                                                    <%=mdTitle %>,
+                                                    <%=mdPurpose %>,
+                                                    <%=mdAbstract %>,
                                                     "<%=mdTopicCategory %>",
                                                     <%=mdTpl %>
                                                     );
