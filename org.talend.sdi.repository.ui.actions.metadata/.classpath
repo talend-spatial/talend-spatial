@@ -38,7 +38,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jta-1.0.1B.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jts-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/junit-4.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mlibwrapper_jai.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/net.opengis.ows-2.5-M3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/net.opengis.wcs-2.5-M3.jar"/>

@@ -31,7 +31,8 @@ Require-Bundle: org.talend.libraries,
  org.talend.commons.ui,
  org.eclipse.core.filesystem,
  org.talend.repository,
- org.talend.libraries.sdi;bundle-version="0.0.1"
+ org.talend.libraries.sdi;bundle-version="0.0.1",
+ org.apache.log4j;bundle-version="1.2.13"
 Eclipse-LazyStart: true
 Bundle-ClassPath: .,
  lib/ant-optional-1.5.1.jar,
@@ -69,7 +70,6 @@ Bundle-ClassPath: .,
  lib/jta-1.0.1B.jar,
  lib/jts-1.9.jar,
  lib/junit-4.4.jar,
- lib/log4j-1.2.12.jar,
  lib/mlibwrapper_jai.jar,
  lib/net.opengis.ows-2.5-M3.jar,
  lib/net.opengis.wcs-2.5-M3.jar,
