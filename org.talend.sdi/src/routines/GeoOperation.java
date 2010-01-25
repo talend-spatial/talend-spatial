@@ -14,6 +14,9 @@
 package routines;
 
 import org.talend.sdi.geometry.Geometry;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.operation.distance.DistanceOp;
 
 /**
  * 
@@ -224,4 +227,76 @@ public class GeoOperation {
 	}
     }
 
+    /**
+     * GETDISTANCE( ) Returns the distance of the closest point of two geometries.
+     * 
+     * {talendTypes} double | Double
+     * 
+     * {Category} GeoOperation
+     * 
+     * {param} Geometry(row1.the_geom)
+     * 
+     * {param} Geometry(row2.the_geom)
+     * 
+     * {example} GETDISTANCE(row1.the_geom, row2.the_geom)
+     * 
+     */
+    public static double GETDISTANCE(Geometry geom1, Geometry geom2) {
+	    return com.vividsolutions.jts.operation.distance.DistanceOp.distance(
+			geom1._getInternalGeometry(), 
+			geom2._getInternalGeometry()
+		);
+    }
+
+    /**
+     * ISWITHINDISTANCE( ) Returns true if the two geometries lie within a given distance of each other.
+     * 
+     * {talendTypes} boolean | Boolean
+     * 
+     * {Category} GeoOperation
+     * 
+     * {param} Geometry(row1.the_geom)
+     * 
+     * {param} Geometry(row2.the_geom)
+     *
+     * {param} double(0.2)
+     * 
+     * {example} ISWITHINDISTANCE(row1.the_geom, row2.the_geom, 0.2)
+     * 
+     */
+    public static boolean ISWITHINDISTANCE(Geometry geom1, Geometry geom2, double distance) {
+	    return com.vividsolutions.jts.operation.distance.DistanceOp.isWithinDistance(
+			geom1._getInternalGeometry(), 
+			geom2._getInternalGeometry(),
+			distance
+		);
+    }
+
+    /**
+     * GETCLOSESTPOINT( ) Returns the closest point of first geometry.
+     * 
+     * {talendTypes} geometry | Geometry
+     * 
+     * {Category} GeoOperation
+     * 
+     * {param} Geometry(row1.the_geom)
+     * 
+     * {param} Geometry(row2.the_geom)
+     * 
+     * {example} GETCLOSESTPOINT(row1.the_geom, row2.the_geom)
+     * 
+     */
+    public static Geometry GETCLOSESTPOINT(Geometry geom1, Geometry geom2) {
+	Coordinate[] coords = DistanceOp.closestPoints(
+			geom1._getInternalGeometry(), 
+			geom2._getInternalGeometry()
+		);
+	
+	// TODO handle precision model and SRID
+	GeometryFactory gf = new GeometryFactory(); 
+	com.vividsolutions.jts.geom.Geometry point = gf.createPoint(coords[0]);
+	org.talend.sdi.geometry.Geometry geom = new org.talend.sdi.geometry.Geometry(point);
+
+	return geom;
+    }
 }
