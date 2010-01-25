@@ -124,6 +124,23 @@
         "__COMP_DEFAULT_FILE_DIR__/.spatial/proj/MAPINFOW.PRJ"
       </DEFAULT>
     </PARAMETER>
+  	<PARAMETER NAME="LOG_LEVEL" FIELD="CLOSED_LIST" REQUIRED="false"
+      NUM_ROW="1">
+      <ITEMS DEFAULT="ERROR">
+        <ITEM NAME="TRACE"
+          VALUE="org.apache.log4j.Level.TRACE" />
+        <ITEM NAME="DEBUG"
+          VALUE="org.apache.log4j.Level.DEBUG" />
+        <ITEM NAME="INFO"
+          VALUE="org.apache.log4j.Level.INFO" />
+        <ITEM NAME="WARN"
+          VALUE="org.apache.log4j.Level.WARN" />
+        <ITEM NAME="ERROR"
+          VALUE="org.apache.log4j.Level.ERROR" />
+        <ITEM NAME="FATAL"
+          VALUE="org.apache.log4j.Level.FATAL" />
+      </ITEMS>
+    </PARAMETER>
   </ADVANCED_PARAMETERS>
   <CODEGENERATION>
     <TEMPLATES INPUT="FI" OUTPUT="SO">
@@ -149,6 +166,7 @@
       <TEMPLATE_PARAM SOURCE="self.MDPURPOSE" TARGET="SO.MDPURPOSE" />
       <TEMPLATE_PARAM SOURCE="self.MDTOPICCATEGORY"
         TARGET="SO.MDTOPICCATEGORY" />
+      <TEMPLATE_PARAM SOURCE="self.LOG_LEVEL" TARGET="SO.LOG_LEVEL" />        
     </TEMPLATES>
   </CODEGENERATION>
   <RETURNS>

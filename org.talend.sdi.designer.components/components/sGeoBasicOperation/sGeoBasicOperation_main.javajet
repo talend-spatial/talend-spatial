@@ -137,7 +137,8 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
     if (geotype_<%=cid %>.equals("LineString") ||
     		geotype_<%=cid %>.equals("MultiLineString")) {
     	for (int j = 0; j < result_<%=cid %>.getNumGeometries(); j++) {
-			com.vividsolutions.jts.geom.Geometry line = result_<%=cid %>.getGeometryN(j)._getInternalGeometry();
+			Geometry linegeom = result_<%=cid %>.getGeometryN(j);
+			com.vividsolutions.jts.geom.Geometry line = linegeom._getInternalGeometry();
 	        com.vividsolutions.jts.geom.Coordinate[] coords = line.getCoordinates();
 			com.vividsolutions.jts.geom.Coordinate[] newCoords = new com.vividsolutions.jts.geom.Coordinate[coords.length];
 			for (int i = 0; i < coords.length; i++) {

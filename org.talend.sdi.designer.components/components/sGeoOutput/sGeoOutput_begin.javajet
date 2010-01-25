@@ -42,11 +42,29 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String mdTopicCategory = ElementParameterParser.getValue(node,"__MDTOPICCATEGORY__");
         String targetCRS = ElementParameterParser.getValue(node,"__CRS__");
         String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
+        String logLevel = ElementParameterParser.getValue(node,"__LOG_LEVEL__");
         String mifPrjFile = ElementParameterParser.getValue(node,"__MIFPRJ_FILE__");
 %>
         /* initialize feature count */
         int nbFeature_<%=cid %> = 0;
        
+       	/* Turn main geotools logger level to ERROR only */
+        org.geotools.util.logging.Logging.GEOTOOLS.setLoggerFactory("org.geotools.util.logging.CommonsLoggerFactory");
+        org.apache.log4j.Level level_<%=cid %> = <%=(logLevel.equals("")?"org.apache.log4j.Level.ERROR":logLevel) %>;
+		org.apache.log4j.PatternLayout layout_<%=cid %> = new org.apache.log4j.PatternLayout("%d [%t] %-5p %m%n");
+	    org.apache.log4j.ConsoleAppender ca_<%=cid %> = new org.apache.log4j.ConsoleAppender(layout_<%=cid %>);
+		       
+		org.apache.log4j.Logger.getLogger("org.geotools.data").setLevel(level_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.data").addAppender(ca_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.factory").setLevel(level_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.factory").addAppender(ca_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.resource").setLevel(level_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.resource").addAppender(ca_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.util").setLevel(level_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.util").addAppender(ca_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.referencing.factory").setLevel(level_<%=cid %>);
+		org.apache.log4j.Logger.getLogger("org.geotools.referencing.factory").addAppender(ca_<%=cid %>);
+		
         org.opengis.referencing.crs.CoordinateReferenceSystem 
                 targetCRS_<%=cid %> = null;
 <%
