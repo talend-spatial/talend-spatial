@@ -16,6 +16,7 @@ then
       'linux.gtk.x86_64') export distrib="Linux_x64";;
       'macosx.carbon.x86') export distrib="MacOSX";;
       'win32.win32.x86') export distrib="Win32";;
+      'win32.win32.x86_64') export distrib="Win32_64";;
       *) export distrib=""
     esac
 
