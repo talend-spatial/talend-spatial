@@ -1,0 +1,17 @@
+Index: org.talend.librariesmanager/META-INF/MANIFEST.MF
+===================================================================
+--- org.talend.librariesmanager/META-INF/MANIFEST.MF	(revision 31214)
++++ org.talend.librariesmanager/META-INF/MANIFEST.MF	(working copy)
+@@ -14,9 +14,11 @@
+  org.talend.libraries,
+  org.eclipse.core.resources,
+  org.eclipse.jdt.core,
+- org.talend.commons.ui
++ org.talend.commons.ui,
++ org.talend.libraries.sdi
+ Eclipse-LazyStart: true
+ Export-Package: org.talend.librariesmanager.model,
+  org.talend.librariesmanager.prefs,
+  routines,
+  routines.system
++Bundle-ClassPath: org.talend.sdi.jar
