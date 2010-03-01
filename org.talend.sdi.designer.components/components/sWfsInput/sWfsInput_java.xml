@@ -93,6 +93,9 @@
       REQUIRED="false">
       <DEFAULT>false</DEFAULT>
     </PARAMETER>
+    <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="2">
+	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+    </PARAMETER>
   </ADVANCED_PARAMETERS>
   <CODEGENERATION>
     <TEMPLATES INPUT="GI" OUTPUT="FF">

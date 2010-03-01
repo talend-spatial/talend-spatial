@@ -91,12 +91,12 @@
 %>
      writer_<%=cid %>.close();
      store_<%=cid %>.dispose();
-     java.io.File file_<%=cid %> = new java.io.File (<%=filename %>);
+     java.io.File outfile_<%=cid %> = new java.io.File (<%=filename %>);
      
      String udigType_<%=cid %> = 
-     	(file_<%=cid %>.getName().lastIndexOf(".")!=-1?
-      		file_<%=cid %>.getName().substring(0, file_<%=cid %>.getName().lastIndexOf(".")):
-      		file_<%=cid %>.getName());
+     	(outfile_<%=cid %>.getName().lastIndexOf(".")!=-1?
+      		outfile_<%=cid %>.getName().substring(0, outfile_<%=cid %>.getName().lastIndexOf(".")):
+      		outfile_<%=cid %>.getName());
       		// FIXME : handle postgis tables
       		
      String udigResourceId_<%=cid %> = <%=filename %> + "#" + udigType_<%=cid %>;

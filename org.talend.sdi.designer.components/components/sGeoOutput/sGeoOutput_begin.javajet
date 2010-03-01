@@ -42,6 +42,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String mdTopicCategory = ElementParameterParser.getValue(node,"__MDTOPICCATEGORY__");
         String targetCRS = ElementParameterParser.getValue(node,"__CRS__");
         String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
+        String append = ElementParameterParser.getValue(node,"__APPEND__");
         String logLevel = ElementParameterParser.getValue(node,"__LOG_LEVEL__");
         String mifPrjFile = ElementParameterParser.getValue(node,"__MIFPRJ_FILE__");
 %>
@@ -134,21 +135,21 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 %>
         
         /* create shapefile data store */
-        java.io.File shapefile_<%=cid %> = new java.io.File(<%=filename %>);
+        java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
         org.geotools.data.DataStore store_<%=cid %> =
-            new org.geotools.data.shapefile.ShapefileDataStore(shapefile_<%=cid %>.toURL());
+            new org.geotools.data.shapefile.ShapefileDataStore(file_<%=cid %>.toURL());
         
-        String schemaName_<%=cid %> = "aa";
+        String schemaName_<%=cid %> = "talend";
         
 <%
         } else if (formatType.equals("GPX")) {
 %>
         
         /* create GPX data store */
-        java.io.File gpxfile_<%=cid %> = new java.io.File(<%=filename %>);
+        java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
         org.geotools.data.DataStore store_<%=cid %> =
              new org.geotools.data.gpx.GpxDataStore(
-                    gpxfile_<%=cid %>.toURL(), java.net.URI
+                    file_<%=cid %>.toURL(), java.net.URI
                             .create(<%=namespace %>));
         
         String schemaName_<%=cid %> = <%=gpxType %>;
@@ -187,10 +188,10 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
             mifParams_<%=cid %>.put(org.geotools.data.mif.MIFDataStore.HCLAUSE_COORDSYS,
                 "earth projection " + mifCrs_<%=cid %>);
         }
-        java.io.File outFile_<%=cid %> = new java.io.File(<%=filename %>);
-        String schemaName_<%=cid %> = outFile_<%=cid %>.getName().substring(0, outFile_<%=cid %>.getName().lastIndexOf("."));
+        java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
+        String schemaName_<%=cid %> = file_<%=cid %>.getName().substring(0, file_<%=cid %>.getName().lastIndexOf("."));
         org.geotools.data.DataStore store_<%=cid %> =
-            new org.geotools.data.mif.MIFDataStore(outFile_<%=cid %>.getParent(), mifParams_<%=cid %>);
+            new org.geotools.data.mif.MIFDataStore(file_<%=cid %>.getParent(), mifParams_<%=cid %>);
 
 <%
         }
@@ -203,7 +204,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         org.geotools.feature.simple.SimpleFeatureTypeBuilder ftBuilder_<%=cid %> = new org.geotools.feature.simple.SimpleFeatureTypeBuilder();
         ftBuilder_<%=cid %>.setName(schemaName_<%=cid %>);
 
-	/* Initialize Attribute Type Builder */
+		/* Initialize Attribute Type Builder */
         org.geotools.feature.AttributeTypeBuilder geoAttBuilder_<%=cid %> = null;
         org.geotools.feature.AttributeTypeBuilder attBuilder_<%=cid %> = null;       
  
@@ -286,7 +287,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
                 
 	ftBuilder_<%=cid %>.add(attBuilder_<%=cid %>.buildDescriptor("<%=columnLabel %>",attBuilder_<%=cid %>.buildType()));
                 
-        map_<%=cid %>.put("<%=column.getLabel() %>", <%=colIdx %>);
+    map_<%=cid %>.put("<%=column.getLabel() %>", <%=colIdx %>);
 <% 
             }
         }
@@ -310,15 +311,45 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 <%
         }
 %>
+	      
+<%
+		// In not in append mode - create the schema
+		if (append.equals("false")) {
+%>      
+		org.opengis.feature.simple.SimpleFeatureType featureType_<%=cid %> = ftBuilder_<%=cid %>.buildFeatureType();
+		String typeName_<%=cid %> = featureType_<%=cid %>.getTypeName();
+		  		
+		store_<%=cid %>.createSchema(featureType_<%=cid %>);
+		
+		org.geotools.data.FeatureWriter<org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature> writer_<%=cid %> = 
+			store_<%=cid %>.getFeatureWriter(typeName_<%=cid %>, org.geotools.data.Transaction.AUTO_COMMIT);  
+<%
+		} else {
+			// If append, check file exist and append, if not create it 
+%>        
 
-        org.opengis.feature.simple.SimpleFeatureType featureType_<%=cid %> = ftBuilder_<%=cid %>.buildFeatureType();
-        String typeName_<%=cid %> = featureType_<%=cid %>.getTypeName();
-        store_<%=cid %>.createSchema(featureType_<%=cid %>);
-        org.geotools.data.FeatureWriter<org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature> writer_<%=cid %> = 
-        	store_<%=cid %>.getFeatureWriter(typeName_<%=cid %>, org.geotools.data.Transaction.AUTO_COMMIT);
+		String typeName_<%=cid %> = "";
+		org.opengis.feature.simple.SimpleFeatureType featureType_<%=cid %> = null;
+		org.geotools.data.FeatureWriter<org.opengis.feature.simple.SimpleFeatureType,org.opengis.feature.simple.SimpleFeature> writer_<%=cid %> = null;	 
+		
+		if (file_<%=cid %>.exists()) {
+			typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0];
+			
+			org.geotools.data.FeatureSource source_<%=cid %> = store_<%=cid %>.getFeatureSource(typeName_<%=cid %>);
+			writer_<%=cid %> = 
+				store_<%=cid %>.getFeatureWriterAppend(typeName_<%=cid %>, 
+				((org.geotools.data.FeatureStore) source_<%=cid %>).getTransaction());
+	    } else {
+			featureType_<%=cid %> = ftBuilder_<%=cid %>.buildFeatureType();
+			typeName_<%=cid %> = featureType_<%=cid %>.getTypeName();
+			  		store_<%=cid %>.createSchema(featureType_<%=cid %>);
+			writer_<%=cid %> = store_<%=cid %>.getFeatureWriter(typeName_<%=cid %>, org.geotools.data.Transaction.AUTO_COMMIT);	    
+	    }
+<%
+		}
+%>        
+
 <%    
-
-
 
         /* Projection for shapefile - Force Shapefile CRS */ 
         if (formatType.equals("SHAPEFILE") && forceCRS.equals("true")) {
