@@ -10,7 +10,25 @@
 <%
 CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
 INode node = (INode)codeGenArgument.getArgument();
+String cidForward = "";
 String cid = node.getUniqueName();
+
+/* Hack : When forwarded context variable are not initialized 
+	The name of the component is replaced by 
+	the name of the component + "_" + 
+	name of the template used
+
+	eg. globalMap.put("sShapefileInput_1_GI_NB_FEATURE", ""); instead of 
+	globalMap.put("sShapefileInput_1_NB_FEATURE", ""); 
+	... then you got null exception when calling those variable from 
+	another component.
+*/
+if (cid.endsWith ("_GI")) {
+	cidForward = cid.substring(0, cid.length() - 3); // Using a forwarded component
+} else {
+	cidForward = cid; // Using sGeoInput directly
+}
+
 List<IMetadataTable> metadatas = node.getMetadataList();
 if ((metadatas!=null)&&(metadatas.size()>0)) {
 	IMetadataTable metadata = metadatas.get(0);
@@ -19,7 +37,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 }
 reader_<%=cid %>.close();
 store_<%=cid %>.dispose();
-globalMap.put("<%=cid %>_NB_FEATURE", nbFeature_<%=cid %>);
+globalMap.put("<%=cidForward %>_NB_FEATURE", nbFeature_<%=cid %>);
 <%
 	}
 }
