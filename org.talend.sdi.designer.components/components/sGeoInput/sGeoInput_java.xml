@@ -112,8 +112,7 @@
           VALUE="org.geotools.wfs.protocol.Version.v1_1_0" />
       </ITEMS>
     </PARAMETER>
-    <PARAMETER NAME="CQL" FIELD="TEXT" NUM_ROW="3" REQUIRED="true"
-      SHOW_IF="FORMAT_TYPE=='WFS'">
+    <PARAMETER NAME="CQL" FIELD="TEXT" NUM_ROW="3" REQUIRED="true">
     </PARAMETER>
     <PARAMETER NAME="USE_METHOD" FIELD="CLOSED_LIST" NUM_ROW="4"
       REQUIRED="true" SHOW_IF="FORMAT_TYPE=='WFS'">
