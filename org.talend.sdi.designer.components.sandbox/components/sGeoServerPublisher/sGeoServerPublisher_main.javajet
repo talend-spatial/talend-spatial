@@ -1,0 +1,72 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+" 
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+
+String cid = node.getUniqueName();
+
+String user = ElementParameterParser.getValue(node,"__USERNAME__");
+String password = ElementParameterParser.getValue(node,"__PASSWORD__");
+String url = ElementParameterParser.getValue(node,"__URL__");
+String action = ElementParameterParser.getValue(node,"__ACTION__");
+String file = ElementParameterParser.getValue(node,"__DATASTORE_FILE__");
+String ft = ElementParameterParser.getValue(node,"__FEATURETYPE__");
+String namespace = ElementParameterParser.getValue(node,"__NS__");
+%>
+
+
+org.talend.sdi.geopublisher.HttpClientFactory httpClientFactory_<%=cid %> = 
+	new org.talend.sdi.geopublisher.HttpClientFactory(<%=user %>, <%=password %>);
+java.io.File f_<%=cid %> = new java.io.File(<%=file %>);
+if (f_<%=cid %> == null)
+	throw new IllegalArgumentException(
+			"Could not find dataset file. Invalid zip file parameters: "
+								+ <%=file %> + ".");
+String status_<%=cid %> = "";
+
+try {
+	String ds_<%=cid %> = f_<%=cid %>.getName();
+<%
+	String className= "GeoServerDataStore";
+	if (file.toLowerCase().contains("tif") || action.equals("DELETE_COVERAGE"))
+		className = "GeoServerCoverageStore";
+		
+		
+	if (action.equals("INSERT_OR_UPDATE")) {
+%>	
+	org.talend.sdi.geopublisher.<%=className %> p_<%=cid %> = 
+	new org.talend.sdi.geopublisher.<%=className %>(httpClientFactory_<%=cid %>, 
+		<%=url %>, ds_<%=cid %>.substring(0, ds_<%=cid %>.indexOf(".")), 
+		<%=namespace %>);
+
+	p_<%=cid %>.create(f_<%=cid %>);
+<%
+	} else {
+%>
+	org.talend.sdi.geopublisher.<%=className %> p_<%=cid %> = 
+	new org.talend.sdi.geopublisher.<%=className %>(httpClientFactory_<%=cid %>, 
+		<%=url %>, <%=ft %>, 
+		<%=namespace %>);
+
+	p_<%=cid %>.delete(<%=ft %>);
+<%
+	}
+%>
+	status_<%=cid %> = p_<%=cid %>.read();
+} catch (IOException e) {
+	status_<%=cid %> = "IOException " + e.getMessage();
+}
+ 
+globalMap.put("<%=cid %>_STATUS", status_<%=cid %>);
