@@ -1,6 +1,6 @@
 Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_end.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_end.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_end.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_end.javajet	(working copy)
 @@ -18,6 +18,50 @@
  	
@@ -55,7 +55,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
          if(pstmtUpdate_<%=cid%> != null){
 Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_messages.properties
 ===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_messages.properties	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_messages.properties	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_messages.properties	(working copy)
 @@ -1,4 +1,4 @@
 -#Created by JInto - www.guh-software.de
@@ -74,9 +74,41 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
  NB_LINE_UPDATED.NAME=Number Of Updated Lines
  NB_LINE_INSERTED.NAME=Number Of Inserted Lines
  NB_LINE_DELETED.NAME=Number Of Deleted Lines
+Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet
+===================================================================
+--- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet	(revision 38739)
++++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet	(working copy)
+@@ -57,6 +57,12 @@
+ 	String useExistingConn = ElementParameterParser.getValue(node,"__USE_EXISTING_CONNECTION__");
+ 
+ 	boolean isEnableDebug = ("true").equals(ElementParameterParser.getValue(node,"__ENABLE_DEBUG_MODE__"));
++
++	boolean useSpatialOptions = ("true").equals(ElementParameterParser.getValue(node,"__USE_SPATIAL_OPTIONS__"));
++	
++	boolean createSpatialIndex = ("true").equals(ElementParameterParser.getValue(node,"__SPATIAL_INDEX__"));
++	
++	boolean createGeometryColumns = ("true").equals(ElementParameterParser.getValue(node,"__GEOMETRY_COLUMNS__"));		
+ %>
+ 
+ <%
+@@ -280,5 +286,14 @@
+        	<%@ include file="../templates/DB/Output/splitSQLForAllDBInBegin.javajet" %>
+         <%
+     }
++    if((createGeometryColumns || createSpatialIndex) && useSpatialOptions) {
++    	%>
++    	String geometryColumnName_<%=cid %> = null;
++    	// Initialize SRID
++    	int SRID_<%=cid %> = 0;
++    	int dimension_<%=cid %> = 0; 
++    	boolean firstGeometry_<%=cid %> = true;
++    	<%
++    }
+ }
+ %>
 Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_main.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_main.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_main.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_main.javajet	(working copy)
 @@ -40,6 +40,10 @@
      String useExistingConn = ElementParameterParser.getValue(node,"__USE_EXISTING_CONNECTION__");
@@ -89,7 +121,14 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
      //feature:2880
      getManager(dbmsId, cid, node);
      boolean whereSupportNull = ElementParameterParser.getValue(node, "__SUPPORT_NULL_WHERE__").equals("true");
-@@ -115,7 +119,45 @@
+@@ -109,13 +113,52 @@
+                 if(column.isInsertable()) {
+                     String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getColumn().getTalendType(), column.getColumn().isNullable());
+                     %>
++                    // <%=typeToGenerate %> <%=column %>
+                     <%=getManager(dbmsId, cid).generateSetStmt(typeToGenerate, column, counter, incomingConnName, cid, NORMAL_TYPE)%>
+                     <%
+                     if(isEnableDebug) {
                          %>
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counter, "insertSQLSplits_")%>;
                          <%
@@ -136,7 +175,15 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      counter++;                        
                  }
              }
-@@ -170,6 +212,8 @@
+@@ -163,6 +206,7 @@
+                 if(column.isUpdatable()) {
+                     String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getColumn().getTalendType(), column.getColumn().isNullable());
+                     %>
++                    // <%=typeToGenerate %> <%=column %>
+                     <%=getManager(dbmsId, cid).generateSetStmt(typeToGenerate, column, counterCol, incomingConnName, cid, NORMAL_TYPE)%>
+                     <%
+                     if(isEnableDebug) {
+@@ -170,6 +214,8 @@
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_")%>;
                          <%
                      }                    
@@ -145,7 +192,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      counterCol++;                   
                  }
              }
-@@ -190,6 +234,8 @@
+@@ -190,6 +236,8 @@
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_", "(("+incomingConnName+"."+column.getName()+"==null)?1:0)")%>;
                          <%
                      }
@@ -154,7 +201,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      	counterCol++;
                         }
                       //#############                      
-@@ -201,7 +247,9 @@
+@@ -201,7 +249,9 @@
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_")%>;
                          <%
                      }                    
@@ -165,7 +212,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                  }
              }
              if(isEnableDebug) {
-@@ -260,6 +308,8 @@
+@@ -260,6 +310,8 @@
                      %>
                      <%=getManager(dbmsId, cid).generateSetStmt(typeToGenerate, column, columnIndex, incomingConnName, cid, NORMAL_TYPE)%>
                      <%
@@ -174,7 +221,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      columnIndex++;
                  }
              }
-@@ -284,6 +334,8 @@
+@@ -284,6 +336,8 @@
                              query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_")%>;
                              <%
                          }                        
@@ -183,7 +230,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                          counterCol++;
                      }
                  }
-@@ -302,6 +354,8 @@
+@@ -302,6 +356,8 @@
  	                        query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_", "(("+incomingConnName+"."+column.getName()+"==null)?1:0)")%>;
  	                        <%
  	                    	} 
@@ -192,7 +239,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
  	                    	counterCol++;
  	                       }
  	                     //#############                      
-@@ -313,6 +367,8 @@
+@@ -313,6 +369,8 @@
                              query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counterCol, "updateSQLSplits_")%>;
                              <%
                          }                        
@@ -201,7 +248,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                          counterCol++;                   
                      }
                  }
-@@ -366,6 +422,8 @@
+@@ -366,6 +424,8 @@
                              query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, columnInsert, incomingConnName, cid, "query_" ,  counterInsert, "insertSQLSplits_")%>;
                              <%
                          }                        
@@ -210,7 +257,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                          counterInsert++;
                      }
                  }
-@@ -423,7 +481,9 @@
+@@ -423,7 +483,9 @@
                          %>
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, columnUpdate, incomingConnName, cid, "query_" , counterColUpdate, "updateSQLSplits_")%>;
                          <%
@@ -221,7 +268,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      counterColUpdate++;
                  }
              }
-@@ -443,6 +503,8 @@
+@@ -443,6 +505,8 @@
  	                        query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, columnUpdate, incomingConnName, cid, "query_" , counterColUpdate, "updateSQLSplits_", "(("+incomingConnName+"."+columnUpdate.getName()+"==null)?1:0)")%>;
  	                        <%
  	                    	}
@@ -230,7 +277,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      	counterColUpdate++;
                         }
                       //#############                      
-@@ -455,6 +517,8 @@
+@@ -455,6 +519,8 @@
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, columnUpdate, incomingConnName, cid, "query_" , counterColUpdate, "updateSQLSplits_")%>;
                          <%
                      }                    
@@ -239,7 +286,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      counterColUpdate++;
                  }
              }
-@@ -515,6 +579,8 @@
+@@ -515,6 +581,8 @@
                              query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , counter, "insertSQLSplits_")%>;
                              <%
                          }                        
@@ -248,7 +295,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                          counter++;
                      }
                  }
-@@ -575,6 +641,8 @@
+@@ -575,6 +643,8 @@
  	                        query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , keyCounter, "deleteSQLSplits_", "(("+incomingConnName+"."+column.getName()+"==null)?1:0)")%>;
  	                        <%
  	                    	}
@@ -257,7 +304,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      	 keyCounter++;
                         }
                       //#############                      
-@@ -585,7 +653,9 @@
+@@ -585,7 +655,9 @@
                          %>
                          query_<%=cid%> = <%=getManager(dbmsId, cid).retrieveSQL(typeToGenerate, column, incomingConnName, cid, "query_" , keyCounter, "deleteSQLSplits_")%>;
                          <%
@@ -268,41 +315,9 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
                      keyCounter++;
                  }
              }
-Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet
-===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet	(revision 37513)
-+++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_begin.javajet	(working copy)
-@@ -57,6 +57,12 @@
- 	String useExistingConn = ElementParameterParser.getValue(node,"__USE_EXISTING_CONNECTION__");
- 
- 	boolean isEnableDebug = ("true").equals(ElementParameterParser.getValue(node,"__ENABLE_DEBUG_MODE__"));
-+
-+	boolean useSpatialOptions = ("true").equals(ElementParameterParser.getValue(node,"__USE_SPATIAL_OPTIONS__"));
-+	
-+	boolean createSpatialIndex = ("true").equals(ElementParameterParser.getValue(node,"__SPATIAL_INDEX__"));
-+	
-+	boolean createGeometryColumns = ("true").equals(ElementParameterParser.getValue(node,"__GEOMETRY_COLUMNS__"));		
- %>
- 
- <%
-@@ -280,5 +286,14 @@
-        	<%@ include file="../templates/DB/Output/splitSQLForAllDBInBegin.javajet" %>
-         <%
-     }
-+    if((createGeometryColumns || createSpatialIndex) && useSpatialOptions) {
-+    	%>
-+    	String geometryColumnName_<%=cid %> = null;
-+    	// Initialize SRID
-+    	int SRID_<%=cid %> = 0;
-+    	int dimension_<%=cid %> = 0; 
-+    	boolean firstGeometry_<%=cid %> = true;
-+    	<%
-+    }
- }
- %>
 Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_java.xml
 ===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_java.xml	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_java.xml	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tPostgresqlOutput/tPostgresqlOutput_java.xml	(working copy)
 @@ -18,6 +18,7 @@
  
@@ -312,7 +327,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
    </FAMILIES>
  
    <DOCUMENTATION>
-@@ -196,10 +197,40 @@
+@@ -197,10 +198,40 @@
        </TABLE>
      </PARAMETER>    
      
@@ -354,7 +369,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
      >
        <DEFAULT>false</DEFAULT>
      </PARAMETER>
-@@ -294,12 +325,18 @@
+@@ -295,12 +326,18 @@
  		NUM_ROW="20">
  		  <DEFAULT>false</DEFAULT>
  	</PARAMETER>
@@ -376,7 +391,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlOutput
     
 Index: org.talend.designer.components.localprovider/components/tPostgresqlInput/tPostgresqlInput_java.xml
 ===================================================================
---- org.talend.designer.components.localprovider/components/tPostgresqlInput/tPostgresqlInput_java.xml	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tPostgresqlInput/tPostgresqlInput_java.xml	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tPostgresqlInput/tPostgresqlInput_java.xml	(working copy)
 @@ -16,6 +16,7 @@
  
@@ -386,7 +401,7 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlInput/
    </FAMILIES>
  
    <DOCUMENTATION>
-@@ -212,12 +213,19 @@
+@@ -213,12 +214,19 @@
  		<ITEMS BASED_ON_SCHEMA="true">
  			<ITEM NAME="TRIM" FIELD="CHECK"></ITEM>
  		</ITEMS>
@@ -409,9 +424,9 @@ Index: org.talend.designer.components.localprovider/components/tPostgresqlInput/
  
 Index: org.talend.designer.components.localprovider/components/templates/DB/Input/AbstractDBInputBegin.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/templates/DB/Input/AbstractDBInputBegin.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/templates/DB/Input/AbstractDBInputBegin.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/templates/DB/Input/AbstractDBInputBegin.javajet	(working copy)
-@@ -129,6 +129,13 @@
+@@ -125,6 +125,13 @@
  %>
  									<%dbInputBeginUtil.generateBytesResultSet(firstConnName, column, currentColNo);%>
  <%
@@ -427,7 +442,7 @@ Index: org.talend.designer.components.localprovider/components/templates/DB/Inpu
  		                          <%dbInputBeginUtil.generateOthersResultSet( firstConnName, column,  currentColNo,  typeToGenerate);%>
 Index: org.talend.designer.components.localprovider/components/templates/db_output_bulk.skeleton
 ===================================================================
---- org.talend.designer.components.localprovider/components/templates/db_output_bulk.skeleton	(revision 37513)
+--- org.talend.designer.components.localprovider/components/templates/db_output_bulk.skeleton	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/templates/db_output_bulk.skeleton	(working copy)
 @@ -139,7 +139,10 @@
              this.sqlStmt = sql;
@@ -441,9 +456,9 @@ Index: org.talend.designer.components.localprovider/components/templates/db_outp
          }
          public void setValue(String value) {
              this.value = value;
-@@ -868,7 +871,31 @@
+@@ -1844,7 +1847,31 @@
                  setStmt.append("} else {\r\n");
-                 setStmt.append(prefix + cid + ".setNull(" + index + ", java.sql.Types.DATE);\r\n");
+                 setStmt.append(prefix + cid + ".setNull(" + index + ", java.sql.Types.TIMESTAMP);\r\n");
                  setStmt.append("}\r\n");
 -            } else {
 +            } else if(typeToGenerate.equals("Geometry")) {

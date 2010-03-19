@@ -1,160 +1,161 @@
-[1;32mIndex: org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet[0;0m
-[1;32m===================================================================[0;0m
-[1;31m--- org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(revision 37513)[0;0m
-[1;34m+++ org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(working copy)[0;0m
-[1;35m@@ -31,6 +31,7 @@[0;0m
-[0;0m String LAST = "last";[0;0m
-[0;0m String AVG = "avg";[0;0m
-[0;0m String COUNT_DISTINCT = "distinct";[0;0m
-[1;34m+String UNION = "union";[0;0m
-[0;0m String LIST = "list";[0;0m
-[0;0m String LIST_OBJECT = "list_object";[0;0m
-[0;0m String STD_DEV = "std_dev";[0;0m
-[1;35m@@ -171,6 +172,7 @@[0;0m
-[0;0m [0;0m
-[0;0m 							boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);[0;0m
-[0;0m 							boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+							boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 							boolean outputIsList = outputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 							boolean outputIsString = outputJavaType == JavaTypesManager.STRING;[0;0m
-[0;0m 							boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;[0;0m
-[1;35m@@ -179,6 +181,7 @@[0;0m
-[0;0m 							[0;0m
-[0;0m 							boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);[0;0m
-[0;0m 							boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+							boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 							boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;[0;0m
-[0;0m 							boolean inputIsList = inputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 							boolean inputIsString = inputJavaType == JavaTypesManager.STRING;[0;0m
-[1;35m@@ -203,6 +206,7 @@[0;0m
-[0;0m 								|| function.equals(FIRST) && sameInOutType[0;0m
-[0;0m 								|| function.equals(LAST) && sameInOutType[0;0m
-[0;0m 								|| function.equals(LIST) && outputIsString[0;0m
-[1;34m+								|| function.equals(UNION) && outputIsGeometry[0;0m
-[0;0m 								|| function.equals(LIST_OBJECT) && outputIsList[0;0m
-[0;0m 								|| function.equals(COUNT) && outputIsNumber[0;0m
-[0;0m 								|| function.equals(COUNT_DISTINCT) && outputIsNumber[0;0m
-[1;32mIndex: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet[0;0m
-[1;32m===================================================================[0;0m
-[1;31m--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(revision 37513)[0;0m
-[1;34m+++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(working copy)[0;0m
-[1;35m@@ -49,7 +49,7 @@[0;0m
-[0;0m String LIST = "list";[0;0m
-[0;0m String LIST_OBJECT = "list_object";[0;0m
-[0;0m String STD_DEV = "std_dev";[0;0m
-[1;31m-[0;0m
-[1;34m+String UNION = "union";[0;0m
-[0;0m [0;0m
-[0;0m List<? extends IConnection> incomingConnections = node.getIncomingConnections();[0;0m
-[0;0m if (incomingConnections != null && !incomingConnections.isEmpty()) {[0;0m
-[1;35m@@ -244,6 +244,7 @@[0;0m
-[0;0m [0;0m
-[0;0m 		boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);[0;0m
-[0;0m 		boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+		boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 		boolean outputIsList = outputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 		boolean outputIsString = outputJavaType == JavaTypesManager.STRING;[0;0m
-[0;0m 		boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;[0;0m
-[1;35m@@ -255,6 +256,7 @@[0;0m
-[0;0m 		[0;0m
-[0;0m 		boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);[0;0m
-[0;0m 		boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+		boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 		boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;[0;0m
-[0;0m 		boolean inputIsList = inputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 		boolean inputIsString = inputJavaType == JavaTypesManager.STRING;[0;0m
-[1;35m@@ -281,6 +283,7 @@[0;0m
-[0;0m 			|| function.equals(LIST) && outputIsString[0;0m
-[0;0m 			|| function.equals(LIST_OBJECT) && outputIsList[0;0m
-[0;0m 			|| function.equals(COUNT) && outputIsNumber[0;0m
-[1;34m+			|| function.equals(UNION) && outputIsGeometry[0;0m
-[0;0m 			|| function.equals(COUNT_DISTINCT) && outputIsNumber[0;0m
-[0;0m 			|| function.equals(STD_DEV) && inputIsNumber && outputIsNumber[0;0m
-[0;0m 		;[0;0m
-[1;35m@@ -495,6 +498,14 @@[0;0m
-[0;0m 					[0;0m
-[0;0m 				}[0;0m
-[0;0m 				[0;0m
-[1;34m+			} else if(function.equals(UNION)){[0;0m
-[1;34m+				%>// Load first one or union[0;0m
-[1;34m+				if (operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> == null) {[0;0m
-[1;34m+					operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> = <%=inputConn.getName() %>.<%=inputColumnName %>;[0;0m
-[1;34m+				} else {[0;0m
-[1;34m+					operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> = operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %>.union(<%=inputConn.getName() %>.<%=inputColumnName %>);[0;0m
-[1;34m+				}[0;0m
-[1;34m+				<%[0;0m
-[0;0m 			}[0;0m
-[0;0m 			[0;0m
-[0;0m 			if(ignoreNull && !isInputColumnPrimitive) { // T_OutMain_AggR_545[0;0m
-[1;32mIndex: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet[0;0m
-[1;32m===================================================================[0;0m
-[1;31m--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(revision 37513)[0;0m
-[1;34m+++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(working copy)[0;0m
-[1;35m@@ -53,6 +53,7 @@[0;0m
-[0;0m String LIST = "list";[0;0m
-[0;0m String LIST_OBJECT = "list_object";[0;0m
-[0;0m String STD_DEV = "std_dev";[0;0m
-[1;34m+String UNION = "union";[0;0m
-[0;0m [0;0m
-[0;0m int sizeOperations = operations.size();[0;0m
-[0;0m [0;0m
-[1;35m@@ -433,6 +434,7 @@[0;0m
-[0;0m 	[0;0m
-[0;0m 			boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);[0;0m
-[0;0m 			boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+			boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 			boolean outputIsList = outputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 			boolean outputIsString = outputJavaType == JavaTypesManager.STRING;[0;0m
-[0;0m 			boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;[0;0m
-[1;35m@@ -441,6 +443,7 @@[0;0m
-[0;0m 			[0;0m
-[0;0m 			boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);[0;0m
-[0;0m 			boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;[0;0m
-[1;34m+			boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;[0;0m
-[0;0m 			boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;[0;0m
-[0;0m 			boolean inputIsList = inputJavaType == JavaTypesManager.LIST;[0;0m
-[0;0m 			boolean inputIsString = inputJavaType == JavaTypesManager.STRING;[0;0m
-[1;35m@@ -467,6 +470,7 @@[0;0m
-[0;0m 				|| function.equals(LIST) && outputIsString[0;0m
-[0;0m 				|| function.equals(LIST_OBJECT) && outputIsList[0;0m
-[0;0m 				|| function.equals(COUNT) && outputIsNumber[0;0m
-[1;34m+				|| function.equals(UNION) && outputIsGeometry[0;0m
-[0;0m 				|| function.equals(COUNT_DISTINCT) && outputIsNumber[0;0m
-[0;0m 				|| function.equals(STD_DEV) && inputIsNumber && outputIsNumber[0;0m
-[0;0m 			;[0;0m
-[1;35m@@ -517,6 +521,11 @@[0;0m
-[0;0m            		 	%>java.util.List <%=funin[OUTPUT_COLUMN] %>_<%=function %> = new java.util.ArrayList();[0;0m
-[0;0m            			<%[0;0m
-[0;0m            			[0;0m
-[1;34m+           		} else if(UNION.equals(function)) {[0;0m
-[1;34m+           		 [0;0m
-[1;34m+           		 	%>org.talend.sdi.geometry.Geometry <%=funin[OUTPUT_COLUMN] %>_<%=function %> = null;[0;0m
-[1;34m+           			<%[0;0m
-[1;34m+           			[0;0m
-[0;0m            		} else if(STD_DEV.equals(function)) {[0;0m
-[0;0m            		[0;0m
-[0;0m            			%>java.util.List<Double> <%=funin[OUTPUT_COLUMN] %>_<%=function %> = new java.util.ArrayList<Double>();[0;0m
-[1;32mIndex: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml[0;0m
-[1;32m===================================================================[0;0m
-[1;31m--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(revision 37513)[0;0m
-[1;34m+++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(working copy)[0;0m
-[1;35m@@ -87,6 +87,7 @@[0;0m
-[0;0m             <ITEM NAME="LIST_OBJECT"    VALUE="list_object"/>[0;0m
-[0;0m             <ITEM NAME="DISTINCT"    VALUE="distinct"/>[0;0m
-[0;0m             <ITEM NAME="STD_DEV"    VALUE="std_dev"/>[0;0m
-[1;34m+            <ITEM NAME="UNION"    VALUE="union"/>[0;0m
-[0;0m           </ITEMS>[0;0m
-[0;0m         </ITEM>[0;0m
-[0;0m         <ITEM NAME="INPUT_COLUMN" FIELD="PREV_COLUMN_LIST" />[0;0m
-[1;32mIndex: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties[0;0m
-[1;32m===================================================================[0;0m
-[1;31m--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(revision 37513)[0;0m
-[1;34m+++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(working copy)[0;0m
-[1;35m@@ -16,6 +16,7 @@[0;0m
-[0;0m OPERATIONS.ITEM.FUNCTION.ITEM.MAX=max[0;0m
-[0;0m OPERATIONS.ITEM.FUNCTION.ITEM.MIN=min[0;0m
-[0;0m OPERATIONS.ITEM.FUNCTION.ITEM.SUM=sum[0;0m
-[1;34m+OPERATIONS.ITEM.FUNCTION.ITEM.UNION=union(geometry)[0;0m
-[0;0m OPERATIONS.ITEM.IGNORE_NULL=Ignore null values[0;0m
-[0;0m OPERATIONS.ITEM.INPUT_COLUMN=Input column position[0;0m
-[0;0m OPERATIONS.ITEM.OUTPUT_COLUMN=Output column[0;0m
+Index: org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(revision 37513)
++++ org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(working copy)
+@@ -31,6 +31,7 @@
+ String LAST = "last";
+ String AVG = "avg";
+ String COUNT_DISTINCT = "distinct";
++String UNION = "union";
+ String LIST = "list";
+ String LIST_OBJECT = "list_object";
+ String STD_DEV = "std_dev";
+@@ -171,6 +172,7 @@
+ 
+ 							boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);
+ 							boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;
++							boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;
+ 							boolean outputIsList = outputJavaType == JavaTypesManager.LIST;
+ 							boolean outputIsString = outputJavaType == JavaTypesManager.STRING;
+ 							boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;
+@@ -179,6 +181,7 @@
+ 							
+ 							boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);
+ 							boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;
++							boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;
+ 							boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;
+ 							boolean inputIsList = inputJavaType == JavaTypesManager.LIST;
+ 							boolean inputIsString = inputJavaType == JavaTypesManager.STRING;
+@@ -203,6 +206,7 @@
+ 								|| function.equals(FIRST) && sameInOutType
+ 								|| function.equals(LAST) && sameInOutType
+ 								|| function.equals(LIST) && outputIsString
++								|| function.equals(UNION) && outputIsGeometry
+ 								|| function.equals(LIST_OBJECT) && outputIsList
+ 								|| function.equals(COUNT) && outputIsNumber
+ 								|| function.equals(COUNT_DISTINCT) && outputIsNumber
+Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(revision 37513)
++++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(working copy)
+@@ -49,8 +49,8 @@
+ String LIST = "list";
+ String LIST_OBJECT = "list_object";
+ String STD_DEV = "std_dev";
++String UNION = "union";
+ 
+-
+ List<? extends IConnection> incomingConnections = node.getIncomingConnections();
+ if (incomingConnections != null && !incomingConnections.isEmpty()) {
+ 	for (IConnection conn : incomingConnections) {
+@@ -244,6 +244,7 @@
+ 
+ 		boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);
+ 		boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;
++		boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;
+ 		boolean outputIsList = outputJavaType == JavaTypesManager.LIST;
+ 		boolean outputIsString = outputJavaType == JavaTypesManager.STRING;
+ 		boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;
+@@ -255,6 +256,7 @@
+ 		
+ 		boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);
+ 		boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;
++		boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;
+ 		boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;
+ 		boolean inputIsList = inputJavaType == JavaTypesManager.LIST;
+ 		boolean inputIsString = inputJavaType == JavaTypesManager.STRING;
+@@ -281,6 +283,7 @@
+ 			|| function.equals(LIST) && outputIsString
+ 			|| function.equals(LIST_OBJECT) && outputIsList
+ 			|| function.equals(COUNT) && outputIsNumber
++			|| function.equals(UNION) && outputIsGeometry
+ 			|| function.equals(COUNT_DISTINCT) && outputIsNumber
+ 			|| function.equals(STD_DEV) && inputIsNumber && outputIsNumber
+ 		;
+@@ -495,6 +498,14 @@
+ 					
+ 				}
+ 				
++			} else if(function.equals(UNION)){
++				%>// Load first one or union
++				if (operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> == null) {
++					operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> = <%=inputConn.getName() %>.<%=inputColumnName %>;
++				} else {
++					operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %> = operation_result_<%=cid %>.<%=outputColumnName %>_<%=function %>.union(<%=inputConn.getName() %>.<%=inputColumnName %>);
++				}
++				<%
+ 			}
+ 			
+ 			if(ignoreNull && !isInputColumnPrimitive) { // T_OutMain_AggR_545
+Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(revision 37513)
++++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(working copy)
+@@ -53,6 +53,7 @@
+ String LIST = "list";
+ String LIST_OBJECT = "list_object";
+ String STD_DEV = "std_dev";
++String UNION = "union";
+ 
+ int sizeOperations = operations.size();
+ 
+@@ -433,6 +434,7 @@
+ 	
+ 			boolean outputIsNumber = JavaTypesManager.isNumberType(outputJavaType, false);
+ 			boolean outputIsObject = outputJavaType == JavaTypesManager.OBJECT;
++			boolean outputIsGeometry = outputJavaType == JavaTypesManager.GEOMETRY;
+ 			boolean outputIsList = outputJavaType == JavaTypesManager.LIST;
+ 			boolean outputIsString = outputJavaType == JavaTypesManager.STRING;
+ 			boolean outputIsBigDecimal = outputJavaType == JavaTypesManager.BIGDECIMAL;
+@@ -441,6 +443,7 @@
+ 			
+ 			boolean inputIsNumber = JavaTypesManager.isNumberType(inputJavaType, false);
+ 			boolean inputIsObject = inputJavaType == JavaTypesManager.OBJECT;
++			boolean inputIsGeometry = inputJavaType == JavaTypesManager.GEOMETRY;
+ 			boolean inputIsBoolean = inputJavaType == JavaTypesManager.BOOLEAN;
+ 			boolean inputIsList = inputJavaType == JavaTypesManager.LIST;
+ 			boolean inputIsString = inputJavaType == JavaTypesManager.STRING;
+@@ -467,6 +470,7 @@
+ 				|| function.equals(LIST) && outputIsString
+ 				|| function.equals(LIST_OBJECT) && outputIsList
+ 				|| function.equals(COUNT) && outputIsNumber
++				|| function.equals(UNION) && outputIsGeometry
+ 				|| function.equals(COUNT_DISTINCT) && outputIsNumber
+ 				|| function.equals(STD_DEV) && inputIsNumber && outputIsNumber
+ 			;
+@@ -517,6 +521,11 @@
+            		 	%>java.util.List <%=funin[OUTPUT_COLUMN] %>_<%=function %> = new java.util.ArrayList();
+            			<%
+            			
++           		} else if(UNION.equals(function)) {
++           		 
++           		 	%>org.talend.sdi.geometry.Geometry <%=funin[OUTPUT_COLUMN] %>_<%=function %> = null;
++           			<%
++           			
+            		} else if(STD_DEV.equals(function)) {
+            		
+            			%>java.util.List<Double> <%=funin[OUTPUT_COLUMN] %>_<%=function %> = new java.util.ArrayList<Double>();
+Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(revision 37513)
++++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(working copy)
+@@ -87,6 +87,7 @@
+             <ITEM NAME="LIST_OBJECT"    VALUE="list_object"/>
+             <ITEM NAME="DISTINCT"    VALUE="distinct"/>
+             <ITEM NAME="STD_DEV"    VALUE="std_dev"/>
++            <ITEM NAME="UNION"    VALUE="union"/>
+           </ITEMS>
+         </ITEM>
+         <ITEM NAME="INPUT_COLUMN" FIELD="PREV_COLUMN_LIST" />
+Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(revision 37513)
++++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(working copy)
+@@ -16,6 +16,7 @@
+ OPERATIONS.ITEM.FUNCTION.ITEM.MAX=max
+ OPERATIONS.ITEM.FUNCTION.ITEM.MIN=min
+ OPERATIONS.ITEM.FUNCTION.ITEM.SUM=sum
++OPERATIONS.ITEM.FUNCTION.ITEM.UNION=union(geometry)
+ OPERATIONS.ITEM.IGNORE_NULL=Ignore null values
+ OPERATIONS.ITEM.INPUT_COLUMN=Input column position
+ OPERATIONS.ITEM.OUTPUT_COLUMN=Output column
