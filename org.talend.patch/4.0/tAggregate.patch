@@ -1,6 +1,6 @@
 Index: org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tAggregateIn/tAggregateIn_main.javajet	(working copy)
 @@ -31,6 +31,7 @@
  String LAST = "last";
@@ -36,7 +36,7 @@ Index: org.talend.designer.components.localprovider/components/tAggregateIn/tAgg
  								|| function.equals(COUNT_DISTINCT) && outputIsNumber
 Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_main.javajet	(working copy)
 @@ -49,8 +49,8 @@
  String LIST = "list";
@@ -89,7 +89,7 @@ Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAg
  			if(ignoreNull && !isInputColumnPrimitive) { // T_OutMain_AggR_545
 Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet
 ===================================================================
---- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_begin.javajet	(working copy)
 @@ -53,6 +53,7 @@
  String LIST = "list";
@@ -137,7 +137,7 @@ Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAg
             			%>java.util.List<Double> <%=funin[OUTPUT_COLUMN] %>_<%=function %> = new java.util.ArrayList<Double>();
 Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml
 ===================================================================
---- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_java.xml	(working copy)
 @@ -87,6 +87,7 @@
              <ITEM NAME="LIST_OBJECT"    VALUE="list_object"/>
@@ -149,9 +149,33 @@ Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAg
          <ITEM NAME="INPUT_COLUMN" FIELD="PREV_COLUMN_LIST" />
 Index: org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties
 ===================================================================
---- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(revision 37513)
+--- org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(revision 38739)
 +++ org.talend.designer.components.localprovider/components/tAggregateOut/tAggregateOut_messages_en.properties	(working copy)
 @@ -16,6 +16,7 @@
+ OPERATIONS.ITEM.FUNCTION.ITEM.MAX=max
+ OPERATIONS.ITEM.FUNCTION.ITEM.MIN=min
+ OPERATIONS.ITEM.FUNCTION.ITEM.SUM=sum
++OPERATIONS.ITEM.FUNCTION.ITEM.UNION=union(geometry)
+ OPERATIONS.ITEM.IGNORE_NULL=Ignore null values
+ OPERATIONS.ITEM.INPUT_COLUMN=Input column position
+ OPERATIONS.ITEM.OUTPUT_COLUMN=Output column
+Index: org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_java.xml
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_java.xml	(revision 38739)
++++ org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_java.xml	(working copy)
+@@ -76,6 +76,7 @@
+             <ITEM NAME="LIST_OBJECT"    VALUE="list_object"/>
+             <ITEM NAME="DISTINCT"    VALUE="distinct"/>            
+             <ITEM NAME="STD_DEV"    VALUE="std_dev"/>
++            <ITEM NAME="UNION"    VALUE="union"/>            
+           </ITEMS>
+         </ITEM>
+         <ITEM NAME="INPUT_COLUMN" FIELD="PREV_COLUMN_LIST" />
+Index: org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_messages_en.properties
+===================================================================
+--- org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_messages_en.properties	(revision 38739)
++++ org.talend.designer.components.localprovider/components/tAggregateRow/tAggregateRow_messages_en.properties	(working copy)
+@@ -17,6 +17,7 @@
  OPERATIONS.ITEM.FUNCTION.ITEM.MAX=max
  OPERATIONS.ITEM.FUNCTION.ITEM.MIN=min
  OPERATIONS.ITEM.FUNCTION.ITEM.SUM=sum
