@@ -1,7 +1,7 @@
 // ============================================================================
 //
 // Copyright (C) 2007-2008 Camptocamp - www.camptocamp.com
-//                  2006-2007 Talend Inc. - www.talend.com
+//               2006-2010 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt

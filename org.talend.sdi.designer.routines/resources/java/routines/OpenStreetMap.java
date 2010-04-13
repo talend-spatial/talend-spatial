@@ -1,6 +1,6 @@
 // ============================================================================
 //
-// Copyright (C) 2009 François
+// Copyright (C) 2009-2010 François Prunayre
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
