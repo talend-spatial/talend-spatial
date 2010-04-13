@@ -97,9 +97,7 @@
       <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/metadata.xml"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="MDTPL" FIELD="FILE" NUM_ROW="12" REQUIRED="true">
-      <DEFAULT>
-        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
-      </DEFAULT>
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"</DEFAULT>
     </PARAMETER>
   </PARAMETERS>
   <CODEGENERATION>

@@ -58,6 +58,9 @@
     </PARAMETER>
   </PARAMETERS>
   <ADVANCED_PARAMETERS>
+	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="1">
+	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+	</PARAMETER>   
     <PARAMETER NAME="NS_URL" FIELD="TEXT" NUM_ROW="5" REQUIRED="true">
       <DEFAULT>"http://www.topografix.com/GPX/1/1"</DEFAULT>
     </PARAMETER>

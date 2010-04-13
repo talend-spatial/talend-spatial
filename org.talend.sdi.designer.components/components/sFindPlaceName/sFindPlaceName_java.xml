@@ -37,9 +37,7 @@
     </PARAMETER>
     <PARAMETER NAME="WS" FIELD="TEXT" REQUIRED="true" NUM_ROW="2"
       SHOW="false">
-      <DEFAULT>
-        "http://ws.geonames.org/findNearbyPlaceName?lat={LATITUDE}&amp;lng={LONGITUDE}&amp;country={COUNTRY}&amp;maxRows=1&amp;"
-      </DEFAULT>
+      <DEFAULT>"http://ws.geonames.org/findNearbyPlaceName?lat={LATITUDE}&amp;lng={LONGITUDE}&amp;country={COUNTRY}&amp;maxRows=1&amp;"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="COUNTRY" FIELD="TEXT" REQUIRED="false"
       NUM_ROW="2">

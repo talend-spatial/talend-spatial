@@ -151,6 +151,11 @@
 	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
     </PARAMETER>
   </PARAMETERS>
+  <ADVANCED_PARAMETERS>
+	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="1">
+	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+	</PARAMETER>   
+  </ADVANCED_PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>
       <IMPORT NAME="ant-optional" MODULE="ant-optional-1.5.1.jar"

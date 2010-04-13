@@ -173,6 +173,9 @@
     </PARAMETER>
   </PARAMETERS>
   <ADVANCED_PARAMETERS>
+	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="1">
+	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+	</PARAMETER>   
     <PARAMETER NAME="APPEND" FIELD="CHECK" REQUIRED="true"
       NUM_ROW="1">
       <DEFAULT>false</DEFAULT>

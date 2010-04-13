@@ -25,9 +25,7 @@
       <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/metadata.xml"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="INFO" FIELD="FILE" REQUIRED="true" NUM_ROW="3">
-      <DEFAULT>
-        "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/info.xml"
-      </DEFAULT>
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/info.xml"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="THUMBNAIL" FIELD="FILE" NUM_ROW="4">
       <DEFAULT></DEFAULT>

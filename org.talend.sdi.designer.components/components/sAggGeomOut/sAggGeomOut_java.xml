@@ -39,6 +39,11 @@
 	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
     </PARAMETER>
   </PARAMETERS>
+  <ADVANCED_PARAMETERS>
+	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="1">
+	  <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+	</PARAMETER>   
+  </ADVANCED_PARAMETERS>  
   <CODEGENERATION>
     <IMPORTS>
       <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
