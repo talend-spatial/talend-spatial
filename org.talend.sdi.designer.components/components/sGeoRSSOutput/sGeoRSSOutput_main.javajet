@@ -116,7 +116,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
                 			"" : 
                 			sdfTemp_<%=cid %>.format( <%=conn.getName() %>.<%=column.getLabel() %>));
     <%        
-                } else if (javaType == JavaTypesManager.GEOMETRY) {
+                } else if (javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
 				// FIXME : if not a geometry
 				/*
 				<georss:point>45.256 -71.92</georss:point>

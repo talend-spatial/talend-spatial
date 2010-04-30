@@ -33,7 +33,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
             %>
             // echo <%=javaType %>
             <%
-            if(javaType == JavaTypesManager.GEOMETRY) {
+            if(javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                 geometryColumn = column;
                 break;
             }
@@ -82,7 +82,7 @@ if ((metadatas != null) && (metadatas.size()>0)) {
                                 colAggType = "String";
                             } else if(javaType == JavaTypesManager.OBJECT) {
                                 colAggType = "Object";
-                            } else if(javaType == JavaTypesManager.GEOMETRY) {
+                            } else if(javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                                 colAggType = "Geometry";
                             }
                             break;

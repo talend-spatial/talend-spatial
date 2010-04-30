@@ -58,6 +58,7 @@ if (incomingConnections != null && !incomingConnections.isEmpty()) {
                                                          // TODO : Could add a number of aggregated features
                     // Get column data type
                     JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+                    
                     if (javaType == JavaTypesManager.BOOLEAN) {
                         colAggType = "Boolean";
                     } else if (javaType == JavaTypesManager.BYTE) {
@@ -82,7 +83,7 @@ if (incomingConnections != null && !incomingConnections.isEmpty()) {
                         colAggType = "String";
                     } else if (javaType == JavaTypesManager.OBJECT) {
                         colAggType = "Object";
-                    } else if (javaType == JavaTypesManager.GEOMETRY) {
+                    } else if (javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                         colAggType = "Geometry";
                     }
                     break;

@@ -38,7 +38,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
             IMetadataColumn column = columns.get(j);
             JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
             //String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
-            if(javaType == JavaTypesManager.GEOMETRY) {
+            if(javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                 geometryColumn = column;
                 break;
             }
@@ -282,14 +282,14 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
                                     !(operationType.equals("IS_VALID") && (columnout.getLabel().equals("is_valid") || columnout.getLabel().equals("is_valid_desc"))) &&
                                     !(operationType.equals("NUM_GEOMS") && columnout.getLabel().equals("num_geoms")) &&
                                     !(operationType.equals("NUM_POINTS") && columnout.getLabel().equals("num_points")) &&
-                                    !(operationType.equals("BOUNDARY") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("ENVELOPE") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("BUFFER") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("CENTROID") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("CLIPPER") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("INTERIOR_POINT") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("DOUGLAS_PEUCKER") && javaType == JavaTypesManager.GEOMETRY) &&
-                                    !(operationType.equals("TOPOLOGY_PRESERVING") && javaType == JavaTypesManager.GEOMETRY)
+                                    !(operationType.equals("BOUNDARY") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("ENVELOPE") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("BUFFER") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("CENTROID") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("CLIPPER") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("INTERIOR_POINT") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("DOUGLAS_PEUCKER") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) &&
+                                    !(operationType.equals("TOPOLOGY_PRESERVING") && javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry"))
                                 ) {
 %>
     <%=outConnection.getName() %>.<%=columnout.getLabel() %> = <%=inConnection.getName() %>.<%=columnout.getLabel() %>;

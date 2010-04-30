@@ -225,7 +225,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
             if (formatType.equals("POSTGIS")) {
                 columnLabel = column.getLabel().toLowerCase();
             }
-            if (javaType == JavaTypesManager.GEOMETRY) {
+            if (javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                 // If using CRS in PostGIS context set the CRS at the feature level
 %>
 	geoAttBuilder_<%=cid %> = new org.geotools.feature.AttributeTypeBuilder();
@@ -267,7 +267,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
                 columnLabel = column.getLabel().toLowerCase();
             }
 
-            if (javaType != JavaTypesManager.GEOMETRY) {
+            if (javaType != JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
                 colIdx ++;
 %>
 	attBuilder_<%=cid %> = new org.geotools.feature.AttributeTypeBuilder();
