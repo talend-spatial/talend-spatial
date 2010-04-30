@@ -19,7 +19,14 @@ public class Geometry implements Serializable {
     private String EPSG = "";
 
     private org.opengis.referencing.crs.CoordinateReferenceSystem CRS;
-
+    
+    /**
+     * Nullary constructor used during loading of java_type extension point. 
+     */
+    public Geometry() {
+    	internalGeometry = null;
+    }
+    
     public Geometry(com.vividsolutions.jts.geom.Geometry internalGeometry) {
         this.internalGeometry = internalGeometry;
     }
