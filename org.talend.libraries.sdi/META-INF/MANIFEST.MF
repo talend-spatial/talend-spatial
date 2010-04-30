@@ -4,6 +4,7 @@ Bundle-Name: Sdi lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi
 Bundle-Version: 2.2.0.qualifier
 Bundle-ClassPath: .,
+ lib/jsr-275-1.0-beta-2.jar,
  lib/geoapi-2.2-M1.jar,
  lib/gt-api-2.5.0.jar,
  lib/gt-main-2.5.0.jar,
@@ -404,6 +405,8 @@ Export-Package:
  org.geotools.data.collection,
  org.geotools.data.crs,
  org.geotools.data.edigeo,
+ org.geotools.data.gpx,
+ org.geotools.data.gpx.temporal,
  org.geotools.data.jdbc,
  org.geotools.data.jdbc.attributeio,
  org.geotools.data.jdbc.datasource,
