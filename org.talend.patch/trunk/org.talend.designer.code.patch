@@ -1,0 +1,40 @@
+Index: resources/subprocess_header.javajet
+===================================================================
+--- resources/subprocess_header.javajet	(revision 41333)
++++ resources/subprocess_header.javajet	(working copy)
+@@ -542,7 +542,7 @@
+ 					%>
+ 					this.<%=column.getLabel() %> = readByteArray(dis);
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 			 		hasAtLeastOneObjectType = true;
+ 					%>
+ 						this.<%=column.getLabel() %> = (<%= typeToGenerate %>) dis.readObject();
+@@ -632,7 +632,7 @@
+ 					%>
+ 						writeByteArray(this.<%=column.getLabel() %>,dos);
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 					%>
+        			    	dos.writeObject(this.<%=column.getLabel() %>);
+ 					<%
+@@ -715,7 +715,7 @@
+ 					%>
+ 						this.<%=column.getLabel() %> = readDate(dis,ois);
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 			 		hasAtLeastOneObjectType = true;
+ 					%>
+        			    	this.<%=column.getLabel() %> = (<%= typeToGenerate %>) ois.readObject();
+@@ -801,7 +801,7 @@
+ 					%>
+ 						writeDate(this.<%=column.getLabel() %>, dos, oos);
+ 					<%
+-				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
++				} else if(typeToGenerate.equals("Object") || typeToGenerate.equals("Geometry") || typeToGenerate.equals("BigDecimal") || typeToGenerate.equals("List")) {
+ 					%>
+        			    	oos.writeObject(this.<%=column.getLabel() %>);
+ 					<%
