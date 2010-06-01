@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial Repository Plug-in
 Bundle-SymbolicName: org.talend.sdi.repository.ui.actions.metadata;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 4.0.1
 Bundle-Activator: org.talend.sdi.repository.ui.actions.metadata.Activator
 Require-Bundle: org.talend.libraries,
  org.apache.axis,
@@ -13,9 +13,6 @@ Require-Bundle: org.talend.libraries,
  org.eclipse.ui.views.properties.tabbed,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
- org.eclipse.datatools.enablement.oda.xml,
- org.eclipse.datatools.enablement.oda.xml.ui,
- org.eclipse.datatools.connectivity.oda,
  org.eclipse.team.core,
  org.talend.resources,
  org.eclipse.ui.workbench.texteditor,
@@ -33,7 +30,6 @@ Require-Bundle: org.talend.libraries,
  org.talend.repository,
  org.talend.libraries.sdi,
  org.apache.log4j;bundle-version="1.2.13"
-Eclipse-LazyStart: true
 Bundle-ClassPath: .
 Export-Package: org.talend.sdi.repository.ui.actions.metadata;
   uses:="org.eclipse.jface.wizard,
@@ -46,3 +42,7 @@ Export-Package: org.talend.sdi.repository.ui.actions.metadata;
    org.osgi.framework,
    org.eclipse.swt.widgets,
    org.geotools.data"
+Bundle-Vendor: .Talend SA.
+Import-Package: org.talend.core.model.metadata.builder.connection,
+ org.talend.core.model.properties
+Bundle-ActivationPolicy: lazy
