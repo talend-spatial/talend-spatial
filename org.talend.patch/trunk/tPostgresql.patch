@@ -38,11 +38,11 @@ Index: components/tPostgresqlOutput/tPostgresqlOutput_end.javajet
 +		%>
 +    	java.sql.Statement stmtCreateIndex_<%=cid%> = conn_<%=cid%>.createStatement();
 +		// Drop spatial index if exists
-+		String dropIndex_<%=cid %> = "DROP INDEX IF EXISTS " + <%=tableName %> +"_geo_index";
++		String dropIndex_<%=cid %> = "DROP INDEX IF EXISTS \""+ tableName_<%=cid%> +"_geo_index\"";
 +		stmtCreateIndex_<%=cid%>.execute(dropIndex_<%=cid %>);
 +		
 +		// Create spatial index using GIST on geometry columns
-+		String createIndex_<%=cid %> = "CREATE INDEX " + <%=tableName %> +"_geo_index ON \""+ <%=tableName %> +
++		String createIndex_<%=cid %> = "CREATE INDEX \""+ <%=tableName %> +"_geo_index\" ON \""+ tableName_<%=cid%> +
 +								 "\" USING GIST (\"" + geometryColumnName_<%=cid %> +"\")";
 +        stmtCreateIndex_<%=cid%>.execute(createIndex_<%=cid %>);
 +        stmtCreateIndex_<%=cid%>.close();
