@@ -28,6 +28,9 @@ String mdAuthor = ElementParameterParser.getValue(node,"__MDAUTHOR__");
 String targetCRS = ElementParameterParser.getValue(node,"__CRS__");
 String mdKeywords = ElementParameterParser.getValue(node,"__KEYWORDS__");
 String mdOnlineSrc = ElementParameterParser.getValue(node,"__ONLINESRCWWW__");
+String mdOnlineDesc = ElementParameterParser.getValue(node,"__ONLINESRCDESC__");
+String mdOnlineName = ElementParameterParser.getValue(node,"__ONLINESRCNAME__");
+String mdOnlineProtocol = ElementParameterParser.getValue(node,"__ONLINESRCPROTOCOL__");
 String xmin = ElementParameterParser.getValue(node,"__XMIN__");
 String ymin = ElementParameterParser.getValue(node,"__YMIN__");
 String xmax = ElementParameterParser.getValue(node,"__XMAX__");
@@ -58,7 +61,7 @@ if (! md_<%=cid %>.setEX_GeographicBoundingBox (
 <%
     if (!mdOnlineSrc.equals("")) {
 %>
-if (! md_<%=cid %>.setOnlineResource (<%=mdOnlineSrc %>))
+if (! md_<%=cid %>.setOnlineResource (<%=mdOnlineSrc %>, <%=mdOnlineProtocol %>, <%=mdOnlineDesc %>, <%=mdOnlineName %>))
         System.out.println ("<%=cid %> | Metadata | Can't set onlineSrc");
 <%
     }

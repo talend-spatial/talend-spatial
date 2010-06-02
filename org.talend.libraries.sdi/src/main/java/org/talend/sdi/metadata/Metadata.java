@@ -135,7 +135,7 @@ public class Metadata {
         
         public static final String ONLINESRC_PROTOCOL = ONLINESRC + "/gmd:protocol/gco:CharacterString";
         
-        public static final String PROTOCOL = "WWW:DOWNLOAD-1.0-http--download";
+        public static final String PROTOCOL = "WWW:LINK-1.0-http--link";
         
         public static final String ONLINESRC_NAME = ONLINESRC + "/gmd:name/gco:CharacterString";
         
@@ -376,10 +376,23 @@ public class Metadata {
      *                   
      */        
     public boolean setOnlineResource(String file) {
+        return setOnlineResource(file, ISO.PROTOCOL, "File for download", "");
+    }
+    
+    /** 
+     * Set an online resource pointing to the file. 
+     * Protocol is assumed to be Local or LAN file only.
+     *  
+     * @param file      Path to the file.
+     * @param protocol	Protocol to use
+     * @return          <code>true</code> 
+     *                   
+     */        
+    public boolean setOnlineResource(String file, String protocol, String desc, String name) {
     	this.setElement(ISO.ONLINESRC_URL, file);
-        this.setElement(ISO.ONLINESRC_PROTOCOL, ISO.PROTOCOL);
-        this.setElement(ISO.ONLINESRC_DESC, "File for download");
-        this.setElement(ISO.ONLINESRC_NAME, "");
+        this.setElement(ISO.ONLINESRC_PROTOCOL, protocol);
+        this.setElement(ISO.ONLINESRC_DESC, desc);
+        this.setElement(ISO.ONLINESRC_NAME, name);
         return true;
     }
     
