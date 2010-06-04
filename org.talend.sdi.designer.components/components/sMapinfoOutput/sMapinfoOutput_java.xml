@@ -45,15 +45,15 @@
     </PARAMETER>
     <PARAMETER NAME="MDTITLE" FIELD="TEXT" NUM_ROW="11" REQUIRED="false"
       SHOW_IF="MD == 'true'">
-      <DEFAULT>Metadata title</DEFAULT>
+      <DEFAULT>"Metadata title"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="MDABSTRACT" FIELD="TEXT" NB_LINES="3" NUM_ROW="12"
       REQUIRED="false" SHOW_IF="MD == 'true'">
-      <DEFAULT>Metadata abstract</DEFAULT>
+      <DEFAULT>"Metadata abstract"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="MDPURPOSE" FIELD="TEXT" NB_LINES="3" NUM_ROW="13"
       REQUIRED="false" SHOW_IF="MD == 'true'">
-      <DEFAULT>Metadata Purpose</DEFAULT>
+      <DEFAULT>"Metadata Purpose"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="MDTOPICCATEGORY" FIELD="CLOSED_LIST"
       REQUIRED="true" NUM_ROW="14" SHOW_IF="MD == 'true'">
