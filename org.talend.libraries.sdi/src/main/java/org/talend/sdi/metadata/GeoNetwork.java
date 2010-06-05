@@ -1,20 +1,19 @@
 package org.talend.sdi.metadata;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 
@@ -128,30 +127,41 @@ public class GeoNetwork extends Catalogue {
             // --- Post xml metadata element
             PostMethod req = new PostMethod(
                     this.host + ":" + this.port + "/" + 
-                    this.servlet + "/srv/en/" + Service.XML_PUT);
-            
-            
-            req.addParameter("data", xml);
-            req.addParameter("template", "n");
-            req.addParameter("title", "");
-            req.addParameter("styleSheet", "_none_");
-            req.addParameter("schema", schema);
-            req.addParameter("validate", "off");
+                    this.servlet + "/srv/en/" + Service.MEF_IMPORT);
+            //System.out.println(xml);
+
+            File xmlFile = createTempFile(xml);
+            String group = "2";// Usually GeoNetwork sample group
+            String category = "2";
+            //req.addParameter("data", xml);
             
             if (groupType.equals("0") || groupType.equals("1"))
-            	req.addParameter("group", groupType); // GeoNetwork intranet and internet group
+            	group = groupType; // GeoNetwork intranet and internet group
             else if (groupType.equals("99")) 
-            	req.addParameter("group", groupId);
-            else
-                req.addParameter("group", "2"); // Usually GeoNetwork sample group
+            	group = groupId;
             
+            if (categoryId != null)
+                category = categoryId;
             
-            if (categoryId == null)
-                req.addParameter("category", "2"); // Usually GeoNetwork datasets category
-            else
-                req.addParameter("category", categoryId);
-
-
+            Part[] parts = {
+            		new FilePart ("mefFile", xmlFile),
+            		new StringPart ("insert_mode", "1"),
+            		new StringPart ("file_type", "single"), 
+            		new StringPart ("template", "n"), 
+            		new StringPart ("title", ""), 
+            		new StringPart ("styleSheet", "_none_"),
+            		new StringPart ("schema", schema),
+            		new StringPart ("validate", "off"),
+            		new StringPart ("group", group),
+            		new StringPart ("category", category)
+            };
+            req.setRequestEntity(
+            		new MultipartRequestEntity (
+            				parts, 
+            				req.getParams()
+            			)
+            		);
+            
             /* Check if error on publication */
             Document doc = httpConnect (httpclient, req);
             List list = doc.selectNodes("response");
@@ -171,6 +181,27 @@ public class GeoNetwork extends Catalogue {
     }
 
 
+    private File createTempFile(String content) {
+    	try {
+            // Create temporary file.
+            File tempfile = File.createTempFile("metadata", ".xml");
+        
+            // Delete temp file when program exits.
+            tempfile.deleteOnExit();
+        
+            // Write to temp file
+            BufferedWriter out = new BufferedWriter(new FileWriter(tempfile));
+            out.write(content);
+            out.close();
+            return tempfile;
+            
+        } catch (IOException e) {
+        	System.out.println("Failed to write temporary file.");
+        }
+        return null;
+    }
+    
+    
     /** 
      * Publish a MEF document in a GeoNetwork node
      *           
