@@ -224,6 +224,36 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
     Geometry result_<%=cid %> = geomProj_<%=cid %>;
     
 <%
+                    } else if (operationType.equals("POLYGONIZER")) {
+                    
+                        destField = geometryObject;                        
+%>   
+
+	 Geometry result_<%=cid %> = null;     
+    org.talend.sdi.geometry.Geometry geom_<%=cid %> = (org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>;  
+
+	 // Polygonize
+    com.vividsolutions.jts.operation.polygonize.Polygonizer polygonizer_<%=cid %> = new  com.vividsolutions.jts.operation.polygonize.Polygonizer();
+    java.util.Collection geoms_<%=cid%> = new java.util.ArrayList();
+    geoms_<%=cid%>.add(geom_<%=cid%>._getInternalGeometry());
+    polygonizer_<%=cid %>.add(geoms_<%=cid%>);
+    java.util.Collection<com.vividsolutions.jts.geom.Polygon> polys_<%=cid%> = polygonizer_<%=cid %>.getPolygons();
+	    
+	 // Return polygon if success
+	 if (polys_<%=cid%>.size() > 0) {
+	    // create Multi polygon from the collection
+		 com.vividsolutions.jts.geom.Polygon[] polyArray = new com.vividsolutions.jts.geom.Polygon[0];
+	             
+		 com.vividsolutions.jts.geom.MultiPolygon mpl_<%=cid %> = 
+			new com.vividsolutions.jts.geom.MultiPolygon(polys_<%=cid%>.toArray(polyArray), 
+				new com.vividsolutions.jts.geom.GeometryFactory()
+			);
+	 	 result_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mpl_<%=cid %>);
+    } else {
+    	 result_<%=cid %> = geom_<%=cid %>;
+    }
+ <%
+ 
                     } else if (operationType.equals("DOUGLAS_PEUCKER")) {
                     
                         destField = geometryObject;                        
