@@ -10,7 +10,7 @@ import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.ui.images.ECoreImage;
 import org.talend.core.ui.images.OverlayImageProvider;
 import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNode.EProperties;
+import org.talend.repository.model.IRepositoryNode.EProperties;
 
 public class CreateGeoEdigeoMetadata extends
 		org.talend.repository.ui.actions.metadata.CreateGenericSchemaAction {

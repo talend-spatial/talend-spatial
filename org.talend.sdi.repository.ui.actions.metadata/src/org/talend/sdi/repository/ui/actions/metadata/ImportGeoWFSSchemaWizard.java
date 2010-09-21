@@ -55,7 +55,9 @@ import org.talend.core.CorePlugin;
 import org.talend.core.context.Context;
 import org.talend.core.context.RepositoryContext;
 import org.talend.core.model.metadata.MetadataColumnsAndDbmsId;
+import org.talend.core.model.metadata.builder.connection.Connection;
 import org.talend.core.model.metadata.builder.connection.ConnectionFactory;
+import org.talend.core.model.metadata.builder.connection.GenericPackage;
 import org.talend.core.model.metadata.builder.connection.GenericSchemaConnection;
 import org.talend.core.model.metadata.builder.connection.MetadataColumn;
 import org.talend.core.model.metadata.builder.connection.MetadataTable;
@@ -64,6 +66,8 @@ import org.talend.core.model.properties.ConnectionItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
 import org.talend.core.ui.images.ECoreImage;
+import org.talend.cwm.helper.ConnectionHelper;
+import org.talend.cwm.helper.PackageHelper;
 import org.talend.repository.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.ProxyRepositoryFactory;
@@ -71,6 +75,7 @@ import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.RepositoryNodeUtilities;
 import org.talend.repository.ui.wizards.RepositoryWizard;
 import org.talend.repository.ui.wizards.metadata.connection.genericshema.GenericSchemaWizardPage;
+import orgomg.cwm.objectmodel.core.Package;
 
 /**
  * DOC fxprunayre / mcoudert Import WFS FeatureType model. Detailled comment
@@ -318,12 +323,23 @@ public class ImportGeoWFSSchemaWizard extends RepositoryWizard implements
 				.createMetadataTable();
 		metadataTable.setId(factory.getNextId());
 		metadataTable.setLabel("metadata");
-		metadataTable.setConnection(connection);
 
+		if (metadataTable.getNamespace() instanceof Package) {
+            Package pkg = (Package) metadataTable.getNamespace();
+            pkg.getDataManager().add(connection);
+        }
+		
 		metadataTable.getColumns().addAll(listColumns);
 
-		connection.getTables().add(metadataTable);
-
+		GenericPackage g = (GenericPackage) ConnectionHelper.getPackage(connection.getName(), (Connection) connection,
+                GenericPackage.class);
+        if (g != null) { // hywang
+            g.getOwnedElement().add(metadataTable);
+        } else {
+            GenericPackage gpkg = ConnectionFactory.eINSTANCE.createGenericPackage();
+            PackageHelper.addMetadataTable(metadataTable, gpkg);
+            ConnectionHelper.addPackage(gpkg, connection);
+        }
 	}
 
 	private void initConnection() {

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial Repository Plug-in
 Bundle-SymbolicName: org.talend.sdi.repository.ui.actions.metadata;singleton:=true
-Bundle-Version: 4.0.1
+Bundle-Version: 4.1.0
 Bundle-Activator: org.talend.sdi.repository.ui.actions.metadata.Activator
 Require-Bundle: org.talend.libraries,
  org.apache.axis,
@@ -15,6 +15,8 @@ Require-Bundle: org.talend.libraries,
  org.eclipse.ui.ide,
  org.eclipse.team.core,
  org.talend.resources,
+ org.talend.model,
+ org.talend.metadata.managment,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.jdt.core,
  org.talend.librariesmanager,
@@ -29,7 +31,8 @@ Require-Bundle: org.talend.libraries,
  org.eclipse.core.filesystem,
  org.talend.repository,
  org.talend.libraries.sdi,
- org.apache.log4j;bundle-version="1.2.13"
+ org.apache.log4j;bundle-version="1.2.13",
+ org.talend.cwm.mip
 Bundle-ClassPath: .
 Export-Package: org.talend.sdi.repository.ui.actions.metadata;
   uses:="org.eclipse.jface.wizard,

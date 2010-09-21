@@ -13,8 +13,11 @@ import org.talend.commons.ui.image.ImageProvider;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.ui.images.ECoreImage;
 import org.talend.core.ui.images.OverlayImageProvider;
+import org.talend.repository.ProjectManager;
 import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.RepositoryNode.EProperties;
+import org.talend.repository.model.IRepositoryNode.EProperties;
+import org.talend.repository.model.IProxyRepositoryFactory;
+import org.talend.repository.model.ProxyRepositoryFactory;
 
 
 public class CreateGeoMetadata extends org.talend.repository.ui.actions.metadata.CreateGenericSchemaAction {
@@ -44,7 +47,12 @@ public class CreateGeoMetadata extends org.talend.repository.ui.actions.metadata
      */
     @Override
     protected void init(RepositoryNode node) {
-
+    	IProxyRepositoryFactory factory = ProxyRepositoryFactory.getInstance();
+        if (factory.isUserReadOnlyOnCurrentProject() || !ProjectManager.getInstance().isInCurrentMainProject(node)) {
+            setEnabled(false);
+            return;
+        }
+        
         ERepositoryObjectType nodeType = (ERepositoryObjectType) node.getProperties(EProperties.CONTENT_TYPE);
         if (nodeType == null) {
             return;
