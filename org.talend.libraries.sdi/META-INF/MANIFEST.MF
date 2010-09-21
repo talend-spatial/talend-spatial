@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Sdi lib Plug-in
+Bundle-Name: Spatial lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi;singleton:=true
-Bundle-Version: 4.0.1
+Bundle-Version: 4.1.0
 Bundle-ClassPath: .,
  lib/jsr-275-1.0-beta-2.jar,
  lib/geoapi-2.2-M1.jar,
