@@ -303,7 +303,7 @@
       <IMPORT NAME="jta" MODULE="jta-1.0.1B.jar" REQUIRED="true" />
       <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
       <IMPORT NAME="junit" MODULE="junit-4.4.jar" REQUIRED="true" />
-      <IMPORT NAME="log4j" MODULE="log4j-1.2.9.jar" REQUIRED="true" />
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.15.jar" REQUIRED="true" />
       <IMPORT NAME="mlibwrapper" MODULE="mlibwrapper_jai.jar"
         REQUIRED="true" />
       <IMPORT NAME="net.opengis.ows" MODULE="net.opengis.ows-2.5-M3.jar"
