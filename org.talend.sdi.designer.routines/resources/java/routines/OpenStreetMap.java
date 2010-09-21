@@ -27,11 +27,11 @@ public class OpenStreetMap {
 	 * 
 	 * {Category} OpenStreetMap
 	 * 
-	 * {param} String(null)
+	 * {param} String(row1.tags)
 	 * 
-	 * {param} String(null)
+	 * {param} String("name")
 	 * 
-	 * {example} GETTAG(row1.tags, "name")
+	 * {example} GETTAGVALUE(row1.tags, "name")
 	 * 
 	 */
 	public static String GETTAGVALUE(String tags, String tagName) {

@@ -34,7 +34,7 @@ public class SdiJavaRoutinesProvider implements IRoutinesProvider {
 
 	public List<URL> getSystemRoutines() {
 		List<URL> toReturn = FilesUtils.getFilesFromFolder(Activator
-				.getDefault().getBundle(), "resources/java/routines/system",
+				.getDefault().getBundle(), "resources/java/routines",
 				".java", false, false);
 
 		return toReturn;
