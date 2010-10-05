@@ -6,6 +6,8 @@ Bundle-Version: 4.1.0
 Bundle-Activator: org.talend.sdi.workspace.spatial.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui
-Eclipse-LazyStart: true
+Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Camptocamp
 Eclipse-BundleShape: dir
+Bundle-ClassPath: .
+Export-Package: org.talend.sdi.workspace.spatial
