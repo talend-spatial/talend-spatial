@@ -11,7 +11,9 @@
                mapping_id="postgres_id">
             <DbType
                   DbType="GEOMETRY"
-                  default="true">
+                  default="true"
+                  ignoreLen="true"
+                  ignorePre="true">
             </DbType>
          </DbMapping>
       </JavaType>
