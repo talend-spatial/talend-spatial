@@ -129,6 +129,10 @@
         "__COMP_DEFAULT_FILE_DIR__/.spatial/md/template/iso19139.xml"
       </DEFAULT>
     </PARAMETER>
+    <PARAMETER NAME="LENIENT" FIELD="CHECK" REQUIRED="true"
+      NUM_ROW="4">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
   </PARAMETERS>
   <CODEGENERATION></CODEGENERATION>
   <RETURNS>

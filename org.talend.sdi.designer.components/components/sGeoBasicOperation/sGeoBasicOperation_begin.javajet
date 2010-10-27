@@ -28,6 +28,7 @@ imports="
     String sx = ElementParameterParser.getValue(node, "__SX__");
     String sy = ElementParameterParser.getValue(node, "__SY__");
     String use_centroid = ElementParameterParser.getValue(node, "__USE_CENTROID_AS_ANCHOR__");
+    String lenient = ElementParameterParser.getValue(node, "__LENIENT__");
     
     String cid = node.getUniqueName(); 
  
@@ -98,11 +99,12 @@ org.opengis.referencing.crs.CoordinateReferenceSystem sourceCRS_<%=cid %> = null
 org.opengis.referencing.crs.CoordinateReferenceSystem targetCRS_<%=cid %> = null;
 org.opengis.referencing.operation.MathTransform transform_<%=cid %> = null;
 try {
-     sourceCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=sourceCRS %>);
-     targetCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=targetCRS %>);
+     sourceCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=sourceCRS %>, true);
+     targetCRS_<%=cid %> = org.geotools.referencing.CRS.decode(<%=targetCRS %>, true);
      transform_<%=cid %> = org.geotools.referencing.CRS.findMathTransform(
      								sourceCRS_<%=cid %>,
-			     					targetCRS_<%=cid %>);
+			     					targetCRS_<%=cid %>,
+			     					<%=lenient %>);
 } catch (Exception e) {
     System.out.println (e.getMessage());
 }
