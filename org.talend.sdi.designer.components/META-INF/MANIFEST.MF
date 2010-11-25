@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SDI components Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.components;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 4.1.1
 Bundle-Localization: plugin
 Bundle-Activator: org.talend.sdi.designer.components.Plugin
-Bundle-Vendor: .Camptocamp.
+Bundle-Vendor: Camptocamp, Neogeo technologies
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.talend.commons,

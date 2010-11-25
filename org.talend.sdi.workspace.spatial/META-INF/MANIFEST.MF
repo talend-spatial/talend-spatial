@@ -2,12 +2,12 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: WorkspaceSpatial Plug-in
 Bundle-SymbolicName: org.talend.sdi.workspace.spatial;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 4.1.1
 Bundle-Activator: org.talend.sdi.workspace.spatial.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Camptocamp
+Bundle-Vendor: Camptocamp, Neogeo technologies
 Eclipse-BundleShape: dir
 Bundle-ClassPath: .
 Export-Package: org.talend.sdi.workspace.spatial

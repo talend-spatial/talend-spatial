@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 4.1.1
 Bundle-ClassPath: .,
  lib/jsr-275-1.0-beta-2.jar,
  lib/geoapi-2.2-M1.jar,
@@ -708,3 +708,4 @@ Export-Package:
  org.xmlpull.v1.wrapper.classic
 Eclipse-BundleShape: dir
 Require-Bundle: org.talend.core
+Bundle-Vendor: Camptocamp, Neogeo technologies

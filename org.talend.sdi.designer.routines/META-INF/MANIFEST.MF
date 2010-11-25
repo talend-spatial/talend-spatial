@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial RoutinesProvider Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.routines;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 4.1.1
 Bundle-Activator: org.talend.sdi.designer.routines.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
@@ -13,5 +13,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.talend.libraries.sdi
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
-Bundle-Vendor: .Talend SA.
+Bundle-Vendor: Camptocamp, Neogeo technologies
 Eclipse-BundleShape: dir

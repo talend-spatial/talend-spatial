@@ -1,7 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/52n-wps-config-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/52n-wps-xml-1.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/bsh-2.0b4.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/epsgraphics.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/flowmap.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/gmlpacket-2.0-0.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/j3dcore.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jcommon-1.0.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jcs-1.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jep-2.4.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jfreechart-1.0.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jgraph.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jsr108-0.01.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jsr173_api-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/jts-1.9.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/libDocEngines-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/libMath-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/log4j-1.2.14.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/prefuse.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/prefusex.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_fireSimulation-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_flowTools-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gridAnalysis-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gridCalculus-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gridCategorical-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gridStatistics-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gridTools-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_gui-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_hydrology-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_imageAnalysis-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_lighting-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_locate-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_morphometry-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_pointAnalysis-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_profiles-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_rasterize-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_simulationTools-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_statisticalMethods-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_tables-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_tin-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_topology-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_vectorize-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_vectorTools-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_vegetationIndices-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante_wps-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/sextante-0.55.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/TableLayout-bin-jdk1.5-2007-04-21.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/vecmath-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/xbean-2.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="src/main/sextante-0.5/core/xsd-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
 	<classpathentry kind="output" path="class"/>
 </classpath>

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial Repository Plug-in
 Bundle-SymbolicName: org.talend.sdi.repository.ui.actions.metadata;singleton:=true
-Bundle-Version: 4.1.0
+Bundle-Version: 4.1.1
 Bundle-Activator: org.talend.sdi.repository.ui.actions.metadata.Activator
 Require-Bundle: org.talend.libraries,
  org.apache.axis,
@@ -45,7 +45,7 @@ Export-Package: org.talend.sdi.repository.ui.actions.metadata;
    org.osgi.framework,
    org.eclipse.swt.widgets,
    org.geotools.data"
-Bundle-Vendor: .Talend SA.
+Bundle-Vendor: Camptocamp, Neogeo technologies
 Import-Package: org.talend.core.model.metadata.builder.connection,
  org.talend.core.model.properties
 Bundle-ActivationPolicy: lazy
