@@ -51,8 +51,10 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
 						new com.vividsolutions.jts.geom.GeometryFactory();
 
 					org.talend.sdi.geometry.Geometry geom_<%=cid %> = null;
+					org.talend.sdi.geometry.Geometry inputGeom_<%=cid %> = <%=inConnection.getName()%>.<%=geometryObject%>;
+					
 					com.vividsolutions.jts.geom.Geometry geometry_<%=cid %> = 
-						((org.talend.sdi.geometry.Geometry)<%=inConnection.getName()%>.<%=geometryObject%>)._getInternalGeometry();                          
+						inputGeom_<%=cid %>._getInternalGeometry();                          
 
 
 					if (geometry_<%=cid %>.getGeometryType().equals("Point")) {
@@ -60,19 +62,28 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
 						pointArray[0]= (com.vividsolutions.jts.geom.Point) geometry_<%=cid %>;                                   
 						com.vividsolutions.jts.geom.MultiPoint mpt_<%=cid %> =
 							new com.vividsolutions.jts.geom.MultiPoint(pointArray,new com.vividsolutions.jts.geom.GeometryFactory());
-						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mpt_<%=cid %>);
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+							(com.vividsolutions.jts.geom.Geometry) mpt_<%=cid %>,
+							inputGeom_<%=cid %>.getCRS()
+						);
 					} else if (geometry_<%=cid %>.getGeometryType().equals("LineString")) {  
 						com.vividsolutions.jts.geom.LineString[] lineArray = new com.vividsolutions.jts.geom.LineString[1];
 						lineArray[0] = (com.vividsolutions.jts.geom.LineString) geometry_<%=cid %>; 
 						com.vividsolutions.jts.geom.MultiLineString mls_<%=cid %> =
 							new com.vividsolutions.jts.geom.MultiLineString(lineArray,new com.vividsolutions.jts.geom.GeometryFactory());
-						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mls_<%=cid %>); 
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+							(com.vividsolutions.jts.geom.Geometry) mls_<%=cid %>,
+							inputGeom_<%=cid %>.getCRS()
+						); 
 					} else if (geometry_<%=cid %>.getGeometryType().equals("Polygon")) {
 						com.vividsolutions.jts.geom.Polygon[] polygonArray = new com.vividsolutions.jts.geom.Polygon[1];
 						polygonArray[0] = (com.vividsolutions.jts.geom.Polygon) geometry_<%=cid %>; 
 						com.vividsolutions.jts.geom.MultiPolygon mpl_<%=cid %> = 
 							new com.vividsolutions.jts.geom.MultiPolygon(polygonArray, new com.vividsolutions.jts.geom.GeometryFactory());                                  
-						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) mpl_<%=cid %>);       	
+						geom_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+							(com.vividsolutions.jts.geom.Geometry) mpl_<%=cid %>,
+							inputGeom_<%=cid %>.getCRS()
+						);       	
 					} else if (geometry_<%=cid %>.getGeometryType().equals("MultiPolygon")
 							|| geometry_<%=cid %>.getGeometryType().equals("MultiLineString")
 							|| geometry_<%=cid %>.getGeometryType().equals("MultiPoint")

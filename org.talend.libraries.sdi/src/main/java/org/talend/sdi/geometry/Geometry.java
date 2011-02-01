@@ -78,30 +78,30 @@ public class Geometry implements Serializable {
     }
     
     public Geometry buffer(double distance) {
-        return new Geometry(internalGeometry.buffer(distance));
+        return new Geometry(internalGeometry.buffer(distance), this.CRS);
     }
 
     public Geometry buffer(double distance, int quadrantSegments) {
-        return new Geometry(internalGeometry.buffer(distance, quadrantSegments));
+        return new Geometry(internalGeometry.buffer(distance, quadrantSegments), this.CRS);
     }
 
     public Geometry buffer(double distance, int quadrantSegments,
             int endCapStyle) {
         return new Geometry(internalGeometry.buffer(distance, quadrantSegments,
-                endCapStyle));
+                endCapStyle), this.CRS);
     }
 
     public Geometry convexHull() {
-        return new Geometry(internalGeometry.convexHull());
+        return new Geometry(internalGeometry.convexHull(), this.CRS);
     }
 
     public Geometry simplify(String type, double distanceTolerance) {
         if (type != null && type.equals("DouglasPeuckerSimplifier"))
             return new Geometry(DouglasPeuckerSimplifier.simplify(
-                    internalGeometry, distanceTolerance));
+                    internalGeometry, distanceTolerance), this.CRS);
         else
             return new Geometry(TopologyPreservingSimplifier.simplify(
-                    internalGeometry, distanceTolerance));
+                    internalGeometry, distanceTolerance), this.CRS);
     }
 
     public double getLength() {
@@ -117,19 +117,19 @@ public class Geometry implements Serializable {
     }
 
     public Geometry getCentroid() {
-        return new Geometry(internalGeometry.getCentroid());
+        return new Geometry(internalGeometry.getCentroid(), this.CRS);
     }
 
     public Geometry getInteriorPoint() {
-        return new Geometry(internalGeometry.getInteriorPoint());
+        return new Geometry(internalGeometry.getInteriorPoint(), this.CRS);
     }
 
     public Geometry getEnvelope() {
-        return new Geometry(internalGeometry.getEnvelope());
+        return new Geometry(internalGeometry.getEnvelope(), this.CRS);
     }
 
     public Geometry getBoundary() {
-        return new Geometry(internalGeometry.getBoundary());
+        return new Geometry(internalGeometry.getBoundary(), this.CRS);
     }
 
     public int getNumPoints() {
@@ -145,7 +145,7 @@ public class Geometry implements Serializable {
     }
 
     public Geometry getGeometryN(int n) {
-        return new Geometry(internalGeometry.getGeometryN(n));
+        return new Geometry(internalGeometry.getGeometryN(n), this.CRS);
     }
 
     /* Projection information */
@@ -191,21 +191,21 @@ public class Geometry implements Serializable {
 
     /* Geom intersection */
     public Geometry union(Geometry geom) {
-        return new Geometry(internalGeometry.union(geom.internalGeometry));
+        return new Geometry(internalGeometry.union(geom.internalGeometry), this.CRS);
     }
 
     public Geometry intersection(Geometry geom) {
         return new Geometry(internalGeometry
-                .intersection(geom.internalGeometry));
+                .intersection(geom.internalGeometry), this.CRS);
     }
 
     public Geometry symDifference(Geometry geom) {
         return new Geometry(internalGeometry
-                .symDifference(geom.internalGeometry));
+                .symDifference(geom.internalGeometry), this.CRS);
     }
 
     public Geometry difference(Geometry geom) {
-        return new Geometry(internalGeometry.difference(geom.internalGeometry));
+        return new Geometry(internalGeometry.difference(geom.internalGeometry), this.CRS);
     }
 
     /* 9IM operators */
