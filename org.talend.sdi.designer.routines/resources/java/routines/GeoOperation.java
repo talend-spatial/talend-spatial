@@ -228,6 +228,45 @@ public class GeoOperation {
     }
 
     /**
+     * RELATE( ) Returns the DE-9IM IntersectionMatrix for the two Geometrys.
+     * 
+     * {talendTypes} string | String
+     * 
+     * {Category} GeoOperation
+     * 
+     * {param} Geometry(row1.the_geom)
+     * 
+     * {param} Geometry(row2.the_geom)
+     * 
+     * {example} RELATE(row1.the_geom, row2.the_geom)
+     * 
+     */
+    public static String RELATE(Geometry geom1, Geometry geom2) {
+    	return geom1.relate(geom2);
+    }
+    
+    /**
+     * RELATE( ) Returns true if this Geometry overlaps the specified
+     * Geometry.
+     * 
+     * {talendTypes} boolean | Boolean
+     * 
+     * {Category} GeoOperation
+     * 
+     * {param} Geometry(row1.the_geom)
+     * 
+     * {param} Geometry(row2.the_geom)
+     * 
+     * {param} String("0FFFFFFF2")
+     * 
+     * {example} RELATE(row1.the_geom, row2.the_geom, "0FFFFFFF2")
+     * 
+     */
+    public static boolean RELATE(Geometry geom1, Geometry geom2, String intersectionMatrix) {
+    	return geom1.relate(geom2, intersectionMatrix);
+    }
+    
+    /**
      * GETDISTANCE( ) Returns the distance of the closest point of two geometries.
      * 
      * {talendTypes} double | Double

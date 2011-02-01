@@ -1,11 +1,11 @@
 package org.talend.sdi.geometry;
 
 import java.io.Serializable;
-import java.lang.String;
 
+import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
 import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
+import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
 
 public class Geometry implements Serializable {
 
@@ -31,6 +31,18 @@ public class Geometry implements Serializable {
         this.internalGeometry = internalGeometry;
     }
 
+    public Geometry(com.vividsolutions.jts.geom.Geometry internalGeometry,
+    		org.opengis.referencing.crs.CoordinateReferenceSystem CRS) {
+        this.internalGeometry = internalGeometry;
+        this.CRS = CRS;
+    }
+
+    public Geometry(com.vividsolutions.jts.geom.Geometry internalGeometry,
+    		String EPSGCode) {
+        this.internalGeometry = internalGeometry;
+        setCRS(EPSGCode);
+    }
+    
     public Geometry(String wkt) {
         com.vividsolutions.jts.io.WKTReader reader = new com.vividsolutions.jts.io.WKTReader();
         com.vividsolutions.jts.geom.Geometry geom = null;
@@ -60,6 +72,11 @@ public class Geometry implements Serializable {
         return internalGeometry.toString();
     }
 
+    // TODO : add CRS
+    public static Geometry parseGeometry(String geometry) {
+    	return new Geometry(geometry);
+    }
+    
     public Geometry buffer(double distance) {
         return new Geometry(internalGeometry.buffer(distance));
     }
@@ -156,6 +173,14 @@ public class Geometry implements Serializable {
         this.CRS = CRS;
     }
 
+    public void setCRS(String EPSGCode) {
+    	try {
+            this.CRS = org.geotools.referencing.CRS.decode(EPSGCode);
+        } catch (Exception e) {
+            System.out.println ("Set CRS error: " + e.getMessage());
+        }
+    }
+    
     public com.vividsolutions.jts.geom.Coordinate[] getCoordinates() {
         return internalGeometry.getCoordinates();
     }
@@ -219,7 +244,16 @@ public class Geometry implements Serializable {
     public boolean overlaps(Geometry geom) {
         return internalGeometry.overlaps(geom.internalGeometry);
     }
-
+    
+    public String relate(Geometry geom) {
+        IntersectionMatrix im = internalGeometry.relate(geom.internalGeometry);
+        return im.toString();
+    }
+    
+    public boolean relate(Geometry geom, String im) {
+        return internalGeometry.relate(geom.internalGeometry, im);
+    }
+    
     /* Geometry quality control */
     public String isValid() {
         return String.valueOf(internalGeometry.isValid());
