@@ -18,6 +18,7 @@ INode node = (INode)codeGenArgument.getArgument();
 
 String dbCol = ElementParameterParser.getValue(node,"__DB_COL__");
 String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+String geometryType = ElementParameterParser.getValue(node,"__GEOMETRY_TYPE__");
 String md = ElementParameterParser.getValue(node,"__MD__");
 String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
 
@@ -47,22 +48,20 @@ org.opengis.feature.simple.SimpleFeature outFeature_<%=cid%> = writer_<%=cid%>.n
 // TODO: don't we want to accept null geometries for PostGIS
 if (<%=conn.getName() %>.<%=column.getLabel() %> == null) 
     continue;
-    
-if (((org.talend.sdi.geometry.Geometry)<%=conn.getName() %>.<%=column.getLabel() %>).isEmpty())
+Geometry currentGeom = <%=conn.getName() %>.<%=column.getLabel() %>;    
+if (currentGeom.isEmpty())
     continue;
 <%
                         if (formatType.equals("POSTGIS")) {
 %>
 
 outFeature_<%=cid%>.setAttribute(
-    map_<%=cid %>.get(<%=dbCol %>),
-        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>))._getInternalGeometry());
+    map_<%=cid %>.get(<%=dbCol %>), currentGeom._getInternalGeometry());
 <%
                         } else {
 %>
 outFeature_<%=cid%>.setAttribute(
-    map_<%=cid %>.get("<%=column.getLabel() %>"),
-        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>))._getInternalGeometry());
+    map_<%=cid %>.get("<%=column.getLabel() %>"), currentGeom._getInternalGeometry());
 <%
                          }
                          
@@ -72,10 +71,23 @@ outFeature_<%=cid%>.setAttribute(
 /* Projection for shapefile - if not forced, set using feature CRS*/
 if (nbFeature_<%=cid%> == 0) {
     org.opengis.referencing.crs.CoordinateReferenceSystem crs_<%=cid %> = 
-        ((org.talend.sdi.geometry.Geometry)(<%=conn.getName() %>.<%=column.getLabel() %>)).getCRS();
+        currentGeom.getCRS();
     if (crs_<%=cid %> != null)
         ((org.geotools.data.shapefile.ShapefileDataStore)store_<%=cid %>).forceSchemaCRS(crs_<%=cid %>);
 }
+
+// Test geometry type according to shapefile type
+String currentGeomType = currentGeom.getGeometryType();
+if (!geometryType_<%=cid %>.equals(currentGeomType)) {
+	
+	String e = "Geometry type (" + currentGeomType 
+			+ ") does not match Shapefile geometry type (" 
+			+ geometryType_<%=cid %> 
+			+ "). Row #" + nbFeature_<%=cid%>;
+	RuntimeException ex = new RuntimeException(e);
+	throw new TalendException(ex, currentComponent, globalMap);
+}
+
 <%
                         }
                         
@@ -98,7 +110,11 @@ bbox<%=cid %>.expandToInclude(new org.geotools.geometry.jts.ReferencedEnvelope(o
 <%
                 }
 %>
-writer_<%=cid%>.write();
+try {
+  writer_<%=cid%>.write();
+} catch (Exception e) {
+  System.out.println(e.getMessage());
+}
 <%
             }
 %>      

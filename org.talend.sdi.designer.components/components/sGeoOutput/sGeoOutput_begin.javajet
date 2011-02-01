@@ -48,7 +48,8 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 %>
         /* initialize feature count */
         int nbFeature_<%=cid %> = 0;
-       
+        String geometryType_<%=cid %> = "<%= geometry%>".split("\\.")[4];
+        
        	/* Turn main geotools logger level to ERROR only */
         org.geotools.util.logging.Logging.GEOTOOLS.setLoggerFactory("org.geotools.util.logging.CommonsLoggerFactory");
         org.apache.log4j.Level level_<%=cid %> = <%=(logLevel.equals("")?"org.apache.log4j.Level.ERROR":logLevel) %>;
