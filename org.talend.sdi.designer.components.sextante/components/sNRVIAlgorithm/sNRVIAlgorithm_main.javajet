@@ -1,0 +1,122 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String layerred = ElementParameterParser.getValue(node, "__LAYERRED__");
+String bandred = ElementParameterParser.getValue(node, "__BANDRED__");
+String layernir = ElementParameterParser.getValue(node, "__LAYERNIR__");
+String bandnir = ElementParameterParser.getValue(node, "__BANDNIR__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(layerred)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_layerred = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_layerred = new java.io.File(<%=layerred %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_layerred = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_layerred);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_layerred = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_layerred.read(null);
+layer_<%=cid %>_layerred.create(coverage_<%=cid %>_layerred);
+layer_<%=cid %>_layerred.setName("LAYERRED");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandred)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layernir)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_layernir = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_layernir = new java.io.File(<%=layernir %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_layernir = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_layernir);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_layernir = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_layernir.read(null);
+layer_<%=cid %>_layernir.create(coverage_<%=cid %>_layernir);
+layer_<%=cid %>_layernir.setName("LAYERNIR");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandnir)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.vegetationIndices.nrvi.NRVIAlgorithm alg_<%=cid %> = new es.unex.sextante.vegetationIndices.nrvi.NRVIAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(layerred)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vegetationIndices.nrvi.NRVIAlgorithm.LAYERRED).setParameterValue(layer_<%=cid %>_layerred);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandred)) {
+%>
+params_<%=cid %>.getParameter("BANDRED").setParameterValue(<%=bandred %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layernir)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vegetationIndices.nrvi.NRVIAlgorithm.LAYERNIR).setParameterValue(layer_<%=cid %>_layernir);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandnir)) {
+%>
+params_<%=cid %>.getParameter("BANDNIR").setParameterValue(<%=bandnir %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.vegetationIndices.nrvi.NRVIAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

@@ -1,0 +1,103 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String layermain = ElementParameterParser.getValue(node, "__LAYERMAIN__");
+List<Map<String, String>> layers = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__LAYERS__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(layermain)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_layermain = new java.io.File( <%=layermain %> );
+java.util.Map connect_<%=cid %>_layermain = new java.util.HashMap();
+connect_<%=cid %>_layermain.put("url", file_<%=cid %>_layermain.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_layermain = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_layermain );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_layermain = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_layermain, ds_<%=cid %>_layermain.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layers)) {
+%>
+java.util.ArrayList<Object> layers_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<layers.size(); i++) {
+  Map<String, String> current = layers.get(i);
+  String currentfile = current.get("LAYERS");
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_layers_current<%=i %> = new java.io.File( <%=currentfile %> );
+java.util.Map connect_<%=cid %>_layers_current<%=i %> = new java.util.HashMap();
+connect_<%=cid %>_layers_current<%=i %>.put("url", file_<%=cid %>_layers_current<%=i %>.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_layers_current<%=i %> = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_layers_current<%=i %> );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_layers_current<%=i %> = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_layers_current<%=i %>, ds_<%=cid %>_layers_current<%=i %>.getTypeNames()[0]);
+layers_<%=cid %>.add(layer_<%=cid %>_layers_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.vectorTools.merge.MergeAlgorithm alg_<%=cid %> = new es.unex.sextante.vectorTools.merge.MergeAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(layermain)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.merge.MergeAlgorithm.LAYERMAIN).setParameterValue(layer_<%=cid %>_layermain);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layers)) {
+%>
+params_<%=cid %>.getParameter("LAYERS").setParameterValue(layers_<%=cid %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.vectorTools.merge.MergeAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

@@ -1,0 +1,176 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String streams = ElementParameterParser.getValue(node, "__STREAMS__");
+String order = ElementParameterParser.getValue(node, "__ORDER__");
+String length = ElementParameterParser.getValue(node, "__LENGTH__");
+String downslope = ElementParameterParser.getValue(node, "__DOWNSLOPE__");
+String basins = ElementParameterParser.getValue(node, "__BASINS__");
+String area = ElementParameterParser.getValue(node, "__AREA__");
+String velocity = ElementParameterParser.getValue(node, "__VELOCITY__");
+String interval = ElementParameterParser.getValue(node, "__INTERVAL__");
+String guh_out = ElementParameterParser.getValue(node, "__GUH_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(streams)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_streams = new java.io.File( <%=streams %> );
+java.util.Map connect_<%=cid %>_streams = new java.util.HashMap();
+connect_<%=cid %>_streams.put("url", file_<%=cid %>_streams.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_streams = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_streams );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_streams = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_streams, ds_<%=cid %>_streams.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(order)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(length)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(downslope)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(basins)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_basins = new java.io.File( <%=basins %> );
+java.util.Map connect_<%=cid %>_basins = new java.util.HashMap();
+connect_<%=cid %>_basins.put("url", file_<%=cid %>_basins.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_basins = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_basins );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_basins = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_basins, ds_<%=cid %>_basins.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(area)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(velocity)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.hydrology.guh.GUHAlgorithm alg_<%=cid %> = new es.unex.sextante.hydrology.guh.GUHAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(streams)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.guh.GUHAlgorithm.STREAMS).setParameterValue(layer_<%=cid %>_streams);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(order)) {
+%>
+params_<%=cid %>.getParameter("ORDER").setParameterValue(<%=order %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(length)) {
+%>
+params_<%=cid %>.getParameter("LENGTH").setParameterValue(<%=length %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(downslope)) {
+%>
+params_<%=cid %>.getParameter("DOWNSLOPE").setParameterValue(<%=downslope %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(basins)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.guh.GUHAlgorithm.BASINS).setParameterValue(layer_<%=cid %>_basins);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(area)) {
+%>
+params_<%=cid %>.getParameter("AREA").setParameterValue(<%=area %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(velocity)) {
+%>
+params_<%=cid %>.getParameter("VELOCITY").setParameterValue(Double.valueOf(<%=velocity%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+params_<%=cid %>.getParameter("INTERVAL").setParameterValue(Double.valueOf(<%=interval%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_guh_out = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.guh.GUHAlgorithm.GUH);
+af_<%=cid %>_guh_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=guh_out%>));
+globalMap.put("<%=cid %>_GUH_OUT", <%=guh_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

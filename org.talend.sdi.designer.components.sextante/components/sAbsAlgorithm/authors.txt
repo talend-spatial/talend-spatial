@@ -1,0 +1,18 @@
+Copyright (c) 2010 Victor Olaya
+
+The following people have contributed code:
+
+-Andrea Aime (GeoTools bindings and Maven integration)
+-Antonio Falciano (algorithms for tables and attributes tables)
+-Benjamin Ducke (GRASS integration)
+-Cesar Martinez Izquierdo (GeoTools bindings)
+-Fernando Gonzalez Cortés (Improvement in SEXTANTE core elements)
+-Nacho Brodín (gvSIG 1.9 bindings)
+-Nacho Varela (algorithms for vector layers and GUI redesign)
+
+Portions of this code have been adapted from SAGA, System for Automated Geographical Analysis, and relicensed with explicit permission of their copyright holders
+
+Copyrights (c) 2002-2005 by Olaf Conrad
+Portions (c) 2002 by Andre Ringeler
+Portions (c) 2005 by Victor Olaya
+

@@ -1,0 +1,136 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String cost = ElementParameterParser.getValue(node, "__COST__");
+String costdir = ElementParameterParser.getValue(node, "__COSTDIR__");
+String features = ElementParameterParser.getValue(node, "__FEATURES__");
+String kfactor = ElementParameterParser.getValue(node, "__KFACTOR__");
+String acccost_out = ElementParameterParser.getValue(node, "__ACCCOST_OUT__");
+String closestpoint_out = ElementParameterParser.getValue(node, "__CLOSESTPOINT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(cost)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_cost = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_cost = new java.io.File(<%=cost %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_cost = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_cost);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_cost = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_cost.read(null);
+layer_<%=cid %>_cost.create(coverage_<%=cid %>_cost);
+layer_<%=cid %>_cost.setName("COST");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(costdir)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_costdir = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_costdir = new java.io.File(<%=costdir %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_costdir = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_costdir);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_costdir = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_costdir.read(null);
+layer_<%=cid %>_costdir.create(coverage_<%=cid %>_costdir);
+layer_<%=cid %>_costdir.setName("COSTDIR");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(features)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_features = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_features = new java.io.File(<%=features %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_features = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_features);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_features = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_features.read(null);
+layer_<%=cid %>_features.create(coverage_<%=cid %>_features);
+layer_<%=cid %>_features.setName("FEATURES");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(kfactor)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(cost)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm.COST).setParameterValue(layer_<%=cid %>_cost);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(costdir)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm.COSTDIR).setParameterValue(layer_<%=cid %>_costdir);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(features)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm.FEATURES).setParameterValue(layer_<%=cid %>_features);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(kfactor)) {
+%>
+params_<%=cid %>.getParameter("KFACTOR").setParameterValue(Double.valueOf(<%=kfactor%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_acccost_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm.ACCCOST);
+af_<%=cid %>_acccost_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=acccost_out%>));
+globalMap.put("<%=cid %>_ACCCOST_OUT", <%=acccost_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_closestpoint_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.accCostAnisotropic.AccCostAnisotropicAlgorithm.CLOSESTPOINT);
+af_<%=cid %>_closestpoint_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=closestpoint_out%>));
+globalMap.put("<%=cid %>_CLOSESTPOINT_OUT", <%=closestpoint_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

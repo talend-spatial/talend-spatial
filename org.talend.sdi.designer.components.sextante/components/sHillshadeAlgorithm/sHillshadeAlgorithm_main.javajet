@@ -1,0 +1,129 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String dem = ElementParameterParser.getValue(node, "__DEM__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String declination = ElementParameterParser.getValue(node, "__DECLINATION__");
+String azimuth = ElementParameterParser.getValue(node, "__AZIMUTH__");
+String exaggeration = ElementParameterParser.getValue(node, "__EXAGGERATION__");
+String shaded_out = ElementParameterParser.getValue(node, "__SHADED_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(dem)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_dem = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_dem = new java.io.File(<%=dem %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_dem = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_dem);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_dem = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_dem.read(null);
+layer_<%=cid %>_dem.create(coverage_<%=cid %>_dem);
+layer_<%=cid %>_dem.setName("DEM");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(declination)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(azimuth)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(exaggeration)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.lighting.hillshade.HillshadeAlgorithm alg_<%=cid %> = new es.unex.sextante.lighting.hillshade.HillshadeAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(dem)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.hillshade.HillshadeAlgorithm.DEM).setParameterValue(layer_<%=cid %>_dem);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(declination)) {
+%>
+params_<%=cid %>.getParameter("DECLINATION").setParameterValue(Double.valueOf(<%=declination%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(azimuth)) {
+%>
+params_<%=cid %>.getParameter("AZIMUTH").setParameterValue(Double.valueOf(<%=azimuth%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(exaggeration)) {
+%>
+params_<%=cid %>.getParameter("EXAGGERATION").setParameterValue(Double.valueOf(<%=exaggeration%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_shaded_out = outputs_<%=cid %>.getOutput(es.unex.sextante.lighting.hillshade.HillshadeAlgorithm.SHADED);
+af_<%=cid %>_shaded_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=shaded_out%>));
+globalMap.put("<%=cid %>_SHADED_OUT", <%=shaded_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

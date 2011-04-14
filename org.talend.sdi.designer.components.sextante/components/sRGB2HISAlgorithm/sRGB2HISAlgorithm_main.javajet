@@ -1,0 +1,171 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String layerr = ElementParameterParser.getValue(node, "__LAYERR__");
+String bandr = ElementParameterParser.getValue(node, "__BANDR__");
+String layerg = ElementParameterParser.getValue(node, "__LAYERG__");
+String bandg = ElementParameterParser.getValue(node, "__BANDG__");
+String layerb = ElementParameterParser.getValue(node, "__LAYERB__");
+String bandb = ElementParameterParser.getValue(node, "__BANDB__");
+String h_out = ElementParameterParser.getValue(node, "__H_OUT__");
+String i_out = ElementParameterParser.getValue(node, "__I_OUT__");
+String s_out = ElementParameterParser.getValue(node, "__S_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(layerr)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_layerr = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_layerr = new java.io.File(<%=layerr %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_layerr = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_layerr);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_layerr = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_layerr.read(null);
+layer_<%=cid %>_layerr.create(coverage_<%=cid %>_layerr);
+layer_<%=cid %>_layerr.setName("LAYERR");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandr)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layerg)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_layerg = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_layerg = new java.io.File(<%=layerg %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_layerg = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_layerg);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_layerg = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_layerg.read(null);
+layer_<%=cid %>_layerg.create(coverage_<%=cid %>_layerg);
+layer_<%=cid %>_layerg.setName("LAYERG");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandg)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layerb)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_layerb = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_layerb = new java.io.File(<%=layerb %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_layerb = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_layerb);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_layerb = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_layerb.read(null);
+layer_<%=cid %>_layerb.create(coverage_<%=cid %>_layerb);
+layer_<%=cid %>_layerb.setName("LAYERB");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandb)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm alg_<%=cid %> = new es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(layerr)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.LAYERR).setParameterValue(layer_<%=cid %>_layerr);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandr)) {
+%>
+params_<%=cid %>.getParameter("BANDR").setParameterValue(<%=bandr %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layerg)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.LAYERG).setParameterValue(layer_<%=cid %>_layerg);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandg)) {
+%>
+params_<%=cid %>.getParameter("BANDG").setParameterValue(<%=bandg %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layerb)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.LAYERB).setParameterValue(layer_<%=cid %>_layerb);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(bandb)) {
+%>
+params_<%=cid %>.getParameter("BANDB").setParameterValue(<%=bandb %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_h_out = outputs_<%=cid %>.getOutput(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.H);
+af_<%=cid %>_h_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=h_out%>));
+globalMap.put("<%=cid %>_H_OUT", <%=h_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_i_out = outputs_<%=cid %>.getOutput(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.I);
+af_<%=cid %>_i_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=i_out%>));
+globalMap.put("<%=cid %>_I_OUT", <%=i_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_s_out = outputs_<%=cid %>.getOutput(es.unex.sextante.imageAnalysis.rgb2his.RGB2HISAlgorithm.S);
+af_<%=cid %>_s_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=s_out%>));
+globalMap.put("<%=cid %>_S_OUT", <%=s_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

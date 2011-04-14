@@ -1,0 +1,107 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String points = ElementParameterParser.getValue(node, "__POINTS__");
+String field = ElementParameterParser.getValue(node, "__FIELD__");
+String interval = ElementParameterParser.getValue(node, "__INTERVAL__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+String cloud_out = ElementParameterParser.getValue(node, "__CLOUD_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(points)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_points = new java.io.File( <%=points %> );
+java.util.Map connect_<%=cid %>_points = new java.util.HashMap();
+connect_<%=cid %>_points.put("url", file_<%=cid %>_points.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_points = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_points );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_points = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_points, ds_<%=cid %>_points.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.pointAnalysis.spatialCorrelation.SpatialCorrelationAlgorithm alg_<%=cid %> = new es.unex.sextante.pointAnalysis.spatialCorrelation.SpatialCorrelationAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(points)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.pointAnalysis.spatialCorrelation.SpatialCorrelationAlgorithm.POINTS).setParameterValue(layer_<%=cid %>_points);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+params_<%=cid %>.getParameter("FIELD").setParameterValue(<%=field %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+params_<%=cid %>.getParameter("INTERVAL").setParameterValue(Double.valueOf(<%=interval%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.pointAnalysis.spatialCorrelation.SpatialCorrelationAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_cloud_out = outputs_<%=cid %>.getOutput(es.unex.sextante.pointAnalysis.spatialCorrelation.SpatialCorrelationAlgorithm.CLOUD);
+af_<%=cid %>_cloud_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=cloud_out%>));
+globalMap.put("<%=cid %>_CLOUD_OUT", <%=cloud_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

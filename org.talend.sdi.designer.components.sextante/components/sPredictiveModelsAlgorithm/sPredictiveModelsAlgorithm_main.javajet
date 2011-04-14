@@ -1,0 +1,132 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<Map<String, String>> input = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__INPUT__");
+String points = ElementParameterParser.getValue(node, "__POINTS__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String cutoff = ElementParameterParser.getValue(node, "__CUTOFF__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+java.util.ArrayList<Object> input_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<input.size(); i++) {
+  Map<String, String> current = input.get(i);
+  String currentfile = current.get("INPUT");
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_input_current<%=i %> = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_input_current<%=i %> = new java.io.File(<%=currentfile %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_input_current<%=i %> = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_input_current<%=i %>);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_input_current<%=i %> = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_input_current<%=i %>.read(null);
+layer_<%=cid %>_input_current<%=i %>.create(coverage_<%=cid %>_input_current<%=i %>);
+layer_<%=cid %>_input_current<%=i %>.setName("input_current<%=i %>");
+input_<%=cid %>.add(layer_<%=cid %>_input_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(points)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_points = new java.io.File( <%=points %> );
+java.util.Map connect_<%=cid %>_points = new java.util.HashMap();
+connect_<%=cid %>_points.put("url", file_<%=cid %>_points.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_points = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_points );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_points = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_points, ds_<%=cid %>_points.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cutoff)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.predictiveModels.PredictiveModelsAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.predictiveModels.PredictiveModelsAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter("INPUT").setParameterValue(input_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(points)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.predictiveModels.PredictiveModelsAlgorithm.POINTS).setParameterValue(layer_<%=cid %>_points);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cutoff)) {
+%>
+params_<%=cid %>.getParameter("CUTOFF").setParameterValue(Double.valueOf(<%=cutoff%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.predictiveModels.PredictiveModelsAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

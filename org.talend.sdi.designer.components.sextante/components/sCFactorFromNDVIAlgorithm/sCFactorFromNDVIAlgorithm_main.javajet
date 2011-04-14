@@ -1,0 +1,101 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String ndvi = ElementParameterParser.getValue(node, "__NDVI__");
+String alpha = ElementParameterParser.getValue(node, "__ALPHA__");
+String beta = ElementParameterParser.getValue(node, "__BETA__");
+String cfactor_out = ElementParameterParser.getValue(node, "__CFACTOR_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(ndvi)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_ndvi = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_ndvi = new java.io.File(<%=ndvi %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_ndvi = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_ndvi);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_ndvi = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_ndvi.read(null);
+layer_<%=cid %>_ndvi.create(coverage_<%=cid %>_ndvi);
+layer_<%=cid %>_ndvi.setName("NDVI");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(alpha)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(beta)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.hydrology.cFactorFromNDVI.CFactorFromNDVIAlgorithm alg_<%=cid %> = new es.unex.sextante.hydrology.cFactorFromNDVI.CFactorFromNDVIAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(ndvi)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.cFactorFromNDVI.CFactorFromNDVIAlgorithm.NDVI).setParameterValue(layer_<%=cid %>_ndvi);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(alpha)) {
+%>
+params_<%=cid %>.getParameter("ALPHA").setParameterValue(Double.valueOf(<%=alpha%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(beta)) {
+%>
+params_<%=cid %>.getParameter("BETA").setParameterValue(Double.valueOf(<%=beta%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_cfactor_out = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.cFactorFromNDVI.CFactorFromNDVIAlgorithm.CFACTOR);
+af_<%=cid %>_cfactor_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=cfactor_out%>));
+globalMap.put("<%=cid %>_CFACTOR_OUT", <%=cfactor_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

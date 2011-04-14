@@ -1,0 +1,88 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String input = ElementParameterParser.getValue(node, "__INPUT__");
+String max_size = ElementParameterParser.getValue(node, "__MAX_SIZE__");
+String result_table_out = ElementParameterParser.getValue(node, "__RESULT_TABLE_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_input = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_input = new java.io.File(<%=input %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_input = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_input);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_input = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_input.read(null);
+layer_<%=cid %>_input.create(coverage_<%=cid %>_input);
+layer_<%=cid %>_input.setName("INPUT");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(max_size)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridCategorical.lacunarity.LacunarityAlgorithm alg_<%=cid %> = new es.unex.sextante.gridCategorical.lacunarity.LacunarityAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridCategorical.lacunarity.LacunarityAlgorithm.INPUT).setParameterValue(layer_<%=cid %>_input);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(max_size)) {
+%>
+params_<%=cid %>.getParameter("MAX_SIZE").setParameterValue(Double.valueOf(<%=max_size%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_table_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridCategorical.lacunarity.LacunarityAlgorithm.RESULT_TABLE);
+af_<%=cid %>_result_table_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_table_out%>));
+globalMap.put("<%=cid %>_RESULT_TABLE_OUT", <%=result_table_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+// TODO Unsupported type: RESULT_CHART[OutputChart]
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

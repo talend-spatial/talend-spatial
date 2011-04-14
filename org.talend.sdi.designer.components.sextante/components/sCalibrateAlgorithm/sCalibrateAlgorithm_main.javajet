@@ -1,0 +1,143 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String input = ElementParameterParser.getValue(node, "__INPUT__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String stddev = ElementParameterParser.getValue(node, "__STDDEV__");
+String mean = ElementParameterParser.getValue(node, "__MEAN__");
+String gain = ElementParameterParser.getValue(node, "__GAIN__");
+String offset = ElementParameterParser.getValue(node, "__OFFSET__");
+String calibrated_out = ElementParameterParser.getValue(node, "__CALIBRATED_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_input = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_input = new java.io.File(<%=input %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_input = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_input);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_input = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_input.read(null);
+layer_<%=cid %>_input.create(coverage_<%=cid %>_input);
+layer_<%=cid %>_input.setName("INPUT");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stddev)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(mean)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(gain)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(offset)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.imageAnalysis.calibrate.CalibrateAlgorithm alg_<%=cid %> = new es.unex.sextante.imageAnalysis.calibrate.CalibrateAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.imageAnalysis.calibrate.CalibrateAlgorithm.INPUT).setParameterValue(layer_<%=cid %>_input);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stddev)) {
+%>
+params_<%=cid %>.getParameter("STDDEV").setParameterValue(Double.valueOf(<%=stddev%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(mean)) {
+%>
+params_<%=cid %>.getParameter("MEAN").setParameterValue(Double.valueOf(<%=mean%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(gain)) {
+%>
+params_<%=cid %>.getParameter("GAIN").setParameterValue(Double.valueOf(<%=gain%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(offset)) {
+%>
+params_<%=cid %>.getParameter("OFFSET").setParameterValue(Double.valueOf(<%=offset%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_calibrated_out = outputs_<%=cid %>.getOutput(es.unex.sextante.imageAnalysis.calibrate.CalibrateAlgorithm.CALIBRATED);
+af_<%=cid %>_calibrated_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=calibrated_out%>));
+globalMap.put("<%=cid %>_CALIBRATED_OUT", <%=calibrated_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

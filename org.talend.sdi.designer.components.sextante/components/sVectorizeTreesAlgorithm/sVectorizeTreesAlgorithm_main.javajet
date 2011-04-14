@@ -1,0 +1,126 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<Map<String, String>> input = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__INPUT__");
+String polygons = ElementParameterParser.getValue(node, "__POLYGONS__");
+String tolerance_spectral = ElementParameterParser.getValue(node, "__TOLERANCE_SPECTRAL__");
+String tolerance_size = ElementParameterParser.getValue(node, "__TOLERANCE_SIZE__");
+String trees_out = ElementParameterParser.getValue(node, "__TREES_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+java.util.ArrayList<Object> input_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<input.size(); i++) {
+  Map<String, String> current = input.get(i);
+  String currentfile = current.get("INPUT");
+%>
+// TODO
+input_<%=cid %>.add(layer_<%=cid %>_input_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(polygons)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_polygons = new java.io.File( <%=polygons %> );
+java.util.Map connect_<%=cid %>_polygons = new java.util.HashMap();
+connect_<%=cid %>_polygons.put("url", file_<%=cid %>_polygons.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_polygons = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_polygons );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_polygons = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_polygons, ds_<%=cid %>_polygons.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tolerance_spectral)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tolerance_size)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.imageAnalysis.vectorizeTrees.VectorizeTreesAlgorithm alg_<%=cid %> = new es.unex.sextante.imageAnalysis.vectorizeTrees.VectorizeTreesAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter("INPUT").setParameterValue(input_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(polygons)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.imageAnalysis.vectorizeTrees.VectorizeTreesAlgorithm.POLYGONS).setParameterValue(layer_<%=cid %>_polygons);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tolerance_spectral)) {
+%>
+params_<%=cid %>.getParameter("TOLERANCE_SPECTRAL").setParameterValue(Double.valueOf(<%=tolerance_spectral%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tolerance_size)) {
+%>
+params_<%=cid %>.getParameter("TOLERANCE_SIZE").setParameterValue(Double.valueOf(<%=tolerance_size%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_trees_out = outputs_<%=cid %>.getOutput(es.unex.sextante.imageAnalysis.vectorizeTrees.VectorizeTreesAlgorithm.TREES);
+af_<%=cid %>_trees_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=trees_out%>));
+globalMap.put("<%=cid %>_TREES_OUT", <%=trees_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

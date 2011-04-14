@@ -1,0 +1,122 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String minx = ElementParameterParser.getValue(node, "__MINX__");
+String maxx = ElementParameterParser.getValue(node, "__MAXX__");
+String miny = ElementParameterParser.getValue(node, "__MINY__");
+String maxy = ElementParameterParser.getValue(node, "__MAXY__");
+String formula = ElementParameterParser.getValue(node, "__FORMULA__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(minx)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxx)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(miny)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxy)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(formula)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridCalculus.gridFromFunction.GridFromFunctionAlgorithm alg_<%=cid %> = new es.unex.sextante.gridCalculus.gridFromFunction.GridFromFunctionAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(minx)) {
+%>
+params_<%=cid %>.getParameter("MINX").setParameterValue(Double.valueOf(<%=minx%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxx)) {
+%>
+params_<%=cid %>.getParameter("MAXX").setParameterValue(Double.valueOf(<%=maxx%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(miny)) {
+%>
+params_<%=cid %>.getParameter("MINY").setParameterValue(Double.valueOf(<%=miny%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxy)) {
+%>
+params_<%=cid %>.getParameter("MAXY").setParameterValue(Double.valueOf(<%=maxy%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(formula)) {
+%>
+params_<%=cid %>.getParameter("FORMULA").setParameterValue(<%=formula %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridCalculus.gridFromFunction.GridFromFunctionAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

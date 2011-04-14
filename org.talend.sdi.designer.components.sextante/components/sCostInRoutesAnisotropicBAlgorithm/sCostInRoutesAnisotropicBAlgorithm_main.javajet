@@ -1,0 +1,128 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String routes = ElementParameterParser.getValue(node, "__ROUTES__");
+String cost = ElementParameterParser.getValue(node, "__COST__");
+String costdir = ElementParameterParser.getValue(node, "__COSTDIR__");
+String factors = ElementParameterParser.getValue(node, "__FACTORS__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(routes)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_routes = new java.io.File( <%=routes %> );
+java.util.Map connect_<%=cid %>_routes = new java.util.HashMap();
+connect_<%=cid %>_routes.put("url", file_<%=cid %>_routes.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_routes = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_routes );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_routes = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_routes, ds_<%=cid %>_routes.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cost)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_cost = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_cost = new java.io.File(<%=cost %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_cost = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_cost);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_cost = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_cost.read(null);
+layer_<%=cid %>_cost.create(coverage_<%=cid %>_cost);
+layer_<%=cid %>_cost.setName("COST");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(costdir)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_costdir = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_costdir = new java.io.File(<%=costdir %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_costdir = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_costdir);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_costdir = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_costdir.read(null);
+layer_<%=cid %>_costdir.create(coverage_<%=cid %>_costdir);
+layer_<%=cid %>_costdir.setName("COSTDIR");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(factors)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(routes)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm.ROUTES).setParameterValue(layer_<%=cid %>_routes);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cost)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm.COST).setParameterValue(layer_<%=cid %>_cost);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(costdir)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm.COSTDIR).setParameterValue(layer_<%=cid %>_costdir);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(factors)) {
+%>
+params_<%=cid %>.getParameter("FACTORS").setParameterValue(<%=factors %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.costInRoutesAnisotropicB.CostInRoutesAnisotropicBAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

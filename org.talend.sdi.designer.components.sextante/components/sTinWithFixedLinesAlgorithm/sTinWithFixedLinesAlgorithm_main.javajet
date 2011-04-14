@@ -1,0 +1,140 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String triangles = ElementParameterParser.getValue(node, "__TRIANGLES__");
+String hardlines = ElementParameterParser.getValue(node, "__HARDLINES__");
+String softlines = ElementParameterParser.getValue(node, "__SOFTLINES__");
+String hardlines_b = ElementParameterParser.getValue(node, "__HARDLINES_B__");
+String softlines_b = ElementParameterParser.getValue(node, "__SOFTLINES_B__");
+String triangles_out = ElementParameterParser.getValue(node, "__TRIANGLES_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(triangles)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_triangles = new java.io.File( <%=triangles %> );
+java.util.Map connect_<%=cid %>_triangles = new java.util.HashMap();
+connect_<%=cid %>_triangles.put("url", file_<%=cid %>_triangles.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_triangles = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_triangles );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_triangles = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_triangles, ds_<%=cid %>_triangles.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hardlines)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_hardlines = new java.io.File( <%=hardlines %> );
+java.util.Map connect_<%=cid %>_hardlines = new java.util.HashMap();
+connect_<%=cid %>_hardlines.put("url", file_<%=cid %>_hardlines.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_hardlines = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_hardlines );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_hardlines = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_hardlines, ds_<%=cid %>_hardlines.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(softlines)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_softlines = new java.io.File( <%=softlines %> );
+java.util.Map connect_<%=cid %>_softlines = new java.util.HashMap();
+connect_<%=cid %>_softlines.put("url", file_<%=cid %>_softlines.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_softlines = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_softlines );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_softlines = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_softlines, ds_<%=cid %>_softlines.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hardlines_b)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(softlines_b)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm alg_<%=cid %> = new es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(triangles)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm.TRIANGLES).setParameterValue(layer_<%=cid %>_triangles);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hardlines)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm.HARDLINES).setParameterValue(layer_<%=cid %>_hardlines);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(softlines)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm.SOFTLINES).setParameterValue(layer_<%=cid %>_softlines);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hardlines_b)) {
+%>
+params_<%=cid %>.getParameter("HARDLINES_B").setParameterValue(<%=hardlines_b %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(softlines_b)) {
+%>
+params_<%=cid %>.getParameter("SOFTLINES_B").setParameterValue(<%=softlines_b %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_triangles_out = outputs_<%=cid %>.getOutput(es.unex.sextante.vectorTools.tinWithFixedLines.TinWithFixedLinesAlgorithm.TRIANGLES);
+af_<%=cid %>_triangles_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=triangles_out%>));
+globalMap.put("<%=cid %>_TRIANGLES_OUT", <%=triangles_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

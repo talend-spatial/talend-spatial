@@ -1,0 +1,101 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String angle = ElementParameterParser.getValue(node, "__ANGLE__");
+String distance = ElementParameterParser.getValue(node, "__DISTANCE__");
+String x_out = ElementParameterParser.getValue(node, "__X_OUT__");
+String y_out = ElementParameterParser.getValue(node, "__Y_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(angle)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_angle = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_angle = new java.io.File(<%=angle %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_angle = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_angle);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_angle = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_angle.read(null);
+layer_<%=cid %>_angle.create(coverage_<%=cid %>_angle);
+layer_<%=cid %>_angle.setName("ANGLE");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(distance)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_distance = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_distance = new java.io.File(<%=distance %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_distance = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_distance);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_distance = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_distance.read(null);
+layer_<%=cid %>_distance.create(coverage_<%=cid %>_distance);
+layer_<%=cid %>_distance.setName("DISTANCE");
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(angle)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm.ANGLE).setParameterValue(layer_<%=cid %>_angle);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(distance)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm.DISTANCE).setParameterValue(layer_<%=cid %>_distance);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_x_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm.X);
+af_<%=cid %>_x_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=x_out%>));
+globalMap.put("<%=cid %>_X_OUT", <%=x_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_y_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.polarToRect.PolarToRectAlgorithm.Y);
+af_<%=cid %>_y_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=y_out%>));
+globalMap.put("<%=cid %>_Y_OUT", <%=y_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

@@ -1,0 +1,122 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String dem = ElementParameterParser.getValue(node, "__DEM__");
+String weights = ElementParameterParser.getValue(node, "__WEIGHTS__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String convergence = ElementParameterParser.getValue(node, "__CONVERGENCE__");
+String flowacc_out = ElementParameterParser.getValue(node, "__FLOWACC_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(dem)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_dem = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_dem = new java.io.File(<%=dem %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_dem = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_dem);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_dem = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_dem.read(null);
+layer_<%=cid %>_dem.create(coverage_<%=cid %>_dem);
+layer_<%=cid %>_dem.setName("DEM");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(weights)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_weights = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_weights = new java.io.File(<%=weights %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_weights = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_weights);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_weights = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_weights.read(null);
+layer_<%=cid %>_weights.create(coverage_<%=cid %>_weights);
+layer_<%=cid %>_weights.setName("WEIGHTS");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(convergence)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.hydrology.accFlow.AccFlowAlgorithm alg_<%=cid %> = new es.unex.sextante.hydrology.accFlow.AccFlowAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(dem)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.accFlow.AccFlowAlgorithm.DEM).setParameterValue(layer_<%=cid %>_dem);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(weights)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.accFlow.AccFlowAlgorithm.WEIGHTS).setParameterValue(layer_<%=cid %>_weights);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(convergence)) {
+%>
+params_<%=cid %>.getParameter("CONVERGENCE").setParameterValue(Double.valueOf(<%=convergence%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_flowacc_out = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.accFlow.AccFlowAlgorithm.FLOWACC);
+af_<%=cid %>_flowacc_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=flowacc_out%>));
+globalMap.put("<%=cid %>_FLOWACC_OUT", <%=flowacc_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

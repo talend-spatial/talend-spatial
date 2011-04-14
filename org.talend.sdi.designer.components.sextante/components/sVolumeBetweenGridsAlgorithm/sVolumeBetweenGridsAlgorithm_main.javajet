@@ -1,0 +1,88 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String lgrid = ElementParameterParser.getValue(node, "__LGRID__");
+String ugrid = ElementParameterParser.getValue(node, "__UGRID__");
+
+%>
+
+<%
+if (!"\"\"".equals(lgrid)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_lgrid = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_lgrid = new java.io.File(<%=lgrid %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_lgrid = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_lgrid);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_lgrid = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_lgrid.read(null);
+layer_<%=cid %>_lgrid.create(coverage_<%=cid %>_lgrid);
+layer_<%=cid %>_lgrid.setName("LGRID");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(ugrid)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_ugrid = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_ugrid = new java.io.File(<%=ugrid %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_ugrid = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_ugrid);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_ugrid = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_ugrid.read(null);
+layer_<%=cid %>_ugrid.create(coverage_<%=cid %>_ugrid);
+layer_<%=cid %>_ugrid.setName("UGRID");
+<%
+}
+%>
+
+
+es.unex.sextante.gridCalculus.volumeBetweenGrids.VolumeBetweenGridsAlgorithm alg_<%=cid %> = new es.unex.sextante.gridCalculus.volumeBetweenGrids.VolumeBetweenGridsAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(lgrid)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridCalculus.volumeBetweenGrids.VolumeBetweenGridsAlgorithm.LGRID).setParameterValue(layer_<%=cid %>_lgrid);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(ugrid)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridCalculus.volumeBetweenGrids.VolumeBetweenGridsAlgorithm.UGRID).setParameterValue(layer_<%=cid %>_ugrid);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+// TODO Unsupported type: VOL[OutputText]
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

@@ -1,0 +1,175 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String timeout = ElementParameterParser.getValue(node, "__TIMEOUT__");
+String cn = ElementParameterParser.getValue(node, "__CN__");
+String stations = ElementParameterParser.getValue(node, "__STATIONS__");
+String field = ElementParameterParser.getValue(node, "__FIELD__");
+List<Map<String, String>> tables = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__TABLES__");
+String intervalhydro = ElementParameterParser.getValue(node, "__INTERVALHYDRO__");
+String intervalhyeto = ElementParameterParser.getValue(node, "__INTERVALHYETO__");
+
+%>
+
+<%
+if (!"\"\"".equals(timeout)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_timeout = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_timeout = new java.io.File(<%=timeout %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_timeout = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_timeout);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_timeout = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_timeout.read(null);
+layer_<%=cid %>_timeout.create(coverage_<%=cid %>_timeout);
+layer_<%=cid %>_timeout.setName("TIMEOUT");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cn)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_cn = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_cn = new java.io.File(<%=cn %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_cn = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_cn);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_cn = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_cn.read(null);
+layer_<%=cid %>_cn.create(coverage_<%=cid %>_cn);
+layer_<%=cid %>_cn.setName("CN");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stations)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_stations = new java.io.File( <%=stations %> );
+java.util.Map connect_<%=cid %>_stations = new java.util.HashMap();
+connect_<%=cid %>_stations.put("url", file_<%=cid %>_stations.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_stations = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_stations );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_stations = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_stations, ds_<%=cid %>_stations.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tables)) {
+%>
+java.util.ArrayList<Object> tables_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<tables.size(); i++) {
+  Map<String, String> current = tables.get(i);
+  String currentfile = current.get("TABLES");
+%>
+// TODO
+tables_<%=cid %>.add(layer_<%=cid %>_tables_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervalhydro)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervalhyeto)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.hydrology.hydroModel.HydroModelAlgorithm alg_<%=cid %> = new es.unex.sextante.hydrology.hydroModel.HydroModelAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(timeout)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.hydroModel.HydroModelAlgorithm.TIMEOUT).setParameterValue(layer_<%=cid %>_timeout);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(cn)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.hydroModel.HydroModelAlgorithm.CN).setParameterValue(layer_<%=cid %>_cn);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stations)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.hydrology.hydroModel.HydroModelAlgorithm.STATIONS).setParameterValue(layer_<%=cid %>_stations);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+params_<%=cid %>.getParameter("FIELD").setParameterValue(<%=field %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(tables)) {
+%>
+params_<%=cid %>.getParameter("TABLES").setParameterValue(tables_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervalhydro)) {
+%>
+params_<%=cid %>.getParameter("INTERVALHYDRO").setParameterValue(Double.valueOf(<%=intervalhydro%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervalhyeto)) {
+%>
+params_<%=cid %>.getParameter("INTERVALHYETO").setParameterValue(Double.valueOf(<%=intervalhyeto%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

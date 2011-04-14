@@ -1,0 +1,143 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String features = ElementParameterParser.getValue(node, "__FEATURES__");
+String values = ElementParameterParser.getValue(node, "__VALUES__");
+String threshold = ElementParameterParser.getValue(node, "__THRESHOLD__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String absolute_threshold = ElementParameterParser.getValue(node, "__ABSOLUTE_THRESHOLD__");
+String buffer_layer_out = ElementParameterParser.getValue(node, "__BUFFER_LAYER_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(features)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_features = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_features = new java.io.File(<%=features %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_features = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_features);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_features = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_features.read(null);
+layer_<%=cid %>_features.create(coverage_<%=cid %>_features);
+layer_<%=cid %>_features.setName("FEATURES");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(values)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_values = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_values = new java.io.File(<%=values %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_values = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_values);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_values = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_values.read(null);
+layer_<%=cid %>_values.create(coverage_<%=cid %>_values);
+layer_<%=cid %>_values.setName("VALUES");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(threshold)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_threshold = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_threshold = new java.io.File(<%=threshold %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_threshold = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_threshold);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_threshold = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_threshold.read(null);
+layer_<%=cid %>_threshold.create(coverage_<%=cid %>_threshold);
+layer_<%=cid %>_threshold.setName("THRESHOLD");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(absolute_threshold)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm alg_<%=cid %> = new es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(features)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm.FEATURES).setParameterValue(layer_<%=cid %>_features);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(values)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm.VALUES).setParameterValue(layer_<%=cid %>_values);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(threshold)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm.THRESHOLD).setParameterValue(layer_<%=cid %>_threshold);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(absolute_threshold)) {
+%>
+params_<%=cid %>.getParameter("ABSOLUTE_THRESHOLD").setParameterValue(Double.valueOf(<%=absolute_threshold%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_buffer_layer_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridTools.thresholdBuffer.ThresholdBufferAlgorithm.BUFFER_LAYER);
+af_<%=cid %>_buffer_layer_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=buffer_layer_out%>));
+globalMap.put("<%=cid %>_BUFFER_LAYER_OUT", <%=buffer_layer_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

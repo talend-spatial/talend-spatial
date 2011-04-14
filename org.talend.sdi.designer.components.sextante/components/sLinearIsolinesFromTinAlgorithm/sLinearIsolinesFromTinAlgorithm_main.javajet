@@ -1,0 +1,128 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String tin = ElementParameterParser.getValue(node, "__TIN__");
+String equidistance = ElementParameterParser.getValue(node, "__EQUIDISTANCE__");
+String lod = ElementParameterParser.getValue(node, "__LoD__");
+String clustertol = ElementParameterParser.getValue(node, "__ClusterTol__");
+String smooth = ElementParameterParser.getValue(node, "__Smooth__");
+String isolines_out = ElementParameterParser.getValue(node, "__ISOLINES_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(tin)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_tin = new java.io.File( <%=tin %> );
+java.util.Map connect_<%=cid %>_tin = new java.util.HashMap();
+connect_<%=cid %>_tin.put("url", file_<%=cid %>_tin.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_tin = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_tin );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_tin = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_tin, ds_<%=cid %>_tin.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(equidistance)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(lod)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(clustertol)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(smooth)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.tin.linearIsolinesFromTin.LinearIsolinesFromTinAlgorithm alg_<%=cid %> = new es.unex.sextante.tin.linearIsolinesFromTin.LinearIsolinesFromTinAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(tin)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.tin.linearIsolinesFromTin.LinearIsolinesFromTinAlgorithm.TIN).setParameterValue(layer_<%=cid %>_tin);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(equidistance)) {
+%>
+params_<%=cid %>.getParameter("EQUIDISTANCE").setParameterValue(Double.valueOf(<%=equidistance%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(lod)) {
+%>
+params_<%=cid %>.getParameter("LoD").setParameterValue(<%=lod %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(clustertol)) {
+%>
+params_<%=cid %>.getParameter("ClusterTol").setParameterValue(Double.valueOf(<%=clustertol%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(smooth)) {
+%>
+params_<%=cid %>.getParameter("Smooth").setParameterValue(Double.valueOf(<%=smooth%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_isolines_out = outputs_<%=cid %>.getOutput(es.unex.sextante.tin.linearIsolinesFromTin.LinearIsolinesFromTinAlgorithm.ISOLINES);
+af_<%=cid %>_isolines_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=isolines_out%>));
+globalMap.put("<%=cid %>_ISOLINES_OUT", <%=isolines_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

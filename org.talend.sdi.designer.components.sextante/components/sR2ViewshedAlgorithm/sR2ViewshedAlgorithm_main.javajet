@@ -1,0 +1,129 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String dem = ElementParameterParser.getValue(node, "__DEM__");
+String point = ElementParameterParser.getValue(node, "__POINT_X__") + ", " + ElementParameterParser.getValue(node, "__POINT_Y__");
+String height = ElementParameterParser.getValue(node, "__HEIGHT__");
+String heightobs = ElementParameterParser.getValue(node, "__HEIGHTOBS__");
+String radius = ElementParameterParser.getValue(node, "__RADIUS__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(dem)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_dem = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_dem = new java.io.File(<%=dem %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_dem = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_dem);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_dem = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_dem.read(null);
+layer_<%=cid %>_dem.create(coverage_<%=cid %>_dem);
+layer_<%=cid %>_dem.setName("DEM");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(point)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(height)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(heightobs)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(radius)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.lighting.viewshed.R2ViewshedAlgorithm alg_<%=cid %> = new es.unex.sextante.lighting.viewshed.R2ViewshedAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(dem)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.viewshed.R2ViewshedAlgorithm.DEM).setParameterValue(layer_<%=cid %>_dem);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(point)) {
+%>
+params_<%=cid %>.getParameter("POINT").setParameterValue(new java.awt.geom.Point2D.Double(<%=point %>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(height)) {
+%>
+params_<%=cid %>.getParameter("HEIGHT").setParameterValue(Double.valueOf(<%=height%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(heightobs)) {
+%>
+params_<%=cid %>.getParameter("HEIGHTOBS").setParameterValue(Double.valueOf(<%=heightobs%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(radius)) {
+%>
+params_<%=cid %>.getParameter("RADIUS").setParameterValue(Double.valueOf(<%=radius%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.lighting.viewshed.R2ViewshedAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

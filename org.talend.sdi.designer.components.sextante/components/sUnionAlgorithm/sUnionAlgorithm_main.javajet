@@ -1,0 +1,92 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String layer1 = ElementParameterParser.getValue(node, "__LAYER1__");
+String layer2 = ElementParameterParser.getValue(node, "__LAYER2__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(layer1)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_layer1 = new java.io.File( <%=layer1 %> );
+java.util.Map connect_<%=cid %>_layer1 = new java.util.HashMap();
+connect_<%=cid %>_layer1.put("url", file_<%=cid %>_layer1.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_layer1 = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_layer1 );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_layer1 = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_layer1, ds_<%=cid %>_layer1.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layer2)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_layer2 = new java.io.File( <%=layer2 %> );
+java.util.Map connect_<%=cid %>_layer2 = new java.util.HashMap();
+connect_<%=cid %>_layer2.put("url", file_<%=cid %>_layer2.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_layer2 = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_layer2 );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_layer2 = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_layer2, ds_<%=cid %>_layer2.getTypeNames()[0]);
+<%
+}
+%>
+
+
+es.unex.sextante.vectorTools.union.UnionAlgorithm alg_<%=cid %> = new es.unex.sextante.vectorTools.union.UnionAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(layer1)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.union.UnionAlgorithm.LAYER1).setParameterValue(layer_<%=cid %>_layer1);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(layer2)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.vectorTools.union.UnionAlgorithm.LAYER2).setParameterValue(layer_<%=cid %>_layer2);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.vectorTools.union.UnionAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

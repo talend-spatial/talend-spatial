@@ -1,0 +1,99 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<Map<String, String>> input = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__INPUT__");
+String numclass = ElementParameterParser.getValue(node, "__NUMCLASS__");
+String resultlayer_out = ElementParameterParser.getValue(node, "__RESULTLAYER_OUT__");
+String resulttable_out = ElementParameterParser.getValue(node, "__RESULTTABLE_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+java.util.ArrayList<Object> input_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<input.size(); i++) {
+  Map<String, String> current = input.get(i);
+  String currentfile = current.get("INPUT");
+%>
+// TODO
+input_<%=cid %>.add(layer_<%=cid %>_input_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(numclass)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.cluster.ClusterAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.cluster.ClusterAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter("INPUT").setParameterValue(input_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(numclass)) {
+%>
+params_<%=cid %>.getParameter("NUMCLASS").setParameterValue(Double.valueOf(<%=numclass%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_resultlayer_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.cluster.ClusterAlgorithm.RESULTLAYER);
+af_<%=cid %>_resultlayer_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=resultlayer_out%>));
+globalMap.put("<%=cid %>_RESULTLAYER_OUT", <%=resultlayer_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_resulttable_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.cluster.ClusterAlgorithm.RESULTTABLE);
+af_<%=cid %>_resulttable_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=resulttable_out%>));
+globalMap.put("<%=cid %>_RESULTTABLE_OUT", <%=resulttable_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

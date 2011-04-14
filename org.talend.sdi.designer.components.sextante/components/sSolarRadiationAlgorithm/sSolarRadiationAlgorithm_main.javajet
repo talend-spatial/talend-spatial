@@ -1,0 +1,262 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String dem = ElementParameterParser.getValue(node, "__DEM__");
+String solarconst = ElementParameterParser.getValue(node, "__SOLARCONST__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String transmittance = ElementParameterParser.getValue(node, "__TRANSMITTANCE__");
+String pressure = ElementParameterParser.getValue(node, "__PRESSURE__");
+String water = ElementParameterParser.getValue(node, "__WATER__");
+String dust = ElementParameterParser.getValue(node, "__DUST__");
+String latitude = ElementParameterParser.getValue(node, "__LATITUDE__");
+String hourstep = ElementParameterParser.getValue(node, "__HOURSTEP__");
+String dailystep = ElementParameterParser.getValue(node, "__DAILYSTEP__");
+String initmonth = ElementParameterParser.getValue(node, "__INITMONTH__");
+String initday = ElementParameterParser.getValue(node, "__INITDAY__");
+String endmonth = ElementParameterParser.getValue(node, "__ENDMONTH__");
+String endday = ElementParameterParser.getValue(node, "__ENDDAY__");
+String radiation_out = ElementParameterParser.getValue(node, "__RADIATION_OUT__");
+String time_out = ElementParameterParser.getValue(node, "__TIME_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(dem)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_dem = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_dem = new java.io.File(<%=dem %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_dem = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_dem);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_dem = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_dem.read(null);
+layer_<%=cid %>_dem.create(coverage_<%=cid %>_dem);
+layer_<%=cid %>_dem.setName("DEM");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(solarconst)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(transmittance)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(pressure)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(water)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dust)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(latitude)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hourstep)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dailystep)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(initmonth)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(initday)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(endmonth)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(endday)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.lighting.solarRadiation.SolarRadiationAlgorithm alg_<%=cid %> = new es.unex.sextante.lighting.solarRadiation.SolarRadiationAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(dem)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.solarRadiation.SolarRadiationAlgorithm.DEM).setParameterValue(layer_<%=cid %>_dem);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(solarconst)) {
+%>
+params_<%=cid %>.getParameter("SOLARCONST").setParameterValue(Double.valueOf(<%=solarconst%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(transmittance)) {
+%>
+params_<%=cid %>.getParameter("TRANSMITTANCE").setParameterValue(Double.valueOf(<%=transmittance%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(pressure)) {
+%>
+params_<%=cid %>.getParameter("PRESSURE").setParameterValue(Double.valueOf(<%=pressure%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(water)) {
+%>
+params_<%=cid %>.getParameter("WATER").setParameterValue(Double.valueOf(<%=water%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dust)) {
+%>
+params_<%=cid %>.getParameter("DUST").setParameterValue(Double.valueOf(<%=dust%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(latitude)) {
+%>
+params_<%=cid %>.getParameter("LATITUDE").setParameterValue(Double.valueOf(<%=latitude%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hourstep)) {
+%>
+params_<%=cid %>.getParameter("HOURSTEP").setParameterValue(Double.valueOf(<%=hourstep%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dailystep)) {
+%>
+params_<%=cid %>.getParameter("DAILYSTEP").setParameterValue(Double.valueOf(<%=dailystep%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(initmonth)) {
+%>
+params_<%=cid %>.getParameter("INITMONTH").setParameterValue(<%=initmonth %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(initday)) {
+%>
+params_<%=cid %>.getParameter("INITDAY").setParameterValue(<%=initday %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(endmonth)) {
+%>
+params_<%=cid %>.getParameter("ENDMONTH").setParameterValue(<%=endmonth %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(endday)) {
+%>
+params_<%=cid %>.getParameter("ENDDAY").setParameterValue(<%=endday %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_radiation_out = outputs_<%=cid %>.getOutput(es.unex.sextante.lighting.solarRadiation.SolarRadiationAlgorithm.RADIATION);
+af_<%=cid %>_radiation_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=radiation_out%>));
+globalMap.put("<%=cid %>_RADIATION_OUT", <%=radiation_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_time_out = outputs_<%=cid %>.getOutput(es.unex.sextante.lighting.solarRadiation.SolarRadiationAlgorithm.TIME);
+af_<%=cid %>_time_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=time_out%>));
+globalMap.put("<%=cid %>_TIME_OUT", <%=time_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

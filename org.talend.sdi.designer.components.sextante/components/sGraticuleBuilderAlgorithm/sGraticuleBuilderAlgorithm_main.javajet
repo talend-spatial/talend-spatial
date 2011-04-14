@@ -1,0 +1,94 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String intervalx = ElementParameterParser.getValue(node, "__INTERVALX__");
+String intervaly = ElementParameterParser.getValue(node, "__INTERVALY__");
+String type = ElementParameterParser.getValue(node, "__TYPE__");
+String graticule_out = ElementParameterParser.getValue(node, "__GRATICULE_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(intervalx)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervaly)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(type)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm alg_<%=cid %> = new es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(intervalx)) {
+%>
+params_<%=cid %>.getParameter("INTERVALX").setParameterValue(Double.valueOf(<%=intervalx%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(intervaly)) {
+%>
+params_<%=cid %>.getParameter("INTERVALY").setParameterValue(Double.valueOf(<%=intervaly%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(type)) {
+%>
+params_<%=cid %>.getParameter("TYPE").setParameterValue(<%=type %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_graticule_out = outputs_<%=cid %>.getOutput(es.unex.sextante.vectorTools.graticuleBuilder.GraticuleBuilderAlgorithm.GRATICULE);
+af_<%=cid %>_graticule_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=graticule_out%>));
+globalMap.put("<%=cid %>_GRATICULE_OUT", <%=graticule_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

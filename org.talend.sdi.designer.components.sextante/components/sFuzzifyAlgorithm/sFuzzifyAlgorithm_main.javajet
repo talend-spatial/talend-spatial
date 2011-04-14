@@ -1,0 +1,143 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String input = ElementParameterParser.getValue(node, "__INPUT__");
+String functiontype = ElementParameterParser.getValue(node, "__FUNCTIONTYPE__");
+String a = ElementParameterParser.getValue(node, "__A__");
+String b = ElementParameterParser.getValue(node, "__B__");
+String c = ElementParameterParser.getValue(node, "__C__");
+String d = ElementParameterParser.getValue(node, "__D__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_input = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_input = new java.io.File(<%=input %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_input = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_input);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_input = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_input.read(null);
+layer_<%=cid %>_input.create(coverage_<%=cid %>_input);
+layer_<%=cid %>_input.setName("INPUT");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(functiontype)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(a)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(b)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(c)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(d)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.fuzzify.FuzzifyAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.fuzzify.FuzzifyAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.gridAnalysis.fuzzify.FuzzifyAlgorithm.INPUT).setParameterValue(layer_<%=cid %>_input);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(functiontype)) {
+%>
+params_<%=cid %>.getParameter("FUNCTIONTYPE").setParameterValue(<%=functiontype %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(a)) {
+%>
+params_<%=cid %>.getParameter("A").setParameterValue(Double.valueOf(<%=a%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(b)) {
+%>
+params_<%=cid %>.getParameter("B").setParameterValue(Double.valueOf(<%=b%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(c)) {
+%>
+params_<%=cid %>.getParameter("C").setParameterValue(Double.valueOf(<%=c%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(d)) {
+%>
+params_<%=cid %>.getParameter("D").setParameterValue(Double.valueOf(<%=d%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.fuzzify.FuzzifyAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

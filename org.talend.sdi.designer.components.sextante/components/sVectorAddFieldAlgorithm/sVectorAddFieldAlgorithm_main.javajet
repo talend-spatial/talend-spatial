@@ -1,0 +1,142 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String input = ElementParameterParser.getValue(node, "__INPUT__");
+String field_name = ElementParameterParser.getValue(node, "__FIELD_NAME__");
+String field_type = ElementParameterParser.getValue(node, "__FIELD_TYPE__");
+String field_length = ElementParameterParser.getValue(node, "__FIELD_LENGTH__");
+String field_precision = ElementParameterParser.getValue(node, "__FIELD_PRECISION__");
+String default_value = ElementParameterParser.getValue(node, "__DEFAULT_VALUE__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_input = new java.io.File( <%=input %> );
+java.util.Map connect_<%=cid %>_input = new java.util.HashMap();
+connect_<%=cid %>_input.put("url", file_<%=cid %>_input.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_input = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_input );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_input = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_input, ds_<%=cid %>_input.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_name)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_type)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_length)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_precision)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(default_value)) {
+%>
+<%
+}
+%>
+
+
+it.falciano.sextante.vectorAddField.VectorAddFieldAlgorithm alg_<%=cid %> = new it.falciano.sextante.vectorAddField.VectorAddFieldAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter(it.falciano.sextante.vectorAddField.VectorAddFieldAlgorithm.INPUT).setParameterValue(layer_<%=cid %>_input);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_name)) {
+%>
+params_<%=cid %>.getParameter("FIELD_NAME").setParameterValue(<%=field_name %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_type)) {
+%>
+params_<%=cid %>.getParameter("FIELD_TYPE").setParameterValue(<%=field_type %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_length)) {
+%>
+params_<%=cid %>.getParameter("FIELD_LENGTH").setParameterValue(Double.valueOf(<%=field_length%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field_precision)) {
+%>
+params_<%=cid %>.getParameter("FIELD_PRECISION").setParameterValue(Double.valueOf(<%=field_precision%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(default_value)) {
+%>
+params_<%=cid %>.getParameter("DEFAULT_VALUE").setParameterValue(<%=default_value %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(it.falciano.sextante.vectorAddField.VectorAddFieldAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

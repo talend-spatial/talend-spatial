@@ -1,0 +1,230 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String layer = ElementParameterParser.getValue(node, "__LAYER__");
+String field = ElementParameterParser.getValue(node, "__FIELD__");
+String dist = ElementParameterParser.getValue(node, "__DIST__");
+List<Map<String, String>> grids = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__GRIDS__");
+String minpoints = ElementParameterParser.getValue(node, "__MINPOINTS__");
+String maxpoints = ElementParameterParser.getValue(node, "__MAXPOINTS__");
+String model = ElementParameterParser.getValue(node, "__MODEL__");
+String nugget = ElementParameterParser.getValue(node, "__NUGGET__");
+String sill = ElementParameterParser.getValue(node, "__SILL__");
+String range = ElementParameterParser.getValue(node, "__RANGE__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+String crossvalidation_out = ElementParameterParser.getValue(node, "__CROSSVALIDATION_OUT__");
+String variance_out = ElementParameterParser.getValue(node, "__VARIANCE_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(layer)) {
+%>
+// Create a vector layer
+java.io.File file_<%=cid %>_layer = new java.io.File( <%=layer %> );
+java.util.Map connect_<%=cid %>_layer = new java.util.HashMap();
+connect_<%=cid %>_layer.put("url", file_<%=cid %>_layer.toURL() );
+org.geotools.data.DataStore ds_<%=cid %>_layer = org.geotools.data.DataStoreFinder.getDataStore( connect_<%=cid %>_layer );
+es.unex.sextante.geotools.GTVectorLayer layer_<%=cid %>_layer = es.unex.sextante.geotools.GTVectorLayer.createLayer(ds_<%=cid %>_layer, ds_<%=cid %>_layer.getTypeNames()[0]);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dist)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(grids)) {
+%>
+java.util.ArrayList<Object> grids_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<grids.size(); i++) {
+  Map<String, String> current = grids.get(i);
+  String currentfile = current.get("GRIDS");
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_grids_current<%=i %> = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_grids_current<%=i %> = new java.io.File(<%=currentfile %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_grids_current<%=i %> = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_grids_current<%=i %>);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_grids_current<%=i %> = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_grids_current<%=i %>.read(null);
+layer_<%=cid %>_grids_current<%=i %>.create(coverage_<%=cid %>_grids_current<%=i %>);
+layer_<%=cid %>_grids_current<%=i %>.setName("grids_current<%=i %>");
+grids_<%=cid %>.add(layer_<%=cid %>_grids_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(minpoints)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxpoints)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(model)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(nugget)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(sill)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(range)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm alg_<%=cid %> = new es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(layer)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm.LAYER).setParameterValue(layer_<%=cid %>_layer);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(field)) {
+%>
+params_<%=cid %>.getParameter("FIELD").setParameterValue(<%=field %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(dist)) {
+%>
+params_<%=cid %>.getParameter("DIST").setParameterValue(Double.valueOf(<%=dist%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(grids)) {
+%>
+params_<%=cid %>.getParameter("GRIDS").setParameterValue(grids_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(minpoints)) {
+%>
+params_<%=cid %>.getParameter("MINPOINTS").setParameterValue(Double.valueOf(<%=minpoints%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(maxpoints)) {
+%>
+params_<%=cid %>.getParameter("MAXPOINTS").setParameterValue(Double.valueOf(<%=maxpoints%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(model)) {
+%>
+params_<%=cid %>.getParameter("MODEL").setParameterValue(<%=model %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(nugget)) {
+%>
+params_<%=cid %>.getParameter("NUGGET").setParameterValue(Double.valueOf(<%=nugget%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(sill)) {
+%>
+params_<%=cid %>.getParameter("SILL").setParameterValue(Double.valueOf(<%=sill%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(range)) {
+%>
+params_<%=cid %>.getParameter("RANGE").setParameterValue(Double.valueOf(<%=range%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_crossvalidation_out = outputs_<%=cid %>.getOutput(es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm.CROSSVALIDATION);
+af_<%=cid %>_crossvalidation_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=crossvalidation_out%>));
+globalMap.put("<%=cid %>_CROSSVALIDATION_OUT", <%=crossvalidation_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_variance_out = outputs_<%=cid %>.getOutput(es.unex.sextante.rasterize.universalKriging.UniversalKrigingAlgorithm.VARIANCE);
+af_<%=cid %>_variance_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=variance_out%>));
+globalMap.put("<%=cid %>_VARIANCE_OUT", <%=variance_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

@@ -1,0 +1,113 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<Map<String, String>> input = (List<Map<String, String>>) ElementParameterParser.getObjectValue(node, "__INPUT__");
+String table = ElementParameterParser.getValue(node, "__TABLE__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String classification_out = ElementParameterParser.getValue(node, "__CLASSIFICATION_OUT__");
+String classes_out = ElementParameterParser.getValue(node, "__CLASSES_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(input)) {
+%>
+java.util.ArrayList<Object> input_<%=cid %> = new java.util.ArrayList<Object>();
+<%
+for (int i=0; i<input.size(); i++) {
+  Map<String, String> current = input.get(i);
+  String currentfile = current.get("INPUT");
+%>
+// TODO
+input_<%=cid %>.add(layer_<%=cid %>_input_current<%=i %>);
+
+<%
+}
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(table)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.gridAnalysis.supervisedClassificationB.SupervisedClassificationBAlgorithm alg_<%=cid %> = new es.unex.sextante.gridAnalysis.supervisedClassificationB.SupervisedClassificationBAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(input)) {
+%>
+params_<%=cid %>.getParameter("INPUT").setParameterValue(input_<%=cid %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(table)) {
+%>
+params_<%=cid %>.getParameter("TABLE").setParameterValue(<%=table %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_classification_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.supervisedClassificationB.SupervisedClassificationBAlgorithm.CLASSIFICATION);
+af_<%=cid %>_classification_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=classification_out%>));
+globalMap.put("<%=cid %>_CLASSIFICATION_OUT", <%=classification_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+es.unex.sextante.outputs.Output af_<%=cid %>_classes_out = outputs_<%=cid %>.getOutput(es.unex.sextante.gridAnalysis.supervisedClassificationB.SupervisedClassificationBAlgorithm.CLASSES);
+af_<%=cid %>_classes_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=classes_out%>));
+globalMap.put("<%=cid %>_CLASSES_OUT", <%=classes_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

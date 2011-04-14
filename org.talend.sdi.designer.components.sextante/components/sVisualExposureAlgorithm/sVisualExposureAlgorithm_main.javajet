@@ -1,0 +1,143 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String dem = ElementParameterParser.getValue(node, "__DEM__");
+String features = ElementParameterParser.getValue(node, "__FEATURES__");
+String weights = ElementParameterParser.getValue(node, "__WEIGHTS__");
+String method = ElementParameterParser.getValue(node, "__METHOD__");
+String radius = ElementParameterParser.getValue(node, "__RADIUS__");
+String result_out = ElementParameterParser.getValue(node, "__RESULT_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(dem)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_dem = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_dem = new java.io.File(<%=dem %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_dem = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_dem);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_dem = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_dem.read(null);
+layer_<%=cid %>_dem.create(coverage_<%=cid %>_dem);
+layer_<%=cid %>_dem.setName("DEM");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(features)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_features = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_features = new java.io.File(<%=features %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_features = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_features);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_features = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_features.read(null);
+layer_<%=cid %>_features.create(coverage_<%=cid %>_features);
+layer_<%=cid %>_features.setName("FEATURES");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(weights)) {
+%>
+// Create a RASTER coverage
+es.unex.sextante.geotools.GTRasterLayer layer_<%=cid %>_weights = new es.unex.sextante.geotools.GTRasterLayer();
+java.net.URL url_<%=cid %>_weights = new java.io.File(<%=weights %>).toURL();
+org.geotools.gce.arcgrid.ArcGridReader agr_<%=cid %>_weights = new org.geotools.gce.arcgrid.ArcGridReader(url_<%=cid %>_weights);
+org.geotools.coverage.grid.GridCoverage2D coverage_<%=cid %>_weights = (org.geotools.coverage.grid.GridCoverage2D) agr_<%=cid %>_weights.read(null);
+layer_<%=cid %>_weights.create(coverage_<%=cid %>_weights);
+layer_<%=cid %>_weights.setName("WEIGHTS");
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(radius)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm alg_<%=cid %> = new es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(dem)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm.DEM).setParameterValue(layer_<%=cid %>_dem);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(features)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm.FEATURES).setParameterValue(layer_<%=cid %>_features);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(weights)) {
+%>
+params_<%=cid %>.getParameter(es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm.WEIGHTS).setParameterValue(layer_<%=cid %>_weights);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(method)) {
+%>
+params_<%=cid %>.getParameter("METHOD").setParameterValue(<%=method %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(radius)) {
+%>
+params_<%=cid %>.getParameter("RADIUS").setParameterValue(Double.valueOf(<%=radius%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_result_out = outputs_<%=cid %>.getOutput(es.unex.sextante.lighting.visualExposure.VisualExposureAlgorithm.RESULT);
+af_<%=cid %>_result_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=result_out%>));
+globalMap.put("<%=cid %>_RESULT_OUT", <%=result_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+

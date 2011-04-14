@@ -1,0 +1,136 @@
+<%@ jet
+imports="
+    org.talend.core.model.process.INode
+    org.talend.core.model.process.ElementParameterParser
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.util.Map
+    java.util.ArrayList
+    org.talend.commons.utils.StringUtils
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.metadata.IMetadataColumn
+    org.talend.core.model.process.EConnectionType
+    org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+String returns = ElementParameterParser.getValue(node, "__RETURNS__");
+String hyetographlength = ElementParameterParser.getValue(node, "__HYETOGRAPHLENGTH__");
+String timetopeak = ElementParameterParser.getValue(node, "__TIMETOPEAK__");
+String interval = ElementParameterParser.getValue(node, "__INTERVAL__");
+String average = ElementParameterParser.getValue(node, "__AVERAGE__");
+String stddev = ElementParameterParser.getValue(node, "__STDDEV__");
+String hyetograph_out = ElementParameterParser.getValue(node, "__HYETOGRAPH_OUT__");
+
+%>
+
+<%
+if (!"\"\"".equals(returns)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hyetographlength)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(timetopeak)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(average)) {
+%>
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stddev)) {
+%>
+<%
+}
+%>
+
+
+es.unex.sextante.hydrology.createHyetogram.CreateHyetogramAlgorithm alg_<%=cid %> = new es.unex.sextante.hydrology.createHyetogram.CreateHyetogramAlgorithm();
+
+
+es.unex.sextante.core.ParametersSet params_<%=cid %> = alg_<%=cid %>.getParameters();
+<%
+if (!"\"\"".equals(returns)) {
+%>
+params_<%=cid %>.getParameter("RETURNS").setParameterValue(<%=returns %>);
+<%
+}
+%>
+<%
+if (!"\"\"".equals(hyetographlength)) {
+%>
+params_<%=cid %>.getParameter("HYETOGRAPHLENGTH").setParameterValue(Double.valueOf(<%=hyetographlength%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(timetopeak)) {
+%>
+params_<%=cid %>.getParameter("TIMETOPEAK").setParameterValue(Double.valueOf(<%=timetopeak%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(interval)) {
+%>
+params_<%=cid %>.getParameter("INTERVAL").setParameterValue(Double.valueOf(<%=interval%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(average)) {
+%>
+params_<%=cid %>.getParameter("AVERAGE").setParameterValue(Double.valueOf(<%=average%>));
+<%
+}
+%>
+<%
+if (!"\"\"".equals(stddev)) {
+%>
+params_<%=cid %>.getParameter("STDDEV").setParameterValue(Double.valueOf(<%=stddev%>));
+<%
+}
+%>
+
+
+// Output objects ...
+es.unex.sextante.core.OutputObjectsSet outputs_<%=cid %> = alg_<%=cid %>.getOutputObjects();
+es.unex.sextante.outputs.Output af_<%=cid %>_hyetograph_out = outputs_<%=cid %>.getOutput(es.unex.sextante.hydrology.createHyetogram.CreateHyetogramAlgorithm.HYETOGRAPH);
+af_<%=cid %>_hyetograph_out.setOutputChannel(new es.unex.sextante.outputs.FileOutputChannel(<%=hyetograph_out%>));
+globalMap.put("<%=cid %>_HYETOGRAPH_OUT", <%=hyetograph_out%>);
+//if (alg_<%=cid %>.getUserCanDefineOutputExtent()) {
+// TODO : get Extent
+//}
+
+
+es.unex.sextante.geotools.GTOutputFactory outputFactory_<%=cid %> = new es.unex.sextante.geotools.GTOutputFactory();
+try {
+alg_<%=cid %>.execute(null, outputFactory_<%=cid %>);
+} catch (Exception e) {
+  e.printStackTrace();
+}
+
+
