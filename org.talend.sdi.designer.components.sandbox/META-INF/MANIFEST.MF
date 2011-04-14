@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: SDI Sandbox components Plug-in
+Bundle-Name: Talend Spatial Sandbox components Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.components.sandbox;singleton:=true
-Bundle-Version: 4.1.1
+Bundle-Version: 4.1.2
 Bundle-Localization: plugin
 Bundle-Activator: org.talend.sdi.designer.components.sandbox.SandboxPlugin
 Bundle-Vendor: Camptocamp, Neogeo technologies
