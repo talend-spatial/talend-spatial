@@ -18,7 +18,7 @@ imports="
 CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
 INode node = (INode)codeGenArgument.getArgument();
 String cid = node.getUniqueName();
-String operation = "";
+String operation = ElementParameterParser.getValue(node,"__OPERATION__");
 
 IMetadataColumn geometryColumn = null;
 List<IMetadataTable> metadatas = node.getMetadataList();
@@ -41,17 +41,21 @@ if (geometryColumn == null){
 }
 String colGeo = geometryColumn.getLabel();
 String colAgg = ElementParameterParser.getValue(node,"__COL__");
-
+boolean noColSelected = ElementParameterParser.getValue(node, "__NO_COL_SELECTED__").equals("true");
 
 List< ? extends IConnection> conns = node.getIncomingConnections();
 for (IConnection conn : conns) {
     if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
-        operation = ElementParameterParser.getValue(node,"__OPERATION__");
 %>
+org.talend.sdi.geometry.Geometry geomCur = (org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>;
+
+<% if (noColSelected) { %>
+if (!hash_<%=colAgg %>_<%=cid %>.isEmpty()) {
+    operation_result_<%=cid %> = hash_<%=colAgg %>_<%=cid %>.values().iterator().next();
+<% } else { %>
 if (hash_<%=colAgg %>_<%=cid %>.containsKey(<%=conn.getName() %>.<%=colAgg %>)) {
     operation_result_<%=cid %> = hash_<%=colAgg %>_<%=cid %>.get(<%=conn.getName() %>.<%=colAgg %>);
-    // Dissolve geometry
-    org.talend.sdi.geometry.Geometry geomCur = (org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>;
+<% } %>
 
 <%
         /* 
@@ -76,6 +80,12 @@ if (hash_<%=colAgg %>_<%=cid %>.containsKey(<%=conn.getName() %>.<%=colAgg %>)) 
 
     operation_result_<%=cid %>.<%=colGeo %> =
         ((org.talend.sdi.geometry.Geometry) operation_result_<%=cid %>.<%=colGeo %>).union(geomCur).getEnvelope();
+
+<%
+        } else if (operation.equals("cascadedPolygonUnion")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %>.add(geomCur._getInternalGeometry());
 
 <%
         }
@@ -108,6 +118,14 @@ if (hash_<%=colAgg %>_<%=cid %>.containsKey(<%=conn.getName() %>.<%=colAgg %>)) 
 
     operation_result_<%=cid %>.<%=colGeo %> =
         ((org.talend.sdi.geometry.Geometry) <%=conn.getName() %>.<%=colGeo %>).getEnvelope();
+
+<%
+        } else if (operation.equals("cascadedPolygonUnion")) {
+%>
+
+    operation_result_<%=cid %>.<%=colGeo %> = new java.util.Vector<com.vividsolutions.jts.geom.Geometry>();
+    operation_result_<%=cid %>.<%=colGeo %>.add(geomCur._getInternalGeometry());
+    operation_result_<%=cid %>.inputCRS = geomCur.getCRS();
 
 <%
         }

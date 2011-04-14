@@ -11,6 +11,7 @@ imports="
     org.talend.core.model.metadata.types.JavaType
     java.util.List
     java.util.Map
+    
 "
 %>
 
@@ -20,6 +21,8 @@ INode node = (INode)codeGenArgument.getArgument();
 String cid = node.getUniqueName();
 String colAgg = ElementParameterParser.getValue(node,"__COL__");
 String colAggType = "String"; // initial value
+String operation = ElementParameterParser.getValue(node,"__OPERATION__");
+boolean noColSelected = ElementParameterParser.getValue(node, "__NO_COL_SELECTED__").equals("true");
 
 IMetadataColumn geometryColumn = null;
 List<IMetadataTable> metadatas = node.getMetadataList();
@@ -29,6 +32,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
         List<IMetadataColumn> columns = metadata.getListColumns();
         for (int j = 0; j < columns.size(); j++) {
             IMetadataColumn column = columns.get(j);
+            // Look for the geometry column to be used by the aggregation
             String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
             if(typeToGenerate.equals("Geometry")) {
                 geometryColumn = column;
@@ -37,6 +41,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
         }
     }
 }
+
 if (geometryColumn == null){
     return "error(\"Cannot find a geometry column\");";
 }
@@ -45,7 +50,22 @@ String colGeo = geometryColumn.getLabel();
 %>
 
 class OperationStruct<%=cid %> {
+
+<%
+        if (operation.equals("cascadedPolygonUnion")) {
+%>
+
+    java.util.Vector<com.vividsolutions.jts.geom.Geometry> <%=colGeo %>;
+    org.opengis.referencing.crs.CoordinateReferenceSystem inputCRS;
+<%
+        } else {
+%>
+
     Geometry <%=colGeo %>;
+
+<%
+        }
+%>
 
 <%
 List<? extends IConnection> incomingConnections = node.getIncomingConnections();

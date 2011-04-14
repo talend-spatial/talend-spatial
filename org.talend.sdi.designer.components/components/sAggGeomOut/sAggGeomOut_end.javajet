@@ -20,6 +20,7 @@ INode node = (INode)codeGenArgument.getArgument();
 String cid = node.getUniqueName();
 List<IMetadataTable> metadatas = node.getMetadataList();
 String colAgg = ElementParameterParser.getValue(node,"__COL__");
+String operation = ElementParameterParser.getValue(node,"__OPERATION__");
 
 IMetadataColumn geometryColumn = null;
 if ((metadatas != null) && (metadatas.size() > 0)) {
@@ -102,12 +103,27 @@ java.util.Iterator<<%=colAggType %>> <%=colAgg%>_iterator_<%=cid %> = hash_<%=co
 while(<%=colAgg%>_iterator_<%=cid %>.hasNext()){
     <%=colAggType %> <%=colAgg %>_<%=colAgg %> = <%=colAgg %>_iterator_<%=cid %>.next();
     operation_result_<%=cid %> = hash_<%=colAgg%>_<%=cid %>.get(<%=colAgg %>_<%=colAgg %>);
-
+    
     //in the deepest begin
     OnRowsEndStruct<%=destination %> aggregated_row_<%=cid %> = new OnRowsEndStruct<%=destination %>();
     aggregated_row_<%=cid %>.<%=colAgg %> = <%=colAgg %>_<%=colAgg %>;
 
+    <%
+        if (operation.equals("cascadedPolygonUnion")) {
+    %>
+    com.vividsolutions.jts.geom.Geometry result_geom = com.vividsolutions.jts.operation.union.CascadedPolygonUnion.union(operation_result_<%=cid %>.<%=colGeo %>);
+    aggregated_row_<%=cid %>.<%=colGeo %> = new Geometry(result_geom);
+    aggregated_row_<%=cid %>.<%=colGeo %>.setCRS(operation_result_<%=cid %>.inputCRS);
+
+    <%
+        } else {
+    %>
+    
     aggregated_row_<%=cid %>.<%=colGeo %> = operation_result_<%=cid %>.<%=colGeo %>;
+
+    <%
+        }
+    %>
 
     //in the deepest end
     result_list_<%=cid %>.add(aggregated_row_<%=cid %>);
