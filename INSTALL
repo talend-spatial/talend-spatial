@@ -1,0 +1,15 @@
+How-to install Talend Open Studio Spatial module ?
+
+ * Download TOS from http://www.talend.com
+ * Install TOS
+ * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/ 
+ * Unzip Spatial module
+ * Copy the content of the plugin directory in the plugins directory of TOS.
+ * Start or restart TOS
+
+
+
+For more information:
+
+ * Wiki: http://www.talendforge.org/wiki/doku.php?id=sdi:mainpage
+ * Forum: http://www.talendforge.org/forum/viewforum.php?id=9
