@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" xmi:id="_ouo9w2ZyEeCUeI-JLejmbw" defaultContext="Default" screenshot="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">
+  <context xmi:id="_ouo9xGZyEeCUeI-JLejmbw" confirmationNeeded="false" name="Default">
+    <contextParameter xmi:id="_ouo9xWZyEeCUeI-JLejmbw" comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/francois/Neogeo3/GeoData/"/>
+    <contextParameter xmi:id="_ouo9xmZyEeCUeI-JLejmbw" comment="" name="DirOutput" prompt="Select your output directory (eg. /tmp)?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/tmp/"/>
+  </context>
+  <parameters xmi:id="_ouo9x2ZyEeCUeI-JLejmbw">
+    <elementParameter xmi:id="_ouo9yGZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_FILE_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r53616-V4.1.2/workspace"/>
+    <elementParameter xmi:id="_ouo9yWZyEeCUeI-JLejmbw" field="DIRECTORY" name="PRODUCT_ROOT_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r53616-V4.1.2"/>
+    <elementParameter xmi:id="_ouo9ymZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_PROJECT_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r53616-V4.1.2/workspace/DEMO"/>
+    <elementParameter xmi:id="_ouo9y2ZyEeCUeI-JLejmbw" field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
+    <elementParameter xmi:id="_ouo9zGZyEeCUeI-JLejmbw" field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
+    <elementParameter xmi:id="_ouo9zWZyEeCUeI-JLejmbw" field="TEXT" name="AUTHOR" value="fx.prunayre@gmail.com"/>
+    <elementParameter xmi:id="_ouo9zmZyEeCUeI-JLejmbw" field="TEXT" name="STATUS" value=""/>
+    <elementParameter xmi:id="_ouo9z2ZyEeCUeI-JLejmbw" field="TEXT" name="NAME" value="test_contourLines"/>
+    <elementParameter xmi:id="_ouo90GZyEeCUeI-JLejmbw" field="TEXT" name="VERSION" value="0.1"/>
+    <elementParameter xmi:id="_ouo90WZyEeCUeI-JLejmbw" field="TEXT" name="PURPOSE" value=""/>
+    <elementParameter xmi:id="_ouo90mZyEeCUeI-JLejmbw" field="TEXT" name="DESCRIPTION" value=""/>
+    <elementParameter xmi:id="_ouo902ZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_X" value="0"/>
+    <elementParameter xmi:id="_ouo91GZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_Y" value="0"/>
+    <elementParameter xmi:id="_ouo91WZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
+    <elementParameter xmi:id="_ouo91mZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter xmi:id="_ouo912ZyEeCUeI-JLejmbw" field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter xmi:id="_ouo92GZyEeCUeI-JLejmbw" field="CHECK" name="MULTI_THREAD_EXECATION" value="false"/>
+    <elementParameter xmi:id="_ouo92WZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICIT_TCONTEXTLOAD" value="false"/>
+    <elementParameter xmi:id="_ouo92mZyEeCUeI-JLejmbw" field="RADIO" name="FROM_FILE_FLAG_IMPLICIT_CONTEXT" value="false"/>
+    <elementParameter xmi:id="_ouo922ZyEeCUeI-JLejmbw" field="RADIO" name="FROM_DATABASE_FLAG_IMPLICIT_CONTEXT" value="false"/>
+    <elementParameter xmi:id="_ouo93GZyEeCUeI-JLejmbw" field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo93WZyEeCUeI-JLejmbw" field="TEXT" name="FIELDSEPARATOR" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo93mZyEeCUeI-JLejmbw" field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:PROPERTY_TYPE" value=""/>
+    <elementParameter xmi:id="_ouo932ZyEeCUeI-JLejmbw" field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:REPOSITORY_PROPERTY_TYPE" value=""/>
+    <elementParameter xmi:id="_ouo94GZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE_IMPLICIT_CONTEXT" value=""/>
+    <elementParameter xmi:id="_ouo94WZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value=""/>
+    <elementParameter xmi:id="_ouo94mZyEeCUeI-JLejmbw" field="TEXT" name="HOST_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo942ZyEeCUeI-JLejmbw" field="TEXT" name="PORT_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo95GZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo95WZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo95mZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo952ZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo96GZyEeCUeI-JLejmbw" field="TEXT" name="USER_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo96WZyEeCUeI-JLejmbw" field="TEXT" name="PASS_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo96mZyEeCUeI-JLejmbw" field="FILE" name="DBFILE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo962ZyEeCUeI-JLejmbw" field="DBTABLE" name="DBTABLE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo97GZyEeCUeI-JLejmbw" field="TEXT" name="QUERY_CONDITION_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo97WZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOAD_NEW_VARIABLE" value=""/>
+    <elementParameter xmi:id="_ouo97mZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="NOT_LOAD_OLD_VARIABLE" value=""/>
+    <elementParameter xmi:id="_ouo972ZyEeCUeI-JLejmbw" field="CHECK" name="PRINT_OPERATIONS" value="false"/>
+    <elementParameter xmi:id="_ouo98GZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_ERROR" value="false"/>
+    <elementParameter xmi:id="_ouo98WZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_WARNINGS" value="false"/>
+    <elementParameter xmi:id="_ouo98mZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_INFO" value="false"/>
+    <elementParameter xmi:id="_ouo982ZyEeCUeI-JLejmbw" field="CHECK" name="ON_STATCATCHER_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo99GZyEeCUeI-JLejmbw" field="CHECK" name="ON_LOGCATCHER_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo99WZyEeCUeI-JLejmbw" field="CHECK" name="ON_METERCATCHER_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo99mZyEeCUeI-JLejmbw" field="CHECK" name="ON_CONSOLE_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo992ZyEeCUeI-JLejmbw" field="CHECK" name="ON_FILES_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo9-GZyEeCUeI-JLejmbw" field="DIRECTORY" name="FILE_PATH" value="&quot;/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace/.metadata&quot;"/>
+    <elementParameter xmi:id="_ouo9-WZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_STATS" value="&quot;stats_file.txt&quot;"/>
+    <elementParameter xmi:id="_ouo9-mZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_LOGS" value="&quot;logs_file.txt&quot;"/>
+    <elementParameter xmi:id="_ouo9-2ZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_METTER" value="&quot;meter_file.txt&quot;"/>
+    <elementParameter xmi:id="_ouo9_GZyEeCUeI-JLejmbw" field="ENCODING_TYPE" name="ENCODING" value="ISO-8859-15"/>
+    <elementParameter xmi:id="_ouo9_WZyEeCUeI-JLejmbw" field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter xmi:id="_ouo9_mZyEeCUeI-JLejmbw" field="CHECK" name="ON_DATABASE_FLAG" value="false"/>
+    <elementParameter xmi:id="_ouo9_2ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE" value="tJDBCOutput"/>
+    <elementParameter xmi:id="_ouo-AGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14-10g.jar"/>
+    <elementParameter xmi:id="_ouo-AWZyEeCUeI-JLejmbw" field="TEXT" name="URL" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-AmZyEeCUeI-JLejmbw" field="TABLE" name="DRIVER_JAR"/>
+    <elementParameter xmi:id="_ouo-A2ZyEeCUeI-JLejmbw" field="TEXT" name="DRIVER_CLASS" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-BGZyEeCUeI-JLejmbw" field="TEXT" name="HOST" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-BWZyEeCUeI-JLejmbw" field="TEXT" name="PORT" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-BmZyEeCUeI-JLejmbw" field="TEXT" name="DATASOURCE" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-B2ZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-CGZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-CWZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-CmZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-C2ZyEeCUeI-JLejmbw" field="TEXT" name="USER" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-DGZyEeCUeI-JLejmbw" field="TEXT" name="PASS" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-DWZyEeCUeI-JLejmbw" field="FILE" name="DBFILE" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-DmZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_STATS" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-D2ZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_LOGS" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-EGZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_METER" value="&quot;&quot;"/>
+    <elementParameter xmi:id="_ouo-EWZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_RUNTIME_ERRORS" value="true"/>
+    <elementParameter xmi:id="_ouo-EmZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_ERRORS" value="true"/>
+    <elementParameter xmi:id="_ouo-E2ZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_WARNING" value="true"/>
+    <elementParameter xmi:id="_ouo-FGZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_REALTIME_STATS" value="false"/>
+    <elementParameter xmi:id="_ouo-FWZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_HEADERID" value=""/>
+    <elementParameter xmi:id="_ouo-FmZyEeCUeI-JLejmbw" field="CHECK" name="HEADER_ENABLED" value="false"/>
+    <elementParameter xmi:id="_ouo-F2ZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_LIBRARY" value=""/>
+    <elementParameter xmi:id="_ouo-GGZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_CODE" value=""/>
+    <elementParameter xmi:id="_ouo-GWZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_IMPORT" value=""/>
+    <elementParameter xmi:id="_ouo-GmZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_FOOTERID" value=""/>
+    <elementParameter xmi:id="_ouo-G2ZyEeCUeI-JLejmbw" field="CHECK" name="FOOTER_ENABLED" value="false"/>
+    <elementParameter xmi:id="_ouo-HGZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_LIBRARY" value=""/>
+    <elementParameter xmi:id="_ouo-HWZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_CODE" value=""/>
+    <elementParameter xmi:id="_ouo-HmZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_IMPORT" value=""/>
+    <routinesParameter xmi:id="_ouo-H2ZyEeCUeI-JLejmbw" id="_GtJn4PfxEd-yU-x4djaaPQ" name="TalendString"/>
+    <routinesParameter xmi:id="_ouo-IGZyEeCUeI-JLejmbw" id="_Gux_kPfxEd-yU-x4djaaPQ" name="Relational"/>
+    <routinesParameter xmi:id="_ouo-IWZyEeCUeI-JLejmbw" id="_Gu57YPfxEd-yU-x4djaaPQ" name="TalendDate"/>
+    <routinesParameter xmi:id="_ouo-ImZyEeCUeI-JLejmbw" id="_Gu9lwPfxEd-yU-x4djaaPQ" name="TalendDataGenerator"/>
+    <routinesParameter xmi:id="_ouo-I2ZyEeCUeI-JLejmbw" id="_Gu-z4PfxEd-yU-x4djaaPQ" name="Numeric"/>
+    <routinesParameter xmi:id="_ouo-JGZyEeCUeI-JLejmbw" id="_GvDFUPfxEd-yU-x4djaaPQ" name="DataOperation"/>
+    <routinesParameter xmi:id="_ouo-JWZyEeCUeI-JLejmbw" id="_GvE6gPfxEd-yU-x4djaaPQ" name="StringHandling"/>
+    <routinesParameter xmi:id="_ouo-JmZyEeCUeI-JLejmbw" id="_GvGIoPfxEd-yU-x4djaaPQ" name="Mathematical"/>
+    <routinesParameter xmi:id="_ouo-J2ZyEeCUeI-JLejmbw" id="_GvHWwPfxEd-yU-x4djaaPQ" name="GeoOperation"/>
+    <routinesParameter xmi:id="_ouo-KGZyEeCUeI-JLejmbw" id="_GvH90PfxEd-yU-x4djaaPQ" name="GeometryOperation"/>
+    <routinesParameter xmi:id="_ouo-KWZyEeCUeI-JLejmbw" id="_GvJL8PfxEd-yU-x4djaaPQ" name="OpenStreetMap"/>
+  </parameters>
+  <node xmi:id="_ouo-KmZyEeCUeI-JLejmbw" componentName="sContourLinesAlgorithm" componentVersion="0.1" offsetLabelX="0" offsetLabelY="0" posX="128" posY="64">
+    <elementParameter xmi:id="_ouo-K2ZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sContourLinesAlgorithm_1"/>
+    <elementParameter xmi:id="_ouo-LGZyEeCUeI-JLejmbw" field="CHECK" name="START" value="true"/>
+    <elementParameter xmi:id="_ouo-LWZyEeCUeI-JLejmbw" field="FILE" name="LAYER" value="context.DirGeoData + &quot;/sextante/dem.asc&quot;"/>
+    <elementParameter xmi:id="_ouo-LmZyEeCUeI-JLejmbw" field="TEXT" name="DISTANCE" value="&quot;100.0&quot;"/>
+    <elementParameter xmi:id="_ouo-L2ZyEeCUeI-JLejmbw" field="TEXT" name="MIN" value="&quot;0.0&quot;"/>
+    <elementParameter xmi:id="_ouo-MGZyEeCUeI-JLejmbw" field="TEXT" name="MAX" value="&quot;10000.0&quot;"/>
+    <elementParameter xmi:id="_ouo-MWZyEeCUeI-JLejmbw" field="FILE" name="RESULT_OUT" value="context.DirOutput + &quot;/contourLines.shp&quot;"/>
+    <elementParameter xmi:id="_ouo-MmZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter xmi:id="_ouo-M2ZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter xmi:id="_ouo-NGZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
+  </node>
+  <subjob xmi:id="_ouo-NWZyEeCUeI-JLejmbw">
+    <elementParameter xmi:id="_ouo-NmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sContourLinesAlgorithm_1"/>
+    <elementParameter xmi:id="_ouo-N2ZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter xmi:id="_ouo-OGZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  </subjob>
+</talendfile:ProcessType>

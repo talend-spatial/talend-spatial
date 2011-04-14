@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ContextType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" xmi:id="_ot4v02ZyEeCUeI-JLejmbw" confirmationNeeded="false" name="Default">
+  <contextParameter xmi:id="_ot4v1GZyEeCUeI-JLejmbw" comment="" name="FileStation" prompt="new1?" promptNeeded="false" type="id_String" value="stations.txt"/>
+  <contextParameter xmi:id="_ot4v1WZyEeCUeI-JLejmbw" comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" type="id_String" value="/home/francois/Neogeo3/GeoData/"/>
+  <contextParameter xmi:id="_ot4v1mZyEeCUeI-JLejmbw" comment="" name="FileRivers" prompt="new1?" promptNeeded="false" type="id_String" value="CCMRIVERS.shp"/>
+  <contextParameter xmi:id="_ot4v12ZyEeCUeI-JLejmbw" comment="" name="FilePoint" prompt="new1?" promptNeeded="false" type="id_String" value="geomPoint.shp"/>
+  <contextParameter xmi:id="_ot4v2GZyEeCUeI-JLejmbw" comment="" name="FileLine" prompt="new1?" promptNeeded="false" type="id_String" value="geomLine.shp"/>
+  <contextParameter xmi:id="_ot4v2WZyEeCUeI-JLejmbw" comment="" name="FilePolygon" prompt="new1?" promptNeeded="false" type="id_String" value="geomPoly.shp"/>
+  <contextParameter xmi:id="_ot4v2mZyEeCUeI-JLejmbw" comment="" name="FileDEM" prompt="new1?" promptNeeded="false" type="id_String" value="SRTM.tif"/>
+  <contextParameter xmi:id="_ot4v22ZyEeCUeI-JLejmbw" comment="" name="FileCatchments" prompt="new1?" promptNeeded="false" type="id_String" value="CATCHMENTS.MIF"/>
+  <contextParameter xmi:id="_ot4v3GZyEeCUeI-JLejmbw" comment="" name="DirOutput" prompt="Select your output directory (eg. /tmp)?" promptNeeded="false" type="id_String" value="/tmp/"/>
+  <contextParameter xmi:id="_ot4v3WZyEeCUeI-JLejmbw" comment="" name="DbHost" prompt="new1?" promptNeeded="false" type="id_String" value="localhost"/>
+  <contextParameter xmi:id="_ot4v3mZyEeCUeI-JLejmbw" comment="" name="DbPort" prompt="new1?" promptNeeded="false" type="id_String" value="5432"/>
+  <contextParameter xmi:id="_ot4v32ZyEeCUeI-JLejmbw" comment="" name="DbName" prompt="new1?" promptNeeded="false" type="id_String" value="talend"/>
+  <contextParameter xmi:id="_ot4v4GZyEeCUeI-JLejmbw" comment="" name="DbUsername" prompt="new1?" promptNeeded="false" type="id_String" value="www-data"/>
+  <contextParameter xmi:id="_ot4v4WZyEeCUeI-JLejmbw" comment="" name="DbPassword" prompt="new1?" promptNeeded="false" type="id_String" value="www-data"/>
+  <contextParameter xmi:id="_ot4v4mZyEeCUeI-JLejmbw" comment="" name="GeoNetworkHost" prompt="new1?" promptNeeded="false" type="id_String" value="http://localhost"/>
+  <contextParameter xmi:id="_ot4v42ZyEeCUeI-JLejmbw" comment="" name="GeoNetworkPort" prompt="new1?" promptNeeded="false" type="id_Integer" value="8080"/>
+  <contextParameter xmi:id="_ot4v5GZyEeCUeI-JLejmbw" comment="" name="GeoNetworkServlet" prompt="new1?" promptNeeded="false" type="id_String" value="geonetwork"/>
+  <contextParameter xmi:id="_ot4v5WZyEeCUeI-JLejmbw" comment="" name="GeoNetworkUsername" prompt="new1?" promptNeeded="false" type="id_String" value="admin"/>
+  <contextParameter xmi:id="_ot4v5mZyEeCUeI-JLejmbw" comment="" name="GeoNetworkPassword" prompt="new1?" promptNeeded="false" type="id_String" value="admin"/>
+  <contextParameter xmi:id="_ot4v52ZyEeCUeI-JLejmbw" comment="" name="ProjDefaultInput" prompt="new1?" promptNeeded="false" type="id_String" value="EPSG:4326"/>
+  <contextParameter xmi:id="_ot4v6GZyEeCUeI-JLejmbw" comment="" name="ProjDefaultOutput" prompt="new1?" promptNeeded="false" type="id_String" value="EPSG:27572"/>
+  <contextParameter xmi:id="_ot4v6WZyEeCUeI-JLejmbw" comment="" name="FileStationsShp" prompt="new1?" promptNeeded="false" type="id_String" value="station.shp"/>
+  <contextParameter xmi:id="_ot4v6mZyEeCUeI-JLejmbw" comment="" name="FileStationsShpLIIE" prompt="new1?" promptNeeded="false" type="id_String" value="stationlIIe.shp"/>
+  <contextParameter xmi:id="_ot4v62ZyEeCUeI-JLejmbw" comment="" name="FileValidation" prompt="new1?" promptNeeded="false" type="id_String" value="validation.shp"/>
+  <contextParameter xmi:id="_ot4v7GZyEeCUeI-JLejmbw" comment="" name="FileBoundaries" prompt="new1?" promptNeeded="false" type="id_String" value="gboundaries.shp"/>
+  <contextParameter xmi:id="_ot4v7WZyEeCUeI-JLejmbw" comment="" name="SdiDir" prompt="Select your SDI installation directory?" promptNeeded="false" type="id_String" value="/home/fxprunayre/eworkspace/runtime-talend.product"/>
+</talendfile:ContextType>
