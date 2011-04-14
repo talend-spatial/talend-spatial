@@ -3,21 +3,21 @@ package org.talend.sdi.repository.ui.actions.metadata;
 import java.io.File;
 
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.talend.commons.ui.image.ImageProvider;
 import org.talend.core.model.repository.ERepositoryObjectType;
+import org.talend.core.model.repository.RepositoryManager;
 import org.talend.core.ui.images.ECoreImage;
 import org.talend.core.ui.images.OverlayImageProvider;
 import org.talend.repository.ProjectManager;
-import org.talend.repository.model.RepositoryNode;
-import org.talend.repository.model.IRepositoryNode.EProperties;
 import org.talend.repository.model.IProxyRepositoryFactory;
 import org.talend.repository.model.ProxyRepositoryFactory;
+import org.talend.repository.model.RepositoryNode;
+import org.talend.repository.model.IRepositoryNode.EProperties;
 
 
 public class CreateGeoMetadata extends org.talend.repository.ui.actions.metadata.CreateGenericSchemaAction {
@@ -114,11 +114,12 @@ public class CreateGeoMetadata extends org.talend.repository.ui.actions.metadata
             wizard.dispose();
             return;
         }
-        WizardDialog wizardDialog = new WizardDialog(new Shell(), wizard);
+        WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
         wizardDialog.setPageSize(WIZARD_WIDTH, WIZARD_HEIGHT);
         wizardDialog.create();
         wizardDialog.open();
-        refresh(((IStructuredSelection) selection).getFirstElement());
+        RepositoryManager.refreshCreatedNode(ERepositoryObjectType.METADATA_GENERIC_SCHEMA);
+        //refresh(((IStructuredSelection) selection).getFirstElement());
     }
 
 
