@@ -2,6 +2,8 @@ package org.talend.sdi.geometry;
 
 import java.io.Serializable;
 
+import org.opengis.referencing.ReferenceIdentifier;
+
 import com.vividsolutions.jts.geom.IntersectionMatrix;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
@@ -34,13 +36,14 @@ public class Geometry implements Serializable {
     public Geometry(com.vividsolutions.jts.geom.Geometry internalGeometry,
     		org.opengis.referencing.crs.CoordinateReferenceSystem CRS) {
         this.internalGeometry = internalGeometry;
-        this.CRS = CRS;
+        setCRS(CRS);
     }
 
     public Geometry(com.vividsolutions.jts.geom.Geometry internalGeometry,
     		String EPSGCode) {
         this.internalGeometry = internalGeometry;
         setCRS(EPSGCode);
+        
     }
     
     public Geometry(String wkt) {
@@ -148,11 +151,19 @@ public class Geometry implements Serializable {
         return new Geometry(internalGeometry.getGeometryN(n), this.CRS);
     }
 
-    /* Projection information */
+    /* 
+     * Get internal JTS geometry SRID.
+     */
     public int getSRID() {
         return internalGeometry.getSRID();
     }
 
+    /**
+     * Set internal JTS geometry SRID. This method does not set
+     * Talend geometry CRS property. Use {@link #setCRS(org.opengis.referencing.crs.CoordinateReferenceSystem)}.
+     * 
+     * @param SRID
+     */
     public void setSRID(int SRID) {
         internalGeometry.setSRID(SRID);
     }
@@ -163,19 +174,43 @@ public class Geometry implements Serializable {
 
     public void setEPSG(String EPSG) {
         this.EPSG = EPSG;
+        setCRS(EPSG);
     }
 
     public org.opengis.referencing.crs.CoordinateReferenceSystem getCRS() {
         return CRS;
     }
 
+    /**
+     * Set Talend geometry and JTS internal geometry CRS and SRID.
+     * @param CRS
+     */
     public void setCRS(org.opengis.referencing.crs.CoordinateReferenceSystem CRS) {
         this.CRS = CRS;
+        int SRID = -1;
+        
+        try {
+            java.util.Set<ReferenceIdentifier> ident = this.CRS.getIdentifiers();
+            if ((ident == null || ident.isEmpty())
+                && this.CRS == org.geotools.referencing.crs.DefaultGeographicCRS.WGS84) {
+                SRID = 4326;
+            } else {
+                String code = ((org.geotools.referencing.NamedIdentifier) ident.toArray()[0]).getCode();
+                SRID = Integer.parseInt(code);
+            }
+
+            // Set internal JTS geometry projection
+            setSRID(SRID);
+            this.EPSG = "EPSG:" + SRID;
+        } catch (Exception e) {
+            System.out.println("SRID could not be determined");
+            SRID = -1;
+        }
     }
 
     public void setCRS(String EPSGCode) {
     	try {
-            this.CRS = org.geotools.referencing.CRS.decode(EPSGCode);
+            setCRS(org.geotools.referencing.CRS.decode(EPSGCode));
         } catch (Exception e) {
             System.out.println ("Set CRS error: " + e.getMessage());
         }
