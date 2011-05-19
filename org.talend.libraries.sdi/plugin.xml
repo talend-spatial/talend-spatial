@@ -16,7 +16,21 @@
                   ignorePre="true">
             </DbType>
          </DbMapping>
+         <DbMapping
+               mapping_id="oracle_id">
+            <DbType
+                  DbType="MDSYS.SDO_GEOMETRY"
+                  default="true"
+                  ignoreLen="true"
+                  ignorePre="true">
+            </DbType>
+            <DbType
+                  DbType="SDO_GEOMETRY"
+                  default="false"
+                  ignoreLen="true"
+                  ignorePre="true">
+            </DbType>
+         </DbMapping>
       </JavaType>
    </extension>
-
 </plugin>

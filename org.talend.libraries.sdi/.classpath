@@ -90,5 +90,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/xsd-2.2.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gt-edigeo-2.5-0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gt-gpx-2.5-M3.jar"/>
+	<classpathentry kind="lib" path="lib/jai_core.jar"/>
+	<classpathentry kind="lib" path="lib/jai_codec-1.1.3.jar"/>
 	<classpathentry kind="output" path="class"/>
 </classpath>

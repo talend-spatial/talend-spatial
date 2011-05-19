@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-==============================================================================
-=== This Ant build file is used to build the Talend Spatial 
-==============================================================================
--->
-
 <project name="TalendSpatial" default="compile" basedir=".">
-	<!-- ================================= 
-	          target: compile              
-	         ================================= -->
+
 	<target name="compile" description="Compile the source.">
 
-		<delete>
-			<fileset dir="src/main/java/org/talend/sdi" includes="**/*.class"/>
-		</delete>
+		<delete file="src/main/java/org/talend/sdi/*/*.class" />
 		<delete file="lib/org.talend.sdi.jar" />
 
-		<javac srcdir="src/main/java/org/talend/sdi" classpath="src/main/java/.;lib/jts-1.9.jar;lib/jdom-1.0.jar;lib/dom4j-1.6.1.jar;lib/commons-httpclient-3.0.1.jar;lib/geoapi-2.2-M1.jar" target="1.5" debug="true" />
+		<javac srcdir="src/main/java/org/talend/sdi" classpath="src/.;lib/jts-1.9.jar;lib/jdom-1.0.jar;lib/dom4j-1.6.1.jar;lib/commons-httpclient-3.0.1.jar;lib/geoapi-2.2-M1.jar;lib/gt-referencing-2.5.0.jar" target="1.5" debug="true" />
 
 		<jar jarfile="lib/org.talend.sdi.jar" basedir="src/main/java" includes="org/talend/sdi/**/*.class" />
 
-		<delete>
-			<fileset dir="src/main/java/org/talend/sdi" includes="**/*.class"/>
-		</delete>
-				
-		<!-- Publish in related plugins 
-		FIXME : Plugins are supposed to be in same base location (which is not the case usually)
-		<copy todir="../org.talend.sdi/components/sGeoInput">
+		<delete file="src/main/java/org/talend/sdi/*/*.class" />
+
+		<!-- Publish in related plugins -->
+		<copy todir="../org.talend.sdi.repository.ui.actions.metadata/lib">
 			<fileset dir="lib">
 				<include name="org.talend.sdi.jar" />
 			</fileset>
 		</copy>
+		<copy todir="../org.talend.sdi.designer.components/components/sGeoInput">
+			<fileset dir="lib">
+				<include name="org.talend.sdi.jar" />
+			</fileset>
+		</copy>
+		<!-- WARNING : TOS plugins may be installed in another location -->
 		<copy todir="../org.talend.designer.components.localprovider/components/tPostgresqlInput">
 			<fileset dir="lib">
 				<include name="org.talend.sdi.jar" />
 			</fileset>
-		</copy>-->
+		</copy>
 	</target>
 
 
@@ -44,11 +37,12 @@
           target: xsd-validation              
          ================================= -->
 	<target name="xsd-validation" description="Parse *_java.xml with components.xsd">
-		<!-- FIXME XSD location-->
+		<!-- FIXME : XSD location-->
 		<schemavalidate nonamespacefile="util/Component.xsd">
 			<fileset dir="components">
 				<include name="s*/*_java.xml" />
 			</fileset>
 		</schemavalidate>
 	</target>
+
 </project>
