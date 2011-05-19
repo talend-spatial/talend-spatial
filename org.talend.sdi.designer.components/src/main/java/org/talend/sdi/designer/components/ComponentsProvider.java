@@ -13,14 +13,12 @@
 package org.talend.sdi.designer.components;
 
 import java.io.File;
-
-import org.talend.commons.exception.ExceptionHandler;
-import org.talend.core.model.components.AbstractComponentsProvider;
+import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-
-import java.net.URL;
+import org.talend.commons.ui.runtime.exception.ExceptionHandler;
+import org.talend.core.model.components.AbstractComponentsProvider;
 
 /**
  * Components provider for SDI components.
@@ -33,6 +31,7 @@ public class ComponentsProvider extends AbstractComponentsProvider {
     public ComponentsProvider() {
     }
 
+    
     @Override
     protected File getExternalComponentsLocation() {
         URL url = FileLocator

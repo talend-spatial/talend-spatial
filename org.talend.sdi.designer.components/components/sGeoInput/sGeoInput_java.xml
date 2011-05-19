@@ -300,6 +300,8 @@
         REQUIRED="true" />
       <IMPORT NAME="xpp3" MODULE="xpp3-1.1.3.4.O.jar" REQUIRED="true" />
       <IMPORT NAME="xsd" MODULE="xsd-2.2.2.jar" REQUIRED="true" />
+      <IMPORT NAME="jai-codec" MODULE="jai_codec-1.1.3.jar" REQUIRED="true" />
+      <IMPORT NAME="jai-core" MODULE="jai_core.jar" REQUIRED="true" />
     </IMPORTS>
   </CODEGENERATION>
   <RETURNS>
