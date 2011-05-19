@@ -21,7 +21,6 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.ISelection;
@@ -29,15 +28,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.geotools.data.DataStore;
-import org.geotools.data.mif.MIFDataStore;
 import org.geotools.data.gpx.GpxDataStore;
+import org.geotools.data.mif.MIFDataStore;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.talend.commons.exception.BusinessException;
 import org.talend.commons.exception.PersistenceException;
-import org.talend.commons.ui.image.ImageProvider;
+import org.talend.commons.ui.runtime.image.ECoreImage;
+import org.talend.commons.ui.runtime.image.ImageProvider;
 import org.talend.commons.ui.swt.dialogs.ErrorDialogWidthDetailArea;
 import org.talend.commons.utils.VersionUtils;
 import org.talend.core.CorePlugin;
@@ -54,12 +54,11 @@ import org.talend.core.model.metadata.types.JavaTypesManager;
 import org.talend.core.model.properties.ConnectionItem;
 import org.talend.core.model.properties.PropertiesFactory;
 import org.talend.core.model.properties.Property;
-import org.talend.core.ui.images.ECoreImage;
+import org.talend.core.repository.model.ProxyRepositoryFactory;
 import org.talend.cwm.helper.ConnectionHelper;
 import org.talend.cwm.helper.PackageHelper;
 import org.talend.repository.i18n.Messages;
 import org.talend.repository.model.IProxyRepositoryFactory;
-import org.talend.repository.model.ProxyRepositoryFactory;
 import org.talend.repository.model.RepositoryNode;
 import org.talend.repository.model.RepositoryNodeUtilities;
 import org.talend.repository.ui.wizards.RepositoryWizard;
@@ -178,8 +177,10 @@ public class ImportGeoSchemaWizard extends RepositoryWizard implements INewWizar
      */
     private void initWizard() {
     	final List<org.talend.core.model.metadata.builder.connection.MetadataColumn> listColumns = new ArrayList<org.talend.core.model.metadata.builder.connection.MetadataColumn>();
+    	
+    	DataStore ds = null;
+    	
         try {
-        	DataStore ds = null;
         	SimpleFeatureType ft = null;
         	
         	if (file.getName().toLowerCase().endsWith(".shp")){
@@ -233,7 +234,11 @@ public class ImportGeoSchemaWizard extends RepositoryWizard implements INewWizar
         } catch (IOException e) {
             showErrorMessages(e.toString());
             return;
+        } catch (Exception e) {
+            showErrorMessages(e.toString());
+            return;
         }
+        
         if (selection == null || existingNames == null) {
             initConnection();
             pathToSave = new Path("");
