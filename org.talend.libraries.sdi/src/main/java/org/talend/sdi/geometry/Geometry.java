@@ -53,7 +53,7 @@ public class Geometry implements Serializable {
         try {
             geom = reader.read(wkt);
         } catch (ParseException e) {
-            System.out.println("Can't parse WKT."); // FIXME : log elsewhere
+            System.out.println("Can't parse WKT:" + e.getMessage()); // FIXME : log elsewhere
         }
 
         this.internalGeometry = geom;
@@ -203,7 +203,7 @@ public class Geometry implements Serializable {
             setSRID(SRID);
             this.EPSG = "EPSG:" + SRID;
         } catch (Exception e) {
-            System.out.println("SRID could not be determined");
+            System.out.println("SRID could not be determined: " + e.getMessage());
             SRID = -1;
         }
     }
