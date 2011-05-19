@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Talend Spatial Sextante components Plug-in
+Bundle-Name: Talend Spatial Sextante (beta) components Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.components.sextante;singleton:=true
 Bundle-Version: 4.1.2.beta
 Bundle-Localization: plugin
