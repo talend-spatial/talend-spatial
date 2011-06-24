@@ -1,0 +1,200 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+        
+    " 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+        String filename = ElementParameterParser.getValue(node,"__FILENAME__");
+        String layer = ElementParameterParser.getValue(node,"__LAYER__");
+        String xmin = ElementParameterParser.getValue(node,"__XMIN__");
+        String ymin = ElementParameterParser.getValue(node,"__YMIN__");
+        String xmax = ElementParameterParser.getValue(node,"__XMAX__");
+        String ymax = ElementParameterParser.getValue(node,"__YMAX__");
+        String where = ElementParameterParser.getValue(node,"__WHERE__");
+        String sql = ElementParameterParser.getValue(node,"__SQL__");
+%>
+
+/* initialize feature count */
+int nbFeature_<%=cid %> = 0;
+
+/* initialize OGR main variables */
+boolean bReadOnly_<%=cid %> = true;
+boolean bVerbose_<%=cid %> = true;
+boolean bAllLayers_<%=cid %> = false;
+
+int OGRNullFID_<%=cid %> = -1;
+int nFetchFID_<%=cid %> = OGRNullFID_<%=cid %>;
+int nRepeatCount_<%=cid %> = 1;
+
+org.gdal.ogr.Geometry poSpatialFilter_<%=cid %> = null;
+
+String pszWHERE_<%=cid %> = null;
+String pszSQLStatement_<%=cid %> = null;
+String pszDialect_<%=cid %> = null;
+
+/* initialize data source and layer (only one) */
+String pszDataSource_<%=cid %> = <%=filename %>;
+String papszLayers_<%=cid %> = <%=layer %>;
+
+org.gdal.ogr.ogr.RegisterAll();
+
+<%
+        // Spatial filter
+        if (!xmin.equals("\"\"")) {
+%>
+/* initilize spatial filter */
+org.gdal.ogr.Geometry oRing_<%=cid %> = new org.gdal.ogr.Geometry(org.gdal.ogr.ogrConstants.wkbLinearRing);
+double xmin_<%=cid %> = new Double(<%=xmin %>).doubleValue();
+double ymin_<%=cid %> = new Double(<%=ymin %>).doubleValue();
+double xmax_<%=cid %> = new Double(<%=xmax %>).doubleValue();
+double ymax_<%=cid %> = new Double(<%=ymax %>).doubleValue();
+oRing_<%=cid %>.AddPoint(xmin_<%=cid %>, ymin_<%=cid %>);
+oRing_<%=cid %>.AddPoint(xmin_<%=cid %>, ymax_<%=cid %>);
+oRing_<%=cid %>.AddPoint(xmax_<%=cid %>, ymax_<%=cid %>);
+oRing_<%=cid %>.AddPoint(xmax_<%=cid %>, ymin_<%=cid %>);
+oRing_<%=cid %>.AddPoint(xmin_<%=cid %>, ymin_<%=cid %>);
+
+poSpatialFilter_<%=cid %> = new org.gdal.ogr.Geometry(org.gdal.ogr.ogrConstants.wkbPolygon);
+poSpatialFilter_<%=cid %>.AddGeometry(oRing_<%=cid %>);
+
+<%
+        }
+        
+        // SQL filter
+        if (!where.equals("")) {
+%>
+pszWHERE_<%=cid %> = <%=where %>;
+<%
+         }
+%>
+
+/* get feature source from store */
+org.gdal.ogr.DataSource poDS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
+if (poDS_<%=cid %> == null) {
+    System.out.print("FAILURE:\n" + "Unable to open datasource `"
+            + pszDataSource_<%=cid %> + "' with the following drivers.\n");
+
+    for (int iDriver = 0; iDriver < org.gdal.ogr.ogr.GetDriverCount(); iDriver++) {
+        System.out.println("  -> " + org.gdal.ogr.ogr.GetDriver(iDriver).GetName());
+    }
+    return;
+}
+
+
+org.gdal.ogr.Driver poDriver_<%=cid %> = poDS_<%=cid %>.GetDriver();
+
+if (bVerbose_<%=cid %>) {
+    System.out.println("INFO: Open of `" + pszDataSource_<%=cid %> + "'\n"
+            + "      using driver `" + poDriver_<%=cid %>.GetName()
+            + "' successful.");
+}
+
+org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
+
+
+/* Set filters if provided. */
+if (pszWHERE_<%=cid %> != null)
+    poLayer_<%=cid %>.SetAttributeFilter(pszWHERE_<%=cid %>);
+
+if (poSpatialFilter_<%=cid %> != null)
+    poLayer_<%=cid %>.SetSpatialFilter(poSpatialFilter_<%=cid %>);
+
+
+/* CRS TODO get EPSG code */
+int pszWKT_<%=cid %>;
+if (poLayer_<%=cid %>.GetSpatialRef() == null)
+    pszWKT_<%=cid %> = -1;
+else {
+    pszWKT_<%=cid %> = poLayer_<%=cid %>.GetSpatialRef().AutoIdentifyEPSG();
+    //poLayer_<%=cid %>.GetSpatialRef().ExportToPrettyWkt();
+}
+
+
+
+
+/* loop over the feature collection and fill up the columns */
+org.gdal.ogr.Feature poFeature_<%=cid %>;
+String geomColum_<%=cid %> = poLayer_<%=cid %>.GetGeometryColumn();
+while ((poFeature_<%=cid %> = poLayer_<%=cid %>.GetNextFeature()) != null) {
+<%  
+        List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+        String firstConnName = "";
+        if (conns!=null) {
+            if (conns.size()>0) {
+                for (int i = 0; i < conns.size(); i++) {
+                    IConnection conn = conns.get(i);
+                    firstConnName = conn.getName();
+        
+                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+                        List<IMetadataColumn> listColumns = metadata.getListColumns();
+                        int sizeListColumns = listColumns.size();
+                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+
+                            //Just to get a non-primitive type we can cast an Object instance to.
+                            String objectType = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
+
+                            // TODO : handle key column ?
+                            // GetFID
+/*                            if (column.isKey()) {
+                                if (typeToGenerate.equals("String")) {
+                                }
+                            } else {
+*/                            
+                            
+                            if (typeToGenerate.equals("Geometry")) {
+%>
+    org.talend.sdi.geometry.Geometry geometry_<%=cid %> = 
+        new org.talend.sdi.geometry.Geometry(
+            poFeature_<%=cid %>.GetGeometryRef().ExportToWkt());
+    geometry_<%=cid %>.setSRID(pszWKT_<%=cid %>);
+    <%=conn.getName() %>.<%=column.getLabel() %> = geometry_<%=cid %>;
+<%                                    
+                            } else if (typeToGenerate.equals("String")) {
+%>
+    <%=conn.getName() %>.<%=column.getLabel() %> = 
+        poFeature_<%=cid %>.GetFieldAsString("<%=column.getLabel() %>");
+<%                            
+                               } else if (typeToGenerate.equals("Double")) {
+%>
+    <%=conn.getName() %>.<%=column.getLabel() %> = 
+        poFeature_<%=cid %>.GetFieldAsDouble("<%=column.getLabel() %>");
+<%                            
+                               } else if (typeToGenerate.equals("Integer")) {
+%>
+    <%=conn.getName() %>.<%=column.getLabel() %> = 
+        poFeature_<%=cid %>.GetFieldAsInteger("<%=column.getLabel() %>");
+<%                            
+                               } 
+                               // TODO : GetStyleString
+                        }
+                    }
+                }
+            }
+        }
+%>
+    nbFeature_<%=cid %>++;
+<%
+    }
+}
+%>
