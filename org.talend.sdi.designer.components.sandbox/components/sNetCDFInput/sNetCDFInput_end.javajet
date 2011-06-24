@@ -1,0 +1,39 @@
+<%@ jet 
+	imports="
+		org.talend.core.model.process.INode 
+		org.talend.core.model.metadata.IMetadataTable 
+		org.talend.designer.codegen.config.CodeGeneratorArgument
+		org.talend.core.model.process.ElementParameterParser 
+		java.util.List
+	" 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cidForward = "";
+String cid = node.getUniqueName();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas!=null)&&(metadatas.size()>0)) {
+	IMetadataTable metadata = metadatas.get(0);
+	if (metadata!=null) {
+%>
+        }
+    } catch (IOException ioe) {
+        ioe.printStackTrace();
+    }
+} catch (Exception e) {
+    System.out.println("Error: ");
+    e.printStackTrace();
+} finally {
+    if (null != ncfile_<%=cid %>) try {
+        ncfile_<%=cid %>.close();
+    } catch (Exception e) {
+        // TODO: handle exception
+    }
+}
+globalMap.put("<%=cidForward %>_NB_FEATURE", nbFeature_<%=cid %>);
+<%
+	}
+}
+%>      

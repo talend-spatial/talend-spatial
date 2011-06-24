@@ -1,0 +1,113 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+        
+    " 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+// Retrive component properties
+String filename = ElementParameterParser.getValue(node,"__FILENAME__");
+String reducedColName = ElementParameterParser.getValue(node,"__COL__");
+String loopColName = ElementParameterParser.getValue(node,"__LOOP_COL__");
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+    // Open the NetCDF file
+%>
+    int nbFeature_<%=cid %> = 0;
+    String filename_<%=cid %> = <%=filename %>;
+    ucar.nc2.NetcdfFile ncfile_<%=cid %> = null;
+    try {
+        ncfile_<%=cid %> = ucar.nc2.NetcdfFile.open(filename_<%=cid %>);
+        try {
+<%
+        // Define variables for each dimension
+        List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+        String firstConnName = "";
+        if (conns!=null) {
+            if (conns.size()>0) {
+                for (int i = 0; i < conns.size(); i++) {
+                    IConnection conn = conns.get(i);
+                    firstConnName = conn.getName();
+        
+                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+                        List<IMetadataColumn> listColumns = metadata.getListColumns();
+                        int sizeListColumns = listColumns.size();
+                        // Retrieve the values and reduce 
+                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+
+                            //Just to get a non-primitive type we can cast an Object instance to.
+                            String objectType = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
+                            
+                            
+                            // Read the variables
+%>
+        ucar.nc2.Variable v_<%=cid %>_<%=column.getLabel() %> = ncfile_<%=cid %>.findVariable("<%=column.getLabel() %>");
+        // TODO : Return when null
+        //if (null == vTemp)
+        //        return; <%=cid %>
+            
+        ucar.ma2.Array data_<%=cid %>_<%=column.getLabel() %> = v_<%=cid %>_<%=column.getLabel() %>.read();
+<%
+                            // 
+                            if (column.getLabel().equals(reducedColName)) {
+%>
+        ucar.ma2.Array data2D_<%=cid %>_<%=column.getLabel() %> = data_<%=cid %>_<%=column.getLabel() %>.reduce();
+<%
+                            }
+                        }
+                        
+                        // Start the main loop
+                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+                            if (column.getLabel().equals(loopColName)) {
+%>      
+        for (int i = 0; i < data_<%=cid %>_<%=column.getLabel() %>.getSize(); i++) {
+<%
+                            }
+                        }
+                        
+                        // Pass values to next component
+                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+                            
+                            if (column.isKey()) {
+%>
+                            int pos_<%=cid %>_<%=column.getLabel() %> = 0;
+<%
+                            } else {
+%>
+                            int pos_<%=cid %>_<%=column.getLabel() %> = i;
+<%
+                            }
+%>      
+            // TODO get according to data type
+            <%=conn.getName() %>.<%=column.getLabel() %> = data_<%=cid %>_<%=column.getLabel() %>.getDouble(pos_<%=cid %>_<%=column.getLabel() %>);
+<%
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+%>
