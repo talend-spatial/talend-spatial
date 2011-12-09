@@ -48,20 +48,20 @@ org.opengis.feature.simple.SimpleFeature outFeature_<%=cid%> = writer_<%=cid%>.n
 // TODO: don't we want to accept null geometries for PostGIS
 if (<%=conn.getName() %>.<%=column.getLabel() %> == null) 
     continue;
-Geometry currentGeom = <%=conn.getName() %>.<%=column.getLabel() %>;    
-if (currentGeom.isEmpty())
+Geometry currentGeom_<%=cid %> = <%=conn.getName() %>.<%=column.getLabel() %>;    
+if (currentGeom_<%=cid %>.isEmpty())
     continue;
 <%
                         if (formatType.equals("POSTGIS")) {
 %>
 
 outFeature_<%=cid%>.setAttribute(
-    map_<%=cid %>.get(<%=dbCol %>), currentGeom._getInternalGeometry());
+    map_<%=cid %>.get(<%=dbCol %>), currentGeom_<%=cid %>._getInternalGeometry());
 <%
                         } else {
 %>
 outFeature_<%=cid%>.setAttribute(
-    map_<%=cid %>.get("<%=column.getLabel() %>"), currentGeom._getInternalGeometry());
+    map_<%=cid %>.get("<%=column.getLabel() %>"), currentGeom_<%=cid %>._getInternalGeometry());
 <%
                          }
                          
@@ -71,16 +71,16 @@ outFeature_<%=cid%>.setAttribute(
 /* Projection for shapefile - if not forced, set using feature CRS*/
 if (nbFeature_<%=cid%> == 0) {
     org.opengis.referencing.crs.CoordinateReferenceSystem crs_<%=cid %> = 
-        currentGeom.getCRS();
+        currentGeom_<%=cid %>.getCRS();
     if (crs_<%=cid %> != null)
         ((org.geotools.data.shapefile.ShapefileDataStore)store_<%=cid %>).forceSchemaCRS(crs_<%=cid %>);
 }
 
 // Test geometry type according to shapefile type
-String currentGeomType = currentGeom.getGeometryType();
-if (!geometryType_<%=cid %>.equals(currentGeomType)) {
+String currentGeomType_<%=cid %> = currentGeom_<%=cid %>.getGeometryType();
+if (!geometryType_<%=cid %>.equals(currentGeomType_<%=cid %>)) {
 	
-	String e = "Geometry type (" + currentGeomType 
+	String e = "Geometry type (" + currentGeomType_<%=cid %> 
 			+ ") does not match Shapefile geometry type (" 
 			+ geometryType_<%=cid %> 
 			+ "). Row #" + nbFeature_<%=cid%>;
