@@ -1,0 +1,119 @@
+<COMPONENT>
+  <HEADER
+    PLATEFORM="ALL"
+    SERIAL=""
+    VERSION="0.1"
+    STATUS="ALPHA"
+    
+    COMPATIBILITY="ALL"
+    AUTHOR="mcoudert"
+    RELEASE_DATE="20120807"
+    STARTABLE="true"
+  >
+    <SIGNATURE/>
+  </HEADER>
+
+  <FAMILIES>
+    <FAMILY>Geo/File/Input</FAMILY>
+  </FAMILIES>
+
+  <DOCUMENTATION>
+    <URL/>
+  </DOCUMENTATION>
+
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="0"/>
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1"/>
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK"/>
+    <CONNECTOR CTYPE="COMPONENT_ERROR"/>
+    <CONNECTOR CTYPE="RUN_IF"/>
+  </CONNECTORS>
+
+  <PARAMETERS>
+    
+    <PARAMETER
+      NAME="FILENAME"
+      FIELD="FILE"
+      NUM_ROW="10"
+      REQUIRED="true"
+      REPOSITORY_VALUE="FILE_PATH"
+    >
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/in.TIF"</DEFAULT>
+    </PARAMETER>
+
+    <PARAMETER
+      NAME="SCHEMA"
+      FIELD="SCHEMA_TYPE"
+      REQUIRED="true"
+      NUM_ROW="20"
+      
+	>
+  		<TABLE READONLY="true">
+   			   <COLUMN NAME="driver"        TYPE="id_String" LENGTH="50"/>
+   			   <COLUMN NAME="files"         TYPE="id_String" LENGTH="255"/>
+			   <COLUMN NAME="x_size"        TYPE="id_Integer" LENGTH="8"/>
+			   <COLUMN NAME="y_size"        TYPE="id_Integer" LENGTH="8"/>
+			   <COLUMN NAME="srs"           TYPE="id_String" LENGTH="255"/>
+			   <COLUMN NAME="epsg_code"     TYPE="id_Integer" LENGTH="6"/>
+			   <COLUMN NAME="origin"        TYPE="id_Geometry"/>
+			   <COLUMN NAME="pixel_size"    TYPE="id_String" LENGTH="50"/>
+			   <COLUMN NAME="geotransform"  TYPE="id_String" LENGTH="50"/>
+			   <COLUMN NAME="center"        TYPE="id_Geometry"/>
+			   <COLUMN NAME="geo_extent"    TYPE="id_Geometry"/>
+			   <COLUMN NAME="latlon_extent" TYPE="id_Geometry"/>
+			   <COLUMN NAME="bands"         TYPE="id_String" LENGTH="255"/>
+
+  	  </TABLE>
+    </PARAMETER>
+
+  </PARAMETERS>
+  
+  <ADVANCED_PARAMETERS>
+  	 <PARAMETER
+      NAME="FIELD_SEPARATOR"
+      FIELD="TEXT"
+      NUM_ROW="10"
+      REQUIRED="true"
+      REPOSITORY_VALUE="FIELD_SEPARATOR"
+    >
+      <DEFAULT>" | "</DEFAULT>
+    </PARAMETER>
+    
+    <PARAMETER 
+      NAME="IMPORT" 
+      FIELD="MEMO_IMPORT" 
+      REQUIRED="false" 
+      SHOW="false" 
+      NUM_ROW="20"
+    >
+      <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+    </PARAMETER>
+    
+  </ADVANCED_PARAMETERS>
+
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT 
+        NAME="jts-1.9" 
+        MODULE="jts-1.9.jar" 
+        REQUIRED="true" 
+      />
+      <IMPORT
+        NAME="org.talend.sdi"
+        MODULE="org.talend.sdi.jar"
+        REQUIRED="true"
+      />
+      <IMPORT
+        NAME="gdal"
+        MODULE="gdal.jar"
+        REQUIRED="true"
+      />
+    </IMPORTS>
+  </CODEGENERATION>
+
+  <RETURNS>
+    <RETURN NAME="NB_LINE" TYPE="id_Integer" AVAILABILITY="AFTER"/>
+  </RETURNS>
+</COMPONENT>

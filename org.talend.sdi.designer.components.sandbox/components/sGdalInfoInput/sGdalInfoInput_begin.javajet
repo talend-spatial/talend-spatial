@@ -1,0 +1,283 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.IConnectionCategory
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+    " 
+%>
+    
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();
+    
+    List<IMetadataTable> metadatas = node.getMetadataList();
+    if ((metadatas!=null)&&(metadatas.size()>0)) {
+        IMetadataTable metadata = metadatas.get(0);
+        if (metadata!=null) {
+            String filename = ElementParameterParser.getValueWithUIFieldKey(node,"__FILENAME__", "FILENAME");
+            String fs = ElementParameterParser.getValueWithUIFieldKey(node,"__FIELD_SEPARATOR__", "FIELD_SEPARATOR");
+            
+            // TODO Handle GdalInfo Args in advanced params
+%>
+    // Fixed number of line. Only one row to extract information.
+    int nb_line_<%=cid %> = 1;
+        
+    /* Initialize GDAL main variables */
+    org.gdal.gdal.Dataset dataset_<%=cid %> = null;
+    org.gdal.gdal.Driver driver_<%=cid %> = null;
+    org.gdal.osr.SpatialReference proj_<%=cid %>, latlon_<%=cid %> = null;
+    org.gdal.osr.CoordinateTransformation transform_<%=cid %> = null;
+    
+    /* Initialize JTS main variables */
+    com.vividsolutions.jts.geom.GeometryFactory gFact_<%=cid %> = new com.vividsolutions.jts.geom.GeometryFactory();
+    
+    /* Initialize variables */ 
+    String srs_<%=cid %> = null;
+    // Default SRS EPSG code, if none is found
+    int epsg_code_<%=cid %> = -1;
+    String datasetName_<%=cid %> = <%=filename %>;
+    String FS_<%=cid %> = <%=fs %>;
+    
+    // Register all known configured GDAL drivers.
+    org.gdal.gdal.gdal.AllRegister();
+    
+    // Open a GDAL dataset
+    dataset_<%=cid %> = org.gdal.gdal.gdal.Open(datasetName_<%=cid %>, org.gdal.gdalconst.gdalconstConstants.GA_ReadOnly);
+    
+    if (dataset_<%=cid %> == null) {
+        System.err.println("DS null : GDALOpen failed - " + org.gdal.gdal.gdal.GetLastErrorNo());
+        System.err.println(org.gdal.gdal.gdal.GetLastErrorMsg());
+        return;
+    }
+    
+    // Get current GDAL driver
+    driver_<%=cid %> = dataset_<%=cid %>.GetDriver();
+    
+    /* Handle Projection - lat/long transformation */
+    String projection_<%=cid %> = dataset_<%=cid %>.GetProjectionRef();
+    if (projection_<%=cid %> != null && projection_<%=cid %>.length() > 0) {
+        proj_<%=cid %> = new org.gdal.osr.SpatialReference(projection_<%=cid %>);
+        if (proj_<%=cid %> != null) {
+            srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt(0);
+            if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
+                epsg_code_<%=cid %> =  Integer.parseInt(proj_<%=cid %>.GetAuthorityCode(null));
+            }
+            latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
+        }
+        
+        if (latlon_<%=cid %> != null) {
+            org.gdal.gdal.gdal.PushErrorHandler("CPLQuietErrorHandler");
+            transform_<%=cid %> = new org.gdal.osr.CoordinateTransformation(proj_<%=cid %>, latlon_<%=cid %>);
+            org.gdal.gdal.gdal.PopErrorHandler();
+            latlon_<%=cid %>.delete();
+            if (org.gdal.gdal.gdal.GetLastErrorMsg().indexOf("Unable to load PROJ.4 library") != -1) {
+                transform_<%=cid %> = null;
+            }
+        }
+    }
+    
+    /* Affine GeoTransform */
+    org.talend.sdi.geometry.Geometry geom_origin_<%=cid %> = null;
+    String pixel_size_<%=cid %> = null;
+    String geotransform_<%=cid %> = null;
+    double[] adfGeoTransform_<%=cid %> = new double[6];
+    dataset_<%=cid %>.GetGeoTransform(adfGeoTransform_<%=cid %>);
+    
+    if (adfGeoTransform_<%=cid %>[2] == 0.0 && adfGeoTransform_<%=cid %>[4] == 0.0) {
+        /* Create point origin */
+        com.vividsolutions.jts.geom.Coordinate origin_coord_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate(
+            adfGeoTransform_<%=cid %>[0], adfGeoTransform_<%=cid %>[3]);
+        geom_origin_<%=cid %> = new org.talend.sdi.geometry.Geometry((com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPoint(origin_coord_<%=cid %>));
+        /* Pixel size */
+        pixel_size_<%=cid %> = adfGeoTransform_<%=cid %>[1] +","+ adfGeoTransform_<%=cid %>[5];
+    } else {
+        geotransform_<%=cid %> = adfGeoTransform_<%=cid %>[0] +", "+ adfGeoTransform_<%=cid %>[1] +", "+ adfGeoTransform_<%=cid %>[2] + "\n "+
+                                 adfGeoTransform_<%=cid %>[3] +", "+ adfGeoTransform_<%=cid %>[4] +", "+ adfGeoTransform_<%=cid %>[5];
+    }
+    
+    /* Compute extent */
+    java.util.HashMap<String, double[]> corners_<%=cid %> = new java.util.HashMap<String, double[]>(5);
+    double[] upper_left_corner_<%=cid %> = { 0.0, 0.0 };
+    double[] lower_left_corner_<%=cid %> = { 0.0, dataset_<%=cid %>.getRasterYSize() };
+    double[] upper_right_corner_<%=cid %> = { dataset_<%=cid %>.getRasterXSize(), 0.0 };
+    double[] lower_right_corner_<%=cid %> = { dataset_<%=cid %>.getRasterXSize(), dataset_<%=cid %>.getRasterYSize() };
+    double[] center_<%=cid %> = { dataset_<%=cid %>.getRasterXSize() / 2.0, dataset_<%=cid %>.getRasterYSize() / 2.0 };
+    
+    corners_<%=cid %>.put("upperLeft", upper_left_corner_<%=cid %>);
+    corners_<%=cid %>.put("lowerLeft", lower_left_corner_<%=cid %>);
+    corners_<%=cid %>.put("upperRight", upper_right_corner_<%=cid %>);
+    corners_<%=cid %>.put("lowerRight", lower_right_corner_<%=cid %>);
+    corners_<%=cid %>.put("center", center_<%=cid %>);
+    
+    java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> geoXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(5);
+    java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> latlonXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(5);
+    
+    for (String corner_<%=cid %> : corners_<%=cid %>.keySet()) {
+        com.vividsolutions.jts.geom.Coordinate coord_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate();
+        if (adfGeoTransform_<%=cid %>[0] == 0 && adfGeoTransform_<%=cid %>[1] == 0
+                && adfGeoTransform_<%=cid %>[2] == 0 && adfGeoTransform_<%=cid %>[3] == 0
+                && adfGeoTransform_<%=cid %>[4] == 0 && adfGeoTransform_<%=cid %>[5] == 0) {
+            coord_<%=cid %>.x = corners_<%=cid %>.get(corner_<%=cid %>)[0];
+            coord_<%=cid %>.y = corners_<%=cid %>.get(corner_<%=cid %>)[1];
+        } else {
+            coord_<%=cid %>.x = adfGeoTransform_<%=cid %>[0] + adfGeoTransform_<%=cid %>[1]
+                * corners_<%=cid %>.get(corner_<%=cid %>)[0] + adfGeoTransform_<%=cid %>[2]
+                * corners_<%=cid %>.get(corner_<%=cid %>)[1];
+            coord_<%=cid %>.y = adfGeoTransform_<%=cid %>[3] + adfGeoTransform_<%=cid %>[4]
+                * corners_<%=cid %>.get(corner_<%=cid %>)[0] + adfGeoTransform_<%=cid %>[5]
+                * corners_<%=cid %>.get(corner_<%=cid %>)[1];
+        }
+        geoXY_<%=cid %>.put(corner_<%=cid %>, coord_<%=cid %>);
+        
+        // lat/long transformation
+        if (transform_<%=cid %> != null) {
+            double[] transPoint_<%=cid %> = new double[3];
+            transform_<%=cid %>.TransformPoint(transPoint_<%=cid %>, coord_<%=cid %>.x, coord_<%=cid %>.y, 0);
+            latlonXY_<%=cid %>.put(corner_<%=cid %>, new com.vividsolutions.jts.geom.Coordinate(transPoint_<%=cid %>[0], transPoint_<%=cid %>[1]));
+        }
+    }
+    
+<%
+            List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+            String firstConnName = "";
+            if (conns!=null) {
+                if (conns.size()>0) {
+                    IConnection conn = conns.get(0);
+                    firstConnName = conn.getName();
+                    
+                    if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+                        List<IMetadataColumn> listColumns = metadata.getListColumns();
+                        int sizeListColumns = listColumns.size();
+                        for (int valueN=0; valueN<sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+                            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+                            String patternValue = column.getPattern() == null || column.getPattern().trim().length() == 0 ? null : column.getPattern();
+                            
+                            if (column.getLabel().equals("driver")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = driver_<%=cid %>.getShortName()+"/"+driver_<%=cid %>.getLongName(); 
+<%
+                            } else if (column.getLabel().equals("files")) {
+%>
+            // Loop over associated files.
+            String files_<%=cid %> = null;
+            java.util.Vector<String> fileList_<%=cid %> = dataset_<%=cid %>.GetFileList();
+            boolean singleFile_<%=cid %> = true;
+            for (String file_<%=cid %> : fileList_<%=cid %>) {
+                if (singleFile_<%=cid %>) {
+                    files_<%=cid %> = file_<%=cid %>;
+                    singleFile_<%=cid %> = false;
+                } else {
+                    files_<%=cid %> += FS_<%=cid %> + file_<%=cid %>;
+                }
+            }
+            <%=firstConnName %>.<%=column.getLabel() %> = files_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("x_size")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = dataset_<%=cid %>.getRasterXSize();
+<%
+                            } else if (column.getLabel().equals("y_size")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = dataset_<%=cid %>.getRasterYSize();
+<%
+                            } else if (column.getLabel().equals("srs")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = srs_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("epsg_code")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = epsg_code_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("origin")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = geom_origin_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("pixel_size")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = pixel_size_<%=cid %>;
+<%                            
+                            } else if (column.getLabel().equals("geotransform")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = geotransform_<%=cid %>;
+<%                             
+                            } else if (column.getLabel().equals("center")) {
+%>
+            // the center of the extent (Point)
+            org.talend.sdi.geometry.Geometry geom_center_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPoint(geoXY_<%=cid %>.get("center")));
+            geom_center_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+            <%=firstConnName %>.<%=column.getLabel() %> = geom_center_<%=cid %>;
+<%                             
+                            } else if (column.getLabel().equals("geo_extent")) {
+%>
+            // the geo extent (Polygon)
+            com.vividsolutions.jts.geom.Coordinate[] geoCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
+            geoCoords_<%=cid %>[0] = geoXY_<%=cid %>.get("upperLeft");
+            geoCoords_<%=cid %>[1] = geoXY_<%=cid %>.get("lowerLeft");
+            geoCoords_<%=cid %>[2] = geoXY_<%=cid %>.get("lowerRight");
+            geoCoords_<%=cid %>[3] = geoXY_<%=cid %>.get("upperRight");
+            geoCoords_<%=cid %>[4] = geoXY_<%=cid %>.get("upperLeft");
+            
+            org.talend.sdi.geometry.Geometry geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
+            geo_extent_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+            <%=firstConnName %>.<%=column.getLabel() %> = geo_extent_<%=cid %>;
+<%                             
+                            } else if (column.getLabel().equals("latlon_extent")) {
+%>
+            // the lat/long extent (Polygon)
+            org.talend.sdi.geometry.Geometry latlon_extent_<%=cid %> = null;
+            if (!latlonXY_<%=cid %>.isEmpty()) {
+                com.vividsolutions.jts.geom.Coordinate[] latlonCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
+                latlonCoords_<%=cid %>[0] = latlonXY_<%=cid %>.get("upperLeft");
+                latlonCoords_<%=cid %>[1] = latlonXY_<%=cid %>.get("lowerLeft");
+                latlonCoords_<%=cid %>[2] = latlonXY_<%=cid %>.get("lowerRight");
+                latlonCoords_<%=cid %>[3] = latlonXY_<%=cid %>.get("upperRight");
+                latlonCoords_<%=cid %>[4] = latlonXY_<%=cid %>.get("upperLeft");
+                
+                latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
+                latlon_extent_<%=cid %>.setSRID(4326);
+            }
+            
+            <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;
+<%                             
+                            } else if (column.getLabel().equals("bands")) {
+%>
+            // Loop over the bands if any.
+            String bandsInfo_<%=cid %> = "";
+            for (int iBand_<%=cid %> = 0; iBand_<%=cid %> < dataset_<%=cid %>.getRasterCount(); iBand_<%=cid %>++) {
+                org.gdal.gdal.Band band_<%=cid %> = dataset_<%=cid %>.GetRasterBand(iBand_<%=cid %> + 1);
+                int[] blockXSize_<%=cid %> = new int[1];
+                int[] blockYSize_<%=cid %> = new int[1];
+                band_<%=cid %>.GetBlockSize(blockXSize_<%=cid %>, blockYSize_<%=cid %>);
+                if (iBand_<%=cid %> > 0) {
+                    bandsInfo_<%=cid %> += FS_<%=cid %>;
+                }
+                
+                bandsInfo_<%=cid %> += "Band : "+ (iBand_<%=cid %> + 1) 
+                    + " Block=" + blockXSize_<%=cid %>[0] + "x" + blockYSize_<%=cid %>[0]
+                    + " Type=" + org.gdal.gdal.gdal.GetDataTypeName(band_<%=cid %>.getDataType())
+                    + ", ColorInterp=" + org.gdal.gdal.gdal.GetColorInterpretationName(band_<%=cid %>.GetRasterColorInterpretation());
+            }
+            <%=firstConnName %>.<%=column.getLabel() %> = bandsInfo_<%=cid %>;
+<%                             
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+%>
