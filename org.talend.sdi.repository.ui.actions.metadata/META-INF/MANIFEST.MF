@@ -38,7 +38,8 @@ Require-Bundle: org.talend.libraries.ui,
  org.talend.libraries.sdi,
  org.apache.log4j;bundle-version="1.2.13",
  org.talend.cwm.mip,
- org.talend.metadata.managment.ui
+ org.talend.metadata.managment.ui,
+ org.talend.repository.metadata
 Bundle-ClassPath: .
 Export-Package: org.talend.sdi.repository.ui.actions.metadata;
   uses:="org.eclipse.jface.wizard,
