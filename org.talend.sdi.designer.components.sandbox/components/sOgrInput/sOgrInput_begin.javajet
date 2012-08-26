@@ -124,8 +124,13 @@ int pszWKT_<%=cid %>;
 if (poLayer_<%=cid %>.GetSpatialRef() == null)
     pszWKT_<%=cid %> = -1;
 else {
-    pszWKT_<%=cid %> = poLayer_<%=cid %>.GetSpatialRef().AutoIdentifyEPSG();
-    //poLayer_<%=cid %>.GetSpatialRef().ExportToPrettyWkt();
+	try {
+    	pszWKT_<%=cid %> = poLayer_<%=cid %>.GetSpatialRef().AutoIdentifyEPSG();
+    	//poLayer_<%=cid %>.GetSpatialRef().ExportToPrettyWkt();
+    } catch (Exception e) {
+    	System.err.println("Error trying to identify SRS. Error is: " + e.getMessage());
+    	pszWKT_<%=cid %> = -1;
+    }
 }
 
 
