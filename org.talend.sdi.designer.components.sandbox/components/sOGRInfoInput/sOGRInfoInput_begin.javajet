@@ -1,0 +1,294 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.IConnectionCategory
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+    " 
+%>
+    
+<%
+    CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+    INode node = (INode)codeGenArgument.getArgument();
+    String cid = node.getUniqueName();
+    
+    List<IMetadataTable> metadatas = node.getMetadataList();
+    if ((metadatas!=null)&&(metadatas.size()>0)) {
+        IMetadataTable metadata = metadatas.get(0);
+        if (metadata!=null) {
+            String filename = ElementParameterParser.getValueWithUIFieldKey(node,"__FILENAME__", "FILENAME");
+            String fs = ElementParameterParser.getValueWithUIFieldKey(node,"__FIELD_SEPARATOR__", "FIELD_SEPARATOR");
+            
+            // TODO Handle OGRInfo Args in advanced params
+%>
+    // Fixed number of line. Only one row to extract information.
+    int nb_line_<%=cid %> = 1;
+        
+    /* Initialize OGR main variables */
+    org.gdal.ogr.DataSource dataset_<%=cid %> = null;
+    org.gdal.ogr.Driver driver_<%=cid %> = null;
+    org.gdal.osr.SpatialReference proj_<%=cid %>, latlon_<%=cid %> = null;
+    org.gdal.osr.CoordinateTransformation transform_<%=cid %> = null;
+    
+    boolean bReadOnly_<%=cid %> = true;
+
+    /* Initialize JTS main variables */
+    com.vividsolutions.jts.geom.GeometryFactory gFact_<%=cid %> = new com.vividsolutions.jts.geom.GeometryFactory();
+    
+    /* Initialize variables */ 
+    String srs_<%=cid %> = null;
+    // Default SRS EPSG code, if none is found
+    int epsg_code_<%=cid %> = -1;
+    String datasetName_<%=cid %> = <%=filename %>;
+    String FS_<%=cid %> = <%=fs %>;
+    String error_<%=cid %> = "";
+    String geomType_<%=cid %> = "";
+    String fidColumn_<%=cid %> = "";
+    String geomColumn_<%=cid %> = "";
+    String columnsDef_<%=cid %> = "";
+    int nbFeatures_<%=cid %> = 0;
+    java.util.HashMap<String, double[]> corners_<%=cid %>;
+    java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> geoXY_<%=cid %>;
+    java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> latlonXY_<%=cid %>;
+            
+    
+    // Register all known configured GDAL drivers.
+    org.gdal.ogr.ogr.RegisterAll();
+    
+    // Open an OGR dataset
+    //dataset_<%=cid %> = org.gdal.gdal.gdal.Open(datasetName_<%=cid %>, org.gdal.gdalconst.gdalconstConstants.GA_ReadOnly);
+    /* get feature source from store */
+    dataset_<%=cid %> = org.gdal.ogr.ogr.Open(datasetName_<%=cid %>, !bReadOnly_<%=cid %>);
+    if (dataset_<%=cid %> == null) {
+        error_<%=cid %> = "FAILURE:" + "Unable to open datasource `"
+                + datasetName_<%=cid %> + "' with the OGR drivers.";
+        // TODO : report in reject output
+        System.err.println(error_<%=cid %>);
+        /*for (int iDriver = 0; iDriver < org.gdal.ogr.ogr.GetDriverCount(); iDriver++) {
+            System.err.println("  -> " + org.gdal.ogr.ogr.GetDriver(iDriver).GetName());
+        }*/
+    } else {
+        
+        // Get current GDAL driver
+        driver_<%=cid %> = dataset_<%=cid %>.GetDriver();
+        geoXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(4);
+        latlonXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(4);
+            
+        for (int iLayer = 0; iLayer < dataset_<%=cid %>.GetLayerCount(); iLayer++) {
+            //Layer poLayer = poDS.GetLayer(iLayer);
+            org.gdal.ogr.Layer poLayer_<%=cid %> = dataset_<%=cid %>.GetLayer(iLayer);
+    
+            if (poLayer_<%=cid %> == null)
+            {
+                System.out.println("FAILURE: Couldn't fetch advertised layer " + iLayer + "!");
+                return;
+            }
+               org.gdal.ogr.FeatureDefn poDefn_<%=cid %> = poLayer_<%=cid %>.GetLayerDefn();
+        
+            geomType_<%=cid %> = 
+                org.gdal.ogr.ogr.GeometryTypeToName(poDefn_<%=cid %>.GetGeomType());
+        
+            nbFeatures_<%=cid %> = poLayer_<%=cid %>.GetFeatureCount();
+    
+               
+            /* Handle Projection - lat/long transformation */
+            /* CRS TODO get EPSG code */
+            int pszWKT_<%=cid %>;
+            proj_<%=cid %> = poLayer_<%=cid %>.GetSpatialRef();
+            if (proj_<%=cid %> == null)
+                pszWKT_<%=cid %> = -1;
+            else {
+                try {
+                    pszWKT_<%=cid %> = proj_<%=cid %>.AutoIdentifyEPSG();
+                    srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt();
+                    if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
+                        epsg_code_<%=cid %> =  Integer.parseInt(poLayer_<%=cid %>.GetSpatialRef().GetAuthorityCode(null));
+                    }
+                    latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
+                } catch (Exception e) {
+                    System.err.println("Error trying to identify SRS. Error is: " + e.getMessage());
+                    pszWKT_<%=cid %> = -1;
+                }
+            }
+            
+            
+            if (latlon_<%=cid %> != null) {
+                org.gdal.gdal.gdal.PushErrorHandler("CPLQuietErrorHandler");
+                transform_<%=cid %> = new org.gdal.osr.CoordinateTransformation(proj_<%=cid %>, latlon_<%=cid %>);
+                org.gdal.gdal.gdal.PopErrorHandler();
+                latlon_<%=cid %>.delete();
+                if (org.gdal.gdal.gdal.GetLastErrorMsg().indexOf("Unable to load PROJ.4 library") != -1) {
+                    transform_<%=cid %> = null;
+                }
+            }
+            
+            if (poLayer_<%=cid %>.GetFIDColumn().length() > 0)
+                fidColumn_<%=cid %> = poLayer_<%=cid %>.GetFIDColumn();
+    
+            if (poLayer_<%=cid %>.GetGeometryColumn().length() > 0)
+                geomColumn_<%=cid %> = poLayer_<%=cid %>.GetGeometryColumn();
+    
+            for (int iAttr = 0; iAttr < poDefn_<%=cid %>.GetFieldCount(); iAttr++)
+            {
+                org.gdal.ogr.FieldDefn poField_<%=cid %> = poDefn_<%=cid %>.GetFieldDefn(iAttr);
+    
+                columnsDef_<%=cid %> += poField_<%=cid %>.GetNameRef() + "#" 
+                    + poField_<%=cid %>.GetFieldTypeName(poField_<%=cid %>.GetFieldType()) + "#"
+                    + poField_<%=cid %>.GetWidth() + "." + poField_<%=cid %>.GetPrecision()
+                    + FS_<%=cid %>;
+            }
+    
+            double oExt_<%=cid %>[] = poLayer_<%=cid %>.GetExtent(true);
+                
+            if (oExt_<%=cid %> != null) {
+                System.out.println("Extent: (" + oExt_<%=cid %>[0] + ", " + oExt_<%=cid %>[2] + ") - (" 
+                                                + oExt_<%=cid %>[1] + ", " + oExt_<%=cid %>[3] + ")");
+    
+                /* Compute extent */
+                corners_<%=cid %> = new java.util.HashMap<String, double[]>(4);
+                double[] upper_left_corner_<%=cid %> = { oExt_<%=cid %>[0], oExt_<%=cid %>[3] };
+                double[] lower_left_corner_<%=cid %> = { oExt_<%=cid %>[0], oExt_<%=cid %>[2] };
+                double[] upper_right_corner_<%=cid %> = { oExt_<%=cid %>[1], oExt_<%=cid %>[3] };
+                double[] lower_right_corner_<%=cid %> = { oExt_<%=cid %>[1], oExt_<%=cid %>[2] };
+                
+                corners_<%=cid %>.put("upperLeft", upper_left_corner_<%=cid %>);
+                corners_<%=cid %>.put("lowerLeft", lower_left_corner_<%=cid %>);
+                corners_<%=cid %>.put("upperRight", upper_right_corner_<%=cid %>);
+                corners_<%=cid %>.put("lowerRight", lower_right_corner_<%=cid %>);
+                
+                
+                for (String corner_<%=cid %> : corners_<%=cid %>.keySet()) {
+                    com.vividsolutions.jts.geom.Coordinate coord_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate();
+                    
+                    coord_<%=cid %>.x = corners_<%=cid %>.get(corner_<%=cid %>)[0];
+                    coord_<%=cid %>.y = corners_<%=cid %>.get(corner_<%=cid %>)[1];
+                    
+                    geoXY_<%=cid %>.put(corner_<%=cid %>, coord_<%=cid %>);
+                    
+                    // lat/long transformation
+                    if (transform_<%=cid %> != null) {
+                        double[] transPoint_<%=cid %> = new double[3];
+                        transform_<%=cid %>.TransformPoint(transPoint_<%=cid %>, coord_<%=cid %>.x, coord_<%=cid %>.y, 0);
+                        latlonXY_<%=cid %>.put(corner_<%=cid %>, new com.vividsolutions.jts.geom.Coordinate(transPoint_<%=cid %>[0], transPoint_<%=cid %>[1]));
+                    }
+                }
+            }
+        }
+    
+<%
+            List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+            String firstConnName = "";
+            if (conns!=null) {
+                if (conns.size()>0) {
+                    IConnection conn = conns.get(0);
+                    firstConnName = conn.getName();
+                    
+                    if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+                        List<IMetadataColumn> listColumns = metadata.getListColumns();
+                        int sizeListColumns = listColumns.size();
+                        for (int valueN=0; valueN<sizeListColumns; valueN++) {
+                            IMetadataColumn column = listColumns.get(valueN);
+                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+                            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+                            String patternValue = column.getPattern() == null || column.getPattern().trim().length() == 0 ? null : column.getPattern();
+                            
+                            if (column.getLabel().equals("driver")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = driver_<%=cid %>.getName(); 
+<%
+                            } else if (column.getLabel().equals("files")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = datasetName_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("fid_column")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = fidColunm_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("geom_column")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = geomColumn_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("error")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = error_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("geom_type")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = geomType_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("nb_features")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = nbFeatures_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("columns_def")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = columnsDef_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("srs")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = srs_<%=cid %>;
+<%
+                            } else if (column.getLabel().equals("epsg_code")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = epsg_code_<%=cid %>;
+<%                             
+                            } else if (column.getLabel().equals("geo_extent")) {
+%>
+
+            // the geo extent (Polygon)
+            com.vividsolutions.jts.geom.Coordinate[] geoCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
+            org.talend.sdi.geometry.Geometry geo_extent_<%=cid %> = null;
+            if (!geoXY_<%=cid %>.isEmpty()) {
+                geoCoords_<%=cid %>[0] = geoXY_<%=cid %>.get("upperLeft");
+                geoCoords_<%=cid %>[1] = geoXY_<%=cid %>.get("lowerLeft");
+                geoCoords_<%=cid %>[2] = geoXY_<%=cid %>.get("lowerRight");
+                geoCoords_<%=cid %>[3] = geoXY_<%=cid %>.get("upperRight");
+                geoCoords_<%=cid %>[4] = geoXY_<%=cid %>.get("upperLeft");
+                
+                geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
+                geo_extent_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+            }
+            <%=firstConnName %>.<%=column.getLabel() %> = geo_extent_<%=cid %>;
+            
+<%                             
+                            } else if (column.getLabel().equals("latlon_extent")) {
+%>
+
+            // the lat/long extent (Polygon)
+            org.talend.sdi.geometry.Geometry latlon_extent_<%=cid %> = null;
+            if (!latlonXY_<%=cid %>.isEmpty()) {
+                com.vividsolutions.jts.geom.Coordinate[] latlonCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
+                latlonCoords_<%=cid %>[0] = latlonXY_<%=cid %>.get("upperLeft");
+                latlonCoords_<%=cid %>[1] = latlonXY_<%=cid %>.get("lowerLeft");
+                latlonCoords_<%=cid %>[2] = latlonXY_<%=cid %>.get("lowerRight");
+                latlonCoords_<%=cid %>[3] = latlonXY_<%=cid %>.get("upperRight");
+                latlonCoords_<%=cid %>[4] = latlonXY_<%=cid %>.get("upperLeft");
+                
+                latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
+                latlon_extent_<%=cid %>.setSRID(4326);
+            }
+            
+            <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;
+
+<%                             
+                            } else if (column.getLabel().equals("bands")) {
+%>
+            
+<%                             
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+    }
+%>
