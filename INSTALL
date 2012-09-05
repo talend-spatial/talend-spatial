@@ -20,11 +20,7 @@ FAQ
 ---
 
  * After spatial plugins installation, no spatial components appears in the palette ?
-
-Some workarounds:
- * Unzip a clean TDI installer, Unzip spatial module to the plugins folder. Start TDI.
- * Copy all jar file from the org.talend.sdi.designer.components/**/*.jar folder to the lib/java folder of your TOS installation.
- * Create a new job and run CTRL+SHIFT+F3 to reload all components
+Start from a clean TOS zip and do not start TOS before unzipping spatial plugins.
 
 
 List of changes
