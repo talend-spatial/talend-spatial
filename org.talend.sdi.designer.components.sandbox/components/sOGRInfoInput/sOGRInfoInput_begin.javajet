@@ -147,9 +147,6 @@
             double oExt_<%=cid %>[] = poLayer_<%=cid %>.GetExtent(true);
                 
             if (oExt_<%=cid %> != null) {
-                System.out.println("Extent: (" + oExt_<%=cid %>[0] + ", " + oExt_<%=cid %>[2] + ") - (" 
-                                                + oExt_<%=cid %>[1] + ", " + oExt_<%=cid %>[3] + ")");
-    
                 /* Compute extent */
                 corners_<%=cid %> = new java.util.HashMap<String, double[]>(4);
                 double[] upper_left_corner_<%=cid %> = { oExt_<%=cid %>[0], oExt_<%=cid %>[3] };

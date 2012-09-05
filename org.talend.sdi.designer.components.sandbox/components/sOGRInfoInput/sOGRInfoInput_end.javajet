@@ -19,12 +19,9 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 %>
     nb_line_<%=cid %> ++;
 }
-// Delete current GDAL dataset
+// Delete current dataset
 if (dataset_<%=cid %> != null)
     dataset_<%=cid %>.delete();
-
-// Optional
-org.gdal.gdal.gdal.GDALDestroyDriverManager();
 
 globalMap.put("<%=cid %>_NB_LINE", nb_line_<%=cid %>);
 <%
