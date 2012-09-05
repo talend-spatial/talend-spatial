@@ -1,18 +1,20 @@
 How-to install Talend Open Studio Spatial module ?
+--------------------------------------------------
 
- * Download TOS from http://www.talend.com
- * Install TOS
+ * Download TOS DI from http://www.talend.com
+ * Unzip TOS DI
  * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/ 
  * Unzip Spatial module
  * Copy the content of the plugin directory in the plugins directory of TOS.
- * Start or restart TOS
+ * Start TOS
 
 
-
-For more information:
+More information
+----------------
 
  * Wiki: http://www.talendforge.org/wiki/doku.php?id=sdi:mainpage
  * Forum: http://www.talendforge.org/forum/viewforum.php?id=9
+
 
 FAQ
 ---
@@ -23,3 +25,13 @@ Some workarounds:
  * Unzip a clean TDI installer, Unzip spatial module to the plugins folder. Start TDI.
  * Copy all jar file from the org.talend.sdi.designer.components/**/*.jar folder to the lib/java folder of your TOS installation.
  * Create a new job and run CTRL+SHIFT+F3 to reload all components
+
+
+List of changes
+---------------
+
+ * Talend spatial module version 5.1.1 :
+  * sGdalInfoInput component
+  * sOgrInfoInput component
+  * Tested on TOS DI 5.1.1 and 5.2.0M3
+
