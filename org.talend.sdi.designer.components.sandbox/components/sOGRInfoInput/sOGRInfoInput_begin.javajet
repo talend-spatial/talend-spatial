@@ -205,7 +205,7 @@
 <%
                             } else if (column.getLabel().equals("fid_column")) {
 %>
-            <%=firstConnName %>.<%=column.getLabel() %> = fidColunm_<%=cid %>;
+            <%=firstConnName %>.<%=column.getLabel() %> = fidColumn_<%=cid %>; 
 <%
                             } else if (column.getLabel().equals("geom_column")) {
 %>
