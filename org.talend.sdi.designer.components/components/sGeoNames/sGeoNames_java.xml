@@ -57,7 +57,7 @@
         MODULE="commons-logging-1.1.1.jar" REQUIRED="true" />
       <IMPORT NAME="commons-codec-1.3" MODULE="commons-codec-1.3.jar"
         REQUIRED="true" />
-      <IMPORT NAME="log4j" MODULE="log4j-1.2.12.jar"
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.15.jar"
         REQUIRED="true" />
     </IMPORTS>
   </CODEGENERATION>
