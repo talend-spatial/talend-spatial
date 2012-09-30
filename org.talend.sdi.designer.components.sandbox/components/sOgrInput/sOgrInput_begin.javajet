@@ -169,12 +169,15 @@ while ((poFeature_<%=cid %> = poLayer_<%=cid %>.GetNextFeature()) != null) {
                             
                             if (typeToGenerate.equals("Geometry")) {
 %>
-    org.talend.sdi.geometry.Geometry geometry_<%=cid %> = 
-        new org.talend.sdi.geometry.Geometry(
-            poFeature_<%=cid %>.GetGeometryRef().ExportToWkt());
-    geometry_<%=cid %>.setSRID(pszWKT_<%=cid %>);
+    org.gdal.ogr.Geometry ogrGeometry_<%=cid %> = poFeature_<%=cid %>.GetGeometryRef();
+    org.talend.sdi.geometry.Geometry geometry_<%=cid %> = ogrGeometry_<%=cid %> != null ?
+        new org.talend.sdi.geometry.Geometry(ogrGeometry_<%=cid %>.ExportToWkt()) : null;
+
+    if (geometry_<%=cid %> != null) {
+        geometry_<%=cid %>.setSRID(pszWKT_<%=cid %>);
+    }
     <%=conn.getName() %>.<%=column.getLabel() %> = geometry_<%=cid %>;
-<%                                    
+<%
                             } else if (typeToGenerate.equals("String")) {
 %>
     <%=conn.getName() %>.<%=column.getLabel() %> = 
