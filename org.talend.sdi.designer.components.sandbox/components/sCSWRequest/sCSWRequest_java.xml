@@ -1,0 +1,70 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.101" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="fxp" RELEASE_DATE="20120927"
+    STARTABLE="true" DATA_AUTO_PROPAGATE="false"
+    SCHEMA_AUTO_PROPAGATE="false">
+    <SIGNATURE></SIGNATURE>
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/Metadata</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <!-- Host information -->
+    <PARAMETER NAME="HOST" FIELD="TEXT" REQUIRED="true" NUM_ROW="1">
+      <DEFAULT>"http://localhost"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="PORT" FIELD="TEXT" REQUIRED="true" NUM_ROW="1">
+      <DEFAULT>8080</DEFAULT>
+    </PARAMETER>
+    <!-- Login information -->
+    <PARAMETER NAME="LOGIN" FIELD="CHECK" REQUIRED="true" NUM_ROW="2">
+      <DEFAULT>true</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="USERNAME" FIELD="TEXT" NUM_ROW="2" REQUIRED="false"
+      SHOW_IF="LOGIN == 'true'">
+      <DEFAULT>"admin"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="PASSWORD" FIELD="TEXT" NUM_ROW="2" REQUIRED="false"
+      SHOW_IF="LOGIN == 'true'">
+      <DEFAULT>"admin"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="FILE" FIELD="FILE" REQUIRED="true" NUM_ROW="4">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/csw_request.xml"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="SERVLET" FIELD="TEXT" REQUIRED="true" NUM_ROW="5">
+      <DEFAULT>"geonetwork"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="SERVICENAME" FIELD="TEXT" REQUIRED="true" NUM_ROW="5">
+      <DEFAULT>"csw-publication"</DEFAULT>
+    </PARAMETER>
+  </PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="dom4j-1.6.1" MODULE="dom4j-1.6.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jaxen-1.1.1" MODULE="jaxen-1.1.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="commons-httpclient"
+        MODULE="commons-httpclient-3.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-logging"
+        MODULE="commons-logging-1.1.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-codec" MODULE="commons-codec-1.3.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="log4j" MODULE="log4j-1.2.15.jar"
+        REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS />
+</COMPONENT>
