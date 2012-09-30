@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.FileRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -40,6 +41,8 @@ public class GeoNetwork extends Catalogue {
         public static final String XML_LOGOUT = "xml.user.logout";
 
         public static final String MEF_IMPORT = "mef.import";
+
+        public static final String CSW_PUBLICATION = "csw-publication";
 
         public static final String XML_PUT = "xml.metadata.insert";
     }
@@ -93,7 +96,7 @@ public class GeoNetwork extends Catalogue {
         
         req.addParameter("username", username);
         req.addParameter("password", password);
-        
+
         /* Connect & Check ok */
         Document doc = httpConnect (httpclient, req);
         
@@ -128,7 +131,6 @@ public class GeoNetwork extends Catalogue {
             PostMethod req = new PostMethod(
                     this.host + ":" + this.port + "/" + 
                     this.servlet + "/srv/en/" + Service.MEF_IMPORT);
-            //System.out.println(xml);
 
             File xmlFile = createTempFile(xml);
             String group = "2";// Usually GeoNetwork sample group
@@ -259,6 +261,34 @@ public class GeoNetwork extends Catalogue {
 
         return true;
     }
-
-
+    
+    /** 
+     * POST request to CSW server
+     *           
+     * @param xml           The XML file to POST
+     * 
+     */
+    public boolean postCSW(String xmlFile, String serviceName) {
+        try {
+            HttpClient httpclient = new HttpClient ();
+            
+            // --- do we need to authenticate?
+            if (this.username != null)
+                authenticate(httpclient, this.username, this.password);
+            
+            
+            // --- Post xml metadata element
+            PostMethod req = new PostMethod(
+                    this.host + ":" + this.port + "/" + 
+                    this.servlet + "/srv/en/" + (serviceName == null ? Service.CSW_PUBLICATION : serviceName));
+            req.setRequestEntity(new FileRequestEntity(new File(xmlFile), "application/xml"));
+            
+            /* Check if error on publication */
+            Document doc = httpConnect (httpclient, req);
+            System.out.println ("org.talend.sdi.metadata.GeoNetwork | CSW publication: " + doc.asXML());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        return true;
+    }
 }

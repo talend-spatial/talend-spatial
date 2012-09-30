@@ -2,17 +2,14 @@ package org.talend.sdi.metadata;
 
 import java.io.IOException;
 
-import java.util.List;
-
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.ProxyClient;
-import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -120,7 +117,13 @@ public abstract class Catalogue {
         try {
             // Connect
             int result = httpclient.executeMethod(req);
-            
+            String redirectLocation;
+            Header locationHeader = req.getResponseHeader("location");
+            if (locationHeader != null) {
+                redirectLocation = locationHeader.getValue();
+                req.setPath(redirectLocation);
+                result = httpclient.executeMethod(req);
+            }
             if (result == HttpStatus.SC_OK) {
             	// Convert response to xml
             	doc = DocumentHelper.parseText(req.getResponseBodyAsString ());
