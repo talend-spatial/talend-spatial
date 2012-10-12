@@ -14,7 +14,7 @@ package org.talend.sdi.designer.components.sandbox;
 
 import java.io.File;
 
-import org.talend.commons.exception.ExceptionHandler;
+import org.talend.commons.ui.runtime.exception.ExceptionHandler;
 import org.talend.core.model.components.AbstractComponentsProvider;
 
 import org.eclipse.core.runtime.FileLocator;
