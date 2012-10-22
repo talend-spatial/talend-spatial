@@ -1,14 +1,34 @@
 <%@ jet
     imports="
-        org.talend.core.model.process.INode 
+        org.talend.core.model.process.INode
+        org.talend.core.model.metadata.IMetadataTable
         org.talend.core.model.process.ElementParameterParser
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
         org.talend.designer.codegen.config.CodeGeneratorArgument
+        org.talend.core.model.metadata.IMetadataColumn
+        java.util.List
     "
 %>
 <%
     CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
     INode node = (INode)codeGenArgument.getArgument();
     String cid = node.getUniqueName();
+    
+    List<? extends IConnection> inConns = node.getIncomingConnections(EConnectionType.FLOW_MAIN);
+    List<? extends IConnection> outConns = node.getOutgoingConnections(EConnectionType.FLOW_MAIN);
+    String inConnName = null, outConnName = null;
+
+    boolean hasOutputSchema = false;
+
+    if (outConns != null && outConns.size() > 0){
+        outConnName = outConns.get(0).getName();
+        hasOutputSchema = true;
+  
+        if (inConns != null && inConns.size() > 0){
+            inConnName = inConns.get(0).getName();
+        }
+    }
     
     String host  = ElementParameterParser.getValue(node, "__HOST__");
     String port = ElementParameterParser.getValue(node, "__PORT__");
@@ -21,23 +41,44 @@
 
 
 %>
-org.talend.sdi.metadata.GeoNetwork cat = new org.talend.sdi.metadata.GeoNetwork (<%=host %>, 
-                                            <%=port %>,
-                                            <%=servlet %>,
+org.talend.sdi.metadata.GeoNetwork cat_<%=cid %> = new org.talend.sdi.metadata.GeoNetwork(<%=host %>, 
+    <%=port %>, <%=servlet %>,
 <% 
-    if (login.equals("true"))
-    {
+    if (login.equals("true")) {
 %>
-                                            <%=username %>,
-                                            <%=password %>
+    <%=username %>, <%=password %>
 <%
-    } else     {
+    } else {
 %>
-                                            null,
-                                            null
+    null, null
 <% 
     }    
 %>
-                                            );
-cat.postCSW(<%=file %>, <%=servicename %>);
+    );
+String response_<%=cid %> = cat_<%=cid %>.postCSW(<%=file %>, <%=servicename %>);
 
+<%
+// output data
+if (outConnName != null){
+  List<IMetadataTable> metaTables = node.getMetadataList();
+  
+  if (metaTables != null && metaTables.size() > 0){
+    IMetadataTable metaTable = metaTables.get(0);
+    List<IMetadataColumn> columns = metaTable.getListColumns();
+    
+    for (IMetadataColumn column : columns){
+      String colName = column.getLabel();
+      
+      if ("ResponseContent".equals(colName)){
+%>
+<%=outConnName%>.ResponseContent = response_<%=cid %>;
+<%
+      } else {
+%>
+<%=outConnName%>.<%=colName%> = <%=inConnName%>.<%=colName%>;
+<%
+      }
+    }
+  }
+}
+%>
