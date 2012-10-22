@@ -268,8 +268,9 @@ public class GeoNetwork extends Catalogue {
      * @param xml           The XML file to POST
      * 
      */
-    public boolean postCSW(String xmlFile, String serviceName) {
-        try {
+    public String postCSW(String xmlFile, String serviceName) {
+    	String response = null;
+    	try {
             HttpClient httpclient = new HttpClient ();
             
             // --- do we need to authenticate?
@@ -278,17 +279,21 @@ public class GeoNetwork extends Catalogue {
             
             
             // --- Post xml metadata element
+            String service = serviceName == null ? Service.CSW_PUBLICATION : serviceName;
             PostMethod req = new PostMethod(
                     this.host + ":" + this.port + "/" + 
-                    this.servlet + "/srv/en/" + (serviceName == null ? Service.CSW_PUBLICATION : serviceName));
+                    this.servlet + "/srv/en/" + service);
             req.setRequestEntity(new FileRequestEntity(new File(xmlFile), "application/xml"));
             
             /* Check if error on publication */
-            Document doc = httpConnect (httpclient, req);
-            System.out.println ("org.talend.sdi.metadata.GeoNetwork | CSW publication: " + doc.asXML());
+            Document doc = httpConnect(httpclient, req);
+            System.out.println("org.talend.sdi.metadata.GeoNetwork | CSW service ("+service+") ok");
+            response = doc.asXML();
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("org.talend.sdi.metadata.GeoNetwork | CSW publication failed : " + e.getMessage());
         }
-        return true;
+        return response;
     }
+    
+    
 }
