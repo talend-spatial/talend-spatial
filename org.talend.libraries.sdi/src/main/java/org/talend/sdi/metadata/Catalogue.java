@@ -128,17 +128,17 @@ public abstract class Catalogue {
             	// Convert response to xml
             	doc = DocumentHelper.parseText(req.getResponseBodyAsString ());
             } else
-            	System.err.println ("org.talend.sdi.metadata.Catalogue | Bad status");
+            	System.err.println ("org.talend.sdi.metadata.Catalogue | Bad status : " + result);
             
             
         } catch (DocumentException e){
             System.err.println("org.talend.sdi.metadata.Catalogue | Invalid XML Document '" + e.getMessage() + "'");
         } catch (HttpException he) {
-            System.err.println("org.talend.sdi.metadata.Catalogue | Http error connecting to '" + httpclient.toString() + "'");
+            System.err.println("org.talend.sdi.metadata.Catalogue | Http error connecting to '" + this.host+":"+this.port + "'");
             System.err.println(he.getMessage());
             System.exit(-4);
         } catch (IOException ioe){
-            System.err.println("org.talend.sdi.metadata.Catalogue | Unable to connect to '" + httpclient.toString() + "'");
+            System.err.println("org.talend.sdi.metadata.Catalogue | Unable to connect to '" + this.host+":"+this.port + "'");
             System.exit(-3);
         } finally {
             // Release current connection to the connection pool once you are done
