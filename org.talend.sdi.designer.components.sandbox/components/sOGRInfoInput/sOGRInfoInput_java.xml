@@ -71,6 +71,15 @@
             <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
                 REQUIRED="true" />
             <IMPORT NAME="gdal" MODULE="gdal.jar" REQUIRED="true" />
+            <IMPORT NAME="geoapi" MODULE="geoapi-2.2-M1.jar" REQUIRED="true" />
+            <IMPORT NAME="jsr-275" MODULE="jsr-275-1.0-beta-2.jar" REQUIRED="true" />
+            <IMPORT NAME="gt-api" MODULE="gt-api-2.5-M3.jar" REQUIRED="true" />
+            <IMPORT NAME="gt-referencing" MODULE="gt-referencing-2.5-M3.jar" REQUIRED="true" />
+            <IMPORT NAME="gt-metadata" MODULE="gt-metadata-2.5-M3.jar" REQUIRED="true" />
+            <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-2.5-M3.jar" REQUIRED="true" />
+            <IMPORT NAME="hsqldb" MODULE="hsqldb-1.8.0.7.jar" REQUIRED="true" />
+            <IMPORT NAME="jai-core" MODULE="jai_core.jar" REQUIRED="true" />
+            <IMPORT NAME="vecmath" MODULE="vecmath-1.3.1.jar" REQUIRED="true" />
         </IMPORTS>
     </CODEGENERATION>
 

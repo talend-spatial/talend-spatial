@@ -43,6 +43,7 @@
     
     /* Initialize variables */ 
     String srs_<%=cid %> = null;
+    org.opengis.referencing.crs.CoordinateReferenceSystem crs_<%=cid %> = null;
     // Default SRS EPSG code, if none is found
     int epsg_code_<%=cid %> = -1;
     String datasetName_<%=cid %> = <%=filename %>;
@@ -109,6 +110,11 @@
                     srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt();
                     if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
                         epsg_code_<%=cid %> =  Integer.parseInt(poLayer_<%=cid %>.GetSpatialRef().GetAuthorityCode(null));
+                        try {
+                            crs_<%=cid %> = org.geotools.referencing.CRS.decode("EPSG:"+epsg_code_<%=cid %>);
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                        }
                     }
                     latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
                 } catch (Exception e) {
@@ -250,7 +256,9 @@
                 
                 geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
                     (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
-                geo_extent_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+                if (crs_<%=cid %> != null) {
+                    geo_extent_<%=cid %>.setCRS(crs_<%=cid %>);
+                }
             }
             <%=firstConnName %>.<%=column.getLabel() %> = geo_extent_<%=cid %>;
             
@@ -270,7 +278,7 @@
                 
                 latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
                     (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
-                latlon_extent_<%=cid %>.setSRID(4326);
+                latlon_extent_<%=cid %>.setCRS(org.geotools.referencing.CRS.decode("EPSG:4326"));
             }
             
             <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;

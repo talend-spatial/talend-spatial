@@ -41,6 +41,7 @@
     
     /* Initialize variables */ 
     String srs_<%=cid %> = null;
+    org.opengis.referencing.crs.CoordinateReferenceSystem crs_<%=cid %> = null;
     // Default SRS EPSG code, if none is found
     int epsg_code_<%=cid %> = -1;
     String datasetName_<%=cid %> = <%=filename %>;
@@ -69,6 +70,11 @@
             srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt(0);
             if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
                 epsg_code_<%=cid %> =  Integer.parseInt(proj_<%=cid %>.GetAuthorityCode(null));
+                try {
+                    crs_<%=cid %> = org.geotools.referencing.CRS.decode("EPSG:"+epsg_code_<%=cid %>);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
             latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
         }
@@ -215,7 +221,9 @@
             // the center of the extent (Point)
             org.talend.sdi.geometry.Geometry geom_center_<%=cid %> = new org.talend.sdi.geometry.Geometry(
                 (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPoint(geoXY_<%=cid %>.get("center")));
-            geom_center_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+            if (crs_<%=cid %> != null) {
+                geom_center_<%=cid %>.setCRS(crs_<%=cid %>);
+            }
             <%=firstConnName %>.<%=column.getLabel() %> = geom_center_<%=cid %>;
 <%                             
                             } else if (column.getLabel().equals("geo_extent")) {
@@ -230,7 +238,9 @@
             
             org.talend.sdi.geometry.Geometry geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
                 (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
-            geo_extent_<%=cid %>.setSRID(epsg_code_<%=cid %>);
+            if (crs_<%=cid %> != null) {
+                geo_extent_<%=cid %>.setCRS(crs_<%=cid %>);
+            }
             <%=firstConnName %>.<%=column.getLabel() %> = geo_extent_<%=cid %>;
 <%                             
                             } else if (column.getLabel().equals("latlon_extent")) {
@@ -247,7 +257,7 @@
                 
                 latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
                     (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
-                latlon_extent_<%=cid %>.setSRID(4326);
+                latlon_extent_<%=cid %>.setCRS(org.geotools.referencing.CRS.decode("EPSG:4326"));
             }
             
             <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;
