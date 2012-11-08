@@ -12,7 +12,8 @@ How-to install Talend Open Studio Spatial module ?
 More information
 ----------------
 
- * Wiki: http://www.talendforge.org/wiki/doku.php?id=sdi:mainpage
+ * Home page: http://talend-spatial.github.com/
+ * Wiki: http://github.com/talend-spatial/talend-spatial/wiki
  * Forum: http://www.talendforge.org/forum/viewforum.php?id=9
 
 
@@ -27,6 +28,9 @@ List of changes
 ---------------
 
  * Talend spatial module version 5.2.0:
+  * OGRInfo and GDALInfo input components does not set geometry CRS (#9)
+  * Add i18n files (#6)
+  * sCSWRequest component retrieves CSW response (#5)
   * NullPointerException in sOgrInput with NULL geometries (#3). Thanks etdube for reporting and patch.
   * sCSWRequest component for sending CSW request (#2).
   * GeoNetwork support / catalog component does not follow redirects (#4).
