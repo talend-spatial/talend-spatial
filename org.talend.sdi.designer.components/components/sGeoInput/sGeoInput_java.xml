@@ -107,9 +107,9 @@
       REQUIRED="true">
       <ITEMS DEFAULT="v1_0_0">
         <ITEM NAME="v1_0_0"
-          VALUE="org.geotools.wfs.protocol.Version.v1_0_0" />
+          VALUE="org.geotools.data.wfs.protocol.wfs.Version.v1_0_0" />
         <ITEM NAME="v1_1_0"
-          VALUE="org.geotools.wfs.protocol.Version.v1_1_0" />
+          VALUE="org.geotools.data.wfs.protocol.wfs.Version.v1_1_0" />
       </ITEMS>
     </PARAMETER>
     <PARAMETER NAME="CQL" FIELD="TEXT" NUM_ROW="3" REQUIRED="true">
@@ -158,9 +158,7 @@
   </ADVANCED_PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>
-      <IMPORT NAME="ant-optional" MODULE="ant-optional-1.5.1.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="common" MODULE="common-2.2.1.jar" REQUIRED="true" />
+      <IMPORT NAME="common" MODULE="common-2.6.0.jar" REQUIRED="true" />
       <IMPORT NAME="commons-beanutils"
         MODULE="commons-beanutils-1.7.0.jar" REQUIRED="true" />
       <IMPORT NAME="commons-cli" MODULE="commons-cli-2.0-gt2-pre1.jar"
@@ -169,139 +167,100 @@
         REQUIRED="true" />
       <IMPORT NAME="commons-collections"
         MODULE="commons-collections-3.1.jar" REQUIRED="true" />
-      <IMPORT NAME="commons-dbcp" MODULE="commons-dbcp-1.2.2.jar"
+      <IMPORT NAME="commons-dbcp" MODULE="commons-dbcp-1.3.jar"
         REQUIRED="true" />
       <IMPORT NAME="commons-httpclient"
-        MODULE="commons-httpclient-3.0.1.jar" REQUIRED="true" />
-      <IMPORT NAME="commons-io" MODULE="commons-io-1.2.jar"
+        MODULE="commons-httpclient-3.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-io" MODULE="commons-io-2.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="commons-jxpath" MODULE="commons-jxpath-1.2.jar"
+      <IMPORT NAME="commons-jxpath" MODULE="commons-jxpath-1.3.jar"
         REQUIRED="true" />
-      <IMPORT NAME="commons-lang" MODULE="commons-lang-2.1.jar"
+      <IMPORT NAME="commons-lang" MODULE="commons-lang-2.3.jar"
         REQUIRED="true" />
       <IMPORT NAME="commons-logging" MODULE="commons-logging-1.1.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="commons-pool" MODULE="commons-pool-1.3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="concurrent" MODULE="concurrent-1.3.4.jar"
+      <IMPORT NAME="commons-pool" MODULE="commons-pool-1.5.4.jar"
         REQUIRED="true" />
       <IMPORT NAME="dom4j-1.6.1.jar" MODULE="dom4j-1.6.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="ecore" MODULE="ecore-2.2.2.jar" REQUIRED="true" />
-      <IMPORT NAME="geoapi" MODULE="geoapi-2.2-M1.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-api" MODULE="gt-api-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-cql" MODULE="gt-cql-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-data" MODULE="gt-data-2.5-M3.jar"
+      <IMPORT NAME="ecore" MODULE="ecore-2.6.1.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-api" MODULE="gt-api-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-cql" MODULE="gt-cql-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-data" MODULE="gt-data-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-directory" MODULE="gt-directory-2.5-M3.jar"
+      <IMPORT NAME="gt-epsg-wkt" MODULE="gt-epsg-wkt-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-edigeo" MODULE="gt-edigeo-2.5-M3.jar"
+      <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-2.5-M3.jar"
+      <IMPORT NAME="gt-jdbc" MODULE="gt-jdbc-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-epsg-wkt" MODULE="gt-epsg-wkt-2.5-M3.jar"
+      <IMPORT NAME="gt-main" MODULE="gt-main-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-gml" MODULE="gt-gml-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-gpx" MODULE="gt-gpx-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-jdbc" MODULE="gt-jdbc-2.5-M3.jar"
+      <IMPORT NAME="gt-metadata" MODULE="gt-metadata-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-main" MODULE="gt-main-2.5-M3.jar"
+      <!-- <IMPORT NAME="gt-mif" MODULE="gt-mif-8.5.jar" REQUIRED="true" /> -->
+      <IMPORT NAME="gt-postgis" MODULE="gt-jdbc-postgis-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-metadata" MODULE="gt-metadata-2.5-M3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="gt-mif" MODULE="gt-mif-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-postgis" MODULE="gt-postgis-2.5-M3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="gt-referencing" MODULE="gt-referencing-2.5-M3.jar"
+      <IMPORT NAME="gt-referencing" MODULE="gt-referencing-8.5.jar"
         REQUIRED="true" />
       <!-- CHECKME if needed -->
       <IMPORT NAME="gt-referencing3D"
-        MODULE="gt-referencing3D-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-shapefile" MODULE="gt-shapefile-2.5-M3.jar"
+        MODULE="gt-referencing3D-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-shapefile" MODULE="gt-shapefile-8.5.jar"
         REQUIRED="true" />
       <IMPORT NAME="gt-shapefile-renderer"
-        MODULE="gt-shapefile-renderer-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-validation" MODULE="gt-validation-2.5-M3.jar"
+        MODULE="gt-shapefile-renderer-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-validation" MODULE="gt-validation-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-wfs" MODULE="gt-wfs-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-xml" MODULE="gt-xml-2.5-M3.jar" REQUIRED="true" />
-      <IMPORT NAME="gt-xml-gpx" MODULE="gt-xml-gpx-2.5-M3.jar"
+      <IMPORT NAME="gt-wfs" MODULE="gt-wfs-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-xml" MODULE="gt-xml-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-xsd-core" MODULE="gt-xsd-core-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-core" MODULE="gt-xsd-core-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-filter" MODULE="gt-xsd-filter-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-filter" MODULE="gt-xsd-filter-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-gml2" MODULE="gt-xsd-gml2-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-gml2" MODULE="gt-xsd-gml2-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-gml3" MODULE="gt-xsd-gml3-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-gml3" MODULE="gt-xsd-gml3-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-kml" MODULE="gt-xsd-kml-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-kml" MODULE="gt-xsd-kml-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-ows" MODULE="gt-xsd-ows-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-ows" MODULE="gt-xsd-ows-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-sld" MODULE="gt-xsd-sld-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-sld" MODULE="gt-xsd-sld-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-wfs" MODULE="gt-xsd-wfs-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-wfs" MODULE="gt-xsd-wfs-2.5-M3.jar"
+      <IMPORT NAME="gt-xsd-wps" MODULE="gt-xsd-wps-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="gt-xsd-wps" MODULE="gt-xsd-wps-2.5-M3.jar"
+      <IMPORT NAME="gt-opengis" MODULE="gt-opengis-8.5.jar"
         REQUIRED="true" />
       <IMPORT NAME="hsqldb" MODULE="hsqldb-1.8.0.7.jar" REQUIRED="true" />
-      <IMPORT NAME="jaxb-api" MODULE="jaxb-api-1.3.jar" REQUIRED="true" />
-      <IMPORT NAME="jaxb-impl" MODULE="jaxb-impl-1.3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="jaxb-libs" MODULE="jaxb-libs-1.3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="jdbc-stdext" MODULE="jdbc-stdext-2.0.jar"
-        REQUIRED="true" />
+      <IMPORT NAME="jgridshift" MODULE="jgridshift-1.0.jar" REQUIRED="true" />
       <IMPORT NAME="jdom" MODULE="jdom-1.0.jar" REQUIRED="true" />
-      <IMPORT NAME="jlfgr" MODULE="jlfgr-1.0.jar" REQUIRED="true" />
       <IMPORT NAME="jsr-275" MODULE="jsr-275-1.0-beta-2.jar"
         REQUIRED="true" />
-      <IMPORT NAME="jta" MODULE="jta-1.0.1B.jar" REQUIRED="true" />
-      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
-      <IMPORT NAME="junit" MODULE="junit-4.4.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.12.jar" REQUIRED="true" />
       <IMPORT NAME="log4j" MODULE="log4j-1.2.15.jar" REQUIRED="true" />
-      <IMPORT NAME="mlibwrapper" MODULE="mlibwrapper_jai.jar"
+      <IMPORT NAME="net.opengis.ows" MODULE="net.opengis.ows-8.5.jar"
         REQUIRED="true" />
-      <IMPORT NAME="net.opengis.ows" MODULE="net.opengis.ows-2.5-M3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="net.opengis.wfs" MODULE="net.opengis.wfs-2.5-M3.jar"
+      <IMPORT NAME="net.opengis.wfs" MODULE="net.opengis.wfs-8.5.jar"
         REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
-      <IMPORT NAME="org.w3.xlink" MODULE="org.w3.xlink-2.5-M3.jar"
+      <IMPORT NAME="org.w3.xlink" MODULE="org.w3.xlink-8.5.jar"
         REQUIRED="true" />
       <IMPORT NAME="picocontainer" MODULE="picocontainer-1.2.jar"
         REQUIRED="true" />
-      <IMPORT NAME="postgis-driver" MODULE="postgis_1.4.0.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="postgresql" MODULE="postgresql-8.1-407.jdbc3.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="relaxngDatatype-X" MODULE="relaxngDatatype-X.jar"
-        REQUIRED="true" />
-      <!-- slf4j used by coverageio-netcdf -->
-      <IMPORT NAME="slf4j-api" MODULE="slf4j-api-1.4.0.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="slf4j-jdk" MODULE="slf4j-jdk14-1.4.0.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="spatialdb" MODULE="spatialdb-0.1.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="spatialdbbox" MODULE="spatialdbbox-1.0-SNAPSHOT.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="vecmath" MODULE="vecmath-1.3.1.jar" REQUIRED="true" />
-      <IMPORT NAME="velocity" MODULE="velocity-1.4.jar" REQUIRED="true" />
-      <IMPORT NAME="velocity-dep" MODULE="velocity-dep-1.4.jar"
-        REQUIRED="true" />
+      <IMPORT NAME="vecmath" MODULE="vecmath-1.3.2.jar" REQUIRED="true" />
       <IMPORT NAME="xercesImpl" MODULE="xercesImpl-2.7.1.jar"
-        REQUIRED="true" />
-      <IMPORT NAME="xml-apis" MODULE="xml-apis-1.0.b2.jar"
         REQUIRED="true" />
       <IMPORT NAME="xml-apis-xerces" MODULE="xml-apis-xerces-2.7.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="xpp3" MODULE="xpp3-1.1.3.4.O.jar" REQUIRED="true" />
-      <IMPORT NAME="xsd" MODULE="xsd-2.2.2.jar" REQUIRED="true" />
+      <IMPORT NAME="xsd" MODULE="xsd-2.6.0.jar" REQUIRED="true" />
       <IMPORT NAME="jai-codec" MODULE="jai_codec-1.1.3.jar" REQUIRED="true" />
-      <IMPORT NAME="jai-core" MODULE="jai_core.jar" REQUIRED="true" />
+      <IMPORT NAME="jai-core" MODULE="jai_core-1.1.3.jar" REQUIRED="true" />
+      <IMPORT NAME="postgis" MODULE="postgis-jdbc-2.1.0SVN.jar" REQUIRED="true"/>
+      <IMPORT NAME="postgres" MODULE="postgresql-9.2-1002.jdbc3.jar" REQUIRED="true"/>
     </IMPORTS>
   </CODEGENERATION>
   <RETURNS>

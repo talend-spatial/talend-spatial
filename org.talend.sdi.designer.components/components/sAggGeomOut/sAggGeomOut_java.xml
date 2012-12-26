@@ -49,7 +49,7 @@
   </ADVANCED_PARAMETERS>  
   <CODEGENERATION>
     <IMPORTS>
-      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.12.jar" REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
     </IMPORTS>
