@@ -23,13 +23,19 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.geotools.data.DataStore;
-import org.geotools.data.gpx.GpxDataStore;
-import org.geotools.data.mif.MIFDataStore;
+//import org.geotools.data.gpx.GpxDataStore;
+//import org.geotools.data.mif.MIFDataStore;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -126,6 +132,8 @@ public class ImportGeoSchemaWizard extends RepositoryWizard implements INewWizar
         genericSchemaWizardPage.setDescription(Messages.getString("FileWizardPage.descriptionUpdateStep0")); //$NON-NLS-1$
         addPage(genericSchemaWizardPage);
         genericSchemaWizardPage.setPageComplete(true);
+        
+        System.out.println("====" + this.getPageCount() + " " + this.getPages().length);
     }
 
     /*
@@ -177,23 +185,22 @@ public class ImportGeoSchemaWizard extends RepositoryWizard implements INewWizar
      */
     private void initWizard() {
     	final List<org.talend.core.model.metadata.builder.connection.MetadataColumn> listColumns = new ArrayList<org.talend.core.model.metadata.builder.connection.MetadataColumn>();
-    	
     	DataStore ds = null;
-    	
+        
         try {
         	SimpleFeatureType ft = null;
-        	
+            
         	if (file.getName().toLowerCase().endsWith(".shp")){
         		ds = new ShapefileDataStore(file.toURI().toURL());
         		ft = ((ShapefileDataStore)ds).getSchema(); 
-        	} else if (file.getName().toLowerCase().endsWith(".mif")){
-        		ds = new MIFDataStore(file.getPath(), null);
-        		ft = ds.getSchema(ds.getTypeNames()[0]);
-        	} else if (file.getName().toLowerCase().endsWith(".gpx")){
-        		ds = new GpxDataStore(file.toURL(), null);
-        		ft = ds.getSchema(ds.getTypeNames()[0]);
+//        	} else if (file.getName().toLowerCase().endsWith(".mif")){
+//        		ds = new MIFDataStore(file.getPath(), null);
+//        		ft = ds.getSchema(ds.getTypeNames()[0]);
+//        	} else if (file.getName().toLowerCase().endsWith(".gpx")){
+//        		ds = new GpxDataStore(file.toURL(), null);
+//        		ft = ds.getSchema(ds.getTypeNames()[0]);
         	}
-        	
+            
         	
         	for (AttributeDescriptor att : ft.getAttributeDescriptors()) {
         		//.getAttributeTypes()
@@ -222,15 +229,15 @@ public class ImportGeoSchemaWizard extends RepositoryWizard implements INewWizar
                 listColumns.add(metadataColumn);
 			}
         	
-        } catch (ParserConfigurationException e) {
-            showErrorMessages(e.toString());
-            return;
-        } catch (SAXException e) {
-            showErrorMessages(e.toString());
-            return;
-        } catch (URISyntaxException e) {
-            showErrorMessages(e.toString());
-            return;
+//        } catch (ParserConfigurationException e) {
+//            showErrorMessages(e.toString());
+//            return;
+//        } catch (SAXException e) {
+//            showErrorMessages(e.toString());
+//            return;
+//        } catch (URISyntaxException e) {
+//            showErrorMessages(e.toString());
+//            return;
         } catch (IOException e) {
             showErrorMessages(e.toString());
             return;
