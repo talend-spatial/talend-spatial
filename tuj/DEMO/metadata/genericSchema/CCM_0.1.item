@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
-  <TalendMetadata:GenericSchemaConnection xmi:id="_otRr0WZyEeCUeI-JLejmbw" dataPackage="_otRr0mZyEeCUeI-JLejmbw"/>
-  <TalendMetadata:GenericPackage xmi:id="_otRr0mZyEeCUeI-JLejmbw" dataManager="_otRr0WZyEeCUeI-JLejmbw">
-    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_otRr02ZyEeCUeI-JLejmbw" id="_San98TOBEeCkQeIR-Q1dBQ" label="metadata">
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr1GZyEeCUeI-JLejmbw" label="the_geom" talendType="id_Geometry"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr1WZyEeCUeI-JLejmbw" label="CODE" talendType="id_String"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr1mZyEeCUeI-JLejmbw" label="NAME" talendType="id_String"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr12ZyEeCUeI-JLejmbw" label="ID_SOM" talendType="id_Double"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr2GZyEeCUeI-JLejmbw" label="CGENELIN" talendType="id_String"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr2WZyEeCUeI-JLejmbw" label="PKHEXT" talendType="id_Double"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otRr2mZyEeCUeI-JLejmbw" label="CD_REGION" talendType="id_String"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otSS4GZyEeCUeI-JLejmbw" label="CD_SECTEUR" talendType="id_String"/>
-      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_otSS4WZyEeCUeI-JLejmbw" label="CD_SSSECTE" talendType="id_String"/>
+  <TalendMetadata:GenericSchemaConnection xmi:id="_qjSPEFAWEeKeTcE2tnzRtg" dataPackage="_qjSPEVAWEeKeTcE2tnzRtg"/>
+  <TalendMetadata:GenericPackage xmi:id="_qjSPEVAWEeKeTcE2tnzRtg" dataManager="_qjSPEFAWEeKeTcE2tnzRtg">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_qjSPElAWEeKeTcE2tnzRtg" id="_qJvGoVAWEeKeTcE2tnzRtg" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPE1AWEeKeTcE2tnzRtg" label="the_geom" talendType="id_Geometry"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPFFAWEeKeTcE2tnzRtg" label="CODE" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPFVAWEeKeTcE2tnzRtg" label="NAME" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPFlAWEeKeTcE2tnzRtg" label="ID_SOM" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPF1AWEeKeTcE2tnzRtg" label="CGENELIN" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPGFAWEeKeTcE2tnzRtg" label="PKHEXT" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPGVAWEeKeTcE2tnzRtg" label="CD_REGION" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPGlAWEeKeTcE2tnzRtg" label="CD_SECTEUR" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_qjSPG1AWEeKeTcE2tnzRtg" label="CD_SSSECTE" talendType="id_String"/>
     </ownedElement>
   </TalendMetadata:GenericPackage>
 </xmi:XMI>

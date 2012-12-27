@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
+  <context confirmationNeeded="false" name="Default"/>
+  <parameters>
+    <elementParameter field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
+    <elementParameter field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value=""/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_Y" value=""/>
+    <elementParameter field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
+    <elementParameter field="TEXT" name="OEM_CUSTOM_ATTRIBUTE" value=""/>
+    <elementParameter field="TEXT" name="HADOOP_APP_PATH" value=""/>
+    <elementParameter field="TEXT" name="JOBID_FOR_OOZIE" value=""/>
+    <elementParameter field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FIELDSEPARATOR" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:REPOSITORY_PROPERTY_TYPE" value=""/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value=""/>
+    <elementParameter field="CHECK" name="DISABLE_WARNINGS" value="false"/>
+    <elementParameter field="CHECK" name="DISABLE_INFO" value="false"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14.jar"/>
+    <routinesParameter id="_ZXvs8FASEeKkWIeaBZ22Og" name="DataOperation"/>
+    <routinesParameter id="_ZXLsQFASEeKkWIeaBZ22Og" name="GeoOperation"/>
+    <routinesParameter id="_ZXf1UFASEeKkWIeaBZ22Og" name="GeometryOperation"/>
+    <routinesParameter id="_ZXhDcFASEeKkWIeaBZ22Og" name="GeometryUtility"/>
+    <routinesParameter id="_ZXtQsFASEeKkWIeaBZ22Og" name="Mathematical"/>
+    <routinesParameter id="_ZXxiIFASEeKkWIeaBZ22Og" name="Numeric"/>
+    <routinesParameter id="_ZXenMFASEeKkWIeaBZ22Og" name="OpenStreetMap"/>
+    <routinesParameter id="_ZXiRkFASEeKkWIeaBZ22Og" name="Relational"/>
+    <routinesParameter id="_ZXnKEFASEeKkWIeaBZ22Og" name="StringHandling"/>
+    <routinesParameter id="_ZXo_QFASEeKkWIeaBZ22Og" name="TalendDataGenerator"/>
+    <routinesParameter id="_ZXkGwFASEeKkWIeaBZ22Og" name="TalendDate"/>
+    <routinesParameter id="_ZXrbgFASEeKkWIeaBZ22Og" name="TalendString"/>
+  </parameters>
+</talendfile:ProcessType>
