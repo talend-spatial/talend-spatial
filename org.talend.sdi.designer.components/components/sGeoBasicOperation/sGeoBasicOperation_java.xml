@@ -109,6 +109,14 @@
       NUM_ROW="4">
       <DEFAULT>false</DEFAULT>
     </PARAMETER>
+    <PARAMETER NAME="CRS_TRANSFORM" FIELD="CHECK" REQUIRED="true"
+      NUM_ROW="5">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="CRS_TRANSFORM_FILE" FIELD="FILE" NUM_ROW="4" REQUIRED="false"
+      REPOSITORY_VALUE="FILE_PATH" SHOW_IF="CRS_TRANSFORM == 'true'">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/.spatial/proj/epsg_operations.properties"</DEFAULT>
+    </PARAMETER>
   </PARAMETERS>
   <ADVANCED_PARAMETERS>
 	<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false" SHOW="false" NUM_ROW="1">
@@ -135,6 +143,7 @@
         REQUIRED="true" />
       <IMPORT NAME="gt-referencing" MODULE="gt-referencing-8.5.jar"
             REQUIRED="true" />
+      <IMPORT NAME="jgridshift" MODULE="jgridshift-1.0.jar" REQUIRED="true"/>
       <IMPORT NAME="jai-codec" MODULE="jai_codec-1.1.3.jar" REQUIRED="true" />
       <IMPORT NAME="jai-core" MODULE="jai_core-1.1.3.jar" REQUIRED="true" />
     </IMPORTS>
