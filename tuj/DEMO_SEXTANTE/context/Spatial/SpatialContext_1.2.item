@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<talendfile:ContextType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" confirmationNeeded="false" name="Default">
+  <contextParameter comment="" name="FileStation" prompt="new1?" promptNeeded="false" type="id_String" value="stations.txt"/>
+  <contextParameter comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" type="id_String" value="/home/francois/GeoData/"/>
+  <contextParameter comment="" name="FileRivers" prompt="new1?" promptNeeded="false" type="id_String" value="CCMRIVERS.shp"/>
+  <contextParameter comment="" name="FilePoint" prompt="new1?" promptNeeded="false" type="id_String" value="geomPoint.shp"/>
+  <contextParameter comment="" name="FileLine" prompt="new1?" promptNeeded="false" type="id_String" value="geomLine.shp"/>
+  <contextParameter comment="" name="FilePolygon" prompt="new1?" promptNeeded="false" type="id_String" value="geomPoly.shp"/>
+  <contextParameter comment="" name="FileDEM" prompt="new1?" promptNeeded="false" type="id_String" value="SRTM.tif"/>
+  <contextParameter comment="" name="FileCatchments" prompt="new1?" promptNeeded="false" type="id_String" value="CATCHMENTS.MIF"/>
+  <contextParameter comment="" name="DirOutput" prompt="Select your output directory (eg. /tmp)?" promptNeeded="false" type="id_String" value="/tmp/"/>
+  <contextParameter comment="" name="DbHost" prompt="new1?" promptNeeded="false" type="id_String" value="localhost"/>
+  <contextParameter comment="" name="DbPort" prompt="new1?" promptNeeded="false" type="id_String" value="5432"/>
+  <contextParameter comment="" name="DbName" prompt="new1?" promptNeeded="false" type="id_String" value="talend"/>
+  <contextParameter comment="" name="DbUsername" prompt="new1?" promptNeeded="false" type="id_String" value="www-data"/>
+  <contextParameter comment="" name="DbPassword" prompt="new1?" promptNeeded="false" type="id_String" value="www-data"/>
+  <contextParameter comment="" name="GeoNetworkHost" prompt="new1?" promptNeeded="false" type="id_String" value="http://localhost"/>
+  <contextParameter comment="" name="GeoNetworkPort" prompt="new1?" promptNeeded="false" type="id_Integer" value="8080"/>
+  <contextParameter comment="" name="GeoNetworkServlet" prompt="new1?" promptNeeded="false" type="id_String" value="geonetwork"/>
+  <contextParameter comment="" name="GeoNetworkUsername" prompt="new1?" promptNeeded="false" type="id_String" value="admin"/>
+  <contextParameter comment="" name="GeoNetworkPassword" prompt="new1?" promptNeeded="false" type="id_String" value="admin"/>
+  <contextParameter comment="" name="ProjDefaultInput" prompt="new1?" promptNeeded="false" type="id_String" value="EPSG:4326"/>
+  <contextParameter comment="" name="ProjDefaultOutput" prompt="new1?" promptNeeded="false" type="id_String" value="EPSG:27572"/>
+  <contextParameter comment="" name="FileStationsShp" prompt="new1?" promptNeeded="false" type="id_String" value="station.shp"/>
+  <contextParameter comment="" name="FileStationsShpLIIE" prompt="new1?" promptNeeded="false" type="id_String" value="stationlIIe.shp"/>
+  <contextParameter comment="" name="FileValidation" prompt="new1?" promptNeeded="false" type="id_String" value="validation.shp"/>
+  <contextParameter comment="" name="FileBoundaries" prompt="new1?" promptNeeded="false" type="id_String" value="gboundaries.shp"/>
+  <contextParameter comment="" name="SdiDir" prompt="Select your SDI installation directory?" promptNeeded="false" type="id_String" value="/home/fxprunayre/eworkspace/runtime-talend.product"/>
+  <contextParameter comment="" name="dataCountry" prompt="dataCountry?" promptNeeded="false" type="id_String" value="&quot;ne_110m_admin_0_countries&quot;"/>
+  <contextParameter comment="" name="dataRiver" prompt="dataRiver?" promptNeeded="false" type="id_String" value="&quot;ne_110m_rivers_lake_centerlines&quot;"/>
+  <contextParameter comment="" name="dataPlaces" prompt="dataPlaces?" promptNeeded="false" type="id_String" value="&quot;ne_110m_populated_places&quot;"/>
+</talendfile:ContextType>
