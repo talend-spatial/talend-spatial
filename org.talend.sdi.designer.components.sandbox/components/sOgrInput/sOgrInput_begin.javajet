@@ -22,7 +22,6 @@ List<IMetadataTable> metadatas = node.getMetadataList();
 if ((metadatas != null) && (metadatas.size() > 0)) {
     IMetadataTable metadata = metadatas.get(0);
     if (metadata != null) {
-        String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
         String filename = ElementParameterParser.getValue(node,"__FILENAME__");
         String layer = ElementParameterParser.getValue(node,"__LAYER__");
         String xmin = ElementParameterParser.getValue(node,"__XMIN__");
