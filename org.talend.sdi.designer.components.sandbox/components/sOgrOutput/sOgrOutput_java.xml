@@ -1,0 +1,132 @@
+<COMPONENT>
+  <HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.1" STATUS="ALPHA"
+    COMPATIBILITY="ALL" AUTHOR="fx.prunayre" RELEASE_DATE="20130101"
+    STARTABLE="true" VISIBLE="true" DATA_AUTO_PROPAGATE="false"
+    SCHEMA_AUTO_PROPAGATE="true">
+    <SIGNATURE />
+  </HEADER>
+  <FAMILIES>
+    <FAMILY>Geo/File/Output</FAMILY>
+  </FAMILIES>
+  <DOCUMENTATION>
+    <URL />
+  </DOCUMENTATION>
+  <CONNECTORS>
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="1" MAX_OUTPUT="0" />
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK" />
+    <CONNECTOR CTYPE="COMPONENT_ERROR" />
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="RUN_IF" />
+  </CONNECTORS>
+  <PARAMETERS>
+    <!-- File and format -->
+    <PARAMETER NAME="FORMAT_TYPE" FIELD="CLOSED_LIST" NUM_ROW="2">
+      <ITEMS DEFAULT="ESRI Shapefile">
+        <!-- FIXME : this should be generated according to GDAL/OGR installed 
+          in current system and list all OGR registered driver. -->
+        <ITEM NAME="ESRIShapefile" VALUE="ESRI Shapefile" />
+        <ITEM NAME="MapInfoFile" VALUE="MapInfo File" />
+        <ITEM NAME="UKNTF" VALUE="UK .NTF" />
+        <ITEM NAME="SDTS" VALUE="SDTS" />
+        <ITEM NAME="TIGER" VALUE="TIGER" />
+        <ITEM NAME="S57" VALUE="S57" />
+        <ITEM NAME="DGN" VALUE="DGN" />
+        <ITEM NAME="VRT" VALUE="VRT" />
+        <ITEM NAME="REC" VALUE="REC" />
+        <ITEM NAME="Memory" VALUE="Memory" />
+        <ITEM NAME="BNA" VALUE="BNA" />
+        <ITEM NAME="CSV" VALUE="CSV" />
+        <ITEM NAME="NAS" VALUE="NAS" />
+        <ITEM NAME="GML" VALUE="GML" />
+        <ITEM NAME="GPX" VALUE="GPX" />
+        <ITEM NAME="KML" VALUE="KML" />
+        <ITEM NAME="GeoJSON" VALUE="GeoJSON" />
+        <ITEM NAME="Interlis1" VALUE="Interlis 1" />
+        <ITEM NAME="Interlis2" VALUE="Interlis 2" />
+        <ITEM NAME="GMT" VALUE="GMT" />
+        <ITEM NAME="SQLite" VALUE="SQLite" />
+        <ITEM NAME="ODBC" VALUE="ODBC" />
+        <ITEM NAME="PGeo" VALUE="PGeo" />
+        <ITEM NAME="MSSQLSpatial" VALUE="MSSQLSpatial" />
+        <ITEM NAME="PostgreSQL" VALUE="PostgreSQL" />
+        <ITEM NAME="OCI" VALUE="OCI" />
+        <ITEM NAME="PCIDSK" VALUE="PCIDSK" />
+        <ITEM NAME="XPlane" VALUE="XPlane" />
+        <ITEM NAME="AVCBin" VALUE="AVCBin" />
+        <ITEM NAME="AVCE00" VALUE="AVCE00" />
+        <ITEM NAME="DXF" VALUE="DXF" />
+        <ITEM NAME="Geoconcept" VALUE="Geoconcept" />
+        <ITEM NAME="GeoRSS" VALUE="GeoRSS" />
+        <ITEM NAME="GPSTrackMaker" VALUE="GPSTrackMaker" />
+        <ITEM NAME="VFK" VALUE="VFK" />
+        <ITEM NAME="PGDump" VALUE="PGDump" />
+        <ITEM NAME="GPSBabel" VALUE="GPSBabel" />
+        <ITEM NAME="SUA" VALUE="SUA" />
+        <ITEM NAME="OpenAir" VALUE="OpenAir" />
+        <ITEM NAME="PDS" VALUE="PDS" />
+        <ITEM NAME="WFS" VALUE="WFS" />
+        <ITEM NAME="HTF" VALUE="HTF" />
+        <ITEM NAME="AeronavFAA" VALUE="AeronavFAA" />
+      </ITEMS>
+    </PARAMETER>
+
+    <PARAMETER NAME="FILENAME" FIELD="FILE" NUM_ROW="3"
+      REQUIRED="true" REPOSITORY_VALUE="FILE_PATH">
+      <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/out.shp"</DEFAULT>
+    </PARAMETER>
+
+    <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
+      NUM_ROW="4">
+      <DEFAULT />
+    </PARAMETER>
+
+    <PARAMETER NAME="GEOMETRY_TYPE" FIELD="CLOSED_LIST"
+      REQUIRED="true" NUM_ROW="7">
+      <ITEMS DEFAULT="GEOMETRY">
+        <ITEM NAME="POINT" VALUE="org.gdal.ogr.ogr.wkbPoint" />
+        <ITEM NAME="LINESTRING" VALUE="org.gdal.ogr.ogr.wkbLineString" />
+        <ITEM NAME="POLYGON" VALUE="org.gdal.ogr.ogr.wkbPolygon" />
+        <ITEM NAME="MULTIPOINT" VALUE="org.gdal.ogr.ogr.wkbMultiPoint" />
+        <ITEM NAME="MULTILINESTRING" VALUE="org.gdal.ogr.ogr.wkbMultiLineString" />
+        <ITEM NAME="MULTIPOLYGON" VALUE="org.gdal.ogr.ogr.wkbMultiPolygon" />
+        <ITEM NAME="GEOMETRY" VALUE="org.gdal.ogr.ogr.wkbGeometryCollection" />
+      </ITEMS>
+    </PARAMETER>
+  </PARAMETERS>
+  <ADVANCED_PARAMETERS>
+    <PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false"
+      SHOW="false" NUM_ROW="1">
+      <DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
+    </PARAMETER>
+  </ADVANCED_PARAMETERS>
+  <CODEGENERATION>
+    <IMPORTS>
+      <IMPORT NAME="commons-httpclient" MODULE="commons-httpclient-3.0.1.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-opengis" MODULE="gt-opengis-8.5.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jsr-275" MODULE="jsr-275-1.0-beta-2.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-api" MODULE="gt-api-8.5.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-metadata" MODULE="gt-metadata-8.5.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gt-epsg-hsql" MODULE="gt-epsg-hsql-8.5.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="hsqldb" MODULE="hsqldb-1.8.0.7.jar" REQUIRED="true" />
+      <IMPORT NAME="gt-referencing" MODULE="gt-referencing-8.5.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="jai-core" MODULE="jai_core-1.1.3.jar" REQUIRED="true" />
+      <IMPORT NAME="vecmath" MODULE="vecmath-1.3.2.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.12.jar" REQUIRED="true" />
+      <IMPORT NAME="jdom" MODULE="jdom-1.0.jar" REQUIRED="true" />
+      <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
+        REQUIRED="true" />
+      <IMPORT NAME="gdal" MODULE="gdal.jar" REQUIRED="true" />
+    </IMPORTS>
+  </CODEGENERATION>
+  <RETURNS>
+    <RETURN NAME="NB_FEATURE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+  </RETURNS>
+</COMPONENT>

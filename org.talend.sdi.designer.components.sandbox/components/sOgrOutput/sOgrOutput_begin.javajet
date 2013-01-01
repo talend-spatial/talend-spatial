@@ -1,0 +1,146 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List 
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.metadata.types.JavaType
+        
+    " 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata != null) {
+        String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
+        String filename = ElementParameterParser.getValue(node,"__FILENAME__");
+        String geometryType = ElementParameterParser.getValue(node,"__GEOMETRY_TYPE__");
+%>
+
+/* initialize feature count */
+int nbFeature_<%=cid %> = 0;
+
+/* initialize OGR main variables */
+boolean bReadOnly_<%=cid %> = true;
+boolean bVerbose_<%=cid %> = true;
+
+/* initialize data source  */
+String pszFormat_<%=cid %> = "<%=formatType %>";
+String pszDestDataSource_<%=cid %> = <%=filename %>;
+String pszNewLayerName_<%=cid %> = "test"; // TODO : layer name
+
+org.gdal.ogr.ogr.RegisterAll();
+
+// TODO update mode 
+//org.gdal.ogr.DataSource poODS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDestDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
+
+int iDriver_<%=cid %>;
+org.gdal.ogr.DataSource poODS_<%=cid %> = null;
+org.gdal.ogr.Driver poDriver_<%=cid %> = org.gdal.ogr.ogr.GetDriverByName(pszFormat_<%=cid %>);
+
+if (bVerbose_<%=cid %>) {
+    System.out.println("INFO: Open of `" + pszDestDataSource_<%=cid %> + "'\n"
+            + "      using driver `" + poDriver_<%=cid %>.GetName()
+            + "' successful.");
+}
+java.util.Vector papszDSCO_<%=cid %> = new java.util.Vector();
+java.util.Vector papszLCO_<%=cid %> = new java.util.Vector();
+// TODO : add datasource and layer creation options
+
+
+poODS_<%=cid %> = poDriver_<%=cid %>.CreateDataSource( pszDestDataSource_<%=cid %>, papszDSCO_<%=cid %> );
+if(poODS_<%=cid %> == null ) {
+    System.err.println(pszFormat_<%=cid %> + " driver failed to create "+ pszDestDataSource_<%=cid %>);
+    return;
+}
+
+// TODO : set spatial CRS
+
+org.gdal.ogr.Layer poDstLayer_<%=cid %>;
+org.gdal.osr.SpatialReference poOutputSRS_<%=cid %> = null;
+int eGType_<%=cid %> = <%=geometryType %>;
+
+poDstLayer_<%=cid %> = poODS_<%=cid %>.CreateLayer( pszNewLayerName_<%=cid %>, 
+    poOutputSRS_<%=cid %>,
+    eGType_<%=cid %>, 
+    papszLCO_<%=cid %> );
+
+org.gdal.ogr.FeatureDefn poDstFDefn_<%=cid %> = poDstLayer_<%=cid %>.GetLayerDefn();
+<%
+        List<IMetadataColumn> columns = metadata.getListColumns();
+        int sizeColumns = columns.size();
+        int colIdx = 0;
+        
+        for (int i = 0; i < sizeColumns; i++) {
+            IMetadataColumn column = columns.get(i);
+            JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+            // force nullable to true because geotools won't accept primitive types in schema
+            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
+            String columnLabel = column.getLabel();
+%>
+
+
+// Adding field <%=columnLabel %> (<%=javaType %>)
+org.gdal.ogr.FieldDefn oFieldDefn_<%=cid %>_<%=columnLabel %> = new org.gdal.ogr.FieldDefn("<%=columnLabel %>");
+
+<%
+            if (javaType == JavaTypesManager.getJavaTypeFromId("id_Double")
+                || javaType == JavaTypesManager.getJavaTypeFromId("id_Float")) {
+%>
+oFieldDefn_<%=cid %>_<%=columnLabel %>.SetType(org.gdal.ogr.ogr.OFTReal);
+<%          
+            } else if (javaType == JavaTypesManager.getJavaTypeFromId("id_Date")) {
+%>
+oFieldDefn_<%=cid %>_<%=columnLabel %>.SetType(org.gdal.ogr.ogr.OFTDate);
+<%          
+            } else if (javaType != JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
+%>
+oFieldDefn_<%=cid %>_<%=columnLabel %>.SetType(org.gdal.ogr.ogr.OFT<%=typeToGenerate %>);
+<%          
+            } else {
+%>
+oFieldDefn_<%=cid %>_<%=columnLabel %>.SetType(eGType_<%=cid %>);
+// TODO : improve type mapping
+<%
+            }
+            
+            // Set lentgh in schema if specified.
+            // Check 0 value too due to stange TOS behavior removing specified length in schema
+            if (column.getLength() != null && !column.getLength().toString().equals("0")) { 
+%>
+oFieldDefn_<%=cid %>_<%=columnLabel %>.SetWidth(<%=column.getLength() %>);
+//oFieldDefn.SetPrecision( poSrcFieldDefn.GetPrecision() );
+<%
+            }
+            // Geometry field is already in the layer
+            if (javaType != JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
+%>
+/* The field may have been already created at layer creation */
+int iDstField_<%=cid %>_<%=columnLabel %> = -1;
+if (poDstFDefn_<%=cid %> != null) {
+    iDstField_<%=cid %>_<%=columnLabel %> = poDstFDefn_<%=cid %>.GetFieldIndex("<%=columnLabel %>");
+}
+if (iDstField_<%=cid %>_<%=columnLabel %> >= 0) {
+} else {
+     // FIXME : add parameter for approx_ok
+    poDstLayer_<%=cid %>.CreateField(oFieldDefn_<%=cid %>_<%=columnLabel %>, 1);
+    if (poDstFDefn_<%=cid %> == null) {
+        poDstFDefn_<%=cid %> = poDstLayer_<%=cid %>.GetLayerDefn();
+    }
+}
+<%
+            }
+        }
+    }
+}
+%>

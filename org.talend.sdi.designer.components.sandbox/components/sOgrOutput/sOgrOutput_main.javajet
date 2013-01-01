@@ -1,0 +1,72 @@
+<%@ jet 
+    imports="
+        org.talend.core.model.metadata.IMetadataTable
+        org.talend.core.model.metadata.IMetadataColumn
+        org.talend.core.model.metadata.types.JavaType
+        org.talend.core.model.metadata.types.JavaTypesManager
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType 
+        org.talend.core.model.process.ElementParameterParser
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+        java.util.List
+    "
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas!=null)&&(metadatas.size()>0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata!=null) {
+        String cid = node.getUniqueName();
+
+        List< ? extends IConnection> conns = node.getIncomingConnections();
+        for (IConnection conn : conns) {
+            if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)) || (conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+%>
+org.gdal.ogr.Feature outFeature_<%=cid%> = new org.gdal.ogr.Feature(poDstFDefn_<%=cid %>);
+<%  
+                for (IMetadataColumn column : metadata.getListColumns()) {
+                    String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
+%>
+//<%=typeToGenerate %>
+<%
+                    if (typeToGenerate.equals("Geometry")) {
+%>
+Geometry currentGeom_<%=cid %> = <%=conn.getName() %>.<%=column.getLabel() %>;
+outFeature_<%=cid%>.SetGeometry(org.gdal.ogr.Geometry.CreateFromWkt(currentGeom_<%=cid %>.toString()));
+<%
+                    } else if (typeToGenerate.equals("java.util.Date")) {
+%>
+outFeature_<%=cid%>.SetField("<%=column.getLabel()%>", 
+     Integer.valueOf(new java.text.SimpleDateFormat("yyyy").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("MM").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("dd").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("HH").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("mm").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("ss").format(<%=conn.getName() %>.<%=column.getLabel() %>)),
+     Integer.valueOf(new java.text.SimpleDateFormat("Z").format(<%=conn.getName() %>.<%=column.getLabel() %>))
+    );
+<%
+                    } else {
+%>
+outFeature_<%=cid%>.SetField("<%=column.getLabel()%>", <%=conn.getName() %>.<%=column.getLabel() %>);
+<%
+                    }
+                }
+            }
+%>
+outFeature_<%=cid%>.DumpReadable();
+if(poDstLayer_<%=cid %>.CreateFeature(outFeature_<%=cid%>) != 0) {
+    // Failure
+}
+outFeature_<%=cid%>.delete();
+outFeature_<%=cid%> = null;
+nbFeature_<%=cid%> ++;
+<%
+        }
+    }
+}
+%>
