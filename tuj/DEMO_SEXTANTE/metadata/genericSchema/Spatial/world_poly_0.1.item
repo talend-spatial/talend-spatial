@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_osS0Y2ZyEeCUeI-JLejmbw" dataPackage="_osS0ZGZyEeCUeI-JLejmbw"/>
+  <TalendMetadata:GenericPackage xmi:id="_osS0ZGZyEeCUeI-JLejmbw" dataManager="_osS0Y2ZyEeCUeI-JLejmbw">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_osS0ZWZyEeCUeI-JLejmbw" id="_oKUtoW8KEd-eL4yml1VSTQ" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0ZmZyEeCUeI-JLejmbw" name="" label="the_geom" length="-1" precision="-1" talendType="id_Geometry">
+        <initialValue xmi:id="_osS0Z2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0aGZyEeCUeI-JLejmbw" name="" label="Code" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0aWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0amZyEeCUeI-JLejmbw" name="" label="Name" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0a2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0bGZyEeCUeI-JLejmbw" name="" label="UN_name" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0bWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0bmZyEeCUeI-JLejmbw" name="" label="UN_Name_FR" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0b2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0cGZyEeCUeI-JLejmbw" name="" label="Area" length="-1" precision="-1" talendType="id_Double">
+        <initialValue xmi:id="_osS0cWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0cmZyEeCUeI-JLejmbw" name="" label="Perimeter" length="-1" precision="-1" talendType="id_Double">
+        <initialValue xmi:id="_osS0c2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0dGZyEeCUeI-JLejmbw" name="" label="Code_2" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0dWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0dmZyEeCUeI-JLejmbw" name="" label="Feature" length="-1" precision="-1" talendType="id_Long">
+        <initialValue xmi:id="_osS0d2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0eGZyEeCUeI-JLejmbw" name="" label="HCR_Bureau" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0eWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0emZyEeCUeI-JLejmbw" name="" label="HCR_Desk" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0e2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0fGZyEeCUeI-JLejmbw" name="" label="Operation" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0fWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0fmZyEeCUeI-JLejmbw" name="" label="Code_Opera" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0f2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0gGZyEeCUeI-JLejmbw" name="" label="Region" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0gWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0gmZyEeCUeI-JLejmbw" name="" label="Subregion" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0g2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0hGZyEeCUeI-JLejmbw" name="" label="Code_HCR_R" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0hWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0hmZyEeCUeI-JLejmbw" name="" label="HCR_Region" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0h2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0iGZyEeCUeI-JLejmbw" name="" label="Code_HCR_S" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0iWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0imZyEeCUeI-JLejmbw" name="" label="HCR_SubReg" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0i2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0jGZyEeCUeI-JLejmbw" name="" label="HCR_Code" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0jWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0jmZyEeCUeI-JLejmbw" name="" label="UN_Name_SP" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0j2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0kGZyEeCUeI-JLejmbw" name="" label="ExcomMembe" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0kWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0kmZyEeCUeI-JLejmbw" name="" label="Conv_51" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0k2ZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osS0lGZyEeCUeI-JLejmbw" name="" label="Protoc_67" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_osS0lWZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

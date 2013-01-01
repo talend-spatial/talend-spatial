@@ -22,12 +22,9 @@ import org.talend.core.model.routines.IRoutinesProvider;
  */
 public class SdiRoutinesProviderCreator implements IRoutineProviderCreator {
 
-    IRoutinesProvider perlProvider = null;
-
     IRoutinesProvider javaProvider = null;
 
     public SdiRoutinesProviderCreator() {
-        perlProvider = new SdiPerlRoutinesProvider();
         javaProvider = new SdiJavaRoutinesProvider();
     }
 
@@ -39,12 +36,7 @@ public class SdiRoutinesProviderCreator implements IRoutineProviderCreator {
      * .ECodeLanguage)
      */
     public IRoutinesProvider createIRoutinesProviderByLanguage(ECodeLanguage lan) {
-        if (lan == ECodeLanguage.PERL) {
-            return perlProvider;
-        } else {
-            return javaProvider;
-        }
-
+        return javaProvider;
     }
 
 }

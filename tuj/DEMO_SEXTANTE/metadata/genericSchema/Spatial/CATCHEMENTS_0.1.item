@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_ottJ_WZyEeCUeI-JLejmbw" comment="connectionComment" label="connectionLabel" dataPackage="_ottJ_mZyEeCUeI-JLejmbw"/>
+  <TalendMetadata:GenericPackage xmi:id="_ottJ_mZyEeCUeI-JLejmbw" dataManager="_ottJ_WZyEeCUeI-JLejmbw">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_ottwsGZyEeCUeI-JLejmbw" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwsWZyEeCUeI-JLejmbw" name="newColumn" id="5427" label="CODE" length="-1" precision="-1" sourceType="" talendType="id_String" key="true" nullable="false">
+        <initialValue xmi:id="_ottwsmZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottws2ZyEeCUeI-JLejmbw" name="newColumn" id="5498" label="CD_REGION" length="-1" precision="-1" sourceType="" talendType="id_String" nullable="false">
+        <initialValue xmi:id="_ottwtGZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwtWZyEeCUeI-JLejmbw" name="newColumn1" id="5499" label="CD_SECTEUR" length="-1" precision="-1" sourceType="" talendType="id_String" nullable="false">
+        <initialValue xmi:id="_ottwtmZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwt2ZyEeCUeI-JLejmbw" name="newColumn2" id="5500" label="CD_SSECTEUR" length="-1" precision="-1" sourceType="" talendType="id_String" nullable="false">
+        <initialValue xmi:id="_ottwuGZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwuWZyEeCUeI-JLejmbw" name="newColumn" id="5501" label="NAME" length="-1" precision="-1" sourceType="" talendType="id_String" nullable="false">
+        <initialValue xmi:id="_ottwumZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwu2ZyEeCUeI-JLejmbw" name="newColumn" id="5502" label="PKHEXT" length="-1" precision="-1" sourceType="" talendType="id_Double" nullable="false">
+        <initialValue xmi:id="_ottwvGZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ottwvWZyEeCUeI-JLejmbw" name="newColumn" id="5428" label="the_geom" sourceType="" talendType="id_Geometry">
+        <initialValue xmi:id="_ottwvmZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

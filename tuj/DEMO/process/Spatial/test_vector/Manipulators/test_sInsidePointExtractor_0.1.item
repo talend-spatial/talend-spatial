@@ -1,398 +1,342 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" xmi:id="_otxbE2ZyEeCUeI-JLejmbw" defaultContext="Default">
-  <context xmi:id="_otxbFGZyEeCUeI-JLejmbw" confirmationNeeded="false" name="Default">
-    <contextParameter xmi:id="_otxbFWZyEeCUeI-JLejmbw" comment="" name="FileStation" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="stations.txt"/>
-    <contextParameter xmi:id="_otxbFmZyEeCUeI-JLejmbw" comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/francois/Neogeo3/GeoData/"/>
-    <contextParameter xmi:id="_otxbF2ZyEeCUeI-JLejmbw" comment="" name="FileRivers" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="CCMRIVERS.shp"/>
-    <contextParameter xmi:id="_otxbGGZyEeCUeI-JLejmbw" comment="" name="FilePoint" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomPoint.shp"/>
-    <contextParameter xmi:id="_otxbGWZyEeCUeI-JLejmbw" comment="" name="FileLine" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomLine.shp"/>
-    <contextParameter xmi:id="_otxbGmZyEeCUeI-JLejmbw" comment="" name="FilePolygon" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomPoly.shp"/>
-    <contextParameter xmi:id="_otxbG2ZyEeCUeI-JLejmbw" comment="" name="FileDEM" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="SRTM.tif"/>
-    <contextParameter xmi:id="_otxbHGZyEeCUeI-JLejmbw" comment="" name="FileCatchments" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="CATCHMENTS.MIF"/>
-    <contextParameter xmi:id="_otxbHWZyEeCUeI-JLejmbw" comment="" name="DirOutput" prompt="Select your output directory (eg. /tmp)?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/tmp/"/>
-    <contextParameter xmi:id="_otxbHmZyEeCUeI-JLejmbw" comment="" name="DbHost" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="localhost"/>
-    <contextParameter xmi:id="_otxbH2ZyEeCUeI-JLejmbw" comment="" name="DbPort" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="5432"/>
-    <contextParameter xmi:id="_otxbIGZyEeCUeI-JLejmbw" comment="" name="DbName" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="talend"/>
-    <contextParameter xmi:id="_otxbIWZyEeCUeI-JLejmbw" comment="" name="DbUsername" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="www-data"/>
-    <contextParameter xmi:id="_otxbImZyEeCUeI-JLejmbw" comment="" name="DbPassword" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="www-data"/>
-    <contextParameter xmi:id="_otxbI2ZyEeCUeI-JLejmbw" comment="" name="GeoNetworkHost" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="http://localhost"/>
-    <contextParameter xmi:id="_otxbJGZyEeCUeI-JLejmbw" comment="" name="GeoNetworkPort" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_Integer" value="8080"/>
-    <contextParameter xmi:id="_otxbJWZyEeCUeI-JLejmbw" comment="" name="GeoNetworkServlet" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geonetwork"/>
-    <contextParameter xmi:id="_otxbJmZyEeCUeI-JLejmbw" comment="" name="GeoNetworkUsername" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="admin"/>
-    <contextParameter xmi:id="_otxbJ2ZyEeCUeI-JLejmbw" comment="" name="GeoNetworkPassword" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="admin"/>
-    <contextParameter xmi:id="_otxbKGZyEeCUeI-JLejmbw" comment="" name="ProjDefaultInput" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="EPSG:4326"/>
-    <contextParameter xmi:id="_otxbKWZyEeCUeI-JLejmbw" comment="" name="ProjDefaultOutput" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="EPSG:27572"/>
-    <contextParameter xmi:id="_otxbKmZyEeCUeI-JLejmbw" comment="" name="FileStationsShp" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="station.shp"/>
-    <contextParameter xmi:id="_otxbK2ZyEeCUeI-JLejmbw" comment="" name="FileStationsShpLIIE" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="stationlIIe.shp"/>
-    <contextParameter xmi:id="_otxbLGZyEeCUeI-JLejmbw" comment="" name="FileValidation" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="validation.shp"/>
-    <contextParameter xmi:id="_otxbLWZyEeCUeI-JLejmbw" comment="" name="FileBoundaries" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="gboundaries.shp"/>
-    <contextParameter xmi:id="_otxbLmZyEeCUeI-JLejmbw" comment="" name="SdiDir" prompt="Select your SDI installation directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/fxprunayre/eworkspace/runtime-talend.product"/>
+<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
+  <context confirmationNeeded="false" name="Default">
+    <contextParameter comment="" name="FileStation" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="stations.txt"/>
+    <contextParameter comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/francois/GeoData/"/>
+    <contextParameter comment="" name="FileRivers" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="CCMRIVERS.shp"/>
+    <contextParameter comment="" name="FilePoint" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomPoint.shp"/>
+    <contextParameter comment="" name="FileLine" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomLine.shp"/>
+    <contextParameter comment="" name="FilePolygon" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geomPoly.shp"/>
+    <contextParameter comment="" name="FileDEM" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="SRTM.tif"/>
+    <contextParameter comment="" name="FileCatchments" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="CATCHMENTS.MIF"/>
+    <contextParameter comment="" name="DirOutput" prompt="Select your output directory (eg. /tmp)?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/tmp/"/>
+    <contextParameter comment="" name="DbHost" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="localhost"/>
+    <contextParameter comment="" name="DbPort" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="5432"/>
+    <contextParameter comment="" name="DbName" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="talend"/>
+    <contextParameter comment="" name="DbUsername" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="www-data"/>
+    <contextParameter comment="" name="DbPassword" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="www-data"/>
+    <contextParameter comment="" name="GeoNetworkHost" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="http://localhost"/>
+    <contextParameter comment="" name="GeoNetworkPort" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_Integer" value="8080"/>
+    <contextParameter comment="" name="GeoNetworkServlet" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="geonetwork"/>
+    <contextParameter comment="" name="GeoNetworkUsername" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="admin"/>
+    <contextParameter comment="" name="GeoNetworkPassword" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="admin"/>
+    <contextParameter comment="" name="ProjDefaultInput" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="EPSG:4326"/>
+    <contextParameter comment="" name="ProjDefaultOutput" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="EPSG:27572"/>
+    <contextParameter comment="" name="FileStationsShp" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="station.shp"/>
+    <contextParameter comment="" name="FileStationsShpLIIE" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="stationlIIe.shp"/>
+    <contextParameter comment="" name="FileValidation" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="validation.shp"/>
+    <contextParameter comment="" name="FileBoundaries" prompt="new1?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="gboundaries.shp"/>
+    <contextParameter comment="" name="SdiDir" prompt="Select your SDI installation directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/fxprunayre/eworkspace/runtime-talend.product"/>
   </context>
-  <parameters xmi:id="_otxbL2ZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_otxbMGZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_FILE_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace"/>
-    <elementParameter xmi:id="_otxbMWZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_PROJECT_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace/DEMO"/>
-    <elementParameter xmi:id="_otxbMmZyEeCUeI-JLejmbw" field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
-    <elementParameter xmi:id="_otxbM2ZyEeCUeI-JLejmbw" field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
-    <elementParameter xmi:id="_otxbNGZyEeCUeI-JLejmbw" field="TEXT" name="AUTHOR" value="fx.prunayre@gmail.com"/>
-    <elementParameter xmi:id="_otxbNWZyEeCUeI-JLejmbw" field="TEXT" name="STATUS" value=""/>
-    <elementParameter xmi:id="_otxbNmZyEeCUeI-JLejmbw" field="TEXT" name="NAME" value="test_sInsidePointExtractor"/>
-    <elementParameter xmi:id="_otxbN2ZyEeCUeI-JLejmbw" field="TEXT" name="VERSION" value="0.1"/>
-    <elementParameter xmi:id="_otxbOGZyEeCUeI-JLejmbw" field="TEXT" name="PURPOSE" value=""/>
-    <elementParameter xmi:id="_otxbOWZyEeCUeI-JLejmbw" field="TEXT" name="DESCRIPTION" value=""/>
-    <elementParameter xmi:id="_otxbOmZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_X" value="32"/>
-    <elementParameter xmi:id="_otxbO2ZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_Y" value="32"/>
-    <elementParameter xmi:id="_otxbPGZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
-    <elementParameter xmi:id="_otxbPWZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="false"/>
-    <elementParameter xmi:id="_otxbPmZyEeCUeI-JLejmbw" field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="false"/>
-    <elementParameter xmi:id="_otxbP2ZyEeCUeI-JLejmbw" field="CHECK" name="MULTI_THREAD_EXECATION" value="false"/>
-    <elementParameter xmi:id="_otxbQGZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICIT_TCONTEXTLOAD" value="false"/>
-    <elementParameter xmi:id="_otxbQWZyEeCUeI-JLejmbw" field="RADIO" name="FROM_FILE_FLAG_IMPLICIT_CONTEXT" value="false"/>
-    <elementParameter xmi:id="_otxbQmZyEeCUeI-JLejmbw" field="RADIO" name="FROM_DATABASE_FLAG_IMPLICIT_CONTEXT" value="false"/>
-    <elementParameter xmi:id="_otxbQ2ZyEeCUeI-JLejmbw" field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;/home/fxprunayre/eworkspace/runtime-talend.product/in.csv&quot;"/>
-    <elementParameter xmi:id="_otxbRGZyEeCUeI-JLejmbw" field="TEXT" name="FIELDSEPARATOR" value="&quot;;&quot;"/>
-    <elementParameter xmi:id="_otxbRWZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE_IMPLICIT_CONTEXT" value="tDBInput"/>
-    <elementParameter xmi:id="_otxbRmZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value="ojdbc14-10g.jar"/>
-    <elementParameter xmi:id="_otxbR2ZyEeCUeI-JLejmbw" field="TEXT" name="HOST_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbSGZyEeCUeI-JLejmbw" field="TEXT" name="PORT_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbSWZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbSmZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbS2ZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbTGZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbTWZyEeCUeI-JLejmbw" field="TEXT" name="USER_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbTmZyEeCUeI-JLejmbw" field="TEXT" name="PASS_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbT2ZyEeCUeI-JLejmbw" field="FILE" name="DBFILE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbUGZyEeCUeI-JLejmbw" field="DBTABLE" name="DBTABLE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbUWZyEeCUeI-JLejmbw" field="TEXT" name="QUERY_CONDITION_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbUmZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOAD_NEW_VARIABLE" value="Warning"/>
-    <elementParameter xmi:id="_otxbU2ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="NOT_LOAD_OLD_VARIABLE" value="Warning"/>
-    <elementParameter xmi:id="_otxbVGZyEeCUeI-JLejmbw" field="CHECK" name="PRINT_OPERATIONS" value="false"/>
-    <elementParameter xmi:id="_otxbVWZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_ERROR" value="false"/>
-    <elementParameter xmi:id="_otxbVmZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_WARNINGS" value="true"/>
-    <elementParameter xmi:id="_otxbV2ZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_INFO" value="true"/>
-    <elementParameter xmi:id="_otxbWGZyEeCUeI-JLejmbw" field="CHECK" name="ON_STATCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbWWZyEeCUeI-JLejmbw" field="CHECK" name="ON_LOGCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbWmZyEeCUeI-JLejmbw" field="CHECK" name="ON_METERCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbW2ZyEeCUeI-JLejmbw" field="CHECK" name="ON_CONSOLE_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbXGZyEeCUeI-JLejmbw" field="CHECK" name="ON_FILES_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbXWZyEeCUeI-JLejmbw" field="DIRECTORY" name="FILE_PATH" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbXmZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_STATS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbX2ZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_LOGS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbYGZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_METTER" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbYWZyEeCUeI-JLejmbw" field="ENCODING_TYPE" name="ENCODING" value="ISO-8859-15"/>
-    <elementParameter xmi:id="_otxbYmZyEeCUeI-JLejmbw" field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
-    <elementParameter xmi:id="_otxbY2ZyEeCUeI-JLejmbw" field="CHECK" name="ON_DATABASE_FLAG" value="false"/>
-    <elementParameter xmi:id="_otxbZGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE" value=""/>
-    <elementParameter xmi:id="_otxbZWZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14-10g.jar"/>
-    <elementParameter xmi:id="_otxbZmZyEeCUeI-JLejmbw" field="TEXT" name="URL" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbZ2ZyEeCUeI-JLejmbw" field="TABLE" name="DRIVER_JAR"/>
-    <elementParameter xmi:id="_otxbaGZyEeCUeI-JLejmbw" field="TEXT" name="DRIVER_CLASS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbaWZyEeCUeI-JLejmbw" field="TEXT" name="HOST" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbamZyEeCUeI-JLejmbw" field="TEXT" name="PORT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxba2ZyEeCUeI-JLejmbw" field="TEXT" name="DATASOURCE" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbbGZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbbWZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbbmZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbb2ZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbcGZyEeCUeI-JLejmbw" field="TEXT" name="USER" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbcWZyEeCUeI-JLejmbw" field="TEXT" name="PASS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbcmZyEeCUeI-JLejmbw" field="FILE" name="DBFILE" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbc2ZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_STATS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbdGZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_LOGS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbdWZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_METER" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbdmZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_RUNTIME_ERRORS" value="true"/>
-    <elementParameter xmi:id="_otxbd2ZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_ERRORS" value="true"/>
-    <elementParameter xmi:id="_otxbeGZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_WARNING" value="true"/>
-    <elementParameter xmi:id="_otxbeWZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_REALTIME_STATS" value="false"/>
-    <elementParameter xmi:id="_otxbemZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_HEADERID" value=""/>
-    <elementParameter xmi:id="_otxbe2ZyEeCUeI-JLejmbw" field="CHECK" name="HEADER_ENABLED" value="false"/>
-    <elementParameter xmi:id="_otxbfGZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_LIBRARY" value=""/>
-    <elementParameter xmi:id="_otxbfWZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_CODE" value=""/>
-    <elementParameter xmi:id="_otxbfmZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_IMPORT" value=""/>
-    <elementParameter xmi:id="_otxbf2ZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_FOOTERID" value=""/>
-    <elementParameter xmi:id="_otxbgGZyEeCUeI-JLejmbw" field="CHECK" name="FOOTER_ENABLED" value="false"/>
-    <elementParameter xmi:id="_otxbgWZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_LIBRARY" value=""/>
-    <elementParameter xmi:id="_otxbgmZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_CODE" value=""/>
-    <elementParameter xmi:id="_otxbg2ZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_IMPORT" value=""/>
-    <routinesParameter xmi:id="_otxbhGZyEeCUeI-JLejmbw" id="_GtJn4PfxEd-yU-x4djaaPQ" name="TalendString"/>
-    <routinesParameter xmi:id="_otxbhWZyEeCUeI-JLejmbw" id="_Gux_kPfxEd-yU-x4djaaPQ" name="Relational"/>
-    <routinesParameter xmi:id="_otxbhmZyEeCUeI-JLejmbw" id="_Gu57YPfxEd-yU-x4djaaPQ" name="TalendDate"/>
-    <routinesParameter xmi:id="_otxbh2ZyEeCUeI-JLejmbw" id="_Gu9lwPfxEd-yU-x4djaaPQ" name="TalendDataGenerator"/>
-    <routinesParameter xmi:id="_otxbiGZyEeCUeI-JLejmbw" id="_Gu-z4PfxEd-yU-x4djaaPQ" name="Numeric"/>
-    <routinesParameter xmi:id="_otxbiWZyEeCUeI-JLejmbw" id="_GvDFUPfxEd-yU-x4djaaPQ" name="DataOperation"/>
-    <routinesParameter xmi:id="_otxbimZyEeCUeI-JLejmbw" id="_GvE6gPfxEd-yU-x4djaaPQ" name="StringHandling"/>
-    <routinesParameter xmi:id="_otxbi2ZyEeCUeI-JLejmbw" id="_GvGIoPfxEd-yU-x4djaaPQ" name="Mathematical"/>
-    <routinesParameter xmi:id="_otxbjGZyEeCUeI-JLejmbw" id="_GvHWwPfxEd-yU-x4djaaPQ" name="GeoOperation"/>
-    <routinesParameter xmi:id="_otxbjWZyEeCUeI-JLejmbw" id="_GvH90PfxEd-yU-x4djaaPQ" name="GeometryOperation"/>
-    <routinesParameter xmi:id="_otxbjmZyEeCUeI-JLejmbw" id="_GvJL8PfxEd-yU-x4djaaPQ" name="OpenStreetMap"/>
+  <parameters>
+    <elementParameter field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
+    <elementParameter field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value="32"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_Y" value="32"/>
+    <elementParameter field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
+    <elementParameter field="TEXT" name="OEM_CUSTOM_ATTRIBUTE" value=""/>
+    <elementParameter field="TEXT" name="HADOOP_APP_PATH" value=""/>
+    <elementParameter field="TEXT" name="JOBID_FOR_OOZIE" value=""/>
+    <elementParameter field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;/home/fxprunayre/eworkspace/runtime-talend.product/in.csv&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="DB_TYPE_IMPLICIT_CONTEXT" value="tDBInput"/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value="ojdbc14.jar"/>
+    <elementParameter field="DIRECTORY" name="FILE_PATH" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FILENAME_STATS" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FILENAME_LOGS" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FILENAME_METTER" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CLOSED_LIST" name="DB_TYPE" value=""/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14.jar"/>
+    <routinesParameter id="_n5EUgE9mEeKvF5UivPdF-g" name="DataOperation"/>
+    <routinesParameter id="_n4pdwE9mEeKvF5UivPdF-g" name="GeoOperation"/>
+    <routinesParameter id="_n45VYE9mEeKvF5UivPdF-g" name="GeometryOperation"/>
+    <routinesParameter id="_n46jgE9mEeKvF5UivPdF-g" name="GeometryUtility"/>
+    <routinesParameter id="_n5DGYE9mEeKvF5UivPdF-g" name="Mathematical"/>
+    <routinesParameter id="_n5GJsE9mEeKvF5UivPdF-g" name="Numeric"/>
+    <routinesParameter id="_n43gME9mEeKvF5UivPdF-g" name="OpenStreetMap"/>
+    <routinesParameter id="_n47xoE9mEeKvF5UivPdF-g" name="Relational"/>
+    <routinesParameter id="_n4-08E9mEeKvF5UivPdF-g" name="StringHandling"/>
+    <routinesParameter id="_n5AqIE9mEeKvF5UivPdF-g" name="TalendDataGenerator"/>
+    <routinesParameter id="_n49m0E9mEeKvF5UivPdF-g" name="TalendDate"/>
+    <routinesParameter id="_n5B4QE9mEeKvF5UivPdF-g" name="TalendString"/>
   </parameters>
-  <node xmi:id="_otxbj2ZyEeCUeI-JLejmbw" componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="32">
-    <elementParameter xmi:id="_otxbkGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_1"/>
-    <elementParameter xmi:id="_otxbkWZyEeCUeI-JLejmbw" field="CHECK" name="START" value="true"/>
-    <elementParameter xmi:id="_otxbkmZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FilePolygon"/>
-    <elementParameter xmi:id="_otxbk2ZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otxblGZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otxblWZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otxblmZyEeCUeI-JLejmbw" field="TEXT" name="CQL" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otxbl2ZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otxbmGZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="POLY"/>
-    <elementParameter xmi:id="_otyCIGZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCIWZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCImZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCI2ZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileInput_1">
-      <column xmi:id="_otyCJGZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="32">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_1"/>
+    <elementParameter field="CHECK" name="START" value="true"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FilePolygon"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="TEXT" name="CQL" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="POLY"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileInput_1">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCJWZyEeCUeI-JLejmbw" componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="32">
-    <elementParameter xmi:id="_otyCJmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_1"/>
-    <elementParameter xmi:id="_otyCJ2ZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointPoly.shp&quot;"/>
-    <elementParameter xmi:id="_otyCKGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
-    <elementParameter xmi:id="_otyCKWZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otyCKmZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otyCK2ZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otyCLGZyEeCUeI-JLejmbw" field="CHECK" name="MD" value="false"/>
-    <elementParameter xmi:id="_otyCLWZyEeCUeI-JLejmbw" field="TEXT" name="MDTITLE" value="Metadata title"/>
-    <elementParameter xmi:id="_otyCLmZyEeCUeI-JLejmbw" field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
-    <elementParameter xmi:id="_otyCL2ZyEeCUeI-JLejmbw" field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
-    <elementParameter xmi:id="_otyCMGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
-    <elementParameter xmi:id="_otyCMWZyEeCUeI-JLejmbw" field="CHECK" name="MDTPLCK" value="false"/>
-    <elementParameter xmi:id="_otyCMmZyEeCUeI-JLejmbw" field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
-    <elementParameter xmi:id="_otyCM2ZyEeCUeI-JLejmbw" field="CHECK" name="APPEND" value="false"/>
-    <elementParameter xmi:id="_otyCNGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
-    <elementParameter xmi:id="_otyCNWZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCNmZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="INPOINTPOLY"/>
-    <elementParameter xmi:id="_otyCN2ZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCOGZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCOWZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCOmZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileOutput_1">
-      <column xmi:id="_otyCO2ZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="32">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_1"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointPoly.shp&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="CHECK" name="MD" value="false"/>
+    <elementParameter field="TEXT" name="MDTITLE" value="Metadata title"/>
+    <elementParameter field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
+    <elementParameter field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
+    <elementParameter field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
+    <elementParameter field="CHECK" name="MDTPLCK" value="false"/>
+    <elementParameter field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
+    <elementParameter field="CHECK" name="APPEND" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="INPOINTPOLY"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileOutput_1">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCPGZyEeCUeI-JLejmbw" componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="32">
-    <elementParameter xmi:id="_otyCPWZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_1"/>
-    <elementParameter xmi:id="_otyCPmZyEeCUeI-JLejmbw" field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
-    <elementParameter xmi:id="_otyCP2ZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCQGZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCQWZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCQmZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCQ2ZyEeCUeI-JLejmbw" connector="FLOW" name="sInsidePointExtractor_1">
-      <column xmi:id="_otyCRGZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="32">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_1"/>
+    <elementParameter field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sInsidePointExtractor_1">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCRWZyEeCUeI-JLejmbw" componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="288">
-    <elementParameter xmi:id="_otyCRmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_2"/>
-    <elementParameter xmi:id="_otyCR2ZyEeCUeI-JLejmbw" field="CHECK" name="START" value="true"/>
-    <elementParameter xmi:id="_otyCSGZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FilePoint"/>
-    <elementParameter xmi:id="_otyCSWZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otyCSmZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otyCS2ZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otyCTGZyEeCUeI-JLejmbw" field="TEXT" name="CQL" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otyCTWZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCTmZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="POINT"/>
-    <elementParameter xmi:id="_otyCT2ZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCUGZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCUWZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCUmZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileInput_2">
-      <column xmi:id="_otyCU2ZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_2"/>
+    <elementParameter field="CHECK" name="START" value="true"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FilePoint"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="TEXT" name="CQL" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="POINT"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileInput_2">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCVGZyEeCUeI-JLejmbw" componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="288">
-    <elementParameter xmi:id="_otyCVWZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_2"/>
-    <elementParameter xmi:id="_otyCVmZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointPoint.shp&quot;"/>
-    <elementParameter xmi:id="_otyCV2ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
-    <elementParameter xmi:id="_otyCWGZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otyCWWZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otyCWmZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otyCW2ZyEeCUeI-JLejmbw" field="CHECK" name="MD" value="false"/>
-    <elementParameter xmi:id="_otyCXGZyEeCUeI-JLejmbw" field="TEXT" name="MDTITLE" value="Metadata title"/>
-    <elementParameter xmi:id="_otyCXWZyEeCUeI-JLejmbw" field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
-    <elementParameter xmi:id="_otyCXmZyEeCUeI-JLejmbw" field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
-    <elementParameter xmi:id="_otyCX2ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
-    <elementParameter xmi:id="_otyCYGZyEeCUeI-JLejmbw" field="CHECK" name="MDTPLCK" value="false"/>
-    <elementParameter xmi:id="_otyCYWZyEeCUeI-JLejmbw" field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
-    <elementParameter xmi:id="_otyCYmZyEeCUeI-JLejmbw" field="CHECK" name="APPEND" value="false"/>
-    <elementParameter xmi:id="_otyCY2ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
-    <elementParameter xmi:id="_otyCZGZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCZWZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="INPOINTPOINT"/>
-    <elementParameter xmi:id="_otyCZmZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCZ2ZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCaGZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCaWZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileOutput_2">
-      <column xmi:id="_otyCamZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_2"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointPoint.shp&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="CHECK" name="MD" value="false"/>
+    <elementParameter field="TEXT" name="MDTITLE" value="Metadata title"/>
+    <elementParameter field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
+    <elementParameter field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
+    <elementParameter field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
+    <elementParameter field="CHECK" name="MDTPLCK" value="false"/>
+    <elementParameter field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
+    <elementParameter field="CHECK" name="APPEND" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="INPOINTPOINT"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileOutput_2">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCa2ZyEeCUeI-JLejmbw" componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="288">
-    <elementParameter xmi:id="_otyCbGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_3"/>
-    <elementParameter xmi:id="_otyCbWZyEeCUeI-JLejmbw" field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
-    <elementParameter xmi:id="_otyCbmZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCb2ZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCcGZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCcWZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCcmZyEeCUeI-JLejmbw" connector="FLOW" name="sInsidePointExtractor_3">
-      <column xmi:id="_otyCc2ZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_3"/>
+    <elementParameter field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sInsidePointExtractor_3">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCdGZyEeCUeI-JLejmbw" componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="160">
-    <elementParameter xmi:id="_otyCdWZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_3"/>
-    <elementParameter xmi:id="_otyCdmZyEeCUeI-JLejmbw" field="CHECK" name="START" value="true"/>
-    <elementParameter xmi:id="_otyCd2ZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FileLine"/>
-    <elementParameter xmi:id="_otyCeGZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otyCeWZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otyCemZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otyCe2ZyEeCUeI-JLejmbw" field="TEXT" name="CQL" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_otyCfGZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCfWZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="LINE"/>
-    <elementParameter xmi:id="_otyCfmZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCf2ZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCgGZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCgWZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileInput_3">
-      <column xmi:id="_otyCgmZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileInput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="64" posY="160">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_3"/>
+    <elementParameter field="CHECK" name="START" value="true"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirGeoData&quot;))+context.FileLine"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="TEXT" name="CQL" value="&quot;&quot;"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="LINE"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileInput_3">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCg2ZyEeCUeI-JLejmbw" componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="160">
-    <elementParameter xmi:id="_otyChGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_3"/>
-    <elementParameter xmi:id="_otyChWZyEeCUeI-JLejmbw" field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointLine.shp&quot;"/>
-    <elementParameter xmi:id="_otyChmZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
-    <elementParameter xmi:id="_otyCh2ZyEeCUeI-JLejmbw" field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
-    <elementParameter xmi:id="_otyCiGZyEeCUeI-JLejmbw" field="CHECK" name="FORCE_CRS" value="false"/>
-    <elementParameter xmi:id="_otyCiWZyEeCUeI-JLejmbw" field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
-    <elementParameter xmi:id="_otyCimZyEeCUeI-JLejmbw" field="CHECK" name="MD" value="false"/>
-    <elementParameter xmi:id="_otyCi2ZyEeCUeI-JLejmbw" field="TEXT" name="MDTITLE" value="Metadata title"/>
-    <elementParameter xmi:id="_otyCjGZyEeCUeI-JLejmbw" field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
-    <elementParameter xmi:id="_otyCjWZyEeCUeI-JLejmbw" field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
-    <elementParameter xmi:id="_otyCjmZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
-    <elementParameter xmi:id="_otyCj2ZyEeCUeI-JLejmbw" field="CHECK" name="MDTPLCK" value="false"/>
-    <elementParameter xmi:id="_otyCkGZyEeCUeI-JLejmbw" field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
-    <elementParameter xmi:id="_otyCkWZyEeCUeI-JLejmbw" field="CHECK" name="APPEND" value="false"/>
-    <elementParameter xmi:id="_otyCkmZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
-    <elementParameter xmi:id="_otyCk2ZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyClGZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="INPOINTLINE"/>
-    <elementParameter xmi:id="_otyClWZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyClmZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCl2ZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCmGZyEeCUeI-JLejmbw" connector="FLOW" name="sShapefileOutput_3">
-      <column xmi:id="_otyCmWZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sShapefileOutput" componentVersion="0.102" offsetLabelX="0" offsetLabelY="0" posX="384" posY="160">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileOutput_3"/>
+    <elementParameter field="FILE" name="FILENAME" value="(String)((String)context.getProperty(&quot;DirOutput&quot;))+&quot;inPointLine.shp&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="GEOMETRY_TYPE" value="com.vividsolutions.jts.geom.Point"/>
+    <elementParameter field="TEXT" name="FORMAT_TYPE" value="SHAPEFILE"/>
+    <elementParameter field="CHECK" name="FORCE_CRS" value="false"/>
+    <elementParameter field="TEXT" name="CRS" value="&quot;EPSG:4326&quot;"/>
+    <elementParameter field="CHECK" name="MD" value="false"/>
+    <elementParameter field="TEXT" name="MDTITLE" value="Metadata title"/>
+    <elementParameter field="TEXT" name="MDABSTRACT" value="Metadata abstract"/>
+    <elementParameter field="TEXT" name="MDPURPOSE" value="Metadata Purpose"/>
+    <elementParameter field="CLOSED_LIST" name="MDTOPICCATEGORY" value="farming"/>
+    <elementParameter field="CHECK" name="MDTPLCK" value="false"/>
+    <elementParameter field="FILE" name="MDTPL" value="&quot;/home/fxprunayre/app/TOS-All-r6584-V2.2.1/workspace/.spatial/md/template/iso19139.xml&quot;"/>
+    <elementParameter field="CHECK" name="APPEND" value="false"/>
+    <elementParameter field="CLOSED_LIST" name="LOG_LEVEL" value="org.apache.log4j.Level.ERROR"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="LABEL" value="INPOINTLINE"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sShapefileOutput_3">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <node xmi:id="_otyCmmZyEeCUeI-JLejmbw" componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="160">
-    <elementParameter xmi:id="_otyCm2ZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_2"/>
-    <elementParameter xmi:id="_otyCnGZyEeCUeI-JLejmbw" field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
-    <elementParameter xmi:id="_otyCnWZyEeCUeI-JLejmbw" field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
-    <elementParameter xmi:id="_otyCnmZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_otyCn2ZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_otyCoGZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_otyCoWZyEeCUeI-JLejmbw" connector="FLOW" name="sInsidePointExtractor_2">
-      <column xmi:id="_otyComZyEeCUeI-JLejmbw" defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
+  <node componentName="sInsidePointExtractor" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="224" posY="160">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sInsidePointExtractor_2"/>
+    <elementParameter field="TEXT" name="OPERATION_TYPE" value="INTERIOR_POINT"/>
+    <elementParameter field="MEMO_IMPORT" name="IMPORT" value="import org.talend.sdi.geometry.Geometry;"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="sInsidePointExtractor_2">
+      <column defaultValue="" key="false" length="0" name="the_geom" nullable="true" precision="0" sourceType="" type="id_Geometry"/>
     </metadata>
   </node>
-  <connection xmi:id="_otyCo2ZyEeCUeI-JLejmbw" connectorName="FLOW" label="row1" lineStyle="0" metaname="sShapefileInput_1" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_1" target="sInsidePointExtractor_1">
-    <elementParameter xmi:id="_otyCpGZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyCpWZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyCpmZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyCp2ZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyCqGZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row1" lineStyle="0" metaname="sShapefileInput_1" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_1" target="sInsidePointExtractor_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyCqWZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyCqmZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyCq2ZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyCrGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyCrWZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyCrmZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyCr2ZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyCsGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row1"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row1"/>
   </connection>
-  <connection xmi:id="_otyCsWZyEeCUeI-JLejmbw" connectorName="FLOW" label="row2" lineStyle="0" metaname="sInsidePointExtractor_1" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_1" target="sShapefileOutput_1">
-    <elementParameter xmi:id="_otyCsmZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyCs2ZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyCtGZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyCtWZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyCtmZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row2" lineStyle="0" metaname="sInsidePointExtractor_1" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_1" target="sShapefileOutput_1">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyCt2ZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyCuGZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyCuWZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyCumZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyCu2ZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyCvGZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyCvWZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyCvmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row2"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row2"/>
   </connection>
-  <connection xmi:id="_otyCv2ZyEeCUeI-JLejmbw" connectorName="FLOW" label="row5" lineStyle="0" metaname="sShapefileInput_2" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_2" target="sInsidePointExtractor_3">
-    <elementParameter xmi:id="_otyCwGZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyCwWZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyCwmZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyCw2ZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyCxGZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row5" lineStyle="0" metaname="sShapefileInput_2" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_2" target="sInsidePointExtractor_3">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyCxWZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyCxmZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyCx2ZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyCyGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyCyWZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyCymZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyCy2ZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyCzGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row5"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row5"/>
   </connection>
-  <connection xmi:id="_otyCzWZyEeCUeI-JLejmbw" connectorName="FLOW" label="row6" lineStyle="0" metaname="sInsidePointExtractor_3" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_3" target="sShapefileOutput_2">
-    <elementParameter xmi:id="_otyCzmZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyCz2ZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyC0GZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyC0WZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyC0mZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row6" lineStyle="0" metaname="sInsidePointExtractor_3" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_3" target="sShapefileOutput_2">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyC02ZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyC1GZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyC1WZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyC1mZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyC12ZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyC2GZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyC2WZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyC2mZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row6"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row6"/>
   </connection>
-  <connection xmi:id="_otyC22ZyEeCUeI-JLejmbw" connectorName="FLOW" label="row3" lineStyle="0" metaname="sShapefileInput_3" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_3" target="sInsidePointExtractor_2">
-    <elementParameter xmi:id="_otyC3GZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyC3WZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyC3mZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyC32ZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyC4GZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row3" lineStyle="0" metaname="sShapefileInput_3" offsetLabelX="0" offsetLabelY="0" source="sShapefileInput_3" target="sInsidePointExtractor_2">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyC4WZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyC4mZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyC42ZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyC5GZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyC5WZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyC5mZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyC52ZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyC6GZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row3"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row3"/>
   </connection>
-  <connection xmi:id="_otyC6WZyEeCUeI-JLejmbw" connectorName="FLOW" label="row4" lineStyle="0" metaname="sInsidePointExtractor_2" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_2" target="sShapefileOutput_3">
-    <elementParameter xmi:id="_otyC6mZyEeCUeI-JLejmbw" field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
-    <elementParameter xmi:id="_otyC62ZyEeCUeI-JLejmbw" field="TABLE" name="TRACES_CONNECTION_FILTER">
-      <elementValue xmi:id="_otyC7GZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN" value="the_geom"/>
-      <elementValue xmi:id="_otyC7WZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CHECKED" value="true"/>
-      <elementValue xmi:id="_otyC7mZyEeCUeI-JLejmbw" elementRef="TRACE_COLUMN_CONDITION" value=""/>
+  <connection connectorName="FLOW" label="row4" lineStyle="0" metaname="sInsidePointExtractor_2" offsetLabelX="0" offsetLabelY="0" source="sInsidePointExtractor_2" target="sShapefileOutput_3">
+    <elementParameter field="CHECK" name="TRACES_CONNECTION_ENABLE" value="true"/>
+    <elementParameter field="TABLE" name="TRACES_CONNECTION_FILTER">
+      <elementValue elementRef="TRACE_COLUMN" value="the_geom"/>
+      <elementValue elementRef="TRACE_COLUMN_CHECKED" value="true"/>
+      <elementValue elementRef="TRACE_COLUMN_CONDITION" value=""/>
     </elementParameter>
-    <elementParameter xmi:id="_otyC72ZyEeCUeI-JLejmbw" field="CHECK" name="MONITOR_CONNECTION" value="false"/>
-    <elementParameter xmi:id="_otyC8GZyEeCUeI-JLejmbw" field="CHECK" name="USEROWLABEL" value="true"/>
-    <elementParameter xmi:id="_otyC8WZyEeCUeI-JLejmbw" field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
-    <elementParameter xmi:id="_otyC8mZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
-    <elementParameter xmi:id="_otyC82ZyEeCUeI-JLejmbw" field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
-    <elementParameter xmi:id="_otyC9GZyEeCUeI-JLejmbw" field="TABLE" name="THRESHLODS"/>
-    <elementParameter xmi:id="_otyC9WZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_otyC9mZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="row4"/>
+    <elementParameter field="CHECK" name="MONITOR_CONNECTION" value="false"/>
+    <elementParameter field="CHECK" name="USEROWLABEL" value="true"/>
+    <elementParameter field="TEXT" name="METTERLABEL" value="&quot;MyLabel&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="ABSOLUTE" value="Absolute"/>
+    <elementParameter field="CONNECTION_LIST" name="CONNECTIONS" value=""/>
+    <elementParameter field="TABLE" name="THRESHLODS"/>
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="row4"/>
   </connection>
-  <subjob xmi:id="_otyC92ZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_otyC-GZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_1"/>
-    <elementParameter xmi:id="_otyC-WZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter xmi:id="_otyC-mZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_1"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
-  <subjob xmi:id="_otyC-2ZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_otyC_GZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_2"/>
-    <elementParameter xmi:id="_otyC_WZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter xmi:id="_otyC_mZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_2"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
-  <subjob xmi:id="_otyC_2ZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_otyDAGZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_3"/>
-    <elementParameter xmi:id="_otyDAWZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter xmi:id="_otyDAmZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="sShapefileInput_3"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
 </talendfile:ProcessType>

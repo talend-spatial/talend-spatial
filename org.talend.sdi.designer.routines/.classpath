@@ -4,5 +4,8 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="resources/java"/>
+	<classpathentry kind="lib" path="/org.talend.libraries.sdi/lib/gt-xsd-core-8.5.jar"/>
+	<classpathentry kind="lib" path="/org.talend.libraries.sdi/lib/jts-1.12.jar"/>
+	<classpathentry kind="lib" path="/org.talend.libraries.sdi/lib/gt-xsd-gml3-8.5.jar"/>
 	<classpathentry kind="output" path="class"/>
 </classpath>

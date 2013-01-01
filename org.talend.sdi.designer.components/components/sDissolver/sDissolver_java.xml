@@ -64,7 +64,7 @@
       <TEMPLATE_PARAM SOURCE="self.UNIQUE_NAME" TARGET="DI.ORIGIN" />
     </TEMPLATES>
     <IMPORTS>
-      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.12.jar" REQUIRED="true" />
     </IMPORTS>
   </CODEGENERATION>
   <RETURNS />

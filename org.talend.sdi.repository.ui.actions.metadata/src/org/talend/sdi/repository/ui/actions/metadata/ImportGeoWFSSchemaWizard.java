@@ -43,7 +43,7 @@ import org.eclipse.ui.IWorkbench;
 import org.geotools.data.DataStore;
 import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSDataStoreFactory;
-import org.geotools.wfs.protocol.Version;
+import org.geotools.data.wfs.protocol.wfs.Version;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.talend.commons.exception.BusinessException;

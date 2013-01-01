@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Talend Spatial RoutinesProvider Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.routines;singleton:=true
-Bundle-Version: 5.2.0
+Bundle-Version: 5.2.1
 Bundle-Activator: org.talend.sdi.designer.routines.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.apache.log4j,
  org.talend.core,
  org.talend.librariesmanager,
  org.talend.commons,

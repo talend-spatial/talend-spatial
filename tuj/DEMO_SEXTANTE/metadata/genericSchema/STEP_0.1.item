@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_dsjfIFAUEeKwXoGH-LEt5A" dataPackage="_dsjfIVAUEeKwXoGH-LEt5A"/>
+  <TalendMetadata:GenericPackage xmi:id="_dsjfIVAUEeKwXoGH-LEt5A" dataManager="_dsjfIFAUEeKwXoGH-LEt5A">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_dsjfIlAUEeKwXoGH-LEt5A" id="_dG5NUVAUEeKwXoGH-LEt5A" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfI1AUEeKwXoGH-LEt5A" label="msGeometry" talendType="id_Geometry"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfJFAUEeKwXoGH-LEt5A" label="S_ID" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfJVAUEeKwXoGH-LEt5A" label="S_C_ID" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfJlAUEeKwXoGH-LEt5A" label="X" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfJ1AUEeKwXoGH-LEt5A" label="Y" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfKFAUEeKwXoGH-LEt5A" label="S_R_TYPE" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dsjfKVAUEeKwXoGH-LEt5A" label="S_R_NOM" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dskGMFAUEeKwXoGH-LEt5A" label="S_R_X" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dskGMVAUEeKwXoGH-LEt5A" label="S_R_Y" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_dskGMlAUEeKwXoGH-LEt5A" label="DEPARTEMEN" talendType="id_String"/>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

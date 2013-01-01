@@ -95,7 +95,8 @@ public class CreateGeoMetadata extends org.talend.repository.ui.actions.metadata
      */
     private File openImportFileDialog() {
         FileDialog dial = new FileDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell(), SWT.OPEN);
-        dial.setFilterExtensions(new String[] { "*.shp", "*.mif", "*.gpx", "*.SHP", "*.MIF", "*.GPX" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        dial.setFilterExtensions(new String[] { "*.shp", "*.SHP" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+//        dial.setFilterExtensions(new String[] { "*.shp", "*.mif", "*.gpx", "*.SHP", "*.MIF", "*.GPX" }); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         String fileName = dial.open();
         if ((fileName != null) && (!fileName.equals(""))) { //$NON-NLS-1$
             return new File(fileName);

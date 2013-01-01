@@ -44,18 +44,18 @@
   </PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>
-      <IMPORT NAME="jts-1.9" MODULE="jts-1.9.jar" REQUIRED="true" />
+      <IMPORT NAME="jts" MODULE="jts-1.12.jar" REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
       <IMPORT NAME="Java-DOM4J" MODULE="dom4j-1.6.1.jar"
         REQUIRED="true" />
       <IMPORT NAME="Java-JAXEN" MODULE="jaxen-1.1.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="commons-httpclient-3.0.1.jar"
-        MODULE="commons-httpclient-3.0.1.jar" REQUIRED="true" />
+      <IMPORT NAME="commons-httpclient"
+        MODULE="commons-httpclient-3.1.jar" REQUIRED="true" />
       <IMPORT NAME="commons-logging"
         MODULE="commons-logging-1.1.1.jar" REQUIRED="true" />
-      <IMPORT NAME="commons-codec-1.3" MODULE="commons-codec-1.3.jar"
+      <IMPORT NAME="commons-codec" MODULE="commons-codec-1.2.jar"
         REQUIRED="true" />
       <IMPORT NAME="log4j" MODULE="log4j-1.2.15.jar"
         REQUIRED="true" />
