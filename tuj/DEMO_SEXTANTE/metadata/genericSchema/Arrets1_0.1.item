@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_ot3hs2ZyEeCUeI-JLejmbw" dataPackage="_ot3htGZyEeCUeI-JLejmbw"/>
+  <TalendMetadata:GenericPackage xmi:id="_ot3htGZyEeCUeI-JLejmbw" dataManager="_ot3hs2ZyEeCUeI-JLejmbw">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_ot3htWZyEeCUeI-JLejmbw" id="_PEzbMTONEeCQg8cOKtNNMA" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3htmZyEeCUeI-JLejmbw" label="the_geom" talendType="id_Geometry"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3ht2ZyEeCUeI-JLejmbw" label="GCIdentifier" talendType="id_Integer"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3huGZyEeCUeI-JLejmbw" label="GCDegreesAngle" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3huWZyEeCUeI-JLejmbw" label="Nom" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3humZyEeCUeI-JLejmbw" label="PID" talendType="id_Integer"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hu2ZyEeCUeI-JLejmbw" label="Lot_NavTeq" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hvGZyEeCUeI-JLejmbw" label="Charge_Moyenne" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hvWZyEeCUeI-JLejmbw" label="Ligne" talendType="id_Integer"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hvmZyEeCUeI-JLejmbw" label="Direction" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hv2ZyEeCUeI-JLejmbw" label="Horaire_Aller" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hwGZyEeCUeI-JLejmbw" label="Installations_desservies" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hwWZyEeCUeI-JLejmbw" label="Arrets_sur_demande_apres_Phenix" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hwmZyEeCUeI-JLejmbw" label="Horaire_Retour" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hw2ZyEeCUeI-JLejmbw" label="Arret_retour" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hxGZyEeCUeI-JLejmbw" label="Code_Arret" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hxWZyEeCUeI-JLejmbw" label="Arrets" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hxmZyEeCUeI-JLejmbw" label="Adresse" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hx2ZyEeCUeI-JLejmbw" label="CP" talendType="id_Integer"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hyGZyEeCUeI-JLejmbw" label="Ville" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hyWZyEeCUeI-JLejmbw" label="Lat" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hymZyEeCUeI-JLejmbw" label="Lng" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hy2ZyEeCUeI-JLejmbw" label="Q" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_ot3hzGZyEeCUeI-JLejmbw" label="Effectif" talendType="id_String"/>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

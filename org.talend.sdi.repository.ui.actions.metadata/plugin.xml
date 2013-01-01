@@ -12,7 +12,7 @@
             isPropertiesAction="false"
             isReadAction="true"
             level="100"
-            name="Metadata/Create generic schema from ESRI Shapefile, MIF/MID file">
+            name="Metadata/Create generic schema from ESRI Shapefile">
       </Action>
       <Action
             class="org.talend.sdi.repository.ui.actions.metadata.CreateGeoWFSMetadata"
@@ -22,15 +22,6 @@
             isReadAction="true"
             level="101"
             name="Metadata/Create generic schema from WFS">
-      </Action>
-      <Action
-            class="org.talend.sdi.repository.ui.actions.metadata.CreateGeoEdigeoMetadata"
-            id="org.talend.sdi.repository.ui.actions.CreateGeoEdigeoMetadata"
-            isEditAction="true"
-            isPropertiesAction="false"
-            isReadAction="true"
-            level="102"
-            name="Metadata/Create generic schema from EDIGEO Files">
       </Action>
    </extension>
 

@@ -1,221 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" xmi:id="_ouJ1t2ZyEeCUeI-JLejmbw" defaultContext="Default">
-  <context xmi:id="_ouJ1uGZyEeCUeI-JLejmbw" confirmationNeeded="false" name="Default">
-    <contextParameter xmi:id="_ouJ1uWZyEeCUeI-JLejmbw" comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/francois/Neogeo3/GeoData/"/>
+<talendfile:ProcessType xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd" defaultContext="Default">
+  <context confirmationNeeded="false" name="Default">
+    <contextParameter comment="" name="DirGeoData" prompt="Select your demo data directory?" promptNeeded="false" repositoryContextId="_vPMfsJELEdyAreiji0zYBg" type="id_String" value="/home/francois/GeoData/"/>
   </context>
-  <parameters xmi:id="_ouJ1umZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_ouJ1u2ZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_FILE_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace"/>
-    <elementParameter xmi:id="_ouJ1vGZyEeCUeI-JLejmbw" field="DIRECTORY" name="COMP_DEFAULT_PROJECT_DIR" value="/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace/DEMO"/>
-    <elementParameter xmi:id="_ouJ1vWZyEeCUeI-JLejmbw" field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
-    <elementParameter xmi:id="_ouJ1vmZyEeCUeI-JLejmbw" field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
-    <elementParameter xmi:id="_ouJ1v2ZyEeCUeI-JLejmbw" field="TEXT" name="AUTHOR" value="fx.prunayre@gmail.com"/>
-    <elementParameter xmi:id="_ouJ1wGZyEeCUeI-JLejmbw" field="TEXT" name="STATUS" value=""/>
-    <elementParameter xmi:id="_ouJ1wWZyEeCUeI-JLejmbw" field="TEXT" name="NAME" value="readme_first"/>
-    <elementParameter xmi:id="_ouJ1wmZyEeCUeI-JLejmbw" field="TEXT" name="VERSION" value="0.1"/>
-    <elementParameter xmi:id="_ouJ1w2ZyEeCUeI-JLejmbw" field="TEXT" name="PURPOSE" value="Download geodata required for all jobs"/>
-    <elementParameter xmi:id="_ouJ1xGZyEeCUeI-JLejmbw" field="TEXT" name="DESCRIPTION" value=""/>
-    <elementParameter xmi:id="_ouJ1xWZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_X" value="0"/>
-    <elementParameter xmi:id="_ouJ1xmZyEeCUeI-JLejmbw" field="TEXT" name="SCREEN_OFFSET_Y" value="0"/>
-    <elementParameter xmi:id="_ouJ1x2ZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
-    <elementParameter xmi:id="_ouJ1yGZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
-    <elementParameter xmi:id="_ouJ1yWZyEeCUeI-JLejmbw" field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="true"/>
-    <elementParameter xmi:id="_ouJ1ymZyEeCUeI-JLejmbw" field="CHECK" name="MULTI_THREAD_EXECATION" value="false"/>
-    <elementParameter xmi:id="_ouJ1y2ZyEeCUeI-JLejmbw" field="CHECK" name="IMPLICIT_TCONTEXTLOAD" value="false"/>
-    <elementParameter xmi:id="_ouJ1zGZyEeCUeI-JLejmbw" field="RADIO" name="FROM_FILE_FLAG_IMPLICIT_CONTEXT" value="false"/>
-    <elementParameter xmi:id="_ouJ1zWZyEeCUeI-JLejmbw" field="RADIO" name="FROM_DATABASE_FLAG_IMPLICIT_CONTEXT" value="false"/>
-    <elementParameter xmi:id="_ouJ1zmZyEeCUeI-JLejmbw" field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ1z2ZyEeCUeI-JLejmbw" field="TEXT" name="FIELDSEPARATOR" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ10GZyEeCUeI-JLejmbw" field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:PROPERTY_TYPE" value=""/>
-    <elementParameter xmi:id="_ouJ10WZyEeCUeI-JLejmbw" field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:REPOSITORY_PROPERTY_TYPE" value=""/>
-    <elementParameter xmi:id="_ouJ10mZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE_IMPLICIT_CONTEXT" value=""/>
-    <elementParameter xmi:id="_ouJ102ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value=""/>
-    <elementParameter xmi:id="_ouJ11GZyEeCUeI-JLejmbw" field="TEXT" name="HOST_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ11WZyEeCUeI-JLejmbw" field="TEXT" name="PORT_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ11mZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ112ZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ12GZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ12WZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ12mZyEeCUeI-JLejmbw" field="TEXT" name="USER_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ122ZyEeCUeI-JLejmbw" field="TEXT" name="PASS_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ13GZyEeCUeI-JLejmbw" field="FILE" name="DBFILE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ13WZyEeCUeI-JLejmbw" field="DBTABLE" name="DBTABLE_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ13mZyEeCUeI-JLejmbw" field="TEXT" name="QUERY_CONDITION_IMPLICIT_CONTEXT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ132ZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="LOAD_NEW_VARIABLE" value=""/>
-    <elementParameter xmi:id="_ouJ14GZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="NOT_LOAD_OLD_VARIABLE" value=""/>
-    <elementParameter xmi:id="_ouJ14WZyEeCUeI-JLejmbw" field="CHECK" name="PRINT_OPERATIONS" value="false"/>
-    <elementParameter xmi:id="_ouJ14mZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_ERROR" value="false"/>
-    <elementParameter xmi:id="_ouJ142ZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_WARNINGS" value="false"/>
-    <elementParameter xmi:id="_ouJ15GZyEeCUeI-JLejmbw" field="CHECK" name="DISABLE_INFO" value="false"/>
-    <elementParameter xmi:id="_ouJ15WZyEeCUeI-JLejmbw" field="CHECK" name="ON_STATCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ15mZyEeCUeI-JLejmbw" field="CHECK" name="ON_LOGCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ152ZyEeCUeI-JLejmbw" field="CHECK" name="ON_METERCATCHER_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ16GZyEeCUeI-JLejmbw" field="CHECK" name="ON_CONSOLE_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ16WZyEeCUeI-JLejmbw" field="CHECK" name="ON_FILES_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ16mZyEeCUeI-JLejmbw" field="DIRECTORY" name="FILE_PATH" value="&quot;/home/francois/Neogeo3/App/Talend/TOS-All-r50363-V4.1.1/workspace/.metadata&quot;"/>
-    <elementParameter xmi:id="_ouJ162ZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_STATS" value="&quot;stats_file.txt&quot;"/>
-    <elementParameter xmi:id="_ouJ17GZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_LOGS" value="&quot;logs_file.txt&quot;"/>
-    <elementParameter xmi:id="_ouJ17WZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME_METTER" value="&quot;meter_file.txt&quot;"/>
-    <elementParameter xmi:id="_ouJ17mZyEeCUeI-JLejmbw" field="ENCODING_TYPE" name="ENCODING" value="ISO-8859-15"/>
-    <elementParameter xmi:id="_ouJ172ZyEeCUeI-JLejmbw" field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
-    <elementParameter xmi:id="_ouJ18GZyEeCUeI-JLejmbw" field="CHECK" name="ON_DATABASE_FLAG" value="false"/>
-    <elementParameter xmi:id="_ouJ18WZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_TYPE" value="tJDBCOutput"/>
-    <elementParameter xmi:id="_ouJ18mZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14-10g.jar"/>
-    <elementParameter xmi:id="_ouJ182ZyEeCUeI-JLejmbw" field="TEXT" name="URL" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ19GZyEeCUeI-JLejmbw" field="TABLE" name="DRIVER_JAR"/>
-    <elementParameter xmi:id="_ouJ19WZyEeCUeI-JLejmbw" field="TEXT" name="DRIVER_CLASS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ19mZyEeCUeI-JLejmbw" field="TEXT" name="HOST" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ192ZyEeCUeI-JLejmbw" field="TEXT" name="PORT" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ1-GZyEeCUeI-JLejmbw" field="TEXT" name="DATASOURCE" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ1-WZyEeCUeI-JLejmbw" field="TEXT" name="DBNAME" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouJ1-mZyEeCUeI-JLejmbw" field="TEXT" name="LOCAL_SERVICE_NAME" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcoGZyEeCUeI-JLejmbw" field="TEXT" name="PROPERTIES" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcoWZyEeCUeI-JLejmbw" field="TEXT" name="SCHEMA_DB" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcomZyEeCUeI-JLejmbw" field="TEXT" name="USER" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKco2ZyEeCUeI-JLejmbw" field="TEXT" name="PASS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcpGZyEeCUeI-JLejmbw" field="FILE" name="DBFILE" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcpWZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_STATS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcpmZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_LOGS" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcp2ZyEeCUeI-JLejmbw" field="DBTABLE" name="TABLE_METER" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKcqGZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_RUNTIME_ERRORS" value="true"/>
-    <elementParameter xmi:id="_ouKcqWZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_ERRORS" value="true"/>
-    <elementParameter xmi:id="_ouKcqmZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_USER_WARNING" value="true"/>
-    <elementParameter xmi:id="_ouKcq2ZyEeCUeI-JLejmbw" field="CHECK" name="CATCH_REALTIME_STATS" value="false"/>
-    <elementParameter xmi:id="_ouKcrGZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_HEADERID" value=""/>
-    <elementParameter xmi:id="_ouKcrWZyEeCUeI-JLejmbw" field="CHECK" name="HEADER_ENABLED" value="false"/>
-    <elementParameter xmi:id="_ouKcrmZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_LIBRARY" value=""/>
-    <elementParameter xmi:id="_ouKcr2ZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_CODE" value=""/>
-    <elementParameter xmi:id="_ouKcsGZyEeCUeI-JLejmbw" field="TEXT" name="HEADER_IMPORT" value=""/>
-    <elementParameter xmi:id="_ouKcsWZyEeCUeI-JLejmbw" field="TEXT" name="HEADERFOOTER_FOOTERID" value=""/>
-    <elementParameter xmi:id="_ouKcsmZyEeCUeI-JLejmbw" field="CHECK" name="FOOTER_ENABLED" value="false"/>
-    <elementParameter xmi:id="_ouKcs2ZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_LIBRARY" value=""/>
-    <elementParameter xmi:id="_ouKctGZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_CODE" value=""/>
-    <elementParameter xmi:id="_ouKctWZyEeCUeI-JLejmbw" field="TEXT" name="FOOTER_IMPORT" value=""/>
-    <routinesParameter xmi:id="_ouKctmZyEeCUeI-JLejmbw" id="_GtJn4PfxEd-yU-x4djaaPQ" name="TalendString"/>
-    <routinesParameter xmi:id="_ouKct2ZyEeCUeI-JLejmbw" id="_Gux_kPfxEd-yU-x4djaaPQ" name="Relational"/>
-    <routinesParameter xmi:id="_ouKcuGZyEeCUeI-JLejmbw" id="_Gu57YPfxEd-yU-x4djaaPQ" name="TalendDate"/>
-    <routinesParameter xmi:id="_ouKcuWZyEeCUeI-JLejmbw" id="_Gu9lwPfxEd-yU-x4djaaPQ" name="TalendDataGenerator"/>
-    <routinesParameter xmi:id="_ouKcumZyEeCUeI-JLejmbw" id="_Gu-z4PfxEd-yU-x4djaaPQ" name="Numeric"/>
-    <routinesParameter xmi:id="_ouKcu2ZyEeCUeI-JLejmbw" id="_GvDFUPfxEd-yU-x4djaaPQ" name="DataOperation"/>
-    <routinesParameter xmi:id="_ouKcvGZyEeCUeI-JLejmbw" id="_GvE6gPfxEd-yU-x4djaaPQ" name="StringHandling"/>
-    <routinesParameter xmi:id="_ouKcvWZyEeCUeI-JLejmbw" id="_GvGIoPfxEd-yU-x4djaaPQ" name="Mathematical"/>
-    <routinesParameter xmi:id="_ouKcvmZyEeCUeI-JLejmbw" id="_GvHWwPfxEd-yU-x4djaaPQ" name="GeoOperation"/>
-    <routinesParameter xmi:id="_ouKcv2ZyEeCUeI-JLejmbw" id="_GvH90PfxEd-yU-x4djaaPQ" name="GeometryOperation"/>
-    <routinesParameter xmi:id="_ouKcwGZyEeCUeI-JLejmbw" id="_GvJL8PfxEd-yU-x4djaaPQ" name="OpenStreetMap"/>
+  <parameters>
+    <elementParameter field="TEXT" name="JOB_RUN_VM_ARGUMENTS" value=" -Xms256M -Xmx1024M"/>
+    <elementParameter field="CHECK" name="JOB_RUN_VM_ARGUMENTS_OPTION" value="false"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_X" value="0"/>
+    <elementParameter field="TEXT" name="SCREEN_OFFSET_Y" value="0"/>
+    <elementParameter field="TEXT" name="SCHEMA_OPTIONS" value="none"/>
+    <elementParameter field="TEXT" name="OEM_CUSTOM_ATTRIBUTE" value=""/>
+    <elementParameter field="TEXT" name="HADOOP_APP_PATH" value=""/>
+    <elementParameter field="TEXT" name="JOBID_FOR_OOZIE" value=""/>
+    <elementParameter field="CHECK" name="IMPLICITCONTEXT_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="CHECK" name="STATANDLOG_USE_PROJECT_SETTINGS" value="true"/>
+    <elementParameter field="FILE" name="IMPLICIT_TCONTEXTLOAD_FILE" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="FIELDSEPARATOR" value="&quot;&quot;"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:REPOSITORY_PROPERTY_TYPE" value=""/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION_IMPLICIT_CONTEXT" value=""/>
+    <elementParameter field="CLOSED_LIST" name="LOAD_NEW_VARIABLE" value=""/>
+    <elementParameter field="CLOSED_LIST" name="NOT_LOAD_OLD_VARIABLE" value=""/>
+    <elementParameter field="CHECK" name="DISABLE_WARNINGS" value="false"/>
+    <elementParameter field="CHECK" name="DISABLE_INFO" value="false"/>
+    <elementParameter field="TECHNICAL" name="ENCODING:ENCODING_TYPE" value="ISO-8859-15"/>
+    <elementParameter field="CLOSED_LIST" name="DB_VERSION" value="ojdbc14.jar"/>
+    <elementParameter field="CHECK" name="UPDATE_COMPONENTS" value="false"/>
+    <elementParameter field="CHECK" name="STATS_DEFAULT_PROJECTSETTING" value="true"/>
+    <elementParameter field="CHECK" name="ON_STATCATCHER_FLAG" value="false"/>
+    <elementParameter field="CHECK" name="ON_LOGCATCHER_FLAG" value="false"/>
+    <elementParameter field="CHECK" name="ON_METERCATCHER_FLAG" value="false"/>
+    <elementParameter field="CHECK" name="ON_CONSOLE_FLAG" value="false"/>
+    <elementParameter field="CHECK" name="ON_FILES_FLAG" value="false"/>
+    <elementParameter field="CHECK" name="ON_DATABASE_FLAG" value="false"/>
+    <elementParameter field="TABLE" name="DRIVER_JAR"/>
+    <elementParameter field="CHECK" name="CATCH_RUNTIME_ERRORS" value="true"/>
+    <elementParameter field="CHECK" name="CATCH_USER_ERRORS" value="true"/>
+    <elementParameter field="CHECK" name="CATCH_USER_WARNING" value="true"/>
+    <elementParameter field="CHECK" name="CATCH_REALTIME_STATS" value="false"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY_TYPE:PROPERTY_TYPE" value="BUILT_IN"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY_TYPE:REPOSITORY_PROPERTY_TYPE" value=""/>
+    <elementParameter field="CHECK" name="IMPLICIT_TCONTEXTLOAD" value="false"/>
+    <elementParameter field="CHECK" name="IMPLICT_DEFAULT_PROJECTSETTING" value="true"/>
+    <elementParameter field="RADIO" name="FROM_FILE_FLAG_IMPLICIT_CONTEXT" value="false"/>
+    <elementParameter field="RADIO" name="FROM_DATABASE_FLAG_IMPLICIT_CONTEXT" value="false"/>
+    <elementParameter field="CHECK" name="PRINT_OPERATIONS" value="false"/>
+    <elementParameter field="CHECK" name="DISABLE_ERROR" value="false"/>
+    <elementParameter field="TECHNICAL" name="PROPERTY_TYPE_IMPLICIT_CONTEXT:PROPERTY_TYPE" value=""/>
+    <routinesParameter id="_n5EUgE9mEeKvF5UivPdF-g" name="DataOperation"/>
+    <routinesParameter id="_n4pdwE9mEeKvF5UivPdF-g" name="GeoOperation"/>
+    <routinesParameter id="_n45VYE9mEeKvF5UivPdF-g" name="GeometryOperation"/>
+    <routinesParameter id="_n46jgE9mEeKvF5UivPdF-g" name="GeometryUtility"/>
+    <routinesParameter id="_n5DGYE9mEeKvF5UivPdF-g" name="Mathematical"/>
+    <routinesParameter id="_n5GJsE9mEeKvF5UivPdF-g" name="Numeric"/>
+    <routinesParameter id="_n43gME9mEeKvF5UivPdF-g" name="OpenStreetMap"/>
+    <routinesParameter id="_n47xoE9mEeKvF5UivPdF-g" name="Relational"/>
+    <routinesParameter id="_n4-08E9mEeKvF5UivPdF-g" name="StringHandling"/>
+    <routinesParameter id="_n5AqIE9mEeKvF5UivPdF-g" name="TalendDataGenerator"/>
+    <routinesParameter id="_n49m0E9mEeKvF5UivPdF-g" name="TalendDate"/>
+    <routinesParameter id="_n5B4QE9mEeKvF5UivPdF-g" name="TalendString"/>
   </parameters>
-  <node xmi:id="_ouKcwWZyEeCUeI-JLejmbw" componentName="tFileFetch" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="128" posY="288">
-    <elementParameter xmi:id="_ouKcwmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="tFileFetch_1"/>
-    <elementParameter xmi:id="_ouKcw2ZyEeCUeI-JLejmbw" field="CHECK" name="START" value="true"/>
-    <elementParameter xmi:id="_ouKcxGZyEeCUeI-JLejmbw" field="CLOSED_LIST" name="PROTO" value="http"/>
-    <elementParameter xmi:id="_ouKcxWZyEeCUeI-JLejmbw" field="CHECK" name="POST" value="false"/>
-    <elementParameter xmi:id="_ouKcxmZyEeCUeI-JLejmbw" field="TEXT" name="URI" value="&quot;http://spatialdataintegrator.org/download/geodata.zip&quot;"/>
-    <elementParameter xmi:id="_ouKcx2ZyEeCUeI-JLejmbw" field="CHECK" name="USE_CACHE" value="false"/>
-    <elementParameter xmi:id="_ouKcyGZyEeCUeI-JLejmbw" field="TEXT" name="SMB_URI" value="&quot;smb://host/dir/remoteFileName.txt&quot;"/>
-    <elementParameter xmi:id="_ouKcyWZyEeCUeI-JLejmbw" field="DIRECTORY" name="DIRECTORY" value="context.DirGeoData"/>
-    <elementParameter xmi:id="_ouKcymZyEeCUeI-JLejmbw" field="CHECK" name="MAKEDIRS" value="true"/>
-    <elementParameter xmi:id="_ouKcy2ZyEeCUeI-JLejmbw" field="TEXT" name="FILENAME" value="&quot;geodata.zip&quot;"/>
-    <elementParameter xmi:id="_ouKczGZyEeCUeI-JLejmbw" field="CHECK" name="ADD_HEADER" value="false"/>
-    <elementParameter xmi:id="_ouKczWZyEeCUeI-JLejmbw" field="TABLE" name="HEADERS"/>
-    <elementParameter xmi:id="_ouKczmZyEeCUeI-JLejmbw" field="TEXT" name="SMB_DOMAIN" value="&quot;domain&quot;"/>
-    <elementParameter xmi:id="_ouKcz2ZyEeCUeI-JLejmbw" field="TEXT" name="SMB_USERNAME" value="&quot;username&quot;"/>
-    <elementParameter xmi:id="_ouKc0GZyEeCUeI-JLejmbw" field="TEXT" name="SMB_PASSWORD" value="&quot;password&quot;"/>
-    <elementParameter xmi:id="_ouKc0WZyEeCUeI-JLejmbw" field="CHECK" name="DIE_ON_ERROR" value="true"/>
-    <elementParameter xmi:id="_ouKc0mZyEeCUeI-JLejmbw" field="TABLE" name="COMMON_PARAMS"/>
-    <elementParameter xmi:id="_ouKc02ZyEeCUeI-JLejmbw" field="CHECK" name="READ_COOKIE" value="false"/>
-    <elementParameter xmi:id="_ouKc1GZyEeCUeI-JLejmbw" field="CHECK" name="SAVE_COOKIE" value="false"/>
-    <elementParameter xmi:id="_ouKc1WZyEeCUeI-JLejmbw" field="DIRECTORY" name="COOKIE_DIR" value="&quot;C::/cookie&quot;"/>
-    <elementParameter xmi:id="_ouKc1mZyEeCUeI-JLejmbw" field="CHECK" name="PRINT" value="false"/>
-    <elementParameter xmi:id="_ouKc12ZyEeCUeI-JLejmbw" field="TEXT" name="TIMEOUT" value="1000"/>
-    <elementParameter xmi:id="_ouKc2GZyEeCUeI-JLejmbw" field="CHECK" name="UPLOAD" value="false"/>
-    <elementParameter xmi:id="_ouKc2WZyEeCUeI-JLejmbw" field="TABLE" name="FILE_PARAMS"/>
-    <elementParameter xmi:id="_ouKc2mZyEeCUeI-JLejmbw" field="CHECK" name="USE_PROXY" value="false"/>
-    <elementParameter xmi:id="_ouKc22ZyEeCUeI-JLejmbw" field="TEXT" name="PROXY_HOST" value="&quot;61.163.92.4&quot;"/>
-    <elementParameter xmi:id="_ouKc3GZyEeCUeI-JLejmbw" field="TEXT" name="PROXY_PORT" value="&quot;8080&quot;"/>
-    <elementParameter xmi:id="_ouKc3WZyEeCUeI-JLejmbw" field="TEXT" name="PROXY_USERNAME" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKc3mZyEeCUeI-JLejmbw" field="TEXT" name="PROXY_PASSWORD" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKc32ZyEeCUeI-JLejmbw" field="CHECK" name="PROXY_NTLM" value="false"/>
-    <elementParameter xmi:id="_ouKc4GZyEeCUeI-JLejmbw" field="TEXT" name="PROXY_DOMAIN" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKc4WZyEeCUeI-JLejmbw" field="CHECK" name="NEED_AUTH" value="false"/>
-    <elementParameter xmi:id="_ouKc4mZyEeCUeI-JLejmbw" field="TEXT" name="AUTH_USERNAME" value="&quot;username&quot;"/>
-    <elementParameter xmi:id="_ouKc42ZyEeCUeI-JLejmbw" field="TEXT" name="AUTH_PASSWORD" value="&quot;password&quot;"/>
-    <elementParameter xmi:id="_ouKc5GZyEeCUeI-JLejmbw" field="CHECK" name="REDIRECT" value="false"/>
-    <elementParameter xmi:id="_ouKc5WZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="DownloadFromWebSite"/>
-    <elementParameter xmi:id="_ouKc5mZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_ouKc52ZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_ouKc6GZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
-    <metadata xmi:id="_ouKc6WZyEeCUeI-JLejmbw" connector="FLOW" name="tFileFetch_1"/>
+  <node componentName="tFileFetch" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="128" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileFetch_1"/>
+    <elementParameter field="CHECK" name="START" value="true"/>
+    <elementParameter field="CLOSED_LIST" name="PROTO" value="http"/>
+    <elementParameter field="CHECK" name="POST" value="false"/>
+    <elementParameter field="TEXT" name="URI" value="&quot;http://spatialdataintegrator.org/download/geodata.zip&quot;"/>
+    <elementParameter field="CHECK" name="USE_CACHE" value="false"/>
+    <elementParameter field="TEXT" name="SMB_URI" value="&quot;smb://host/dir/remoteFileName.txt&quot;"/>
+    <elementParameter field="DIRECTORY" name="DIRECTORY" value="context.DirGeoData"/>
+    <elementParameter field="CHECK" name="MAKEDIRS" value="true"/>
+    <elementParameter field="TEXT" name="FILENAME" value="&quot;geodata.zip&quot;"/>
+    <elementParameter field="CHECK" name="ADD_HEADER" value="false"/>
+    <elementParameter field="TABLE" name="HEADERS"/>
+    <elementParameter field="TEXT" name="SMB_DOMAIN" value="&quot;domain&quot;"/>
+    <elementParameter field="TEXT" name="SMB_USERNAME" value="&quot;username&quot;"/>
+    <elementParameter field="TEXT" name="SMB_PASSWORD" value="&quot;password&quot;"/>
+    <elementParameter field="CHECK" name="DIE_ON_ERROR" value="true"/>
+    <elementParameter field="TABLE" name="COMMON_PARAMS"/>
+    <elementParameter field="CHECK" name="READ_COOKIE" value="false"/>
+    <elementParameter field="CHECK" name="SAVE_COOKIE" value="false"/>
+    <elementParameter field="DIRECTORY" name="COOKIE_DIR" value="&quot;C::/cookie&quot;"/>
+    <elementParameter field="CLOSED_LIST" name="COOKIE_POLICY" value="DEFAULT"/>
+    <elementParameter field="CHECK" name="SINGLE_COOKIE" value="false"/>
+    <elementParameter field="CHECK" name="PRINT" value="false"/>
+    <elementParameter field="TEXT" name="TIMEOUT" value="1000"/>
+    <elementParameter field="CHECK" name="UPLOAD" value="false"/>
+    <elementParameter field="TABLE" name="FILE_PARAMS"/>
+    <elementParameter field="CHECK" name="USE_PROXY" value="false"/>
+    <elementParameter field="TEXT" name="PROXY_HOST" value="&quot;61.163.92.4&quot;"/>
+    <elementParameter field="TEXT" name="PROXY_PORT" value="&quot;8080&quot;"/>
+    <elementParameter field="TEXT" name="PROXY_USERNAME" value="&quot;&quot;"/>
+    <elementParameter field="TEXT" name="PROXY_PASSWORD" value="&quot;&quot;"/>
+    <elementParameter field="CHECK" name="PROXY_NTLM" value="false"/>
+    <elementParameter field="TEXT" name="PROXY_DOMAIN" value="&quot;&quot;"/>
+    <elementParameter field="CHECK" name="NEED_AUTH" value="false"/>
+    <elementParameter field="TEXT" name="AUTH_USERNAME" value="&quot;username&quot;"/>
+    <elementParameter field="TEXT" name="AUTH_PASSWORD" value="&quot;password&quot;"/>
+    <elementParameter field="CHECK" name="REDIRECT" value="false"/>
+    <elementParameter field="TEXT" name="LABEL" value="DownloadFromWebSite"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
+    <metadata connector="FLOW" name="tFileFetch_1"/>
   </node>
-  <node xmi:id="_ouKc6mZyEeCUeI-JLejmbw" componentName="tFileUnarchive" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="416" posY="288">
-    <elementParameter xmi:id="_ouKc62ZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="tFileUnarchive_1"/>
-    <elementParameter xmi:id="_ouKc7GZyEeCUeI-JLejmbw" field="FILE" name="ZIPFILE" value="context.DirGeoData + &quot;geodata.zip&quot;"/>
-    <elementParameter xmi:id="_ouKc7WZyEeCUeI-JLejmbw" field="DIRECTORY" name="DIRECTORY" value="context.DirGeoData"/>
-    <elementParameter xmi:id="_ouKc7mZyEeCUeI-JLejmbw" field="CHECK" name="ROOTNAME" value="false"/>
-    <elementParameter xmi:id="_ouKc72ZyEeCUeI-JLejmbw" field="CHECK" name="INTEGRITY" value="false"/>
-    <elementParameter xmi:id="_ouKc8GZyEeCUeI-JLejmbw" field="CHECK" name="EXTRACTPATH" value="true"/>
-    <elementParameter xmi:id="_ouKc8WZyEeCUeI-JLejmbw" field="CHECK" name="CHECKPASSWORD" value="false"/>
-    <elementParameter xmi:id="_ouKc8mZyEeCUeI-JLejmbw" field="TEXT" name="PASSWORD" value="&quot;&quot;"/>
-    <elementParameter xmi:id="_ouKc82ZyEeCUeI-JLejmbw" field="CHECK" name="PRINTOUT" value="false"/>
-    <elementParameter xmi:id="_ouKc9GZyEeCUeI-JLejmbw" field="TEXT" name="LABEL" value="UnzipGeoData"/>
-    <elementParameter xmi:id="_ouKc9WZyEeCUeI-JLejmbw" field="TEXT" name="CONNECTION_FORMAT" value="row"/>
-    <elementParameter xmi:id="_ouKc9mZyEeCUeI-JLejmbw" field="CHECK" name="INFORMATION" value="false"/>
-    <elementParameter xmi:id="_ouKc92ZyEeCUeI-JLejmbw" field="MEMO" name="COMMENT" value=""/>
+  <node componentName="tFileUnarchive" componentVersion="0.101" offsetLabelX="0" offsetLabelY="0" posX="416" posY="288">
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileUnarchive_1"/>
+    <elementParameter field="FILE" name="ZIPFILE" value="context.DirGeoData + &quot;geodata.zip&quot;"/>
+    <elementParameter field="DIRECTORY" name="DIRECTORY" value="context.DirGeoData"/>
+    <elementParameter field="CHECK" name="ROOTNAME" value="false"/>
+    <elementParameter field="CHECK" name="INTEGRITY" value="false"/>
+    <elementParameter field="CHECK" name="EXTRACTPATH" value="true"/>
+    <elementParameter field="CHECK" name="CHECKPASSWORD" value="false"/>
+    <elementParameter field="TEXT" name="PASSWORD" value="&quot;&quot;"/>
+    <elementParameter field="CHECK" name="PRINTOUT" value="false"/>
+    <elementParameter field="TEXT" name="LABEL" value="UnzipGeoData"/>
+    <elementParameter field="TEXT" name="CONNECTION_FORMAT" value="row"/>
+    <elementParameter field="CHECK" name="INFORMATION" value="false"/>
+    <elementParameter field="MEMO" name="COMMENT" value=""/>
+    <elementParameter field="CHECK" name="VALIDATION_RULES" value="false"/>
   </node>
-  <connection xmi:id="_ouKc-GZyEeCUeI-JLejmbw" connectorName="COMPONENT_OK" label="OnComponentOk" lineStyle="3" metaname="tFileFetch_1" offsetLabelX="0" offsetLabelY="0" source="tFileFetch_1" target="tFileUnarchive_1">
-    <elementParameter xmi:id="_ouKc-WZyEeCUeI-JLejmbw" field="CHECK" name="ACTIVATE" value="true"/>
-    <elementParameter xmi:id="_ouKc-mZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="OnComponentOk1"/>
+  <connection connectorName="COMPONENT_OK" label="OnComponentOk" lineStyle="3" metaname="tFileFetch_1" offsetLabelX="0" offsetLabelY="0" source="tFileFetch_1" target="tFileUnarchive_1">
+    <elementParameter field="CHECK" name="ACTIVATE" value="true"/>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="OnComponentOk1"/>
   </connection>
-  <note xmi:id="_ouKc-2ZyEeCUeI-JLejmbw" opaque="true" posX="32" posY="32" sizeHeight="97" sizeWidth="833" text="1.Update the contexts in order to be able to run job in your current workstation.&#xA;For this go to the Contexts tree menu, SDI and update parameters (at least DirGeoData use to store the data&#xA;fetch remotely and DirOutput to store geodata produced by all test jobs).">
-    <elementParameter xmi:id="_ouKc_GZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
-    <elementParameter xmi:id="_ouKc_WZyEeCUeI-JLejmbw" field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
-    <elementParameter xmi:id="_ouKc_mZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_LEFT" value="false"/>
-    <elementParameter xmi:id="_ouKc_2ZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_RIGHT" value="false"/>
-    <elementParameter xmi:id="_ouKdAGZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdAWZyEeCUeI-JLejmbw" field="RADIO" name="NOTELABEL_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdAmZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_TOP" value="false"/>
-    <elementParameter xmi:id="_ouKdA2ZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
-    <elementParameter xmi:id="_ouKdBGZyEeCUeI-JLejmbw" field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
-    <elementParameter xmi:id="_ouKdBWZyEeCUeI-JLejmbw" field="TEXT" name="FONT_SIZE" value="10"/>
-    <elementParameter xmi:id="_ouKdBmZyEeCUeI-JLejmbw" field="CHECK" name="FONT_BOLD" value="false"/>
-    <elementParameter xmi:id="_ouKdB2ZyEeCUeI-JLejmbw" field="CHECK" name="FONT_ITALIC" value="false"/>
-    <elementParameter xmi:id="_ouKdCGZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
+  <note opaque="true" posX="32" posY="32" sizeHeight="97" sizeWidth="833" text="1.Update the contexts in order to be able to run job in your current workstation.&#xA;For this go to the Contexts tree menu, SDI and update parameters (at least DirGeoData use to store the data&#xA;fetch remotely and DirOutput to store geodata produced by all test jobs).">
+    <elementParameter field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
+    <elementParameter field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
+    <elementParameter field="RADIO" name="NOTETXT_LEFT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_RIGHT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTELABEL_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTETXT_TOP" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
+    <elementParameter field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
+    <elementParameter field="TEXT" name="FONT_SIZE" value="10"/>
+    <elementParameter field="CHECK" name="FONT_BOLD" value="false"/>
+    <elementParameter field="CHECK" name="FONT_ITALIC" value="false"/>
+    <elementParameter field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
   </note>
-  <note xmi:id="_ouKdCWZyEeCUeI-JLejmbw" opaque="true" posX="32" posY="160" sizeHeight="64" sizeWidth="833" text="2.Run this job to retrieve demo data from the website. This will download and unzip demo data.">
-    <elementParameter xmi:id="_ouKdCmZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
-    <elementParameter xmi:id="_ouKdC2ZyEeCUeI-JLejmbw" field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
-    <elementParameter xmi:id="_ouKdDGZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_LEFT" value="false"/>
-    <elementParameter xmi:id="_ouKdDWZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_RIGHT" value="false"/>
-    <elementParameter xmi:id="_ouKdDmZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdD2ZyEeCUeI-JLejmbw" field="RADIO" name="NOTELABEL_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdEGZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_TOP" value="false"/>
-    <elementParameter xmi:id="_ouKdEWZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
-    <elementParameter xmi:id="_ouKdEmZyEeCUeI-JLejmbw" field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
-    <elementParameter xmi:id="_ouKdE2ZyEeCUeI-JLejmbw" field="TEXT" name="FONT_SIZE" value="10"/>
-    <elementParameter xmi:id="_ouKdFGZyEeCUeI-JLejmbw" field="CHECK" name="FONT_BOLD" value="false"/>
-    <elementParameter xmi:id="_ouKdFWZyEeCUeI-JLejmbw" field="CHECK" name="FONT_ITALIC" value="false"/>
-    <elementParameter xmi:id="_ouKdFmZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
+  <note opaque="true" posX="32" posY="160" sizeHeight="64" sizeWidth="833" text="2.Run this job to retrieve demo data from the website. This will download and unzip demo data.">
+    <elementParameter field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
+    <elementParameter field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
+    <elementParameter field="RADIO" name="NOTETXT_LEFT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_RIGHT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTELABEL_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTETXT_TOP" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
+    <elementParameter field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
+    <elementParameter field="TEXT" name="FONT_SIZE" value="10"/>
+    <elementParameter field="CHECK" name="FONT_BOLD" value="false"/>
+    <elementParameter field="CHECK" name="FONT_ITALIC" value="false"/>
+    <elementParameter field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
   </note>
-  <note xmi:id="_ouKdF2ZyEeCUeI-JLejmbw" opaque="true" posX="32" posY="416" sizeHeight="64" sizeWidth="833" text="3.Demo data is composed of simple shapefiles, GeoNames text file to run most of the test (not all). Some jobs need to be&#xA;run under a specific order (eg. in IO section). Some others need other tools (eg. GeoNetwork catalogue).">
-    <elementParameter xmi:id="_ouKdGGZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
-    <elementParameter xmi:id="_ouKdGWZyEeCUeI-JLejmbw" field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
-    <elementParameter xmi:id="_ouKdGmZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_LEFT" value="false"/>
-    <elementParameter xmi:id="_ouKdG2ZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_RIGHT" value="false"/>
-    <elementParameter xmi:id="_ouKdHGZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdHWZyEeCUeI-JLejmbw" field="RADIO" name="NOTELABEL_CENTER" value="true"/>
-    <elementParameter xmi:id="_ouKdHmZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_TOP" value="false"/>
-    <elementParameter xmi:id="_ouKdH2ZyEeCUeI-JLejmbw" field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
-    <elementParameter xmi:id="_ouKdIGZyEeCUeI-JLejmbw" field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
-    <elementParameter xmi:id="_ouKdIWZyEeCUeI-JLejmbw" field="TEXT" name="FONT_SIZE" value="10"/>
-    <elementParameter xmi:id="_ouKdImZyEeCUeI-JLejmbw" field="CHECK" name="FONT_BOLD" value="false"/>
-    <elementParameter xmi:id="_ouKdI2ZyEeCUeI-JLejmbw" field="CHECK" name="FONT_ITALIC" value="false"/>
-    <elementParameter xmi:id="_ouKdJGZyEeCUeI-JLejmbw" field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
+  <note opaque="true" posX="32" posY="416" sizeHeight="64" sizeWidth="833" text="3.Demo data is composed of simple shapefiles, GeoNames text file to run most of the test (not all). Some jobs need to be&#xA;run under a specific order (eg. in IO section). Some others need other tools (eg. GeoNetwork catalogue).">
+    <elementParameter field="COLOR" name="NOTE_COLOR" value="255;255;203"/>
+    <elementParameter field="COLOR" name="NOTETXT_COLOR" value="0;0;0"/>
+    <elementParameter field="RADIO" name="NOTETXT_LEFT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_RIGHT" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTELABEL_CENTER" value="true"/>
+    <elementParameter field="RADIO" name="NOTETXT_TOP" value="false"/>
+    <elementParameter field="RADIO" name="NOTETXT_BOTTOM" value="false"/>
+    <elementParameter field="TEXT" name="NOTE_FONT" value="Time New Roman"/>
+    <elementParameter field="TEXT" name="FONT_SIZE" value="10"/>
+    <elementParameter field="CHECK" name="FONT_BOLD" value="false"/>
+    <elementParameter field="CHECK" name="FONT_ITALIC" value="false"/>
+    <elementParameter field="COLOR" name="NOTE_LINECOLOR" value="237;201;122"/>
   </note>
-  <subjob xmi:id="_ouKdJWZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_ouKdJmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="tFileFetch_1"/>
-    <elementParameter xmi:id="_ouKdJ2ZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter xmi:id="_ouKdKGZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileFetch_1"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
-  <subjob xmi:id="_ouKdKWZyEeCUeI-JLejmbw">
-    <elementParameter xmi:id="_ouKdKmZyEeCUeI-JLejmbw" field="TEXT" name="UNIQUE_NAME" value="tFileUnarchive_1"/>
-    <elementParameter xmi:id="_ouKdK2ZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
-    <elementParameter xmi:id="_ouKdLGZyEeCUeI-JLejmbw" field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
+  <subjob>
+    <elementParameter field="TEXT" name="UNIQUE_NAME" value="tFileUnarchive_1"/>
+    <elementParameter field="COLOR" name="SUBJOB_TITLE_COLOR" value="160;190;240"/>
+    <elementParameter field="COLOR" name="SUBJOB_COLOR" value="220;220;250"/>
   </subjob>
 </talendfile:ProcessType>

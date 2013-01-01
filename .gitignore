@@ -1,1 +1,2 @@
 *.class
+org.talend.sdi.repository.ui.actions.metadata/bin

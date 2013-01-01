@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:XmlFileConnection xmi:id="_oupk02ZyEeCUeI-JLejmbw" dataPackage="_oupk12ZyEeCUeI-JLejmbw" XmlFilePath="/home/fxprunayre/BRGM_Stratigraphy_2009.xml" Encoding="UTF-8">
+    <schema xmi:id="_oupk1GZyEeCUeI-JLejmbw" LimitBoucle="50" AbsoluteXPathQuery="//gml:ControlledConcept">
+      <schemaTargets xmi:id="_oupk1WZyEeCUeI-JLejmbw" RelativeXPathQuery="./@gml:id" TagName="id"/>
+      <schemaTargets xmi:id="_oupk1mZyEeCUeI-JLejmbw" RelativeXPathQuery="./gml:description" TagName="desc"/>
+    </schema>
+  </TalendMetadata:XmlFileConnection>
+  <TalendMetadata:GenericPackage xmi:id="_oupk12ZyEeCUeI-JLejmbw" dataManager="_oupk02ZyEeCUeI-JLejmbw">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_oupk2GZyEeCUeI-JLejmbw" id="_SUAUcP50EdygX6OZ7aNt1g" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_oupk2WZyEeCUeI-JLejmbw" name="newColumn" label="id" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_oupk2mZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_oupk22ZyEeCUeI-JLejmbw" name="newColumn1" label="desc" length="-1" precision="-1" talendType="id_String">
+        <initialValue xmi:id="_oupk3GZyEeCUeI-JLejmbw" body=""/>
+      </feature>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

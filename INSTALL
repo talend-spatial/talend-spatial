@@ -27,6 +27,10 @@ Start from a clean TOS zip and do not start TOS before unzipping spatial plugins
 List of changes
 ---------------
 
+ * Talend spatial module version 5.2.1:
+  * GeoTools 8.5 upgrade
+  * sProj / Add custom transform for projection (#10) - IGN Ntv2 grid transformation supported
+
  * Talend spatial module version 5.2.0:
   * OGRInfo and GDALInfo input components does not set geometry CRS (#9)
   * Add i18n files (#6)

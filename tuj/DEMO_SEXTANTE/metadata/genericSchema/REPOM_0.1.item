@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_kCIzEFASEeKkWIeaBZ22Og" dataPackage="_kCIzEVASEeKkWIeaBZ22Og"/>
+  <TalendMetadata:GenericPackage xmi:id="_kCIzEVASEeKkWIeaBZ22Og" dataManager="_kCIzEFASEeKkWIeaBZ22Og">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_kCIzElASEeKkWIeaBZ22Og" id="_jy5dMFASEeKkWIeaBZ22Og" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaIFASEeKkWIeaBZ22Og" label="msGeometry" talendType="id_Geometry"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaIVASEeKkWIeaBZ22Og" label="ID" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaIlASEeKkWIeaBZ22Og" label="CODE" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaI1ASEeKkWIeaBZ22Og" label="LIBELLE" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaJFASEeKkWIeaBZ22Og" label="FOURNISSEU" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_kCJaJVASEeKkWIeaBZ22Og" label="FILTER" talendType="id_String"/>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>

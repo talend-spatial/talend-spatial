@@ -33,9 +33,9 @@
       REQUIRED="true">
       <ITEMS DEFAULT="v1_0_0">
         <ITEM NAME="v1_0_0"
-          VALUE="org.geotools.wfs.protocol.Version.v1_0_0" />
+          VALUE="org.geotools.data.wfs.protocol.wfs.Version.v1_0_0" />
         <ITEM NAME="v1_1_0"
-          VALUE="org.geotools.wfs.protocol.Version.v1_1_0" />
+          VALUE="org.geotools.data.wfs.protocol.wfs.Version.v1_1_0" />
       </ITEMS>
     </PARAMETER>
     <PARAMETER NAME="TYPE_NAME" FIELD="TEXT" NUM_ROW="4"

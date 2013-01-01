@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TalendMetadata="http://www.talend.org/metadata/connection/2010">
+  <TalendMetadata:GenericSchemaConnection xmi:id="_osqn02ZyEeCUeI-JLejmbw" dataPackage="_osqn1GZyEeCUeI-JLejmbw"/>
+  <TalendMetadata:GenericPackage xmi:id="_osqn1GZyEeCUeI-JLejmbw" dataManager="_osqn02ZyEeCUeI-JLejmbw">
+    <ownedElement xsi:type="TalendMetadata:MetadataTable" xmi:id="_osqn1WZyEeCUeI-JLejmbw" id="_RH38oTOBEeCkQeIR-Q1dBQ" label="metadata">
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn1mZyEeCUeI-JLejmbw" label="the_geom" talendType="id_Geometry"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn12ZyEeCUeI-JLejmbw" label="CODE" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn2GZyEeCUeI-JLejmbw" label="NAME" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn2WZyEeCUeI-JLejmbw" label="ID_SOM" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn2mZyEeCUeI-JLejmbw" label="CGENELIN" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn22ZyEeCUeI-JLejmbw" label="PKHEXT" talendType="id_Double"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn3GZyEeCUeI-JLejmbw" label="CD_REGION" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn3WZyEeCUeI-JLejmbw" label="CD_SECTEUR" talendType="id_String"/>
+      <feature xsi:type="TalendMetadata:MetadataColumn" xmi:id="_osqn3mZyEeCUeI-JLejmbw" label="CD_SSSECTEUR" talendType="id_String"/>
+    </ownedElement>
+  </TalendMetadata:GenericPackage>
+</xmi:XMI>
