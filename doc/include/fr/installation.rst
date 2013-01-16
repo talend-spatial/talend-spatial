@@ -104,7 +104,7 @@ Paramétrage du système
 	
     	-Djava.library.path=/path/to/gdal-1.9.1/swig/java
 
-  .. image:: ../../_static/ogr_gdal_config.png
+  .. image:: _static/ogr_gdal_config.png
 
   Si l'argument n'est pas définie, Talend renverra probablement le message d'erreur 
   suivant :
