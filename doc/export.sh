@@ -1,7 +1,7 @@
 #!/bin/bash
 RST2HTML=rst2html.py
-RST2PDF=/home/yjacolin/Documents/Formations/svn/admin_formation/geospatial/cd_template/src/buildout/bin/rst2pdf
-EXPORT=export
+RST2PDF=rst2pdf
+EXPORT=_build/
 
 echo "Creating HTML file ..."
 rm -Rf $EXPORT/html && mkdir -p $EXPORT/html

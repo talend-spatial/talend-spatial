@@ -13,7 +13,6 @@ ignore = ['.svn', 'sGeoBasicOperation', 'sGeoInput', 'sGeoOutput', 'sAggGeomOut'
 # 1. prendre en param un répertoire pour placer les fichiers rst et images et où lire le répertoire des components
 # 2. prendre en compte la langue en paramètre (default: en) + traduction du texte.
 # 3. lire le fichier xml pour définir l'arborescence
-# svn co http://talendforge.org/svn/sdi/trunk/org.talend.sdi.designer.components/components .
 
 
 if short == True:
@@ -28,10 +27,6 @@ if short == True:
     header +='.. header::\n'
     header +='    Documentation des extensions spatiales de Talend OS.\n\n'
     
-    header +='    .. image:: _static/logo_c2c_full_carre.png\n'
-    header +='        :align: right\n'
-    header +='        :width: 50px\n\n'
-
     header +='.. footer::\n'
     header +='    mars 2011\n'
     
