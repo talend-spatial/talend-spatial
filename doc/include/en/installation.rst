@@ -96,7 +96,7 @@ System setup
 
     -Djava.library.path=/path/to/gdal-1.9.1/swig/java
 
-  .. image:: ../../_static/ogr_gdal_config.png
+  .. image:: _static/ogr_gdal_config.png
 
   If this argument is not defined, Talend will probably report the following error message::
 
