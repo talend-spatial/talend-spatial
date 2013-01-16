@@ -1,0 +1,1 @@
+Permet de calculer la surface d'une géométrie.
