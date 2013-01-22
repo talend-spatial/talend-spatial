@@ -1,0 +1,153 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the ThreddsIterator component 
+ * 
+ * The ThreddsIterator component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The ThreddsIterator component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the ThreddsIterator Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. *
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
+<%@ jet 
+imports="
+org.talend.core.model.process.INode
+org.talend.core.model.process.ElementParameterParser
+org.talend.core.model.metadata.IMetadataTable 
+org.talend.core.model.metadata.IMetadataColumn 
+org.talend.core.model.process.IConnection
+org.talend.core.model.process.IConnectionCategory
+org.talend.designer.codegen.config.CodeGeneratorArgument
+org.talend.core.model.metadata.types.JavaTypesManager
+org.talend.core.model.metadata.types.JavaType
+" 
+%> 
+
+<% 
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();	
+
+String catalogUrl = ElementParameterParser.getValue(node, "__CATALOG_URL__");
+String excludeDatasets = ElementParameterParser.getValue(node, "__EXCLUDE_DATASETS__");
+%> 
+
+//--- Define THREDDS catalog iterator
+// TODO: Can be replaced by unidata Thredds catalog crawler?
+
+java.util.Iterator<thredds.catalog.InvDataset> catalogIterator_<%=cid%> = new java.util.Iterator<thredds.catalog.InvDataset>() {
+    String catalogUrl;
+    String hostUrl;
+    java.util.List<java.util.regex.Pattern> excludeDatasets = new java.util.ArrayList<java.util.regex.Pattern>();
+    thredds.catalog.InvDataset next; 
+    java.util.List<java.util.Iterator<thredds.catalog.InvDataset>> iteratorStack = new java.util.ArrayList<java.util.Iterator<thredds.catalog.InvDataset>>(); 
+    java.util.List<thredds.catalog.InvDataset> parentStack = new java.util.ArrayList<thredds.catalog.InvDataset>(); 
+    {
+        catalogUrl = <%=catalogUrl %>;
+        // --- parse and compile excludePatterns 
+        for (String excludeDataset : <%=excludeDatasets %>.split(",")) {
+        	excludeDatasets.add(java.util.regex.Pattern.compile(excludeDataset));
+        }
+   		//--- Get base host url
+	    java.net.URL url = new java.net.URL(catalogUrl);
+		hostUrl = url.getProtocol()+"://"+url.getHost();
+		if (url.getPort() != -1) hostUrl += ":"+url.getPort();
+		//--- Load catalog
+        thredds.catalog.InvCatalogFactory factory = new thredds.catalog.InvCatalogFactory("default", true);
+        thredds.catalog.InvCatalogImpl catalog = (thredds.catalog.InvCatalogImpl) factory.readXML(catalogUrl);
+        StringBuilder buff = new StringBuilder();
+        if (!catalog.check(buff, true)) {
+            throw new Exception("Invalid catalog "+ catalogUrl+"\n"+buff.toString());
+        }
+        //--- Initialise iterator position
+        iteratorStack.add(catalog.getDatasets().iterator());
+        parentStack.add(null);
+        findNext();
+    }
+    public boolean hasNext() {
+        return next != null;
+    }
+    public thredds.catalog.InvDataset next() {
+        thredds.catalog.InvDataset result = next;
+        findNext();
+        return result;
+    }
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
+    void findNext() {
+        while (iteratorStack.size()>0) {
+            java.util.Iterator<thredds.catalog.InvDataset> iterator = iteratorStack.get(iteratorStack.size()-1);
+            if (!iterator.hasNext()) {
+                iteratorStack.remove(iteratorStack.size()-1);
+                thredds.catalog.InvDataset parent = parentStack.remove(parentStack.size()-1);
+                //--- Release resources allocated when crawling catalog references
+                if (parent != null && parent instanceof thredds.catalog.InvCatalogRef) {
+                    ((thredds.catalog.InvCatalogRef)parent).release();
+                }
+            } else {
+                thredds.catalog.InvDataset catalogDs = iterator.next();
+                //--- Get real dataset hidden by netcdf library when catalog ref name
+                //--- equals top dataset name in referenced catalog 
+                thredds.catalog.InvDataset realDs = catalogDs;
+                if (catalogDs instanceof thredds.catalog.InvCatalogRef) {
+                    thredds.catalog.InvDataset proxyDataset = ((thredds.catalog.InvCatalogRef)catalogDs).getProxyDataset();
+                    realDs = proxyDataset.getName().equals(catalogDs.getName())?proxyDataset:catalogDs;
+                }
+                if (isExcluded(realDs)) {
+                	// --- skip excluded datasets
+                	continue;
+                } else if (realDs.hasNestedDatasets()) {
+                	// --- non empty folder 
+                    iterator = realDs.getDatasets().iterator();
+                    iteratorStack.add(iterator);
+                    parentStack.add(catalogDs);
+                } else if (realDs.hasAccess()) {
+                	// --- file with access elements - make it the next dataset and return
+                    next = realDs;
+                    return;
+                } else {
+                	// --- ignore datasets with no access (e.g. empty folders)
+                	continue;
+                }
+            }
+        }
+        next = null;
+        return;        
+    }
+    boolean isExcluded(thredds.catalog.InvDataset ds) {
+    	for (java.util.regex.Pattern excludeDataset : excludeDatasets) {
+    		java.util.regex.Matcher matcher = excludeDataset.matcher(ds.getID());
+    		
+    		if (matcher.matches()) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+};
+
+
+//--- Iterate over catalog 
+
+int nb_line_<%=cid %> = 0;
+
+while (catalogIterator_<%=cid%>.hasNext()) {
+        thredds.catalog.InvDataset ds_<%=cid %> = catalogIterator_<%=cid%>.next();
+
+
