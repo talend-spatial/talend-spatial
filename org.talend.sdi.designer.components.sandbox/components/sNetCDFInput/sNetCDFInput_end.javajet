@@ -1,3 +1,29 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the NetCDFInput component 
+ * 
+ * The NetCDFInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The NetCDFInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the NetCDFInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
 <%@ jet 
 	imports="
 		org.talend.core.model.process.INode 
@@ -13,27 +39,37 @@ INode node = (INode)codeGenArgument.getArgument();
 String cidForward = "";
 String cid = node.getUniqueName();
 
-List<IMetadataTable> metadatas = node.getMetadataList();
-if ((metadatas!=null)&&(metadatas.size()>0)) {
-	IMetadataTable metadata = metadatas.get(0);
-	if (metadata!=null) {
+String dieOnError = ElementParameterParser.getValue(node, "__DIE_ON_ERROR__");
 %>
-        }
-    } catch (IOException ioe) {
-        ioe.printStackTrace();
-    }
-} catch (Exception e) {
-    System.out.println("Error: ");
-    e.printStackTrace();
-} finally {
-    if (null != ncfile_<%=cid %>) try {
-        ncfile_<%=cid %>.close();
-    } catch (Exception e) {
-        // TODO: handle exception
-    }
-}
-globalMap.put("<%=cidForward %>_NB_FEATURE", nbFeature_<%=cid %>);
-<%
+
+		}
 	}
+		
+} catch (java.io.IOException ioe) {
+	ioe.printStackTrace();
+	<% if (("true").equals(dieOnError)) {%>
+		throw(ioe);
+	<% } else { %>
+		error_<%=cid %> = true;
+		errorTrace_<%=cid %> = ioe.toString();
+	<% } %>
+} finally { 
+    if (null != ncDataset_<%=cid %>) try {
+      ncDataset_<%=cid %>.close();
+    } catch (java.io.IOException ioe) {
+	    ioe.printStackTrace();
+		<% if (("true").equals(dieOnError)) {%>
+			throw(ioe);
+		<% } else { %>
+			error_<%=cid %> = true;
+			errorTrace_<%=cid %> = ioe.toString();
+		<% } %>
+    }
 }
-%>      
+		  
+globalMap.put("<%=cidForward %>_NB_FEATURE", nbFeature_<%=cid %>);
+
+<% if (("false").equals(dieOnError)) {%>
+	globalMap.put("<%=cidForward %>_ERROR", new Boolean(error_<%=cid %>));
+	globalMap.put("<%=cidForward %>_ERROR_STACK_TRACE", errorTrace_<%=cid %>);
+<% } %>

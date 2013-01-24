@@ -1,8 +1,32 @@
+<!-- 
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the NetCDFInput component 
+ * 
+ * The NetCDFInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The NetCDFInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the NetCDFInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. *
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ -->
+
 <COMPONENT>
 	<HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.1" STATUS="ALPHA"
-		COMPATIBILITY="ALL" AUTHOR="fx.prunayre" RELEASE_DATE="20110624"
+		COMPATIBILITY="ALL" AUTHOR="jonescc" RELEASE_DATE="20120904"
 		STARTABLE="true" VISIBLE="true" DATA_AUTO_PROPAGATE="false"
-		SCHEMA_AUTO_PROPAGATE="true">
+		SCHEMA_AUTO_PROPAGATE="true" HAS_CONDITIONAL_OUTPUTS="true">
 		<SIGNATURE />
 	</HEADER>
 	<FAMILIES>
@@ -12,8 +36,8 @@
 		<URL />
 	</DOCUMENTATION>
 	<CONNECTORS>
-		<CONNECTOR CTYPE="FLOW" MAX_INPUT="0" />
-		<CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="1" MAX_INPUT="1" />
+		<CONNECTOR MULTI_SCHEMA="true" CTYPE="FLOW" MAX_INPUT="0" MIN_OUTPUT="1" />
+		<CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="1" />
 		<CONNECTOR CTYPE="COMPONENT_OK" />
 		<CONNECTOR CTYPE="COMPONENT_ERROR" />
 		<CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
@@ -25,25 +49,65 @@
 			REQUIRED="true" REPOSITORY_VALUE="FILE_PATH">
 			<DEFAULT>"__COMP_DEFAULT_FILE_DIR__/in.nc"</DEFAULT>
 		</PARAMETER>
-		<PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
-			NUM_ROW="2">
-			<DEFAULT />
+       <PARAMETER NAME="SCHEMAS" FIELD="TABLE" NUM_ROW="2"	NB_LINES="3">
+          <ITEMS>
+             <ITEM NAME="SCHEMA" FIELD="SCHEMA_TYPE" />
+          </ITEMS>
+       </PARAMETER>
+		<PARAMETER NAME="DIE_ON_ERROR" FIELD="CHECK" NUM_ROW="100">
+			<DEFAULT>false</DEFAULT>
 		</PARAMETER>
-		<PARAMETER NAME="COL" FIELD="COLUMN_LIST" NUM_ROW="3" />
-		<PARAMETER NAME="LOOP_COL" FIELD="COLUMN_LIST" NUM_ROW="4" />
-	</PARAMETERS>
+   </PARAMETERS>
 	<ADVANCED_PARAMETERS>
-		<PARAMETER NAME="IMPORT" FIELD="MEMO_IMPORT" REQUIRED="false"
-			SHOW="false" NUM_ROW="1">
-			<DEFAULT>import org.talend.sdi.geometry.Geometry;</DEFAULT>
-		</PARAMETER>
+       <PARAMETER NAME="SCALE_MISSING" FIELD="CHECK" NUM_ROW="1">
+          <DEFAULT>true</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="CONVERT_ENUMS" FIELD="CHECK" NUM_ROW="1" SHOW="false">
+          <DEFAULT>true</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="FILLER_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
+          <DEFAULT>true</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="INVALID_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
+          <DEFAULT>false</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="MISSING_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
+          <DEFAULT>true</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="MISSING_VALUE_HANDLING" FIELD="CLOSED_LIST" NUM_ROW="3" SHOW_IF="SCALE_MISSING=='true'">
+		 <ITEMS DEFAULT="NULL_VALUES">
+		    <ITEM NAME="NULL_VALUES" VALUE="NULL_VALUES" />
+		    <ITEM NAME="NANS" VALUE="NANS" />
+		  </ITEMS>
+       </PARAMETER>
+       <PARAMETER NAME="ONE_BASED_INDEX" FIELD="CHECK" NUM_ROW="4">
+          <DEFAULT>false</DEFAULT>
+       </PARAMETER>
+       <PARAMETER NAME="TRIM_STRINGS" FIELD="CHECK" NUM_ROW="4">
+          <DEFAULT>false</DEFAULT>
+       </PARAMETER>
+	   <PARAMETER NAME="COLUMN_MAPPINGS" FIELD="TABLE" REQUIRED="false" NB_LINES="3" NUM_ROW ="5">
+          <ITEMS>
+             <ITEM NAME="COLUMN" FIELD="TEXT" />
+             <ITEM NAME="VARIABLE" FIELD="TEXT" />
+             <ITEM NAME="TYPE" FIELD="CLOSED_LIST">
+				 <ITEMS DEFAULT="VARIABLE">
+				    <ITEM NAME="VARIABLE" VALUE="VARIABLE" />
+				    <ITEM NAME="DIMENSION" VALUE="DIMENSION" />
+				  </ITEMS>
+			  </ITEM> 
+			</ITEMS>
+	   </PARAMETER>
 	</ADVANCED_PARAMETERS>
 	<CODEGENERATION>
 		<IMPORTS>
 			<IMPORT NAME="netcdf" MODULE="netcdfAll-4.2.jar" REQUIRED="true" />
+			<IMPORT NAME="nc-ext" MODULE="talend-dap-1.0.jar" REQUIRED="true" />
 		</IMPORTS>
 	</CODEGENERATION>
 	<RETURNS>
 		<RETURN NAME="NB_FEATURE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+		<RETURN NAME="ERROR" TYPE="id_Boolean" AVAILABILITY="AFTER" />
+		<RETURN NAME="ERROR_STACK_TRACE" TYPE="id_String" AVAILABILITY="AFTER" />
 	</RETURNS>
 </COMPONENT>

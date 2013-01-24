@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the ThreddsIterator component 
+ * 
+ * The ThreddsIterator component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The ThreddsIterator component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the ThreddsIterator Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. *
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ -->
+
+<COMPONENT> 
+ <HEADER AUTHOR="jonescc" 
+   COMPATIBILITY="ALL" 
+   PLATEFORM="ALL" 
+   RELEASE_DATE="20120718A" 
+   SERIAL="" 
+   STARTABLE="true" 
+   STATUS="ALPHA" 
+   VERSION="0.1"> 
+   <SIGNATURE/> 
+  </HEADER> 
+ <FAMILIES> 
+  <FAMILY>Geo/File/Management</FAMILY>
+ </FAMILIES> 
+ <DOCUMENTATION> 
+   <URL></URL> 
+  </DOCUMENTATION> 
+  <CONNECTORS> 
+    <CONNECTOR CTYPE="FLOW" MAX_INPUT="0" MAX_OUTPUT="1"/>
+    <CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="1"/>
+    <CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+    <CONNECTOR CTYPE="COMPONENT_OK"/>
+    <CONNECTOR CTYPE="COMPONENT_ERROR"/>
+    <CONNECTOR CTYPE="RUN_IF"/>
+  </CONNECTORS> 
+  <PARAMETERS> 
+	<PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true" NUM_ROW="1">
+		<TABLE READONLY="false">
+	    	<COLUMN NAME="catalogUri" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="authority" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="id" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="name" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="catalogUrl" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="downloadUrl" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="opendapUrl" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="subsetUrl" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="fullName" TYPE="id_String" READONLY="false" LENGTH="255"/>
+	    	<COLUMN NAME="modified" TYPE="id_Date" READONLY="false" PATTERN="&quot;yyyy-MM-dd'T'HH:mm:ss'000Z'&quot;"/>
+      	</TABLE>
+	</PARAMETER>
+    <PARAMETER NAME="CATALOG_URL" FIELD="TEXT" REQUIRED="true" NUM_ROW ="2" >
+			<DEFAULT>"http://example.com/thredds/catalog.xml"</DEFAULT>
+   </PARAMETER >
+    <PARAMETER NAME="EXCLUDE_DATASETS" FIELD="TEXT" REQUIRED="false" NUM_ROW ="3" >
+			<DEFAULT>""</DEFAULT>
+   </PARAMETER >
+  </PARAMETERS> 
+  <CODEGENERATION>
+		<IMPORTS>
+			<IMPORT NAME="netcdf" MODULE="netcdfAll-4.2.jar" REQUIRED="true" />
+		</IMPORTS>
+	</CODEGENERATION>
+    <RETURNS> 
+        <RETURN AVAILABILITY="AFTER" NAME="NB_LINE" TYPE="id_Integer"/> 
+     </RETURNS> 
+ </COMPONENT>
