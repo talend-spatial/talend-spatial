@@ -1,0 +1,79 @@
+<!-- 
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the OPeNDAPInput component 
+ * 
+ * The OPeNDAPInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The OPeNDAPInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the OPeNDAPInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ -->
+
+<COMPONENT>
+	<HEADER PLATEFORM="ALL" SERIAL="" VERSION="0.1" STATUS="ALPHA"
+		COMPATIBILITY="ALL" AUTHOR="jonescc" RELEASE_DATE="20120904"
+		STARTABLE="true" VISIBLE="true" DATA_AUTO_PROPAGATE="false"
+		SCHEMA_AUTO_PROPAGATE="true" HAS_CONDITIONAL_OUTPUTS="true">
+		<SIGNATURE />
+	</HEADER>
+	<FAMILIES>
+		<FAMILY>Geo/File/Input</FAMILY>
+	</FAMILIES>
+	<DOCUMENTATION>
+		<URL />
+	</DOCUMENTATION>
+	<CONNECTORS>
+		<CONNECTOR MULTI_SCHEMA="true" CTYPE="FLOW" MAX_INPUT="0" MIN_OUTPUT="1" />
+		<CONNECTOR CTYPE="ITERATE" MAX_OUTPUT="0" MAX_INPUT="1" />
+		<CONNECTOR CTYPE="COMPONENT_OK" />
+		<CONNECTOR CTYPE="COMPONENT_ERROR" />
+		<CONNECTOR CTYPE="SUBJOB_OK" MAX_INPUT="1" />
+		<CONNECTOR CTYPE="SUBJOB_ERROR" MAX_INPUT="1" />
+		<CONNECTOR CTYPE="RUN_IF" />
+	</CONNECTORS>
+	<PARAMETERS>
+		<PARAMETER NAME="URL" FIELD="TEXT" NUM_ROW="1" REQUIRED="true"> 
+			<DEFAULT>"http://example.com/thredds/dodsC/in.nc"</DEFAULT>
+		</PARAMETER>
+       <PARAMETER NAME="SCHEMAS" FIELD="TABLE" NUM_ROW="2"	NB_LINES="3">
+          <ITEMS>
+             <ITEM NAME="SCHEMA" FIELD="SCHEMA_TYPE" />
+          </ITEMS>
+       </PARAMETER>
+		<PARAMETER NAME="DIE_ON_ERROR" FIELD="CHECK" NUM_ROW="100">
+			<DEFAULT>false</DEFAULT>
+		</PARAMETER>
+   </PARAMETERS>
+	<ADVANCED_PARAMETERS>
+	   <PARAMETER NAME="COLUMN_MAPPINGS" FIELD="TABLE" REQUIRED="false" NUM_ROW ="1" NB_LINES="6">
+          <ITEMS>
+             <ITEM NAME="COLUMN" FIELD="TEXT" />
+             <ITEM NAME="VARIABLE" FIELD="TEXT" />
+          </ITEMS>
+	   </PARAMETER>
+	</ADVANCED_PARAMETERS>
+	<CODEGENERATION>
+		<IMPORTS>
+			<IMPORT NAME="netcdf" MODULE="netcdfAll-4.2.jar" REQUIRED="true" />
+			<IMPORT NAME="nc-ext" MODULE="talend-dap-1.0.jar" REQUIRED="true" />
+		</IMPORTS>
+	</CODEGENERATION>
+	<RETURNS>
+		<RETURN NAME="NB_FEATURE" TYPE="id_Integer" AVAILABILITY="AFTER" />
+		<RETURN NAME="ERROR" TYPE="id_Boolean" AVAILABILITY="AFTER" />
+		<RETURN NAME="ERROR_STACK_TRACE" TYPE="id_String" AVAILABILITY="AFTER" />
+	</RETURNS>
+</COMPONENT>

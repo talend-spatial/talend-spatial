@@ -1,0 +1,49 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the ThreddsIterator component 
+ * 
+ * The ThreddsIterator component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The ThreddsIterator component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the ThreddsIterator Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. *
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
+<%@ jet 
+imports="
+org.talend.core.model.process.INode
+org.talend.core.model.process.ElementParameterParser
+org.talend.core.model.metadata.IMetadataTable 
+org.talend.core.model.metadata.IMetadataColumn 
+org.talend.core.model.process.IConnection
+org.talend.core.model.process.IConnectionCategory
+org.talend.designer.codegen.config.CodeGeneratorArgument
+org.talend.core.model.metadata.types.JavaTypesManager
+org.talend.core.model.metadata.types.JavaType
+" 
+%> 
+
+<% 
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();	
+%> 
+
+    nb_line_<%=cid %>++;
+}
+globalMap.put("<%=cid %>_NB_LINE",nb_line_<%=cid %>);

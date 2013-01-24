@@ -1,5 +1,36 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the NetCDFInput component 
+ * 
+ * The NetCDFInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The NetCDFInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the NetCDFInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
 <%@ jet 
     imports="
+    	java.util.Iterator
+        java.util.List 
+        java.util.Map
+        java.util.Set 
+        java.util.LinkedHashMap
         org.talend.core.model.process.INode 
         org.talend.core.model.process.ElementParameterParser 
         org.talend.core.model.metadata.IMetadataTable 
@@ -7,10 +38,7 @@
         org.talend.core.model.process.IConnection
         org.talend.core.model.process.EConnectionType
         org.talend.designer.codegen.config.CodeGeneratorArgument
-        java.util.List 
-        org.talend.core.model.metadata.types.JavaTypesManager
-        org.talend.core.model.metadata.types.JavaType
-        
+		org.talend.core.model.metadata.types.JavaTypesManager
     " 
 %>
 <%
@@ -18,96 +46,169 @@ CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
 INode node = (INode)codeGenArgument.getArgument();
 String cid = node.getUniqueName();
 
-// Retrive component properties
-String filename = ElementParameterParser.getValue(node,"__FILENAME__");
-String reducedColName = ElementParameterParser.getValue(node,"__COL__");
-String loopColName = ElementParameterParser.getValue(node,"__LOOP_COL__");
+// Retrieve component properties
+String filename = ElementParameterParser.getValue(node, "__FILENAME__");
+List<Map<String, String>> columnMappingOverrides = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__COLUMN_MAPPINGS__");
+String dieOnError = ElementParameterParser.getValue(node, "__DIE_ON_ERROR__");
 
-List<IMetadataTable> metadatas = node.getMetadataList();
-if ((metadatas != null) && (metadatas.size() > 0)) {
-    IMetadataTable metadata = metadatas.get(0);
-    if (metadata != null) {
-    // Open the NetCDF file
+// Enhanced dataset options
+String scaleMissing = ElementParameterParser.getValue(node, "__SCALE_MISSING__");
+String convertEnums = ElementParameterParser.getValue(node, "__CONVERT_ENUMS__");
+
+// Missing value options
+String isFillerMissing = ElementParameterParser.getValue(node, "__FILLER_MISSING__");
+String isInvalidMissing = ElementParameterParser.getValue(node, "__INVALID_MISSING__");
+String isMissingMissing = ElementParameterParser.getValue(node, "__MISSING_MISSING__");
+String nullValueHandling = ElementParameterParser.getValue(node, "__MISSING_VALUE_HANDLING__");
+
+
+// Get list of column names used in connections and mapped variables/dimensions 
+
 %>
-    int nbFeature_<%=cid %> = 0;
-    String filename_<%=cid %> = <%=filename %>;
-    ucar.nc2.NetcdfFile ncfile_<%=cid %> = null;
-    try {
-        ncfile_<%=cid %> = ucar.nc2.NetcdfFile.open(filename_<%=cid %>);
-        try {
+
+java.util.Map<String, String> columnNameMapping_<%=cid %> = new java.util.LinkedHashMap<String, String>();
+java.util.Map<String, String> columnTypeMapping_<%=cid %> = new java.util.LinkedHashMap<String, String>();
+
 <%
-        // Define variables for each dimension
-        List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
-        String firstConnName = "";
-        if (conns!=null) {
-            if (conns.size()>0) {
-                for (int i = 0; i < conns.size(); i++) {
-                    IConnection conn = conns.get(i);
-                    firstConnName = conn.getName();
+List< ? extends IConnection> conns = node.getOutgoingConnections();
+
+for (int i=0; i < conns.size(); i++) {
+	IConnection conn = conns.get(i);
+
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)	)||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+    	IMetadataTable connMetadata = conn.getMetadataTable();
+    	
+        List<IMetadataColumn> listColumns = connMetadata.getListColumns();
         
-                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
-                        List<IMetadataColumn> listColumns = metadata.getListColumns();
-                        int sizeListColumns = listColumns.size();
-                        // Retrieve the values and reduce 
-                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
-                            IMetadataColumn column = listColumns.get(valueN);
-                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
-
-                            //Just to get a non-primitive type we can cast an Object instance to.
-                            String objectType = JavaTypesManager.getTypeToGenerate(column.getTalendType(), true);
-                            
-                            
-                            // Read the variables
-%>
-        ucar.nc2.Variable v_<%=cid %>_<%=column.getLabel() %> = ncfile_<%=cid %>.findVariable("<%=column.getLabel() %>");
-        // TODO : Return when null
-        //if (null == vTemp)
-        //        return; <%=cid %>
-            
-        ucar.ma2.Array data_<%=cid %>_<%=column.getLabel() %> = v_<%=cid %>_<%=column.getLabel() %>.read();
-<%
-                            // 
-                            if (column.getLabel().equals(reducedColName)) {
-%>
-        ucar.ma2.Array data2D_<%=cid %>_<%=column.getLabel() %> = data_<%=cid %>_<%=column.getLabel() %>.reduce();
-<%
-                            }
-                        }
-                        
-                        // Start the main loop
-                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
-                            IMetadataColumn column = listColumns.get(valueN);
-                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
-                            if (column.getLabel().equals(loopColName)) {
-%>      
-        for (int i = 0; i < data_<%=cid %>_<%=column.getLabel() %>.getSize(); i++) {
-<%
-                            }
-                        }
-                        
-                        // Pass values to next component
-                        for (int valueN = 0; valueN < sizeListColumns; valueN++) {
-                            IMetadataColumn column = listColumns.get(valueN);
-                            String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
-                            
-                            if (column.isKey()) {
-%>
-                            int pos_<%=cid %>_<%=column.getLabel() %> = 0;
-<%
-                            } else {
-%>
-                            int pos_<%=cid %>_<%=column.getLabel() %> = i;
-<%
-                            }
-%>      
-            // TODO get according to data type
-            <%=conn.getName() %>.<%=column.getLabel() %> = data_<%=cid %>_<%=column.getLabel() %>.getDouble(pos_<%=cid %>_<%=column.getLabel() %>);
-<%
-                        }
-                    }
-                }
-            }
+        for (IMetadataColumn column : listColumns) {
+			        	
+        	String columnName = column.getLabel();
+        	
+        	// determine column to NetCDF dimension/variable mapping
+        	
+			String name = "\"" + columnName + "\"";
+			String type = column.isKey()?"DIMENSION":"VARIABLE";
+			
+			for (Map<String, String> columnMapOverride : columnMappingOverrides) {
+				if (columnMapOverride.get("COLUMN").equals(columnName)) {
+					name = columnMapOverride.get("VARIABLE").equals("")?name:columnMapOverride.get("VARIABLE");
+					type = columnMapOverride.get("TYPE");
+					break;
+				} 
+			}
+			
+			// Update column name/variable/dimension name mappings
+			 
+			%>
+			if (<%=name %> != null && !<%=name %>.trim().equals("")) { 
+       			columnNameMapping_<%=cid %>.put("<%=columnName %>", <%=name %>);
+   				columnTypeMapping_<%=cid %>.put("<%=columnName %>", "<%=type %>");
+       		}
+       		<%
         }
     }
 }
+
+// Begin component processing
+
 %>
+int nbFeature_<%=cid %> = 0;
+
+String filename_<%=cid %> = <%=filename %>;
+
+<% if (("false").equals(dieOnError)) {%>
+	boolean error_<%=cid %> = false;
+	String errorTrace_<%=cid %> = "";
+<% }
+
+   if (scaleMissing.equals("true")) { %>
+	ucar.nc2.dataset.NetcdfDataset.setFillValueIsMissing(<%=isFillerMissing.equals("true") %>);
+  	ucar.nc2.dataset.NetcdfDataset.setInvalidDataIsMissing(<%=isInvalidMissing.equals("true") %>);
+  	ucar.nc2.dataset.NetcdfDataset.setMissingDataIsMissing(<%=isMissingMissing.equals("true") %>);
+  	ucar.nc2.dataset.NetcdfDataset.setUseNaNs(<%=nullValueHandling.equals("NANS") %>);
+<% } %>
+
+ucar.nc2.dataset.NetcdfDataset ncDataset_<%=cid %> = null;
+
+try {
+<%	if (scaleMissing.equals("false") && convertEnums.equals("false")) { %>
+	ncDataset_<%=cid %> = ucar.nc2.dataset.NetcdfDataset.openDataset(filename_<%=cid %>, false, null);
+<% } else { %>
+	java.util.Set<ucar.nc2.dataset.NetcdfDataset.Enhance> enhanceMode_<%=cid %> = new java.util.HashSet<ucar.nc2.dataset.NetcdfDataset.Enhance>();
+<%
+      if (scaleMissing.equals("true")) { %>
+      enhanceMode_<%=cid %>.add(ucar.nc2.dataset.NetcdfDataset.Enhance.ScaleMissing);
+<%    }
+ 
+      if (convertEnums.equals("true")) { %>
+      enhanceMode_<%=cid %>.add(ucar.nc2.dataset.NetcdfDataset.Enhance.ConvertEnums);
+<%    } %>
+	
+	  ncDataset_<%=cid %> = ucar.nc2.dataset.NetcdfDataset.openDataset(filename_<%=cid %>, enhanceMode_<%=cid %>, 0, null, null);
+<%	} %>
+			
+	// Create readers for each variable.  Readers return the value of the variable for particular index values
+	
+	java.util.Map<String, au.org.emii.talend.dap.reader.NetcdfReader> readers_<%=cid %> = new java.util.LinkedHashMap<String, au.org.emii.talend.dap.reader.NetcdfReader>();
+	
+	for (java.util.Map.Entry<String, String> typeMapping : columnTypeMapping_<%=cid %>.entrySet()) {
+		if (typeMapping.getValue().equals("VARIABLE")) {
+			String name = columnNameMapping_<%=cid %>.get(typeMapping.getKey());
+			ucar.nc2.Variable variable = ncDataset_<%=cid %>.findVariable(name);
+			if (variable != null) {
+				readers_<%=cid %>.put(name, new au.org.emii.talend.dap.reader.NetcdfReader(variable));
+			}
+		}
+	}
+		
+	java.util.Map<String,java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>>> connIterators_<%=cid %> = new java.util.LinkedHashMap<String, java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>>>();
+	 
+	au.org.emii.talend.dap.IndexRangesBuilder indexRangesBuilder_<%=cid %>;
+				
+<%
+
+// Create iterator for each connection - iterate over all possible index combinations for variables to be output on connection
+
+for (int i=0; i < conns.size(); i++) {
+	IConnection conn = conns.get(i);
+	
+	String connName = conn.getName();
+
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)	)||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+    	IMetadataTable connMetadata = conn.getMetadataTable();
+
+%>
+
+		indexRangesBuilder_<%=cid %> = new au.org.emii.talend.dap.IndexRangesBuilder();
+		
+<%    	
+        List<IMetadataColumn> listColumns = connMetadata.getListColumns();
+        
+        for (IMetadataColumn column : listColumns) {
+        	String columnName = column.getLabel();
+%>
+        	String <%=cid %>_name_<%=connName %>_<%=columnName %> = columnNameMapping_<%=cid %>.get("<%=column.getLabel() %>");
+        	String <%=cid %>_type_<%=connName %>_<%=columnName %> = columnTypeMapping_<%=cid %>.get("<%=column.getLabel() %>");
+        	
+        	if (<%=cid %>_type_<%=connName %>_<%=columnName %>.equals("VARIABLE") && <%=cid %>_name_<%=connName %>_<%=columnName %> != null) {
+				ucar.nc2.Variable variable = ncDataset_<%=cid %>.findVariable(<%=cid %>_name_<%=connName %>_<%=columnName %>);
+				if (variable != null) {
+					indexRangesBuilder_<%=cid %>.addDimensions(variable);
+				}
+			}
+<%        	
+        }
+%>
+
+		connIterators_<%=cid %>.put("<%=connMetadata.getLabel() %>", indexRangesBuilder_<%=cid %>.getIterator());
+		
+<%		
+    }
+}
+%>
+		for (String connName_<%=cid %> : connIterators_<%=cid %>.keySet()) {
+			java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>> connIterator_<%=cid %> = connIterators_<%=cid %>.get(connName_<%=cid %>);
+			
+			while (connIterator_<%=cid %>.hasNext()) {
+				java.util.Set<au.org.emii.talend.dap.IndexValue> indexValues_<%=cid %> = connIterator_<%=cid %>.next();
+
