@@ -28,8 +28,11 @@ List of changes
 ---------------
 
  * Talend spatial module version 5.2.1:
-  * GeoTools 8.5 upgrade
+  * GeoTools 8.5 upgrade - MIF/MID, EDIGEO and GPX format is now supported by OGR component
   * sProj / Add custom transform for projection (#10) - IGN Ntv2 grid transformation supported
+  * sOGRInput-sOGROutput / Read and write all OGR formats (#14, #12) - Vector format supported http://www.gdal.org/ogr/ogr_formats.html
+  * Add NetCDF, OPeNDAP and THREDDS Iterator components developed by IMOS - Thanks to Craig Jones
+  * New components documentation - Thanks Yves Jacolin
 
  * Talend spatial module version 5.2.0:
   * OGRInfo and GDALInfo input components does not set geometry CRS (#9)
