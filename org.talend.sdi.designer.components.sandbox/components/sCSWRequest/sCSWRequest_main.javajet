@@ -36,6 +36,7 @@
     String servlet = ElementParameterParser.getValue(node, "__SERVLET__");
     String servicename = ElementParameterParser.getValue(node, "__SERVICENAME__");
     String login = ElementParameterParser.getValue(node, "__LOGIN__");
+    String ba = ElementParameterParser.getValue(node, "__BA__");
     String username = ElementParameterParser.getValue(node, "__USERNAME__");
     String password = ElementParameterParser.getValue(node, "__PASSWORD__");  
 
@@ -46,11 +47,11 @@ org.talend.sdi.metadata.GeoNetwork cat_<%=cid %> = new org.talend.sdi.metadata.G
 <% 
     if (login.equals("true")) {
 %>
-    <%=username %>, <%=password %>
+    <%=username %>, <%=password %>, <%=(ba.equals("true") ? true : false) %>
 <%
     } else {
 %>
-    null, null
+    null, null, false
 <% 
     }    
 %>
