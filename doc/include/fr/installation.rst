@@ -10,7 +10,7 @@ d'abord besoin de Talend OS. Vous pouvez le télécharger à partir du
 
 .. warning::
     Il est conseillé de lancer une première fois Talend OS pour qu'il créé 
-	et configure les fichiers nécessaires.
+    et configure les fichiers nécessaires.
 
 Les extensions spatiales
 *************************
@@ -25,7 +25,7 @@ spatiales.
 
 .. note::
     Il est conseillé d'utiliser les versions correspondantes de Talend OS et 
-	des extensions spatiales. Mélanger les versions peut être source de problème.
+    des extensions spatiales. Mélanger les versions peut être source de problème.
 
 Installation de la gestion d'Oracle Spatial
 ********************************************
@@ -36,8 +36,8 @@ suivantes :
 * Installer un client Oracle correspondant au moins à la version de la base à 
   accéder. Exemple : un client Oracle 11 fonctionnera pour une base 10g mais un 
   client Oracle 10 ne fonctionnera pas pour une base 11g.
-* copier les fichiers jar (fichier joint) qui se trouvent dans C:\\ETL\\TOS-Win32-r63143-V4.2.2\\plugins\\org.talend.sdi.designer.components_4.2.0
-  dans C:\\ETL\\TOS-Win32-r63143-V4.2.2\\lib\\java si cela ne fonctionne pas.
+* copier les fichiers sdoapi.jar et sdoutil.jar dans ``plugins/org.talend.sdi.designer.components_5.2.1/components/sGeoInput/`` 
+  et dans ``plugins/org.talend.libraries.sdi_5.2.1/lib/``.
  
 Les components Oracle se trouvent dans le dossier Database/Oracle.
 
