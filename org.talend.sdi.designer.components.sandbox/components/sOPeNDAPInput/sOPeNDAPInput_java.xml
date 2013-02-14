@@ -1,22 +1,22 @@
 <!-- 
  * Copyright 2012 Integrated Marine Observing System (IMOS)
 
- * This file is part of the NetCDFInput component 
+ * This file is part of the OPeNDAPInput component 
  * 
- * The NetCDFInput component is free software: you 
+ * The OPeNDAPInput component is free software: you 
  * can redistribute it and/or modify it under the terms of the GNU 
  * General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later
  * version.
  * 
- * The NetCDFInput component is distributed in the
+ * The OPeNDAPInput component is distributed in the
  * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
  * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
  * PURPOSE.  See the GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with the NetCDFInput Component.  If not, 
- * see <http://www.gnu.org/licenses/>. *
+ * along with the OPeNDAPInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
  *  
  * For more information please contact the Integrated Marine Observing 
  * System at info@emii.org.au
@@ -45,9 +45,8 @@
 		<CONNECTOR CTYPE="RUN_IF" />
 	</CONNECTORS>
 	<PARAMETERS>
-		<PARAMETER NAME="FILENAME" FIELD="FILE" NUM_ROW="1"
-			REQUIRED="true" REPOSITORY_VALUE="FILE_PATH">
-			<DEFAULT>"__COMP_DEFAULT_FILE_DIR__/in.nc"</DEFAULT>
+		<PARAMETER NAME="URL" FIELD="TEXT" NUM_ROW="1" REQUIRED="true"> 
+			<DEFAULT>"http://example.com/thredds/dodsC/in.nc"</DEFAULT>
 		</PARAMETER>
        <PARAMETER NAME="SCHEMAS" FIELD="TABLE" NUM_ROW="2"	NB_LINES="3">
           <ITEMS>
@@ -59,44 +58,11 @@
 		</PARAMETER>
    </PARAMETERS>
 	<ADVANCED_PARAMETERS>
-       <PARAMETER NAME="SCALE_MISSING" FIELD="CHECK" NUM_ROW="1">
-          <DEFAULT>true</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="CONVERT_ENUMS" FIELD="CHECK" NUM_ROW="1" SHOW="false">
-          <DEFAULT>true</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="FILLER_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
-          <DEFAULT>true</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="INVALID_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
-          <DEFAULT>false</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="MISSING_MISSING" FIELD="CHECK" NUM_ROW="2" SHOW_IF="SCALE_MISSING=='true'">
-          <DEFAULT>true</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="MISSING_VALUE_HANDLING" FIELD="CLOSED_LIST" NUM_ROW="3" SHOW_IF="SCALE_MISSING=='true'">
-		 <ITEMS DEFAULT="NULL_VALUES">
-		    <ITEM NAME="NULL_VALUES" VALUE="NULL_VALUES" />
-		    <ITEM NAME="NANS" VALUE="NANS" />
-		  </ITEMS>
-       </PARAMETER>
-       <PARAMETER NAME="ONE_BASED_INDEX" FIELD="CHECK" NUM_ROW="4">
-          <DEFAULT>false</DEFAULT>
-       </PARAMETER>
-       <PARAMETER NAME="TRIM_STRINGS" FIELD="CHECK" NUM_ROW="4">
-          <DEFAULT>false</DEFAULT>
-       </PARAMETER>
-	   <PARAMETER NAME="COLUMN_MAPPINGS" FIELD="TABLE" REQUIRED="false" NB_LINES="3" NUM_ROW ="5">
+	   <PARAMETER NAME="COLUMN_MAPPINGS" FIELD="TABLE" REQUIRED="false" NUM_ROW ="1" NB_LINES="6">
           <ITEMS>
              <ITEM NAME="COLUMN" FIELD="TEXT" />
              <ITEM NAME="VARIABLE" FIELD="TEXT" />
-             <ITEM NAME="TYPE" FIELD="CLOSED_LIST">
-				 <ITEMS DEFAULT="VARIABLE">
-				    <ITEM NAME="VARIABLE" VALUE="VARIABLE" />
-				    <ITEM NAME="DIMENSION" VALUE="DIMENSION" />
-				  </ITEMS>
-			  </ITEM> 
-			</ITEMS>
+          </ITEMS>
 	   </PARAMETER>
 	</ADVANCED_PARAMETERS>
 	<CODEGENERATION>

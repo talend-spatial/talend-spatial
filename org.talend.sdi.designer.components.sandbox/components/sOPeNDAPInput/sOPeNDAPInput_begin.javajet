@@ -1,0 +1,203 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the OPeNDAPInput component 
+ * 
+ * The OPeNDAPInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The OPeNDAPInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the OPeNDAPInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
+<%@ jet 
+    imports="
+    	java.util.Iterator
+        java.util.List 
+        java.util.Map
+        java.util.Set 
+        java.util.LinkedHashMap
+        org.talend.core.model.process.INode 
+        org.talend.core.model.process.ElementParameterParser 
+        org.talend.core.model.metadata.IMetadataTable 
+        org.talend.core.model.metadata.IMetadataColumn 
+        org.talend.core.model.process.IConnection
+        org.talend.core.model.process.EConnectionType
+        org.talend.designer.codegen.config.CodeGeneratorArgument
+    " 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+// Retrieve component properties
+String url = ElementParameterParser.getValue(node, "__URL__");
+List<Map<String, String>> columnMappingOverrides = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__COLUMN_MAPPINGS__");
+String dieOnError = ElementParameterParser.getValue(node, "__DIE_ON_ERROR__");
+
+// Get list of column names used in connections, mapped projection names and mapped variable names 
+
+%>
+
+java.util.Map<String, String> columnProjectionNames_<%=cid %> = new java.util.LinkedHashMap<String, String>();
+java.util.Map<String, String> columnVariableNames_<%=cid %> = new java.util.LinkedHashMap<String, String>();
+
+<%
+List< ? extends IConnection> conns = node.getOutgoingConnections();
+
+for (int i=0; i < conns.size(); i++) {
+	IConnection conn = conns.get(i);
+
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)	)||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+    	IMetadataTable connMetadata = conn.getMetadataTable();
+    	
+        List<IMetadataColumn> listColumns = connMetadata.getListColumns();
+        
+        for (IMetadataColumn column : listColumns) {
+			        	
+        	String columnName = column.getLabel();
+        	
+        	// Map column name to projection name
+        	// Its the column name unless specified otherwise in advanced parameters
+        	
+			String projectionName = "\"" + columnName + "\"";
+			
+			for (Map<String, String> columnMapOverride : columnMappingOverrides) {
+				if (columnMapOverride.get("COLUMN").equals(columnName)) {
+					projectionName = columnMapOverride.get("VARIABLE");
+					break;
+				} 
+			}
+			
+			// skip null mappings
+			
+			if (projectionName == null) continue;
+			
+			// Create column name/projection name and column name/variable name mappings
+			// (Can select array within grid by using TEMP.TEMP for example, but variable returned 
+			// is called TEMP.  Can select mapped array within grid by using TEMP.LONGITUDE, but variable 
+			// returned is called LONGITUDE).
+			 
+			%>
+			if (<%=projectionName %> != null && !<%=projectionName %>.trim().equals("")) { 
+       			columnProjectionNames_<%=cid %>.put("<%=columnName %>", <%=projectionName %>);
+       			columnVariableNames_<%=cid %>.put("<%=columnName %>", <%=projectionName %>.indexOf(".")!=-1?<%=projectionName %>.substring(<%=projectionName %>.lastIndexOf(".") + 1):<%=projectionName %>);
+       		}
+       		<%
+        }
+    }
+}
+
+// Construct constraint expression to retrieve variable names used in connections only
+// variable name being the column name used or the variable name mapped to the column in advanced settings
+// if present
+
+%>
+StringBuilder constraintExpression_<%=cid %> = new StringBuilder();
+java.util.Iterator<String> columnIterator_<%=cid %> = columnProjectionNames_<%=cid %>.keySet().iterator();
+
+while (columnIterator_<%=cid %>.hasNext()) {
+	String columnName = columnIterator_<%=cid %>.next(); 
+	String projectionName = columnProjectionNames_<%=cid %>.get(columnName);
+
+	constraintExpression_<%=cid %>.append(columnProjectionNames_<%=cid %>.get(columnName));
+
+	if (columnIterator_<%=cid %>.hasNext()) {
+		constraintExpression_<%=cid %>.append(",");
+	}
+}
+
+<%
+// Begin component processing
+
+%>
+int nbFeature_<%=cid %> = 0;
+
+String dataSourceUrl_<%=cid %> = <%=url %>;
+
+<% if (("false").equals(dieOnError)) {%>
+	boolean error_<%=cid %> = false;
+	String errorTrace_<%=cid %> = "";
+<% } %>
+
+try {
+	opendap.dap.DConnect2 conn_<%=cid %> = new opendap.dap.DConnect2(dataSourceUrl_<%=cid %>);
+			
+	try {
+		opendap.dap.DataDDS data_<%=cid %> = conn_<%=cid %>.getData(constraintExpression_<%=cid %>.toString(), null);
+	
+		// Create readers for each variable.  Readers return the value of the variable for particular index values
+		
+		au.org.emii.talend.dap.reader.DReaderFactory readerFactory_<%=cid %> = new au.org.emii.talend.dap.reader.DReaderFactory();
+			
+		java.util.Map<String, au.org.emii.talend.dap.reader.DReader> readers_<%=cid %> = new java.util.LinkedHashMap<String, au.org.emii.talend.dap.reader.DReader>();
+		
+		for (String variableName : columnVariableNames_<%=cid %>.values()) {
+			readers_<%=cid %>.put(variableName, readerFactory_<%=cid %>.getInstance(data_<%=cid %>.getVariable(variableName)));
+		}
+			
+		java.util.Map<String,java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>>> connIterators_<%=cid %> = new java.util.LinkedHashMap<String, java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>>>();
+		 
+		au.org.emii.talend.dap.IndexRangesBuilder indexRangesBuilder_<%=cid %>;
+		java.util.Set<au.org.emii.talend.dap.IndexRange> indexRanges_<%=cid %>;
+				
+<%
+
+// Create iterator for each connection - iterate over all possible index combinations for variables to be output on connection
+
+for (int i=0; i < conns.size(); i++) {
+	IConnection conn = conns.get(i);
+	
+	String connName = conn.getName();
+
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)	)||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+    	IMetadataTable connMetadata = conn.getMetadataTable();
+
+%>
+
+		indexRangesBuilder_<%=cid %> = new au.org.emii.talend.dap.IndexRangesBuilder();
+		
+<%    	
+        List<IMetadataColumn> listColumns = connMetadata.getListColumns();
+        
+        for (IMetadataColumn column : listColumns) {
+        	String columnName = column.getLabel();
+%>
+        	String <%=cid %>_variableName_<%=connName %>_<%=columnName %> = columnVariableNames_<%=cid %>.get("<%=column.getLabel() %>");
+        	
+        	if (<%=cid %>_variableName_<%=connName %>_<%=columnName %> != null) {
+				indexRangesBuilder_<%=cid %>.addDimensions(data_<%=cid %>.getVariable(<%=cid %>_variableName_<%=connName %>_<%=columnName %>));
+			}
+<%        	
+        }
+%>
+
+		indexRanges_<%=cid %> = indexRangesBuilder_<%=cid %>.getIndexRanges();
+		
+		connIterators_<%=cid %>.put("<%=connMetadata.getLabel() %>", new au.org.emii.talend.dap.IndexValuesIterator(indexRanges_<%=cid %>));
+		
+<%		
+    }
+}
+%>
+		for (String connName_<%=cid %> : connIterators_<%=cid %>.keySet()) {
+			java.util.Iterator<java.util.Set<au.org.emii.talend.dap.IndexValue>> connIterator_<%=cid %> = connIterators_<%=cid %>.get(connName_<%=cid %>);
+			
+			while (connIterator_<%=cid %>.hasNext()) {
+				java.util.Set<au.org.emii.talend.dap.IndexValue> indexValues_<%=cid %> = connIterator_<%=cid %>.next();
+

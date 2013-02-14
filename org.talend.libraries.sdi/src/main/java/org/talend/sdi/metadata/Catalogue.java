@@ -2,13 +2,12 @@ package org.talend.sdi.metadata;
 
 import java.io.IOException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -105,8 +104,12 @@ public abstract class Catalogue {
         
         // Basic Authentification initialisation
         if (this.baUsername != null && this.baPassword != null) {
-            creds = new UsernamePasswordCredentials(this.baUsername, this.baPassword);
-            httpclient.getState().setCredentials(AuthScope.ANY, creds);
+//            creds = new UsernamePasswordCredentials(this.baUsername, this.baPassword);
+//            httpclient.getState().setCredentials(AuthScope.ANY, creds);
+            String user = this.baUsername + ":" + this.baPassword;
+            byte[] encoding = Base64.encodeBase64(user.getBytes());
+            req.setRequestHeader(new Header("Authorization", "Basic " + new String(encoding)));
+            req.setDoAuthentication( true );
         }
 
         // Proxy initialisation

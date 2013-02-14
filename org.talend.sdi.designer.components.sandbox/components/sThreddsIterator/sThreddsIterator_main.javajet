@@ -1,0 +1,122 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the ThreddsIterator component 
+ * 
+ * The ThreddsIterator component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The ThreddsIterator component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the ThreddsIterator Component.  If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
+<%@ jet
+imports="
+org.talend.core.model.metadata.IMetadataColumn
+org.talend.core.model.metadata.IMetadataTable
+org.talend.core.model.process.EConnectionType
+org.talend.core.model.process.IConnection
+org.talend.core.model.process.INode
+org.talend.designer.codegen.config.CodeGeneratorArgument
+java.util.List
+"
+%>
+<% CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();	
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas != null) && (metadatas.size() > 0)) {//b
+ IMetadataTable metadata = metadatas.get(0);
+ if (metadata != null) {//a
+  List<IMetadataColumn> columns = metadata.getListColumns();	
+  
+  List< ? extends IConnection> outConns = node.getOutgoingConnections();
+  for (IConnection conn : outConns) 
+  { //2	
+   if (conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)||conn.getLineStyle().equals(EConnectionType.FLOW_MERGE))
+   { //3
+    String outputConnName = conn.getName();
+    
+    for (int i = 0; i < columns.size(); i++) 
+    {//4
+     IMetadataColumn column = columns.get(i);
+     
+     if (column.getLabel().equals("catalogUri"))
+     {//5
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getParentCatalog().getUriString();
+<%
+     } else if (column.getLabel().equals("authority")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getAuthority();
+<%
+     } else if (column.getLabel().equals("id")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getID();
+<%
+     } else if (column.getLabel().equals("name")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getName();
+<%
+     } else if (column.getLabel().equals("catalogUrl")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getCatalogUrl();
+<%
+     } else if (column.getLabel().equals("downloadUrl")) {
+%>
+    thredds.catalog.InvAccess downloadAccess = ds_<%=cid %>.getAccess(thredds.catalog.ServiceType.HTTPServer);
+    if (downloadAccess != null) {
+   <%=outputConnName %>.<%=column.getLabel() %> = downloadAccess.getStandardUrlName();
+   } else {
+   <%=outputConnName %>.<%=column.getLabel() %> = null;
+   }
+<%
+     } else if (column.getLabel().equals("opendapUrl")) {
+%>
+    thredds.catalog.InvAccess opendapAccess = ds_<%=cid %>.getAccess(thredds.catalog.ServiceType.OPENDAP);
+    if (opendapAccess != null) {
+   <%=outputConnName %>.<%=column.getLabel() %> = opendapAccess.getStandardUrlName();
+   } else {
+   <%=outputConnName %>.<%=column.getLabel() %> = null;
+   }
+<%
+     } else if (column.getLabel().equals("subsetUrl")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getSubsetUrl();
+<%
+     } else if (column.getLabel().equals("fullName")) {
+%>
+   <%=outputConnName %>.<%=column.getLabel() %> = ds_<%=cid %>.getFullName();
+<%
+     } else if (column.getLabel().equals("modified")) {
+%>
+		java.util.List<ucar.nc2.units.DateType> dates = ds_<%=cid %>.getDates();
+		
+		for (ucar.nc2.units.DateType date: dates) {
+			if (date.getType().equalsIgnoreCase("modified")) {
+			    <%=outputConnName %>.<%=column.getLabel() %> = date.getDate();
+			}
+		}
+<%
+     }//5
+    }//4
+   }//3
+  }//2
+ }//a
+}//b
+%>
+    

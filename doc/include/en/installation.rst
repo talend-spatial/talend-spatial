@@ -35,8 +35,11 @@ following tasks:
 * Install an Oracle Client with at least the same release number as your Oracle 
   Spatial DataBase. For instance an Oracle 11 client will work with Oracle data 
   base 10g.
-* Copy jar file from C:\\ETL\\TOS-Win32-r63143-V4.2.2\\plugins\\org.talend.sdi.designer.components_4.2.0
-  to C:\\ETL\\TOS-Win32-r63143-V4.2.2\\lib\\java if it doesn't work.
+* copy sdoapi.jar and sdoutil.jar in ``plugins/org.talend.sdi.designer.components_5.2.1/components/sGeoInput/`` 
+  and in ``plugins/org.talend.libraries.sdi_5.2.1/lib/``
+
+.. * Copy jar file from C:\\ETL\\TOS-Win32-r63143-V4.2.2\\plugins\\org.talend.sdi.designer.components_4.2.0
+..   to C:\\ETL\\TOS-Win32-r63143-V4.2.2\\lib\\java if it doesn't work.
 
 Oracle Spatial components are located in Database/Oracle (same as standard 
 Oracle component).

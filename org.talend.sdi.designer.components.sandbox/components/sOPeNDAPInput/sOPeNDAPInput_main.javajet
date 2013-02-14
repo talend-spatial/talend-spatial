@@ -1,0 +1,131 @@
+<% 
+/*
+ * Copyright 2012 Integrated Marine Observing System (IMOS)
+
+ * This file is part of the OPeNDAPInput component 
+ * 
+ * The OPeNDAPInput component is free software: you 
+ * can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later
+ * version.
+ * 
+ * The OPeNDAPInput component is distributed in the
+ * hope that it will be useful, but WITHOUT ANY WARRANTY; without even 
+ * the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ * PURPOSE.  See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with the OPeNDAPInput Component.  If not, 
+ * see <http://www.gnu.org/licenses/>. 
+ *  
+ * For more information please contact the Integrated Marine Observing 
+ * System at info@emii.org.au
+ */
+  %>
+
+<%@ jet
+imports="
+java.util.List 
+java.util.Map
+org.talend.core.model.metadata.IMetadataColumn
+org.talend.core.model.metadata.IMetadataTable
+org.talend.core.model.process.EConnectionType
+org.talend.core.model.process.ElementParameterParser 
+org.talend.core.model.process.IConnection
+org.talend.core.model.process.INode
+org.talend.designer.codegen.config.CodeGeneratorArgument
+org.talend.core.model.metadata.types.JavaTypesManager
+"
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+String cid = node.getUniqueName();
+
+List<Map<String, String>> columnMappingOverrides = (List<Map<String,String>>)ElementParameterParser.getObjectValue(node, "__COLUMN_MAPPINGS__");
+
+List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
+
+for (int i=0; i < conns.size(); i++) {
+	IConnection conn = conns.get(i);
+
+    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)	)||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+    	IMetadataTable connMetadata = conn.getMetadataTable();
+    	
+%>
+		if (connName_<%=cid %>.equals("<%=conn.getName() %>")) {
+			<%=conn.getName() %> = new <%=conn.getName() %>Struct();
+<%    	
+    	
+        List<IMetadataColumn> listColumns = connMetadata.getListColumns();
+        
+        for (IMetadataColumn column : listColumns) {
+        	String columnName = column.getLabel();
+
+%>
+			String <%=cid %>_variableName_<%=columnName %> = columnVariableNames_<%=cid %>.get("<%=columnName %>");
+			
+			if (<%=cid %>_variableName_<%=columnName %> != null) {
+			 
+<%
+        
+        	String ttg = JavaTypesManager.getTypeToGenerate(column.getTalendType(),column.isNullable());
+        	if (ttg.equals("Byte")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = new Byte(readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getByte(indexValues_<%=cid %>));
+<%        
+			} else if (ttg.equals("byte")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getByte(indexValues_<%=cid %>);
+<%
+			} else if (ttg.equals("Float")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = new Float(readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getFloat32(indexValues_<%=cid %>));
+<%
+			} else if (ttg.equals("float")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getFloat32(indexValues_<%=cid %>);
+<%
+			} else if (ttg.equals("Double")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = new Double(readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getFloat64(indexValues_<%=cid %>));
+<%
+			} else if (ttg.equals("double")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getFloat64(indexValues_<%=cid %>);
+<%
+			} else if (ttg.equals("Short")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = new Short(readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getInt16(indexValues_<%=cid %>));
+<%
+			} else if (ttg.equals("short")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getInt16(indexValues_<%=cid %>);
+<%
+			} else if (ttg.equals("Integer")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = new Integer(readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getInt32(indexValues_<%=cid %>));
+<%
+			} else if (ttg.equals("int")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getInt32(indexValues_<%=cid %>);
+<%
+			} else if (ttg.equals("String")) {
+%>
+				<%=conn.getName() %>.<%=columnName %> = readers_<%=cid %>.get(<%=cid %>_variableName_<%=columnName %>).getString(indexValues_<%=cid %>);
+<%
+			}	
+%>
+			}
+<%		
+        }
+%>
+		} else {
+			<%=conn.getName() %> = null;
+		}
+<%        
+    }
+} 
+%>
+

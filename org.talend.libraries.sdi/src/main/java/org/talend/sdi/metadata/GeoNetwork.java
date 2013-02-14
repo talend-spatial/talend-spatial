@@ -30,14 +30,17 @@ public class GeoNetwork extends Catalogue {
      * Node name (ie. GeoNetwork servlet name) 
      */
     private String servlet;
-
+    
+    private boolean useSpringLogin;
+    
     /**
      * GeoNetwork Service type 
      */
     public class Service {
 
         public static final String XML_LOGIN = "xml.user.login";
-
+        public static final String SPRING_LOGIN = "j_spring_security_check";
+        
         public static final String XML_LOGOUT = "xml.user.logout";
 
         public static final String MEF_IMPORT = "mef.import";
@@ -59,12 +62,13 @@ public class GeoNetwork extends Catalogue {
      * @param password     Password to log into the node.
      * 
      */
-    public GeoNetwork(String host, int port, String servlet, String username, String password) {
+    public GeoNetwork(String host, int port, String servlet, String username, String password, boolean useSpringLogin) {
         this.host = host;
         this.port = port;
         this.servlet = servlet;
         this.username = username;
         this.password = password;
+        this.useSpringLogin = useSpringLogin;
     }
 
     /** 
@@ -91,8 +95,8 @@ public class GeoNetwork extends Catalogue {
         
         /* Login URL & parameters */
         PostMethod req = new PostMethod(
-                this.host + ":" + this.port + "/" + 
-                this.servlet + "/srv/en/" + Service.XML_LOGIN);
+            this.host + ":" + this.port + "/" + 
+            this.servlet + "/srv/en/" + Service.XML_LOGIN);
         
         req.addParameter("username", username);
         req.addParameter("password", password);
@@ -124,13 +128,17 @@ public class GeoNetwork extends Catalogue {
             HttpClient httpclient = new HttpClient ();
             
             // --- do we need to authenticate?
-            if (this.username != null)
+            if (useSpringLogin) {
+                this.baUsername = username;
+                this.baPassword = password;
+            } else if(this.username != null) {
                 authenticate(httpclient, this.username, this.password);
-            
+            }
             // --- Post xml metadata element
             PostMethod req = new PostMethod(
-                    this.host + ":" + this.port + "/" + 
-                    this.servlet + "/srv/en/" + Service.MEF_IMPORT);
+                        this.host + ":" + this.port + "/" + 
+                        this.servlet + "/srv/en/" + Service.MEF_IMPORT);
+            
 
             File xmlFile = createTempFile(xml);
             String group = "2";// Usually GeoNetwork sample group
@@ -216,14 +224,17 @@ public class GeoNetwork extends Catalogue {
             HttpClient httpclient = new HttpClient ();
            
             // --- do we need to authenticate?
-            if (this.username != null)
+            if (useSpringLogin) {
+                this.baUsername = username;
+                this.baPassword = password;
+            } else if(this.username != null) {
                 authenticate(httpclient, this.username, this.password);
-            
+            }
             
             // --- Post xml metadata element
             PostMethod req = new PostMethod(
-                    this.host + ":" + this.port + "/" + 
-                    this.servlet + "/srv/en/" + Service.MEF_IMPORT);
+                            this.host + ":" + this.port + "/" + 
+                            this.servlet + "/srv/en/" + Service.MEF_IMPORT);
             
             File mefFile = new File(mef);
             
@@ -274,9 +285,12 @@ public class GeoNetwork extends Catalogue {
             HttpClient httpclient = new HttpClient ();
             
             // --- do we need to authenticate?
-            if (this.username != null)
+            if (useSpringLogin) {
+                this.baUsername = username;
+                this.baPassword = password;
+            } else if(this.username != null) {
                 authenticate(httpclient, this.username, this.password);
-            
+            }
             
             // --- Post xml metadata element
             String service = serviceName == null ? Service.CSW_PUBLICATION : serviceName;
