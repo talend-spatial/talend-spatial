@@ -86,8 +86,14 @@ String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0] ;
             );          
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.PROTOCOL.key,<%=protocol %>);
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.TRY_GZIP.key,<%=try_gzip %>);
+<%
+        if (!username.equals("\"\"")) {
+%>
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.USERNAME.key,String.valueOf(<%=username %>));
-            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.PASSWORD.key,String.valueOf(<%=password %>));             
+            m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.PASSWORD.key,String.valueOf(<%=password %>));
+<%
+        }
+%>
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.TIMEOUT.key,Integer.valueOf(<%=timeout %>));
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.BUFFER_SIZE.key,Integer.valueOf(<%=buffer %>));            
             m_<%=cid %>.put(org.geotools.data.wfs.WFSDataStoreFactory.LENIENT.key,<%=lenient %>);
