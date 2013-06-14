@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Talend Spatial Workspace Plug-in
 Bundle-SymbolicName: org.talend.sdi.workspace.spatial;singleton:=true
-Bundle-Version: 5.2.1
+Bundle-Version: 5.3.0
 Bundle-Activator: org.talend.sdi.workspace.spatial.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui

@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Talend Spatial Repository Plug-in
 Bundle-SymbolicName: org.talend.sdi.repository.ui.actions.metadata;singleton:=true
-Bundle-Version: 5.2.1
+Bundle-Version: 5.3.0
 Bundle-Activator: org.talend.sdi.repository.ui.actions.metadata.Activator
 Require-Bundle: org.talend.libraries.ui,
  org.apache.axis,
- org.talend.commons,
  org.talend.core,
  org.talend.core.runtime,
  org.eclipse.core.resources,
@@ -30,7 +29,6 @@ Require-Bundle: org.talend.libraries.ui,
  javax.xml.rpc,
  org.eclipse.core.expressions,
  org.eclipse.ui.browser,
- org.talend.commons,
  org.talend.commons.ui,
  org.eclipse.core.filesystem,
  org.talend.core.repository,
@@ -53,7 +51,7 @@ Export-Package: org.talend.sdi.repository.ui.actions.metadata;
    org.eclipse.swt.widgets,
    org.geotools.data"
 Eclipse-BundleShape: dir
-Bundle-Vendor: Camptocamp, Neogeo technologies
+Bundle-Vendor: Camptocamp, Neogeo technologies, titellus
 Import-Package: org.talend.core.model.metadata.builder.connection,
  org.talend.core.model.properties
 Bundle-ActivationPolicy: lazy

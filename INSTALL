@@ -5,7 +5,7 @@ How-to install Talend Open Studio Spatial module ?
  * Unzip TOS DI
  * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/ 
  * Unzip Spatial module
- * Copy the content of the plugin directory in the plugins directory of TOS.
+ * Copy the content of the plugin directory in the plugins directory of TOS
  * Start TOS
 
 
@@ -26,6 +26,10 @@ Start from a clean TOS zip and do not start TOS before unzipping spatial plugins
 
 List of changes
 ---------------
+
+ * Talend spatial module version 5.3.0:
+  * Add support for TDI 5.3.x series
+  * sWfsInput / error 401
 
  * Talend spatial module version 5.2.1:
   * GeoTools 8.5 upgrade - MIF/MID, EDIGEO and GPX format is now supported by OGR component

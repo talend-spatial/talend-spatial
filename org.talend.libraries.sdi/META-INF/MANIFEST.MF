@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi;singleton:=true
-Bundle-Version: 5.2.1
+Bundle-Version: 5.3.0
 Bundle-ClassPath: .,
  lib/jsr-275-1.0-beta-2.jar,
  lib/gt-opengis-8.5.jar,
@@ -516,4 +516,4 @@ Export-Package:
  org.xmlpull.mxp1,
  org.xmlpull.v1
 Eclipse-BundleShape: dir
-Bundle-Vendor: Camptocamp, Neogeo technologies
+Bundle-Vendor: Camptocamp, Neogeo technologies, titellus
