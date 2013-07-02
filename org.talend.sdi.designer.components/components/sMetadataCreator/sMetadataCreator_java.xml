@@ -116,11 +116,11 @@
     <IMPORTS>
       <IMPORT NAME="xercesImpl" MODULE="xercesImpl-2.7.1.jar"
         REQUIRED="true" />
-      <IMPORT NAME="xml-apis" MODULE="xml-apis-1.0.b2.jar"
+      <IMPORT NAME="xml-apis" MODULE="xml-apis.jar"
         REQUIRED="true" />
       <IMPORT NAME="xml-apis-xerces"
         MODULE="xml-apis-xerces-2.7.1.jar" REQUIRED="true" />
-      <IMPORT NAME="xsd" MODULE="xsd-2.2.2.jar" REQUIRED="true" />
+      <IMPORT NAME="xsd" MODULE="xsd-2.6.0.jar" REQUIRED="true" />
       <IMPORT NAME="org.talend.sdi" MODULE="org.talend.sdi.jar"
         REQUIRED="true" />
       <IMPORT NAME="dom4j" MODULE="dom4j-1.6.1.jar"
