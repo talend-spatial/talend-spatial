@@ -54,6 +54,8 @@
     String geomColumn_<%=cid %> = "";
     String columnsDef_<%=cid %> = "";
     int nbFeatures_<%=cid %> = 0;
+    int nbErrors_<%=cid %> = 0;
+    String errors_<%=cid %> = "";
     java.util.HashMap<String, double[]> corners_<%=cid %>;
     java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> geoXY_<%=cid %>;
     java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate> latlonXY_<%=cid %>;
@@ -248,17 +250,24 @@
             com.vividsolutions.jts.geom.Coordinate[] geoCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
             org.talend.sdi.geometry.Geometry geo_extent_<%=cid %> = null;
             if (!geoXY_<%=cid %>.isEmpty()) {
-                geoCoords_<%=cid %>[0] = geoXY_<%=cid %>.get("upperLeft");
-                geoCoords_<%=cid %>[1] = geoXY_<%=cid %>.get("lowerLeft");
-                geoCoords_<%=cid %>[2] = geoXY_<%=cid %>.get("lowerRight");
-                geoCoords_<%=cid %>[3] = geoXY_<%=cid %>.get("upperRight");
-                geoCoords_<%=cid %>[4] = geoXY_<%=cid %>.get("upperLeft");
-                
-                geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
-                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
-                if (crs_<%=cid %> != null) {
-                    geo_extent_<%=cid %>.setCRS(crs_<%=cid %>);
-                }
+                try {
+	                geoCoords_<%=cid %>[0] = geoXY_<%=cid %>.get("upperLeft");
+	                geoCoords_<%=cid %>[1] = geoXY_<%=cid %>.get("lowerLeft");
+	                geoCoords_<%=cid %>[2] = geoXY_<%=cid %>.get("lowerRight");
+	                geoCoords_<%=cid %>[3] = geoXY_<%=cid %>.get("upperRight");
+	                geoCoords_<%=cid %>[4] = geoXY_<%=cid %>.get("upperLeft");
+	                
+	                geo_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+	                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(geoCoords_<%=cid %>), null));
+	                if (crs_<%=cid %> != null) {
+	                    geo_extent_<%=cid %>.setCRS(crs_<%=cid %>);
+	                }
+	            } catch (Exception e) {
+	            	nbErrors_<%=cid %> ++;
+	            	errors_<%=cid %> += "\n" + e.getMessage();
+	            	// TODO : catch error
+	                e.printStackTrace();
+	            }
             }
             <%=firstConnName %>.<%=column.getLabel() %> = geo_extent_<%=cid %>;
             
@@ -269,16 +278,24 @@
             // the lat/long extent (Polygon)
             org.talend.sdi.geometry.Geometry latlon_extent_<%=cid %> = null;
             if (!latlonXY_<%=cid %>.isEmpty()) {
-                com.vividsolutions.jts.geom.Coordinate[] latlonCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
-                latlonCoords_<%=cid %>[0] = latlonXY_<%=cid %>.get("upperLeft");
-                latlonCoords_<%=cid %>[1] = latlonXY_<%=cid %>.get("lowerLeft");
-                latlonCoords_<%=cid %>[2] = latlonXY_<%=cid %>.get("lowerRight");
-                latlonCoords_<%=cid %>[3] = latlonXY_<%=cid %>.get("upperRight");
-                latlonCoords_<%=cid %>[4] = latlonXY_<%=cid %>.get("upperLeft");
-                
-                latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
-                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
-                latlon_extent_<%=cid %>.setCRS(org.geotools.referencing.CRS.decode("EPSG:4326"));
+                try {
+	                com.vividsolutions.jts.geom.Coordinate[] latlonCoords_<%=cid %> = new com.vividsolutions.jts.geom.Coordinate[5];
+	                latlonCoords_<%=cid %>[0] = latlonXY_<%=cid %>.get("upperLeft");
+	                latlonCoords_<%=cid %>[1] = latlonXY_<%=cid %>.get("lowerLeft");
+	                latlonCoords_<%=cid %>[2] = latlonXY_<%=cid %>.get("lowerRight");
+	                latlonCoords_<%=cid %>[3] = latlonXY_<%=cid %>.get("upperRight");
+	                latlonCoords_<%=cid %>[4] = latlonXY_<%=cid %>.get("upperLeft");
+	                
+	                latlon_extent_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+	                    (com.vividsolutions.jts.geom.Geometry) gFact_<%=cid %>.createPolygon(gFact_<%=cid %>.createLinearRing(latlonCoords_<%=cid %>), null));
+	                latlon_extent_<%=cid %>.setCRS(org.geotools.referencing.CRS.decode("EPSG:4326"));
+	               
+	            } catch (Exception e) {
+	            	nbErrors_<%=cid %> ++;
+	            	errors_<%=cid %> += "\n" + e.getMessage();
+	            	// TODO : catch error
+	                e.printStackTrace();
+	            }
             }
             
             <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;
