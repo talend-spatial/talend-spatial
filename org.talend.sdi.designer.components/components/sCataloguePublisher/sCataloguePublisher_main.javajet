@@ -17,6 +17,7 @@
     String mef = ElementParameterParser.getValue(node, "__MEF__");
     String servlet = ElementParameterParser.getValue(node, "__SERVLET__");
     String login = ElementParameterParser.getValue(node, "__LOGIN__");
+    String ba = ElementParameterParser.getValue(node, "__BA__");
     String username = ElementParameterParser.getValue(node, "__USERNAME__");
     String password = ElementParameterParser.getValue(node, "__PASSWORD__");
     String groupType = ElementParameterParser.getValue(node, "__GROUP_TYPE__");
@@ -34,12 +35,14 @@ org.talend.sdi.metadata.GeoNetwork cat = new org.talend.sdi.metadata.GeoNetwork 
     {
 %>
 											<%=username %>,
-											<%=password %>
+											<%=password %>,
+											<%=(ba.equals("true") ? true : false) %>
 <%
     } else 	{
 %>
 											null,
-											null
+											null,
+											false
 <% 
     }	
 %>
