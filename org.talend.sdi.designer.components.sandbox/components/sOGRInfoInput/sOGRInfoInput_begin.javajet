@@ -62,8 +62,18 @@
             
     
     // Register all known configured GDAL drivers.
-    org.gdal.ogr.ogr.RegisterAll();
-    
+    try {
+        org.gdal.ogr.ogr.RegisterAll();
+    } catch (java.lang.UnsatisfiedLinkError e) {
+        System.err.println("In order to use GDAL/OGR in Talend, the java.library.path variable should point to GDAL library.");
+        System.err.println("To set this property, go to the Run view > Advanced settings > Use specific JVM Arguments");
+        System.err.println("and add a new argument:");
+        System.err.println("  -Djava.library.path=/path/to/gdal/swig/java");
+        System.err.println("");
+        e.printStackTrace();
+        // Aborting due to wrong GDAL driver configuration
+        throw e;
+    }
     // Open an OGR dataset
     //dataset_<%=cid %> = org.gdal.gdal.gdal.Open(datasetName_<%=cid %>, org.gdal.gdalconst.gdalconstConstants.GA_ReadOnly);
     /* get feature source from store */

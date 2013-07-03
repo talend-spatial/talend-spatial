@@ -39,7 +39,19 @@ String pszFormat_<%=cid %> = "<%=formatType %>";
 String pszDestDataSource_<%=cid %> = <%=filename %>;
 String pszNewLayerName_<%=cid %> = "test"; // TODO : layer name
 
-org.gdal.ogr.ogr.RegisterAll();
+// Register all known configured GDAL drivers.
+try {
+    org.gdal.ogr.ogr.RegisterAll();
+} catch (java.lang.UnsatisfiedLinkError e) {
+    System.err.println("In order to use GDAL/OGR in Talend, the java.library.path variable should point to GDAL library.");
+    System.err.println("To set this property, go to the Run view > Advanced settings > Use specific JVM Arguments");
+    System.err.println("and add a new argument:");
+    System.err.println("  -Djava.library.path=/path/to/gdal/swig/java");
+    System.err.println("");
+    e.printStackTrace();
+    // Aborting due to wrong GDAL driver configuration
+    throw e;
+}
 
 // TODO update mode 
 //org.gdal.ogr.DataSource poODS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDestDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
