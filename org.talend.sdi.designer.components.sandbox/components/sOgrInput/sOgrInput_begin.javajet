@@ -118,8 +118,16 @@ if (bVerbose_<%=cid %>) {
             + "' successful.");
 }
 
-org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
+if (papszLayers_<%=cid %>.equals("")) {
+    System.err.println("Choose a layer to read:");
+    for (int iLayer = 0; iLayer < poDS_<%=cid %>.GetLayerCount(); iLayer++) {
+            org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(iLayer);
+            System.err.println(iLayer + ": " + poLayer_<%=cid %>.GetName());
+    }
+    throw new java.io.IOException("GDAL/OGR: Choose a layer to read from.");
+}
 
+org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
 
 /* Set filters if provided. */
 if (pszWHERE_<%=cid %> != null)
