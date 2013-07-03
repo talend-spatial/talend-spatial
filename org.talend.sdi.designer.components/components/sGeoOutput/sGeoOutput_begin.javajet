@@ -24,7 +24,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String filename = ElementParameterParser.getValue(node, "__FILENAME__"); 
         String geometry = ElementParameterParser.getValue(node,"__GEOMETRY_TYPE__");
         String formatType = ElementParameterParser.getValue(node,"__FORMAT_TYPE__");
-        String gpxType = ElementParameterParser.getValue(node,"__GPX_TYPE__"); 
         String namespace = ElementParameterParser.getValue(node,"__NS_URL__");      
         String dbHost = ElementParameterParser.getValue(node,"__DB_HOST__");
         String dbPort = ElementParameterParser.getValue(node,"__DB_PORT__");
@@ -44,7 +43,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
         String append = ElementParameterParser.getValue(node,"__APPEND__");
         String logLevel = ElementParameterParser.getValue(node,"__LOG_LEVEL__");
-        String mifPrjFile = ElementParameterParser.getValue(node,"__MIFPRJ_FILE__");
 %>
         /* initialize feature count */
         int nbFeature_<%=cid %> = 0;
@@ -71,7 +69,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
                 targetCRS_<%=cid %> = null;
 <%
         /* Projection */
-        // TODO : if GPX CRS = EPSG:4326 
         if (forceCRS.equals("true")) {
 %>        
         try {
@@ -143,19 +140,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String schemaName_<%=cid %> = "talend";
         
 <%
-        } else if (formatType.equals("GPX")) {
-%>
-        
-        /* create GPX data store */
-        java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
-        org.geotools.data.DataStore store_<%=cid %> =
-             new org.geotools.data.gpx.GpxDataStore(
-                    file_<%=cid %>.toURL(), java.net.URI
-                            .create(<%=namespace %>));
-        
-        String schemaName_<%=cid %> = <%=gpxType %>;
-        
-<%
         } else if (formatType.equals("POSTGIS")) {
 %>  
 
@@ -169,8 +153,8 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         params_<%=cid %>.put("schema", <%=dbSchema %>);           //the schema.
         
         /* create PostgisDataStoreFactory */
-        org.geotools.data.postgis.PostgisDataStoreFactory factory_<%=cid %> = 
-            new org.geotools.data.postgis.PostgisDataStoreFactory(); 
+        org.geotools.data.postgis.PostgisNGDataStoreFactory factory_<%=cid %> = 
+            new org.geotools.data.postgis.PostgisNGDataStoreFactory(); 
         
         /* create postgis database store */
         /* org.geotools.data.DataStore store_<%=cid %> = org.geotools.data.DataStoreFinder.getDataStore(params_<%=cid %>); */
@@ -179,21 +163,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         
         String schemaName_<%=cid %> = <%=dbTable %>.toLowerCase();
         
-<%
-        } else if (formatType.equals("MIFMID")) {
-%>
-        org.geotools.data.mif.MIFProjReader prjReader_<%=cid %> = new org.geotools.data.mif.MIFProjReader(<%=mifPrjFile %>);
-        String mifCrs_<%=cid %> = prjReader_<%=cid %>.checkSRID(targetCRS_<%=cid %>);
-        java.util.HashMap mifParams_<%=cid %> = new java.util.HashMap();
-        if (!mifCrs_<%=cid %>.equals("")) {
-            mifParams_<%=cid %>.put(org.geotools.data.mif.MIFDataStore.HCLAUSE_COORDSYS,
-                "earth projection " + mifCrs_<%=cid %>);
-        }
-        java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
-        String schemaName_<%=cid %> = file_<%=cid %>.getName().substring(0, file_<%=cid %>.getName().lastIndexOf("."));
-        org.geotools.data.DataStore store_<%=cid %> =
-            new org.geotools.data.mif.MIFDataStore(file_<%=cid %>.getParent(), mifParams_<%=cid %>);
-
 <%
         }
 %>      
@@ -216,7 +185,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         int sizeColumns = columns.size();
         int colIdx = 0;
         
-        // MIFFile object: Geometry must be the first attribute in schema
+        // Geometry must be the first attribute in schema (in MIF which is not supported anymore)
         for (int i = 0; i < sizeColumns; i++) {
             IMetadataColumn column = columns.get(i);
             JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
@@ -254,8 +223,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
                 break;
             }
         }
-
-        // FIXME : Unable to create MIFFile object: Unsupported attribute type: java.lang.Long
+        
         for (int i = 0; i < sizeColumns; i++) {
             IMetadataColumn column = columns.get(i);
             JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
@@ -297,8 +265,8 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 %>
         /* drop table if it already exists */
         try {
-            org.geotools.data.postgis.PostgisDataStore pgStore =  
-                (org.geotools.data.postgis.PostgisDataStore) store_<%=cid %>;
+            org.geotools.jdbc.JDBCDataStore pgStore =  
+                (org.geotools.jdbc.JDBCDataStore) store_<%=cid %>;
             java.sql.Connection conn = pgStore.getDataSource().getConnection();
             conn.setAutoCommit(true);
             java.sql.Statement statement = conn.createStatement();

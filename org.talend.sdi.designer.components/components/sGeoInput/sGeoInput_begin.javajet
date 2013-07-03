@@ -34,9 +34,6 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
         String dbCol = ElementParameterParser.getValue(node,"__DB_COL__");
         String sourceCRS = ElementParameterParser.getValue(node,"__CRS__");
         String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
-        String edigeoObj = ElementParameterParser.getValue(node,"__EDIGEO_OBJ__");
-        String gpxType = ElementParameterParser.getValue(node,"__GPX_TYPE__"); 
-        String Namespace = ElementParameterParser.getValue(node,"__NS_URL__");      
       
         String cql_filter = ElementParameterParser.getValue(node,"__CQL__");
         String wfs_str = ElementParameterParser.getValue(node,"__WFS_URL__");
@@ -116,24 +113,7 @@ String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0] ;
             }	
 
 <%
-         } else if (formatType.equals("GPX")) {
-%>
-
-/* create GPX store */
-		
-          java.io.File gpx_<%=cid %> = new java.io.File(<%=filename %>);           
-          String typeName_<%=cid %>=null; 
-          org.geotools.data.DataStore store_<%=cid %> = new org.geotools.data.gpx.GpxDataStore(gpx_<%=cid %>.toURI().toURL(), <%=Namespace %>);
-          String[] typeNames_<%=cid %> = store_<%=cid %>.getTypeNames();               
-	         for (int i=0; i< typeNames_<%=cid %>.length; i++) {	          
-			      if (typeNames_<%=cid %>[i].equals(<%=gpxType %>)) 
-				      typeName_<%=cid %> = typeNames_<%=cid %>[i];				                              
-		          }		                                  
-			      if (typeName_<%=cid %>==null) {
-		          	   throw new RuntimeException("Feature not found in gpx entry!");
-		          }
-<%
-        } else if (formatType.equals("POSTGIS")) {
+         } else if (formatType.equals("POSTGIS")) {
 %>
 
 java.util.Map params_<%=cid %> = new java.util.HashMap();
@@ -149,27 +129,6 @@ params_<%=cid %>.put("schema", <%=dbSchema %>);          //the schema.
 org.geotools.data.DataStore store_<%=cid %> = org.geotools.data.DataStoreFinder.getDataStore(params_<%=cid %>);
 
 String typeName_<%=cid %> = <%=dbTable %>;
-
-<%
-        } else  if (formatType.equals("MIFMID")) {
-%>
-
-/* create MIF store */
-java.io.File mifmid_<%=cid %> = new java.io.File(<%=filename %>);
-java.util.HashMap params_<%=cid %> = new java.util.HashMap();
-// note: a MIFDataStore can have a dir in input
-org.geotools.data.DataStore store_<%=cid %> =
-    new org.geotools.data.mif.MIFDataStore(mifmid_<%=cid %>.getPath(), params_<%=cid %>);
-    
-String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0];
-
-<%
-        } else if (formatType.equals("EDIGEO")) {
-%>
-org.geotools.data.edigeo.EdigeoDataStore store_<%=cid %> = 
-	new org.geotools.data.edigeo.EdigeoDataStore(<%=filename %>,<%=edigeoObj %>);
-	
-String typeName_<%=cid %> = store_<%=cid %>.getTypeNames()[0];
 
 <%
 		}

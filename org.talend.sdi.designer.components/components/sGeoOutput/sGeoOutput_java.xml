@@ -27,13 +27,11 @@
       <ITEMS DEFAULT="SHAPEFILE">
         <ITEM NAME="SHAPEFILE" VALUE="SHAPEFILE" />
         <ITEM NAME="POSTGIS" VALUE="POSTGIS" />
-        <ITEM NAME="MIFMID" VALUE="MIFMID" />
-        <ITEM NAME="GPX" VALUE="GPX" />
       </ITEMS>
     </PARAMETER>
     <PARAMETER NAME="FILENAME" FIELD="FILE" NUM_ROW="3" REQUIRED="true"
       REPOSITORY_VALUE="FILE_PATH"
-      SHOW_IF="(FORMAT_TYPE=='SHAPEFILE') or (FORMAT_TYPE == 'MIFMID')">
+      SHOW_IF="(FORMAT_TYPE=='SHAPEFILE')">
       <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/out.shp"</DEFAULT>
     </PARAMETER>
     <PARAMETER NAME="DB_HOST" FIELD="TEXT" NUM_ROW="4" REQUIRED="true"
@@ -97,29 +95,6 @@
     <PARAMETER NAME="CRS" FIELD="TEXT" NUM_ROW="9" REQUIRED="true"
       SHOW_IF="FORCE_CRS == 'true'">
       <DEFAULT>"EPSG:4326"</DEFAULT>
-    </PARAMETER>
-    <PARAMETER NAME="MIFPROJ" FIELD="CHECK" REQUIRED="true" NUM_ROW="9"
-      SHOW_IF="FORMAT_TYPE=='MIFMID'">
-      <DEFAULT>false</DEFAULT>
-    </PARAMETER>
-    <PARAMETER NAME="MIFPRJ_FILE" FIELD="FILE" NUM_ROW="9"
-      REQUIRED="true" SHOW_IF="MIFPROJ == 'true'">
-      <DEFAULT>
-        "__COMP_DEFAULT_FILE_DIR__/.spatial/proj/MAPINFOW.PRJ"
-      </DEFAULT>
-    </PARAMETER>
-    <PARAMETER NAME="NS_URL" FIELD="TEXT" NUM_ROW="5" REQUIRED="true"
-      SHOW_IF="FORMAT_TYPE=='GPX'">
-      <DEFAULT>"http://www.topografix.com/GPX/1/1"</DEFAULT>
-    </PARAMETER>
-    <PARAMETER NAME="GPX_TYPE" FIELD="CLOSED_LIST" REQUIRED="true"
-      NUM_ROW="3">
-      <ITEMS DEFAULT="TYPE_NAME_POINT">
-        <ITEM NAME="TYPE_NAME_POINT"
-          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_POINT" />
-        <ITEM NAME="TYPE_NAME_TRACK"
-          VALUE="org.geotools.data.gpx.GpxDataStore.TYPE_NAME_TRACK" />
-      </ITEMS>
     </PARAMETER>
     <PARAMETER NAME="MD" FIELD="CHECK" REQUIRED="true" NUM_ROW="10">
       <DEFAULT>false</DEFAULT>
@@ -240,7 +215,6 @@
         REQUIRED="true" />
       <IMPORT NAME="gt-metadata" MODULE="gt-metadata-8.5.jar"
         REQUIRED="true" />
-      <!-- <IMPORT NAME="gt-mif" MODULE="gt-mif-8.5.jar" REQUIRED="true" /> -->
       <IMPORT NAME="gt-postgis" MODULE="gt-jdbc-postgis-8.5.jar"
         REQUIRED="true" />
       <IMPORT NAME="gt-referencing" MODULE="gt-referencing-8.5.jar"
