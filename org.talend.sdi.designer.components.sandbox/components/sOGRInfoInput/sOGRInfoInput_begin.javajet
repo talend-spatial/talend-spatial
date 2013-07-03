@@ -23,6 +23,7 @@
         IMetadataTable metadata = metadatas.get(0);
         if (metadata!=null) {
             String filename = ElementParameterParser.getValueWithUIFieldKey(node,"__FILENAME__", "FILENAME");
+            String layer = ElementParameterParser.getValueWithUIFieldKey(node,"__LAYER__", "LAYER");
             String fs = ElementParameterParser.getValueWithUIFieldKey(node,"__FIELD_SEPARATOR__", "FIELD_SEPARATOR");
             
             // TODO Handle OGRInfo Args in advanced params
@@ -94,21 +95,26 @@
         latlonXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(4);
             
         for (int iLayer = 0; iLayer < dataset_<%=cid %>.GetLayerCount(); iLayer++) {
-            //Layer poLayer = poDS.GetLayer(iLayer);
             org.gdal.ogr.Layer poLayer_<%=cid %> = dataset_<%=cid %>.GetLayer(iLayer);
-    
+            String layerName_<%=cid %> = poLayer_<%=cid %>.GetName();
+            
+            // Skip layer if a specific one is requested.
+            if (!<%=layer %>.equals("") && !<%=layer %>.equals(layerName_<%=cid %>))
+                continue;
+            
+            
             if (poLayer_<%=cid %> == null)
             {
                 System.out.println("FAILURE: Couldn't fetch advertised layer " + iLayer + "!");
                 return;
             }
-               org.gdal.ogr.FeatureDefn poDefn_<%=cid %> = poLayer_<%=cid %>.GetLayerDefn();
-        
+            org.gdal.ogr.FeatureDefn poDefn_<%=cid %> = poLayer_<%=cid %>.GetLayerDefn();
+            
             geomType_<%=cid %> = 
                 org.gdal.ogr.ogr.GeometryTypeToName(poDefn_<%=cid %>.GetGeomType());
-        
+            
             nbFeatures_<%=cid %> = poLayer_<%=cid %>.GetFeatureCount();
-    
+            
                
             /* Handle Projection - lat/long transformation */
             /* CRS TODO get EPSG code */
@@ -193,9 +199,6 @@
                         latlonXY_<%=cid %>.put(corner_<%=cid %>, new com.vividsolutions.jts.geom.Coordinate(transPoint_<%=cid %>[0], transPoint_<%=cid %>[1]));
                     }
                 }
-            }
-        }
-    
 <%
             List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
             String firstConnName = "";
@@ -221,7 +224,11 @@
 %>
             <%=firstConnName %>.<%=column.getLabel() %> = datasetName_<%=cid %>;
 <%
-                            } else if (column.getLabel().equals("fid_column")) {
+                            } else if (column.getLabel().equals("layer_name")) {
+%>
+            <%=firstConnName %>.<%=column.getLabel() %> = layerName_<%=cid %>;
+<%
+                            }  else if (column.getLabel().equals("fid_column")) {
 %>
             <%=firstConnName %>.<%=column.getLabel() %> = fidColumn_<%=cid %>; 
 <%
@@ -309,12 +316,10 @@
             }
             
             <%=firstConnName %>.<%=column.getLabel() %> = latlon_extent_<%=cid %>;
-
-<%                             
+<%                          
                             } else if (column.getLabel().equals("bands")) {
 %>
-            
-<%                             
+<%                          
                             }
                             
                         }
