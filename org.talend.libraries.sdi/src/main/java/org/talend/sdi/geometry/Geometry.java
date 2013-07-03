@@ -203,7 +203,6 @@ public class Geometry implements Serializable {
             setSRID(SRID);
             this.EPSG = "EPSG:" + SRID;
         } catch (Exception e) {
-            System.out.println("SRID could not be determined: " + e.getMessage());
             SRID = -1;
         }
     }
