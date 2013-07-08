@@ -17,9 +17,9 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
     IMetadataTable metadata = metadatas.get(0);
     if (metadata!=null) {
 %>
-// Delete current GDAL dataset
-dataset_<%=cid %>.delete();
-
+	// Delete current GDAL dataset
+	dataset_<%=cid %>.delete();
+}
 // Optional
 org.gdal.gdal.gdal.GDALDestroyDriverManager();
 
