@@ -32,6 +32,10 @@
         <COLUMN NAME="way" TYPE="id_Geometry" READONLY="true" CUSTOM="true"/>
       </TABLE>
     </PARAMETER>
+    
+    <PARAMETER NAME="FAILONERROR" FIELD="CHECK" REQUIRED="true" NUM_ROW="4">
+      <DEFAULT>false</DEFAULT>
+    </PARAMETER>
   </PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>

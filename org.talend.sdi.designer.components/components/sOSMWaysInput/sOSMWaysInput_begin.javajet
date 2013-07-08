@@ -21,6 +21,8 @@ INode node = (INode)codeGenArgument.getArgument();
 String cid = node.getUniqueName();
 String file = ElementParameterParser.getValue(node, "__FILENAME__");
 %>
+
+String errors_<%=cid %> = "";
 try {
     java.io.File file_<%=cid %> = 
     	new java.io.File(<%=file %>);
