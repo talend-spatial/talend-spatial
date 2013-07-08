@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -70,7 +72,17 @@ public class GeoNetwork extends Catalogue {
         this.password = password;
         this.useSpringLogin = useSpringLogin;
     }
-
+    
+    public GeoNetwork(String url, String username, String password) throws MalformedURLException {
+        URL server = new URL(url);
+        this.host = server.getHost();
+        this.port = server.getPort();
+        
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.useSpringLogin = true;
+    }
     /** 
      * Return Catalogue type
      *                  
@@ -294,9 +306,14 @@ public class GeoNetwork extends Catalogue {
             
             // --- Post xml metadata element
             String service = serviceName == null ? Service.CSW_PUBLICATION : serviceName;
-            PostMethod req = new PostMethod(
-                    this.host + ":" + this.port + "/" + 
-                    this.servlet + "/srv/en/" + service);
+            String cswUrl = this.url;
+            
+            if (cswUrl.equals("")) {
+                cswUrl = this.host + ":" + this.port + "/" + 
+                    this.servlet + "/srv/en/" + service;
+            }
+            
+            PostMethod req = new PostMethod(cswUrl);
             req.setRequestEntity(new FileRequestEntity(new File(xmlFile), "application/xml"));
             
             /* Check if error on publication */

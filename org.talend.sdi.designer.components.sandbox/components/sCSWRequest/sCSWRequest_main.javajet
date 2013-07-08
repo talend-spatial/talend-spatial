@@ -30,6 +30,8 @@
         }
     }
     
+    boolean useURL = "true".equals(ElementParameterParser.getValue(node, "__BYURL__"));
+    String url  = ElementParameterParser.getValue(node, "__URL__");
     String host  = ElementParameterParser.getValue(node, "__HOST__");
     String port = ElementParameterParser.getValue(node, "__PORT__");
     String file = ElementParameterParser.getValue(node, "__FILE__");
@@ -40,7 +42,7 @@
     String username = ElementParameterParser.getValue(node, "__USERNAME__");
     String password = ElementParameterParser.getValue(node, "__PASSWORD__");  
 
-
+    if (!useURL) {
 %>
 org.talend.sdi.metadata.GeoNetwork cat_<%=cid %> = new org.talend.sdi.metadata.GeoNetwork(<%=host %>, 
     <%=port %>, <%=servlet %>,
@@ -53,9 +55,28 @@ org.talend.sdi.metadata.GeoNetwork cat_<%=cid %> = new org.talend.sdi.metadata.G
 %>
     null, null, false
 <% 
-    }    
+    }
 %>
     );
+<%
+    } else {
+%>
+org.talend.sdi.metadata.GeoNetwork cat_<%=cid %> = new org.talend.sdi.metadata.GeoNetwork(<%=url %>,
+<% 
+    if (login.equals("true")) {
+%>
+    <%=username %>, <%=password %>
+<%
+    } else {
+%>
+    null, null
+<% 
+    }
+%>
+    );
+<%
+    }
+%>
 String response_<%=cid %> = cat_<%=cid %>.postCSW(<%=file %>, <%=servicename %>);
 
 <%

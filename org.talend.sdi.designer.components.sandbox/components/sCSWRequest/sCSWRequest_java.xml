@@ -27,12 +27,28 @@
       </TABLE>
     </PARAMETER>
     <!-- Host information -->
-    <PARAMETER NAME="HOST" FIELD="TEXT" REQUIRED="true" NUM_ROW="5">
+    <!-- Simple URL -->
+    <PARAMETER NAME="BYURL" FIELD="CHECK" REQUIRED="true" NUM_ROW="4">
+      <DEFAULT>true</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="URL" FIELD="TEXT" REQUIRED="true" NUM_ROW="5" SHOW_IF="BYURL == 'true'">
+      <DEFAULT>"http://localhost:8080/geonetwork/srv/eng/csw-publication"</DEFAULT>
+    </PARAMETER>
+    
+    <!-- Or a custom URL (for GeoNetwork 2.8 and lower) -->
+    <PARAMETER NAME="HOST" FIELD="TEXT" REQUIRED="true" NUM_ROW="5" SHOW_IF="BYURL == 'false'">
       <DEFAULT>"http://localhost"</DEFAULT>
     </PARAMETER>
-    <PARAMETER NAME="PORT" FIELD="TEXT" REQUIRED="true" NUM_ROW="5">
+    <PARAMETER NAME="PORT" FIELD="TEXT" REQUIRED="true" NUM_ROW="5" SHOW_IF="BYURL == 'false'">
       <DEFAULT>8080</DEFAULT>
     </PARAMETER>
+    <PARAMETER NAME="SERVLET" FIELD="TEXT" REQUIRED="true" NUM_ROW="6" SHOW_IF="BYURL == 'false'">
+      <DEFAULT>"geonetwork"</DEFAULT>
+    </PARAMETER>
+    <PARAMETER NAME="SERVICENAME" FIELD="TEXT" REQUIRED="true" NUM_ROW="6" SHOW_IF="BYURL == 'false'">
+      <DEFAULT>"csw-publication"</DEFAULT>
+    </PARAMETER>
+    
     <!-- Login information -->
     <PARAMETER NAME="LOGIN" FIELD="CHECK" REQUIRED="true" NUM_ROW="10">
       <DEFAULT>true</DEFAULT>
@@ -48,15 +64,11 @@
       SHOW_IF="LOGIN == 'true'">
       <DEFAULT>"admin"</DEFAULT>
     </PARAMETER>
+    
     <PARAMETER NAME="FILE" FIELD="FILE" REQUIRED="true" NUM_ROW="15">
       <DEFAULT>"__COMP_DEFAULT_FILE_DIR__/csw_request.xml"</DEFAULT>
     </PARAMETER>
-    <PARAMETER NAME="SERVLET" FIELD="TEXT" REQUIRED="true" NUM_ROW="20">
-      <DEFAULT>"geonetwork"</DEFAULT>
-    </PARAMETER>
-    <PARAMETER NAME="SERVICENAME" FIELD="TEXT" REQUIRED="true" NUM_ROW="20">
-      <DEFAULT>"csw-publication"</DEFAULT>
-    </PARAMETER>
+    
   </PARAMETERS>
   <CODEGENERATION>
     <IMPORTS>

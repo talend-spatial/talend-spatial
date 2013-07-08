@@ -22,6 +22,11 @@ import org.dom4j.DocumentHelper;
 public abstract class Catalogue {
 
     /**
+     * URL of the catalogue 
+     */
+    public String url = "";
+    
+    /**
      * Host name or IP adresse of the catalogue 
      */
     public String host;
