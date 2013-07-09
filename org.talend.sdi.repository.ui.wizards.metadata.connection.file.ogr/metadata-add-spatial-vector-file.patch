@@ -1,0 +1,347 @@
+Index: org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/seeker/NormalMetadatasRepositorySeeker.java
+===================================================================
+--- org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/seeker/NormalMetadatasRepositorySeeker.java	(revision 103938)
++++ org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/seeker/NormalMetadatasRepositorySeeker.java	(working copy)
+@@ -38,6 +38,8 @@
+         validationTypes.add(ERepositoryObjectType.METADATA_FILE_FTP);
+         validationTypes.add(ERepositoryObjectType.METADATA_FILE_LDIF);
+         validationTypes.add(ERepositoryObjectType.METADATA_FILE_POSITIONAL);
++        validationTypes.add(ERepositoryObjectType
++                .valueOf("METADATA_SPATIAL_FILE_VECTOR"));
+         validationTypes.add(ERepositoryObjectType.METADATA_FILE_REGEXP);
+         validationTypes.add(ERepositoryObjectType.METADATA_FILE_XML);
+         validationTypes.add(ERepositoryObjectType.METADATA_GENERIC_SCHEMA);
+Index: org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/tester/DIMetadatasNodeTester.java
+===================================================================
+--- org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/tester/DIMetadatasNodeTester.java	(revision 103938)
++++ org.talend.repository.metadata/src/main/java/org/talend/repository/metadata/tester/DIMetadatasNodeTester.java	(working copy)
+@@ -30,6 +30,8 @@
+ 
+     private static final String IS_FILE_DELIMITED = "isFileDelimited"; //$NON-NLS-1$
+ 
++    private static final String IS_SPATIAL_VECTOR_FILE = "isSpatialVectorFile"; //$NON-NLS-1$
++
+     private static final String IS_FILE_POSITIONAL = "isFilePositional"; //$NON-NLS-1$
+ 
+     private static final String IS_FILE_REGEXP = "isFileRegexp"; //$NON-NLS-1$
+@@ -59,6 +61,8 @@
+                 return ERepositoryObjectType.METADATA_FILE_DELIMITED;
+             } else if (IS_FILE_POSITIONAL.equals(property)) {
+                 return ERepositoryObjectType.METADATA_FILE_POSITIONAL;
++            } else if (IS_SPATIAL_VECTOR_FILE.equals(property)) {
++                return ERepositoryObjectType.METADATA_SPATIAL_FILE_VECTOR;
+             } else if (IS_FILE_REGEXP.equals(property)) {
+                 return ERepositoryObjectType.METADATA_FILE_REGEXP;
+             } else if (IS_FILE_XML.equals(property)) {
+Index: org.talend.repository.metadata/plugin.xml
+===================================================================
+--- org.talend.repository.metadata/plugin.xml	(revision 103938)
++++ org.talend.repository.metadata/plugin.xml	(working copy)
+@@ -1084,7 +1084,7 @@
+             class="org.talend.repository.metadata.tester.DIMetadatasNodeTester"
+             id="org.talend.repository.node.tester.metadata"
+             namespace="org.talend.repository.node.metadata"
+-            properties="isDbConnection,isFileDelimited,isFilePositional,isFileRegexp,isFileXML,isFileExcel,isFileLDIF,isLDAP,isSalesforce,isGenericSchema,isMDM,isWebService"
++            properties="isDbConnection,isFileDelimited,isSpatialVectorFile,isFilePositional,isFileRegexp,isFileXML,isFileExcel,isFileLDIF,isLDAP,isSalesforce,isGenericSchema,isMDM,isWebService"
+             type="org.talend.repository.model.RepositoryNode">
+       </propertyTester>
+         <propertyTester
+Index: org.talend.core.runtime/src/main/java/org/talend/core/model/repository/RepositoryNodeProviderRegistryReader.java
+===================================================================
+--- org.talend.core.runtime/src/main/java/org/talend/core/model/repository/RepositoryNodeProviderRegistryReader.java	(revision 103938)
++++ org.talend.core.runtime/src/main/java/org/talend/core/model/repository/RepositoryNodeProviderRegistryReader.java	(working copy)
+@@ -103,6 +103,7 @@
+                 Iterator<ERepositoryObjectType> typesIterator = parentTypes.keySet().iterator();
+                 while (typesIterator.hasNext()) {
+                     ERepositoryObjectType currentType = typesIterator.next();
++                	System.out.println(currentType.getKey());
+                     Set<String> set = parentTypes.get(currentType);
+                     if (set != null) {
+                         Iterator<String> parentIterator = set.iterator();
+@@ -110,6 +111,7 @@
+                             ERepositoryObjectType parentType = ERepositoryObjectType.valueOf(ERepositoryObjectType.class,
+                                     parentIterator.next());
+                             if (parentType != null) {
++                            	System.out.println(" > " + parentType.getKey());
+                                 currentType.setAParent(parentType);
+                             }
+                         }
+Index: org.talend.core.runtime/src/main/java/org/talend/core/model/repository/ERepositoryObjectType.java
+===================================================================
+--- org.talend.core.runtime/src/main/java/org/talend/core/model/repository/ERepositoryObjectType.java	(revision 103938)
++++ org.talend.core.runtime/src/main/java/org/talend/core/model/repository/ERepositoryObjectType.java	(working copy)
+@@ -48,6 +48,7 @@
+ import org.talend.core.model.properties.LinkDocumentationItem;
+ import org.talend.core.model.properties.LinkRulesItem;
+ import org.talend.core.model.properties.MDMConnectionItem;
++import org.talend.core.model.properties.SpatialVectorFileConnectionItem;
+ import org.talend.core.model.properties.PigudfItem;
+ import org.talend.core.model.properties.PositionalFileConnectionItem;
+ import org.talend.core.model.properties.ProcessItem;
+@@ -374,7 +375,10 @@
+ 
+     public final static ERepositoryObjectType METADATA_FILE_POSITIONAL = ERepositoryObjectType
+             .valueOf("METADATA_FILE_POSITIONAL"); //$NON-NLS-1$
+-
++    
++    public final static ERepositoryObjectType METADATA_SPATIAL_FILE_VECTOR = ERepositoryObjectType
++            .valueOf("METADATA_SPATIAL_FILE_VECTOR");
++    
+     public final static ERepositoryObjectType METADATA_FILE_REGEXP = ERepositoryObjectType.valueOf("METADATA_FILE_REGEXP"); //$NON-NLS-1$
+ 
+     public final static ERepositoryObjectType METADATA_FILE_XML = ERepositoryObjectType.valueOf("METADATA_FILE_XML"); //$NON-NLS-1$
+@@ -637,6 +641,8 @@
+             return "fileDelimited"; //$NON-NLS-1$
+         } else if (type == METADATA_FILE_POSITIONAL) {
+             return "filePositional"; //$NON-NLS-1$
++        } else if (type == METADATA_SPATIAL_FILE_VECTOR) {
++            return "spatialVectorFile"; //$NON-NLS-1$
+         } else if (type == METADATA_FILE_REGEXP) {
+             return "fileRegex"; //$NON-NLS-1$
+         } else if (type == METADATA_FILE_XML) {
+@@ -841,6 +847,11 @@
+             }
+ 
+             @Override
++            public Object caseSpatialVectorFileConnectionItem(SpatialVectorFileConnectionItem object) {
++                return METADATA_SPATIAL_FILE_VECTOR;
++            }
++            
++            @Override
+             public Object caseRegExFileConnectionItem(RegExFileConnectionItem object) {
+                 return METADATA_FILE_REGEXP;
+             }
+Index: org.talend.core.repository/src/main/java/org/talend/repository/model/ProjectRepositoryNode.java
+===================================================================
+--- org.talend.core.repository/src/main/java/org/talend/repository/model/ProjectRepositoryNode.java	(revision 103938)
++++ org.talend.core.repository/src/main/java/org/talend/repository/model/ProjectRepositoryNode.java	(working copy)
+@@ -51,6 +51,7 @@
+ import org.talend.core.model.metadata.builder.connection.MDMConnection;
+ import org.talend.core.model.metadata.builder.connection.MetadataColumn;
+ import org.talend.core.model.metadata.builder.connection.MetadataTable;
++import org.talend.core.model.metadata.builder.connection.SpatialVectorFileConnection;
+ import org.talend.core.model.metadata.builder.connection.PositionalFileConnection;
+ import org.talend.core.model.metadata.builder.connection.QueriesConnection;
+ import org.talend.core.model.metadata.builder.connection.Query;
+@@ -1238,7 +1239,7 @@
+                 parent.getChildren().add(node);
+             }
+         }
+-
++        System.out.println(type.getKey());
+         if (type == ERepositoryObjectType.METADATA_CONNECTIONS && isAvaliableInTOS) {
+             DatabaseConnection metadataConnection = (DatabaseConnection) ((ConnectionItem) repositoryObject.getProperty()
+                     .getItem()).getConnection();
+@@ -1259,6 +1260,11 @@
+                     .getProperty().getItem()).getConnection();
+             createTables(recBinNode, node, repositoryObject, metadataConnection);
+         }
++        if (type == ERepositoryObjectType.METADATA_SPATIAL_FILE_VECTOR) {
++            SpatialVectorFileConnection metadataConnection = (SpatialVectorFileConnection) ((ConnectionItem) repositoryObject
++                    .getProperty().getItem()).getConnection();
++            createTables(recBinNode, node, repositoryObject, metadataConnection);
++        }
+         if (type == ERepositoryObjectType.METADATA_FILE_REGEXP) {
+             RegexpFileConnection metadataConnection = (RegexpFileConnection) ((ConnectionItem) repositoryObject.getProperty()
+                     .getItem()).getConnection();
+Index: org.talend.repository/src/main/java/org/talend/repository/imports/TreeBuilder.java
+===================================================================
+--- org.talend.repository/src/main/java/org/talend/repository/imports/TreeBuilder.java	(revision 103938)
++++ org.talend.repository/src/main/java/org/talend/repository/imports/TreeBuilder.java	(working copy)
+@@ -44,6 +44,7 @@
+             ERepositoryObjectType.JOBLET, ERepositoryObjectType.CONTEXT, ERepositoryObjectType.ROUTINES,
+             ERepositoryObjectType.SQLPATTERNS, ERepositoryObjectType.METADATA_CONNECTIONS,
+             ERepositoryObjectType.METADATA_FILE_DELIMITED, ERepositoryObjectType.METADATA_FILE_POSITIONAL,
++            ERepositoryObjectType.METADATA_SPATIAL_FILE_VECTOR,
+             ERepositoryObjectType.METADATA_FILE_REGEXP, ERepositoryObjectType.METADATA_FILE_XML,
+             ERepositoryObjectType.METADATA_FILE_EXCEL, ERepositoryObjectType.METADATA_FILE_LDIF,
+             ERepositoryObjectType.METADATA_LDAP_SCHEMA, ERepositoryObjectType.METADATA_GENERIC_SCHEMA,
+Index: org.talend.repository/src/main/java/org/talend/repository/ui/actions/metadata/DetecteViewImpactAction.java
+===================================================================
+--- org.talend.repository/src/main/java/org/talend/repository/ui/actions/metadata/DetecteViewImpactAction.java	(revision 103938)
++++ org.talend.repository/src/main/java/org/talend/repository/ui/actions/metadata/DetecteViewImpactAction.java	(working copy)
+@@ -133,6 +133,7 @@
+                             || objectType == ERepositoryObjectType.METADATA_CONNECTIONS
+                             || objectType == ERepositoryObjectType.METADATA_FILE_DELIMITED
+                             || objectType == ERepositoryObjectType.METADATA_FILE_POSITIONAL
++                            || objectType == ERepositoryObjectType.METADATA_SPATIAL_FILE_VECTOR
+                             || objectType == ERepositoryObjectType.METADATA_FILE_REGEXP
+                             || objectType == ERepositoryObjectType.METADATA_FILE_XML
+                             || objectType == ERepositoryObjectType.METADATA_FILE_LDIF
+Index: org.talend.model/model/metadata.ecore
+===================================================================
+--- org.talend.model/model/metadata.ecore	(revision 103938)
++++ org.talend.model/model/metadata.ecore	(working copy)
+@@ -1,8 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<ecore:EPackage xmi:version="2.0"
+-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="connection"
+-    nsURI="http://www.talend.org/metadata/connection/2010" nsPrefix="TalendMetadata">
++<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="connection" nsURI="http://www.talend.org/metadata/connection/2010"
++    nsPrefix="TalendMetadata">
+   <eClassifiers xsi:type="ecore:EClass" name="Metadata" eSuperTypes="#//AbstractMetadataObject">
+     <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+         eType="#//Connection" containment="true"/>
+@@ -796,6 +795,10 @@
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+   </eClassifiers>
++  <eClassifiers xsi:type="ecore:EClass" name="SpatialVectorFileConnection" eSuperTypes="#//FileConnection">
++    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LayerName" lowerBound="1"
++        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
++  </eClassifiers>
+   <eSubpackages name="cwm" nsURI="http://www.talend.org/cwm/2010" nsPrefix="cwm">
+     <eSubpackages name="relational" nsURI="http://www.talend.org/cwm/resource/relational/2010"
+         nsPrefix="relational">
+Index: org.talend.model/model/properties.ecore
+===================================================================
+--- org.talend.model/model/properties.ecore	(revision 103938)
++++ org.talend.model/model/properties.ecore	(working copy)
+@@ -1,8 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<ecore:EPackage xmi:version="2.0"
+-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="properties"
+-    nsURI="http://www.talend.org/properties" nsPrefix="TalendProperties">
++<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="properties" nsURI="http://www.talend.org/properties" nsPrefix="TalendProperties">
+   <eClassifiers xsi:type="ecore:EClass" name="Project">
+     <eStructuralFeatures xsi:type="ecore:EReference" name="technicalStatus" upperBound="-1"
+         eType="#//Status" containment="true"/>
+@@ -861,4 +859,5 @@
+     <eLiterals name="noimpact" value="3"/>
+   </eClassifiers>
+   <eClassifiers xsi:type="ecore:EClass" name="PigudfItem" eSuperTypes="#//RoutineItem"/>
++  <eClassifiers xsi:type="ecore:EClass" name="SpatialVectorFileConnectionItem" eSuperTypes="#//ConnectionItem"/>
+ </ecore:EPackage>
+Index: org.talend.model/src/main/java/org/talend/core/model/properties/util/PropertiesSwitch.java
+===================================================================
+--- org.talend.model/src/main/java/org/talend/core/model/properties/util/PropertiesSwitch.java	(revision 103938)
++++ org.talend.model/src/main/java/org/talend/core/model/properties/util/PropertiesSwitch.java	(working copy)
+@@ -1122,7 +1122,9 @@
+     public Object casePositionalFileConnectionItem(PositionalFileConnectionItem object) {
+         return null;
+     }
+-
++    public Object caseSpatialVectorFileConnectionItem(SpatialVectorFileConnectionItem object) {
++        return null;
++    }
+     /**
+      * Returns the result of interpreting the object as an instance of '<em>Reg Ex File Connection Item</em>'. <!--
+      * begin-user-doc --> This implementation returns null; returning a non-null result will terminate the switch. <!--
+Index: org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionFactory.java
+===================================================================
+--- org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionFactory.java	(revision 103938)
++++ org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionFactory.java	(working copy)
+@@ -420,4 +420,6 @@
+      * @return
+      */
+     MetadataColumn copy(MetadataColumn column, String newId);
++
++    SpatialVectorFileConnection createSpatialVectorFileConnection();
+ } // ConnectionFactory
+Index: org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionPackage.java
+===================================================================
+--- org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionPackage.java	(revision 103938)
++++ org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/ConnectionPackage.java	(working copy)
+@@ -17871,6 +17871,11 @@
+      */
+     int LIST = 62;
+ 
++
++    int SPATIAL_VECTOR_FILE_CONNECTION = 63;
++
++    int SPATIAL_VECTOR_FILE_CONNECTION__LAYERNAME = SPATIAL_VECTOR_FILE_CONNECTION + 1;
++    
+     /**
+      * Returns the meta object for class '{@link org.talend.core.model.metadata.builder.connection.Metadata <em>Metadata</em>}'.
+      * <!-- begin-user-doc --> <!-- end-user-doc -->
+Index: org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/impl/ConnectionFactoryImpl.java
+===================================================================
+--- org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/impl/ConnectionFactoryImpl.java	(revision 103938)
++++ org.talend.model/src/main/java/org/talend/core/model/metadata/builder/connection/impl/ConnectionFactoryImpl.java	(working copy)
+@@ -15,21 +15,26 @@
+ import org.eclipse.emf.ecore.EPackage;
+ import org.eclipse.emf.ecore.impl.EFactoryImpl;
+ import org.eclipse.emf.ecore.plugin.EcorePlugin;
+-import org.talend.core.model.metadata.builder.connection.*;
++import org.talend.core.model.metadata.builder.connection.BRMSConnection;
+ import org.talend.core.model.metadata.builder.connection.CDCConnection;
+ import org.talend.core.model.metadata.builder.connection.CDCType;
+ import org.talend.core.model.metadata.builder.connection.Concept;
+ import org.talend.core.model.metadata.builder.connection.ConceptTarget;
++import org.talend.core.model.metadata.builder.connection.ConditionType;
+ import org.talend.core.model.metadata.builder.connection.Connection;
+ import org.talend.core.model.metadata.builder.connection.ConnectionFactory;
+ import org.talend.core.model.metadata.builder.connection.ConnectionPackage;
+ import org.talend.core.model.metadata.builder.connection.DatabaseConnection;
+ import org.talend.core.model.metadata.builder.connection.DelimitedFileConnection;
++import org.talend.core.model.metadata.builder.connection.EDIFACTColumn;
++import org.talend.core.model.metadata.builder.connection.EDIFACTConnection;
+ import org.talend.core.model.metadata.builder.connection.EbcdicConnection;
+ import org.talend.core.model.metadata.builder.connection.Escape;
++import org.talend.core.model.metadata.builder.connection.FTPConnection;
+ import org.talend.core.model.metadata.builder.connection.FieldSeparator;
+ import org.talend.core.model.metadata.builder.connection.FileExcelConnection;
+ import org.talend.core.model.metadata.builder.connection.FileFormat;
++import org.talend.core.model.metadata.builder.connection.Function;
+ import org.talend.core.model.metadata.builder.connection.GenericPackage;
+ import org.talend.core.model.metadata.builder.connection.GenericSchemaConnection;
+ import org.talend.core.model.metadata.builder.connection.HL7Connection;
+@@ -38,26 +43,33 @@
+ import org.talend.core.model.metadata.builder.connection.InputSAPFunctionParameterTable;
+ import org.talend.core.model.metadata.builder.connection.LDAPSchemaConnection;
+ import org.talend.core.model.metadata.builder.connection.LdifFileConnection;
++import org.talend.core.model.metadata.builder.connection.LogicalOperator;
+ import org.talend.core.model.metadata.builder.connection.MDMConnection;
+ import org.talend.core.model.metadata.builder.connection.MDMConnectionProtocol;
++import org.talend.core.model.metadata.builder.connection.MdmConceptType;
+ import org.talend.core.model.metadata.builder.connection.Metadata;
+ import org.talend.core.model.metadata.builder.connection.MetadataColumn;
+ import org.talend.core.model.metadata.builder.connection.MetadataTable;
++import org.talend.core.model.metadata.builder.connection.Operator;
+ import org.talend.core.model.metadata.builder.connection.OutputSAPFunctionParameterTable;
+ import org.talend.core.model.metadata.builder.connection.PositionalFileConnection;
+ import org.talend.core.model.metadata.builder.connection.QueriesConnection;
+ import org.talend.core.model.metadata.builder.connection.Query;
+ import org.talend.core.model.metadata.builder.connection.RegexpFileConnection;
+ import org.talend.core.model.metadata.builder.connection.RowSeparator;
++import org.talend.core.model.metadata.builder.connection.RuleType;
+ import org.talend.core.model.metadata.builder.connection.SAPConnection;
+ import org.talend.core.model.metadata.builder.connection.SAPFunctionParameterColumn;
+ import org.talend.core.model.metadata.builder.connection.SAPFunctionParameterTable;
+ import org.talend.core.model.metadata.builder.connection.SAPFunctionUnit;
+ import org.talend.core.model.metadata.builder.connection.SAPIDocUnit;
+ import org.talend.core.model.metadata.builder.connection.SAPTestInputParameterTable;
++import org.talend.core.model.metadata.builder.connection.SalesforceModuleUnit;
+ import org.talend.core.model.metadata.builder.connection.SalesforceSchemaConnection;
+ import org.talend.core.model.metadata.builder.connection.SchemaTarget;
++import org.talend.core.model.metadata.builder.connection.SpatialVectorFileConnection;
+ import org.talend.core.model.metadata.builder.connection.SubscriberTable;
++import org.talend.core.model.metadata.builder.connection.ValidationRulesConnection;
+ import org.talend.core.model.metadata.builder.connection.WSDLParameter;
+ import org.talend.core.model.metadata.builder.connection.WSDLSchemaConnection;
+ import org.talend.core.model.metadata.builder.connection.XMLFileNode;
+@@ -119,6 +131,8 @@
+             return createMetadataTable();
+         case ConnectionPackage.DELIMITED_FILE_CONNECTION:
+             return createDelimitedFileConnection();
++        case ConnectionPackage.SPATIAL_VECTOR_FILE_CONNECTION:
++            return createSpatialVectorFileConnection();
+         case ConnectionPackage.POSITIONAL_FILE_CONNECTION:
+             return createPositionalFileConnection();
+         case ConnectionPackage.EBCDIC_CONNECTION:
+@@ -330,6 +344,11 @@
+         return delimitedFileConnection;
+     }
+ 
++
++	public SpatialVectorFileConnection createSpatialVectorFileConnection() {
++		SpatialVectorFileConnectionImpl spatialVectorFileConnection = new SpatialVectorFileConnectionImpl();
++		return spatialVectorFileConnection;
++	}
+     /**
+      * <!-- begin-user-doc --> <!-- end-user-doc -->
+      * @generated
