@@ -24,6 +24,8 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
 org.gdal.gdal.gdal.GDALDestroyDriverManager();
 
 globalMap.put("<%=cid %>_NB_LINE", nb_line_<%=cid %>);
+globalMap.put("<%=cid %>_NB_ERRORS", nbErrors_<%=cid %>);
+globalMap.put("<%=cid %>_ERRORS", errors_<%=cid %>);
 <%
     }
 }

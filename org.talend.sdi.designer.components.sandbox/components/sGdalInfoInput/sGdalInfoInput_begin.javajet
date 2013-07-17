@@ -46,10 +46,12 @@
     int epsg_code_<%=cid %> = -1;
     String datasetName_<%=cid %> = <%=filename %>;
     String FS_<%=cid %> = <%=fs %>;
+    int nbErrors_<%=cid %> = 0;
+    String errors_<%=cid %> = "";
     
     // Register all known configured GDAL drivers.
     try {
-        org.gdal.ogr.ogr.RegisterAll();
+        org.gdal.gdal.gdal.AllRegister();
     } catch (java.lang.UnsatisfiedLinkError e) {
         System.err.println("In order to use GDAL/OGR in Talend, the java.library.path variable should point to GDAL library.");
         System.err.println("To set this property, go to the Run view > Advanced settings > Use specific JVM Arguments");
@@ -65,8 +67,16 @@
     dataset_<%=cid %> = org.gdal.gdal.gdal.Open(datasetName_<%=cid %>, org.gdal.gdalconst.gdalconstConstants.GA_ReadOnly);
     
     if (dataset_<%=cid %> == null) {
-        System.err.println("DS null : GDALOpen failed - " + org.gdal.gdal.gdal.GetLastErrorNo());
-        System.err.println(org.gdal.gdal.gdal.GetLastErrorMsg());
+        nbErrors_<%=cid %> ++;
+        errors_<%=cid %> = "FAILURE: " + "Unable to open datasource `"
+                + datasetName_<%=cid %> + "' with the GDAL drivers. "
+                + "Dataset is null : GDALOpen failed - " + org.gdal.gdal.gdal.GetLastErrorNo()
+                + ". " + org.gdal.gdal.gdal.GetLastErrorMsg();
+        System.err.println(errors_<%=cid %>);
+        for (int iDriver = 0; iDriver < org.gdal.gdal.gdal.GetDriverCount(); iDriver++) {
+            System.err.println("  -> " + org.gdal.gdal.gdal.GetDriver(iDriver).getLongName());
+        }
+        System.err.println("Drivers number " +  org.gdal.gdal.gdal.GetDriverCount());
     } else {
         
         // Get current GDAL driver
