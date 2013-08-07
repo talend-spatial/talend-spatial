@@ -86,14 +86,27 @@
         String projection_<%=cid %> = dataset_<%=cid %>.GetProjectionRef();
         if (projection_<%=cid %> != null && projection_<%=cid %>.length() > 0) {
             proj_<%=cid %> = new org.gdal.osr.SpatialReference(projection_<%=cid %>);
-            if (proj_<%=cid %> != null) {
+            if (proj_<%=cid %> == null) {
+                // No projection
+            } else {
                 srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt(0);
                 if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
                     epsg_code_<%=cid %> =  Integer.parseInt(proj_<%=cid %>.GetAuthorityCode(null));
                     try {
                         crs_<%=cid %> = org.geotools.referencing.CRS.decode("EPSG:"+epsg_code_<%=cid %>);
                     } catch (Exception e) {
-                        System.err.println(e.getMessage());
+                        System.err.println("Error trying to identify SRS from EPSG code. Error is: " + e.getMessage() 
+                        + ".");
+                        
+                    }
+                } else {
+                    // use WKT and init GeoTools CRS
+                    try {
+                        if (srs_<%=cid %> != null) {
+                            crs_<%=cid %> = org.geotools.referencing.CRS.parseWKT(srs_<%=cid %>);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error trying to identify SRS from WKT. Error is: " + e.getMessage());
                     }
                 }
                 latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();

@@ -84,9 +84,9 @@
                 + datasetName_<%=cid %> + "' with the OGR drivers.";
         // TODO : report in reject output
         System.err.println(error_<%=cid %>);
-        /*for (int iDriver = 0; iDriver < org.gdal.ogr.ogr.GetDriverCount(); iDriver++) {
+        for (int iDriver = 0; iDriver < org.gdal.ogr.ogr.GetDriverCount(); iDriver++) {
             System.err.println("  -> " + org.gdal.ogr.ogr.GetDriver(iDriver).GetName());
-        }*/
+        }
     } else {
         
         // Get current GDAL driver
@@ -120,25 +120,41 @@
             /* CRS TODO get EPSG code */
             int pszWKT_<%=cid %>;
             proj_<%=cid %> = poLayer_<%=cid %>.GetSpatialRef();
-            if (proj_<%=cid %> == null)
+            if (proj_<%=cid %> == null) {
                 pszWKT_<%=cid %> = -1;
-            else {
+            } else {
+                srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt();
+                
+                // First try: use AutoIdentifyEPSG and init GeoTools CRS
                 try {
+                    // This method inspects a WKT definition, and adds EPSG authority nodes
                     pszWKT_<%=cid %> = proj_<%=cid %>.AutoIdentifyEPSG();
-                    srs_<%=cid %> = proj_<%=cid %>.ExportToPrettyWkt();
                     if ("EPSG".equals(proj_<%=cid %>.GetAuthorityName(null))) {
-                        epsg_code_<%=cid %> =  Integer.parseInt(poLayer_<%=cid %>.GetSpatialRef().GetAuthorityCode(null));
+                        epsg_code_<%=cid %> = Integer.parseInt(poLayer_<%=cid %>.GetSpatialRef().GetAuthorityCode(null));
                         try {
-                            crs_<%=cid %> = org.geotools.referencing.CRS.decode("EPSG:"+epsg_code_<%=cid %>);
+                            crs_<%=cid %> = org.geotools.referencing.CRS.decode("EPSG:" + epsg_code_<%=cid %>);
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
                     }
-                    latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
                 } catch (Exception e) {
-                    System.err.println("Error trying to identify SRS. Error is: " + e.getMessage());
+                    System.err.println("Error trying to identify SRS from EPSG code. Error is: " + e.getMessage() 
+                        + ". Trying with WKT ...");
+                    
+                    // Second try: use WKT and init GeoTools CRS
+                    try {
+                        if (srs_<%=cid %> != null) {
+                            crs_<%=cid %> = org.geotools.referencing.CRS.parseWKT(srs_<%=cid %>);
+                        }
+                    } catch (Exception e2) {
+                        System.err.println("Error trying to identify SRS from WKT. Error is: " + e2.getMessage());
+                    }
+                    
                     pszWKT_<%=cid %> = -1;
                 }
+                
+                
+                latlon_<%=cid %> = proj_<%=cid %>.CloneGeogCS();
             }
             
             
