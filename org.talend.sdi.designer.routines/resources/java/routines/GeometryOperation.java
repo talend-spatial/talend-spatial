@@ -1,7 +1,7 @@
 // ============================================================================
 //
 // Copyright (C) 2007-2008 Camptocamp - www.camptocamp.com
-//				 2006-2010 Talend Inc. - www.talend.com
+//                 2006-2010 Talend Inc. - www.talend.com
 //
 // This source code is available under agreement available at
 // %InstallDIR%\features\org.talend.rcp.branding.%PRODUCTNAME%\%PRODUCTNAME%license.txt
@@ -38,7 +38,7 @@ public class GeometryOperation {
      * 
      */
     public static Double GETLENGTH(Geometry geom) {
-	return geom.getLength();
+    return geom.getLength();
     }
 
     /**
@@ -54,7 +54,7 @@ public class GeometryOperation {
      * 
      */
     public static Double GETAREA(Geometry geom) {
-	return geom.getArea();
+    return geom.getArea();
     }
 
     /**
@@ -70,7 +70,7 @@ public class GeometryOperation {
      * 
      */
     public static int GETNUMPOINTS(Geometry geom) {
-	return geom.getNumPoints();
+    return geom.getNumPoints();
     }
 
     /**
@@ -87,7 +87,7 @@ public class GeometryOperation {
      * 
      */
     public static int GETNUMGEOMETRIES(Geometry geom) {
-	return geom.getNumGeometries();
+    return geom.getNumGeometries();
     }
 
     /**
@@ -103,7 +103,7 @@ public class GeometryOperation {
      * 
      */
     public static String GETGEOMETRYTYPE(Geometry geom) {
-	return geom.getGeometryType();
+    return geom.getGeometryType();
     }
 
     /**
@@ -119,7 +119,49 @@ public class GeometryOperation {
      * 
      */
     public static int GETSRID(Geometry geom) {
-	return geom.getSRID();
+    return geom.getSRID();
+    }
+    
+    /**
+     * PROJ( ) Reproject specified geometry from on CRS to another.
+     * Return null if error.
+     * Does not support Grid transformation (use sProj component).
+     * 
+     * {talendTypes} geometry | Geometry
+     * 
+     * {Category} GeometryOperation
+     * 
+     * {param} Geometry(null)
+     * 
+     * {param} String(null)
+     * 
+     * {param} String(null)
+     * 
+     * {param} boolean(null)
+     * 
+     * {example} PROJ(row.the_geom, "4326", "2154", false)
+     * 
+     */
+    public static Geometry PROJ(Geometry geom, String fromEPSG, String toEPSG, boolean lenient) {
+
+        org.opengis.referencing.crs.CoordinateReferenceSystem sourceCRS = null;
+        org.opengis.referencing.crs.CoordinateReferenceSystem targetCRS = null;
+        org.opengis.referencing.operation.MathTransform transform = null;
+        try {
+            sourceCRS = org.geotools.referencing.CRS.decode(fromEPSG, true);
+            targetCRS = org.geotools.referencing.CRS.decode(toEPSG, true);
+            transform = org.geotools.referencing.CRS.findMathTransform(
+                    sourceCRS, targetCRS, false);
+            org.talend.sdi.geometry.Geometry geomProj = new org.talend.sdi.geometry.Geometry(
+                    org.geotools.geometry.jts.JTS.transform(
+                            geom._getInternalGeometry(), transform));
+
+            geomProj.setCRS(targetCRS);
+            return geomProj;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -137,7 +179,7 @@ public class GeometryOperation {
      * 
      */
     public static boolean EQUALS(Geometry geom1, Geometry geom2) {
-	return geom1.equals(geom2);
+    return geom1.equals(geom2);
     }
 
     /**
@@ -155,7 +197,7 @@ public class GeometryOperation {
      * 
      */
     public static double DISTANCE(Geometry geom1, Geometry geom2) {
-	return geom1.distance(geom2);
+    return geom1.distance(geom2);
     }
 
     /**
@@ -171,7 +213,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETCENTROID(Geometry geom) {
-	return geom.getCentroid();
+    return geom.getCentroid();
     }
 
     /**
@@ -188,7 +230,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETINTERIORPOINT(Geometry geom) {
-	return geom.getInteriorPoint();
+    return geom.getInteriorPoint();
     }
 
     /**
@@ -204,7 +246,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETENVELOPE(Geometry geom) {
-	return geom.getEnvelope();
+    return geom.getEnvelope();
     }
 
     /**
@@ -220,7 +262,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETBOUNDARY(Geometry geom) {
-	return geom.getBoundary();
+    return geom.getBoundary();
     }
 
     /**
@@ -237,7 +279,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETCONVEXHULL(Geometry geom) {
-	return geom.convexHull();
+    return geom.convexHull();
     }
 
     /**
@@ -255,7 +297,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETGEOMETRYN(Geometry geom, int n) {
-	return geom.getGeometryN(n);
+    return geom.getGeometryN(n);
     }
 
     /**
@@ -278,27 +320,27 @@ public class GeometryOperation {
      * 
      */
     public static double GETCOORDINATE(Geometry geom, int n, String xyz) {
-	Coordinate[] coords = geom.getCoordinates();
+    Coordinate[] coords = geom.getCoordinates();
 
-	// return last one
-	if (n == -1)
-	    if (xyz.equalsIgnoreCase("X"))
-		return coords[coords.length - 1].x;
-	    else if (xyz.equalsIgnoreCase("Y"))
-		return coords[coords.length - 1].y;
-	    else
-		return coords[coords.length - 1].z;
+    // return last one
+    if (n == -1)
+        if (xyz.equalsIgnoreCase("X"))
+        return coords[coords.length - 1].x;
+        else if (xyz.equalsIgnoreCase("Y"))
+        return coords[coords.length - 1].y;
+        else
+        return coords[coords.length - 1].z;
 
-	// Not so many points
-	if (n >= coords.length)
-	    return -1;
+    // Not so many points
+    if (n >= coords.length)
+        return -1;
 
-	if (xyz.equalsIgnoreCase("X"))
-	    return coords[n].x;
-	else if (xyz.equalsIgnoreCase("Y"))
-	    return coords[n].y;
-	else
-	    return coords[n].z;
+    if (xyz.equalsIgnoreCase("X"))
+        return coords[n].x;
+    else if (xyz.equalsIgnoreCase("Y"))
+        return coords[n].y;
+    else
+        return coords[n].z;
     }
 
     /**
@@ -319,7 +361,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry SIMPLIFY(Geometry geom, String type, double tolerance) {
-	return geom.simplify(type, tolerance);
+    return geom.simplify(type, tolerance);
     }
 
     /**
@@ -342,19 +384,19 @@ public class GeometryOperation {
      * 
      */
     public static Geometry GETBUFFER(Geometry geom, double d, int quantization,
-	    String endCapStyle) {
-	int ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_BUTT;
+        String endCapStyle) {
+    int ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_BUTT;
 
-	if (endCapStyle != null) {
-	    if (endCapStyle.equals("ROUND"))
-		ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_ROUND;
-	    else if (endCapStyle.equals("SQUARE"))
-		ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_SQUARE;
-	    else if (endCapStyle.equals("FLAT"))
-		ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_FLAT;
-	}
+    if (endCapStyle != null) {
+        if (endCapStyle.equals("ROUND"))
+        ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_ROUND;
+        else if (endCapStyle.equals("SQUARE"))
+        ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_SQUARE;
+        else if (endCapStyle.equals("FLAT"))
+        ecs = com.vividsolutions.jts.operation.buffer.BufferOp.CAP_FLAT;
+    }
 
-	return geom.buffer(d, quantization, ecs);
+    return geom.buffer(d, quantization, ecs);
     }
 
     /**
@@ -372,7 +414,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry INTERSECTION(Geometry geom, Geometry geom1) {
-	return geom.intersection(geom1);
+    return geom.intersection(geom1);
     }
 
     /**
@@ -390,7 +432,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry UNION(Geometry geom, Geometry geom1) {
-	return geom.union(geom1);
+    return geom.union(geom1);
     }
 
     /**
@@ -409,7 +451,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry SYMDIFFERENCE(Geometry geom, Geometry geom1) {
-	return geom.symDifference(geom1);
+    return geom.symDifference(geom1);
     }
 
     /**
@@ -427,7 +469,7 @@ public class GeometryOperation {
      * 
      */
     public static Geometry DIFFERENCE(Geometry geom, Geometry geom1) {
-	return geom.difference(geom1);
+    return geom.difference(geom1);
     }
 
     /**
@@ -443,7 +485,7 @@ public class GeometryOperation {
      * 
      */
     public static String ISVALID(Geometry geom) {
-	return geom.isValid();
+    return geom.isValid();
     }
 
     /**
@@ -459,7 +501,7 @@ public class GeometryOperation {
      * 
      */
     public static String TOWKT(Geometry geom) {
-	return geom.toString();
+    return geom.toString();
     }
 
 }
