@@ -27,6 +27,21 @@ Start from a clean TOS zip and do not start TOS before unzipping spatial plugins
 List of changes
 ---------------
 
+ * Talend spatial module version 5.3.1:
+  * Demo workspace / Use Natural Earth data to easily run sample jobs
+  * Metadata crawler demo workspace / Populate your metadata catalog by scanning folders, services and databases for GIS data
+  * Create generic schema using OGR
+  * sGDALInfo / Do not stop flow on error enhancement components
+  * sCSWRequest / Add URL parameter enhancement components
+  * sOSM* / Add parameter to fail on error or not enhancement components
+  * sOGRInfo / Loop on all layers available enhancement components
+  * sOGRInfoInput / fail creating extent enhancement components
+  * sCatalogPublisher / Basic auth support
+  * sMetadataCreator / Missing jar
+  * sGeo* / MIF and GPX support / Clean unused code enhancement components
+  * Missing library using sSimpleGeomToMulti components
+  * sOgrInput / List datasource layers when not set 
+
  * Talend spatial module version 5.3.0:
   * Add support for TDI 5.3.x series
   * sWfsInput / error 401
