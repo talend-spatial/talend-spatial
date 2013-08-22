@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="rep.actions"
+         name="Actions"
+         point="org.talend.core.repositoryContextualsActions">
+      <Action
+            class="org.talend.sdi.repository.ui.actions.metadata.ogr.CreateSpatialVectorMetadata"
+            id="org.talend.sdi.repository.ui.actions.metadata.ogr.CreateSpatialVectorMetadata"
+            isEditAction="true"
+            isPropertiesAction="false"
+            isReadAction="true"
+            level="100"
+            name="Metadata/Create generic schema from GIS files (using OGR)">
+      </Action>
+   </extension>
+
+</plugin>
