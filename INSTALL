@@ -9,6 +9,27 @@ How-to install Talend Open Studio Spatial module ?
  * Start TOS
 
 
+How-to set-up GDAL/OGR ?
+------------------------
+
+GDAL/OGR library is used to create generic schema from all OGR supported format
+(eg. SHP, MIF, GML, KML, DXF, WFS, ...). For this, GDAL/OGR should be installed 
+on the system (http://www.gdal.org/). 
+
+Once installed, GDAL/OGR and Talend should be configured.
+
+On Windows, configure the following system variables:
+ * GDAL_DATA C:\Program Files\GDAL\gdal-data
+ * GDAL_DRIVER_PATH C:\Program Files\GDAL\gdalplugins
+ * PROJ_LIB C:\Program Files\GDAL\projlib
+
+
+On Linux, modify the ini file matching the TOS executable (eg. TOS_DI-linux-gtk-x86_64.ini 
+for TOS_DI-linux-gtk-x86_64) in order to add GDAL/OGR to the library path using:
+
+-Djava.library.path=/path/to/gdal/swig/java
+
+
 More information
 ----------------
 
@@ -28,6 +49,7 @@ List of changes
 ---------------
 
  * Talend spatial module version 5.3.1:
+  * Create generic schema from any OGR supported format.
   * Demo workspace / Use Natural Earth data to easily run sample jobs
   * Metadata crawler demo workspace / Populate your metadata catalog by scanning folders, services and databases for GIS data
   * Create generic schema using OGR
@@ -67,4 +89,33 @@ List of changes
   * sGdalInfoInput component
   * sOgrInfoInput component
   * Tested on TOS DI 5.1.1 and 5.2.0M3
+
+
+
+
+
+
+F.A.Q
+-----
+
+How-to solve GDAL/OGR exception ?
+
+Exception like java.lang.UnsatisfiedLinkError: org.gdal.gdal.gdalJNI.Dataset_SWIGUpcast(J)J
+	at org.gdal.gdal.gdalJNI.Dataset_SWIGUpcast(Native Method)
+	at org.gdal.gdal.Dataset.<init>(Dataset.java:15)
+	at org.gdal.gdal.gdal.Open(gdal.java:583)
+may occur if the GDAL/OGR library installed is a different version of the one provided
+in Talend Spatial.
+
+Copy your copy of gdal.jar to Talend in:
+ * ./workspace/.Java/lib/gdal.jar
+ * ./lib/java/gdal.jar
+ * ./plugins/org.talend.sdi.repository.ui.actions.metadata.ogr_5.3.1/lib/gdal.jar
+ * ./plugins/org.talend.sdi.designer.components_5.3.1/components/sGdalInfoInput/gdal.jar
+
+
+
+
+
+
 
