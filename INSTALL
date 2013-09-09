@@ -52,7 +52,6 @@ List of changes
   * Create generic schema from any OGR supported format.
   * Demo workspace / Use Natural Earth data to easily run sample jobs
   * Metadata crawler demo workspace / Populate your metadata catalog by scanning folders, services and databases for GIS data
-  * Create generic schema using OGR
   * sGDALInfo / Do not stop flow on error enhancement components
   * sCSWRequest / Add URL parameter enhancement components
   * sOSM* / Add parameter to fail on error or not enhancement components
