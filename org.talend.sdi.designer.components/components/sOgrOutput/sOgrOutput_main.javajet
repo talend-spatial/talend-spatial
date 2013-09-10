@@ -58,7 +58,7 @@ outFeature_<%=cid%>.SetField("<%=column.getLabel()%>", <%=conn.getName() %>.<%=c
                 }
             }
 %>
-outFeature_<%=cid%>.DumpReadable();
+// Dump in human readable form outFeature_<%=cid%>.DumpReadable();
 if(poDstLayer_<%=cid %>.CreateFeature(outFeature_<%=cid%>) != 0) {
     // Failure
 }

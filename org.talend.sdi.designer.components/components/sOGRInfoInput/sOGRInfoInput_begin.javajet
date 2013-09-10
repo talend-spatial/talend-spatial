@@ -94,8 +94,8 @@
         geoXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(4);
         latlonXY_<%=cid %> = new java.util.HashMap<String, com.vividsolutions.jts.geom.Coordinate>(4);
             
-        for (int iLayer = 0; iLayer < dataset_<%=cid %>.GetLayerCount(); iLayer++) {
-            org.gdal.ogr.Layer poLayer_<%=cid %> = dataset_<%=cid %>.GetLayer(iLayer);
+        for (int iLayer_<%=cid %> = 0; iLayer_<%=cid %> < dataset_<%=cid %>.GetLayerCount(); iLayer_<%=cid %>++) {
+            org.gdal.ogr.Layer poLayer_<%=cid %> = dataset_<%=cid %>.GetLayer(iLayer_<%=cid %>);
             String layerName_<%=cid %> = poLayer_<%=cid %>.GetName();
             
             // Skip layer if a specific one is requested.
@@ -105,7 +105,7 @@
             
             if (poLayer_<%=cid %> == null)
             {
-                System.out.println("FAILURE: Couldn't fetch advertised layer " + iLayer + "!");
+                System.out.println("FAILURE: Couldn't fetch advertised layer " + iLayer_<%=cid %> + "!");
                 return;
             }
             org.gdal.ogr.FeatureDefn poDefn_<%=cid %> = poLayer_<%=cid %>.GetLayerDefn();

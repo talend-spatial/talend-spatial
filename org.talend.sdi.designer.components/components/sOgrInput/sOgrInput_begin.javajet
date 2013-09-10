@@ -120,9 +120,9 @@ if (bVerbose_<%=cid %>) {
 
 if (papszLayers_<%=cid %>.equals("")) {
     System.err.println("Choose a layer to read:");
-    for (int iLayer = 0; iLayer < poDS_<%=cid %>.GetLayerCount(); iLayer++) {
-            org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(iLayer);
-            System.err.println(iLayer + ": " + poLayer_<%=cid %>.GetName());
+    for (int iLayer_<%=cid %> = 0; iLayer_<%=cid %> < poDS_<%=cid %>.GetLayerCount(); iLayer_<%=cid %>++) {
+            org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(iLayer_<%=cid %>);
+            System.err.println(iLayer_<%=cid %> + ": " + poLayer_<%=cid %>.GetName());
     }
     throw new java.io.IOException("GDAL/OGR: Choose a layer to read from.");
 }
