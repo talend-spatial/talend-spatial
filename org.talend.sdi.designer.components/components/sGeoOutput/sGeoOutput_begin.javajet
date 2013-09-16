@@ -43,6 +43,7 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         String forceCRS = ElementParameterParser.getValue(node,"__FORCE_CRS__");
         String append = ElementParameterParser.getValue(node,"__APPEND__");
         String logLevel = ElementParameterParser.getValue(node,"__LOG_LEVEL__");
+        String charset = ElementParameterParser.getValue(node,"__CHARSET__");
 %>
         /* initialize feature count */
         int nbFeature_<%=cid %> = 0;
@@ -134,9 +135,23 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         
         /* create shapefile data store */
         java.io.File file_<%=cid %> = new java.io.File(<%=filename %>);
-        org.geotools.data.DataStore store_<%=cid %> =
+
+<%
+            /* DBF Charset */
+            if (charset.equals("\"\"")) {
+%>      
+         org.geotools.data.DataStore store_<%=cid %> =
             new org.geotools.data.shapefile.ShapefileDataStore(file_<%=cid %>.toURL());
-        
+<%
+            } else {
+%>
+        java.nio.charset.Charset cs_<%=cid %> = java.nio.charset.Charset.forName(<%=charset %>); 
+       
+        org.geotools.data.DataStore store_<%=cid %> =
+            new org.geotools.data.shapefile.ShapefileDataStore(file_<%=cid %>.toURL(), false, cs_<%=cid %>);
+<%
+            }
+%>
         String schemaName_<%=cid %> = "talend";
         
 <%
