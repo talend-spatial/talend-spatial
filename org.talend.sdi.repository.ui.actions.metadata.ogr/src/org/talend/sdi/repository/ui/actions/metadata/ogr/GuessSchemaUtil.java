@@ -57,7 +57,6 @@ public class GuessSchemaUtil {
 					if (poLayer.GetFIDColumn().length() > 0) {
 						fidColumn = poLayer.GetFIDColumn();
 					}
-
 					int colIdx = 0;
 					if (poLayer.GetGeometryColumn().length() > 0) {
 						geomColumn = poLayer.GetGeometryColumn();
@@ -66,6 +65,13 @@ public class GuessSchemaUtil {
 						metadataColumn.setName(geomColumn);
 						metadataColumn.setTalendType("id_Geometry");
 						metadataColumn.setLabel(geomColumn);
+						columns.add(colIdx++, metadataColumn);
+					} else if (poLayer.GetGeomType() != org.gdal.ogr.ogrConstants.wkbNone) {
+						MetadataColumn metadataColumn = ConnectionFactory.eINSTANCE
+								.createMetadataColumn();
+						metadataColumn.setName("the_geom");
+						metadataColumn.setTalendType("id_Geometry");
+						metadataColumn.setLabel("the_geom");
 						columns.add(colIdx++, metadataColumn);
 					}
 

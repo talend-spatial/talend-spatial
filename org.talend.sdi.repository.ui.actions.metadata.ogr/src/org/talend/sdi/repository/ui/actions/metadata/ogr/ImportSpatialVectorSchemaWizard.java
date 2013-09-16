@@ -340,7 +340,6 @@ public class ImportSpatialVectorSchemaWizard extends RepositoryWizard implements
 
 		private List<String> getOGRDatasourceLayer(String source)
 				throws IOException {
-			System.out.println("OGR datasource: " + source);
 			try {
 				org.gdal.ogr.ogr.RegisterAll();
 			} catch (java.lang.UnsatisfiedLinkError e) {
