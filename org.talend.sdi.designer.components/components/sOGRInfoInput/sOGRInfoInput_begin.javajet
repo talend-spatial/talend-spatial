@@ -215,6 +215,7 @@
                         latlonXY_<%=cid %>.put(corner_<%=cid %>, new com.vividsolutions.jts.geom.Coordinate(transPoint_<%=cid %>[0], transPoint_<%=cid %>[1]));
                     }
                 }
+            }
 <%
             List< ? extends IConnection> conns = node.getOutgoingSortedConnections();
             String firstConnName = "";

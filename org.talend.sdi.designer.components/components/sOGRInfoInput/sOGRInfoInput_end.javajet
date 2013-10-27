@@ -18,7 +18,6 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
     if (metadata!=null) {
 %>
     nb_line_<%=cid %> ++;
-            }
         }
 }
 // Delete current dataset
