@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Talend Spatial components Plug-in
 Bundle-SymbolicName: org.talend.sdi.designer.components;singleton:=true
-Bundle-Version: 5.3.1
+Bundle-Version: 5.4.0
 Bundle-Localization: plugin
 Bundle-Activator: org.talend.sdi.designer.components.Plugin
 Bundle-Vendor: Camptocamp, Neogeo technologies, titellus
