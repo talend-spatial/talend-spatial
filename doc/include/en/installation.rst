@@ -80,16 +80,16 @@ System setup
   In the windows you have a button called "Environments variables ..." (bottom). 
   Add the following pathes:
 
-  * **GDAL_DATA** with value C:\Program Files\GDAL\gdal-data
-  * **GDAL_DRIVER_PATH** with value C:\Program Files\GDAL\gdalplugins
-  * **PROJ_LIB** with value *C:\Program Files\GDAL\projlib*
+  * **GDAL_DATA** with value C:\\Program Files\\GDAL\\gdal-data
+  * **GDAL_DRIVER_PATH** with value C:\\Program Files\\GDAL\\gdalplugins
+  * **PROJ_LIB** with value *C:\\Program Files\\GDAL\\projlib*
 
   Finally add this two pathes to *path* variable:
 
-  * C:\Program Files\GDAL\java
-  * C:\Program Files\GDAL
+  * C:\\Program Files\\GDAL\\java
+  * C:\\Program Files\\GDAL
 
-  You should have something like this: *PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\;C:\Program Files\GDAL\java;C:\Program Files\GDAL*
+  You should have something like this: *PATH=%SystemRoot%\\system32;%SystemRoot%;%SystemRoot%\\System32\\Wbem;%SYSTEMROOT%\\System32\\WindowsPowerShell\\v1.0\\;C:\\Program Files\\GDAL\\java;C:\\Program Files\\GDAL*
 
 * Linux system setup
 
