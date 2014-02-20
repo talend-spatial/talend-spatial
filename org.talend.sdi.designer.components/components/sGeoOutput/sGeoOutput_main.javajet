@@ -33,12 +33,14 @@ if ((metadatas!=null)&&(metadatas.size()>0)) {
         List< ? extends IConnection> conns = node.getIncomingConnections();
         for (IConnection conn : conns) {
             if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN)) || (conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
-            
 %>
-if(writer_<%=cid%>.hasNext()){
-org.opengis.feature.simple.SimpleFeature outFeature_<%=cid%> = writer_<%=cid%>.next();                  
-}
+	if(writer_<%=cid%>.hasNext()){
+//		System.out.println("hasNext was needed?");
+	}else{
+//		System.out.println("ok with the hasNext");
+	}
 
+org.opengis.feature.simple.SimpleFeature outFeature_<%=cid%> = writer_<%=cid%>.next();                  
 <%  
                 for (IMetadataColumn column : metadata.getListColumns()) {
                     String typeToGenerate = JavaTypesManager.getTypeToGenerate(column.getTalendType(), column.isNullable());
