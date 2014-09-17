@@ -23,7 +23,7 @@
   <PARAMETERS>
     <PARAMETER NAME="SCHEMA" FIELD="SCHEMA_TYPE" REQUIRED="true"
       NUM_ROW="1">
-      <TABLE READONLY="true">
+      <TABLE READONLY="false">
         <COLUMN NAME="length" TYPE="id_Double" READONLY="true"
           CUSTOM="true" />
       </TABLE>
