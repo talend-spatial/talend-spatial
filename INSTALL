@@ -48,6 +48,9 @@ Start from a clean TOS zip and do not start TOS before unzipping spatial plugins
 List of changes
 ---------------
 
+ * Talend spatial module version 5.4.1:
+  * Projection issue on MN03 #62
+  
  * Talend spatial module version 5.4.0:
   * sOgrInfo / Do not skip layer when latlon bbox is empty
   * OGR / Generic schema / Missing geometry column (#50)
