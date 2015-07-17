@@ -5,6 +5,7 @@
         org.talend.core.model.metadata.IMetadataTable 
         org.talend.core.model.metadata.IMetadataColumn 
         org.talend.core.model.process.IConnection
+        org.talend.core.model.process.IConnectionCategory
         org.talend.core.model.process.EConnectionType
         org.talend.designer.codegen.config.CodeGeneratorArgument
         java.util.List 
@@ -163,11 +164,15 @@ while ((poFeature_<%=cid %> = poLayer_<%=cid %>.GetNextFeature()) != null) {
         String firstConnName = "";
         if (conns!=null) {
             if (conns.size()>0) {
+
+                java.util.Set<String> listOfUniqueConnection = new java.util.HashSet<String>();
                 for (int i = 0; i < conns.size(); i++) {
                     IConnection conn = conns.get(i);
                     firstConnName = conn.getName();
+                    listOfUniqueConnection.add(firstConnName);
+
         
-                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF))) {
+                    if ((conn.getLineStyle().equals(EConnectionType.FLOW_MAIN))||(conn.getLineStyle().equals(EConnectionType.FLOW_REF)) && !listOfUniqueConnection.contains(firstConnName)) {
                         List<IMetadataColumn> listColumns = metadata.getListColumns();
                         int sizeListColumns = listColumns.size();
                         for (int valueN = 0; valueN < sizeListColumns; valueN++) {
