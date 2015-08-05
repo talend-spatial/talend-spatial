@@ -233,6 +233,8 @@
         REQUIRED="true" />
       <IMPORT NAME="xml-apis-xerces" MODULE="xml-apis-xerces-2.7.1.jar"
         REQUIRED="true" />
+      <IMPORT NAME="xpp3_min" MODULE="xpp3_min-1.1.4c.jar"
+        REQUIRED="true" />
       <IMPORT NAME="xsd" MODULE="xsd-2.6.0.jar" REQUIRED="true" />
       <IMPORT NAME="jai-codec" MODULE="jai_codec-1.1.3.jar" REQUIRED="true" />
       <IMPORT NAME="jai-core" MODULE="jai_core-1.1.3.jar" REQUIRED="true" />
