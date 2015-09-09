@@ -64,7 +64,7 @@
     <elementParameter field="CHECK" name="START" value="true"/>
     <elementParameter field="CLOSED_LIST" name="PROTO" value="http"/>
     <elementParameter field="CHECK" name="POST" value="false"/>
-    <elementParameter field="TEXT" name="URI" value="&quot;http://spatialdataintegrator.org/download/geodata.zip&quot;"/>
+    <elementParameter field="TEXT" name="URI" value="&quot;https://github.com/talend-spatial/talend-spatial/raw/6.x/workspaces/SdiDemoGeoData.tar.gz&quot;"/>
     <elementParameter field="CHECK" name="USE_CACHE" value="false"/>
     <elementParameter field="TEXT" name="SMB_URI" value="&quot;smb://host/dir/remoteFileName.txt&quot;"/>
     <elementParameter field="DIRECTORY" name="DIRECTORY" value="context.DirGeoData"/>
