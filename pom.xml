@@ -35,6 +35,7 @@
 	<modules>
 		<module>main/plugins/org.talend.libraries.sdi</module>
 		<module>main/plugins/org.talend.sdi.designer.components</module>
+		<module>main/plugins/org.talend.sdi.designer.components.sandbox</module>
 		<module>main/plugins/org.talend.sdi.designer.routines</module>
 		<module>main/plugins/org.talend.sdi.repository.ui.actions.metadata</module>
 		<module>main/plugins/org.talend.sdi.repository.ui.actions.metadata.ogr</module>

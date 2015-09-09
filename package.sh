@@ -12,6 +12,7 @@ cp README.md target/TOS-Spatial-$1/.
 mkdir target/TOS-Spatial-$1/plugins
 cp main/plugins/org.talend.libraries.sdi/target/org.talend.libraries.sdi-6.0.1.jar target/TOS-Spatial-$1/plugins/.
 cp main/plugins/org.talend.sdi.designer.components/target/org.talend.sdi.designer.components-6.0.1.jar target/TOS-Spatial-$1/plugins/.
+cp main/plugins/org.talend.sdi.designer.components.sandbox/target/org.talend.sdi.designer.components.sandbox-6.0.1.jar target/TOS-Spatial-$1/plugins/.
 cp main/plugins/org.talend.sdi.designer.routines/target/org.talend.sdi.designer.routines-6.0.1.jar target/TOS-Spatial-$1/plugins/.
 cp main/plugins/org.talend.sdi.repository.ui.actions.metadata/target/org.talend.sdi.repository.ui.actions.metadata-6.0.1.jar target/TOS-Spatial-$1/plugins/.
 cp main/plugins/org.talend.sdi.repository.ui.actions.metadata.ogr/target/org.talend.sdi.repository.ui.actions.metadata.ogr-6.0.1.jar target/TOS-Spatial-$1/plugins/.
