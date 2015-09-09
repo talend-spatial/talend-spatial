@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Processing history:
+	May 2 2002  by Aleta Vienneau (ESRI)
+		- Renamed root element to be "metadata" rather than "Metadata". Metadata with the lower-case 
+		   "m" has been used by ArcCatalog since 1999, and is now inherent in our community.
+		- Added GeoBndBox in GeoExtentTypes; otherwise, you can't use a rectangle to describe 
+		   SpatialTemporal, source, and scope extents, and you can't define additional spatial extents,
+		   which is required for searching in ArcCatalog with a projected basemap. 
+		- Added optional attribute esriExtentType with value "native" to GeoBndBox for identifying
+		   projected extents. When present, the coordinate values will not fall within -180 < x < 180 and 
+		   -90 < y < 90. This attribute should only be used when GeoBndBox is a subelement of dataExt. 
+		- The value element no longer requires subelement Integer, Decimal, or Real; was previously 
+		   removed from all other elements where this occurred.
+		- Removed distTranOps subelement from Distrib. Previously distFormat was removed to eliminate 
+		   ambiguity; similarly, transfer options are only appropriate if there is a distributor from which to 
+		   get the resource.
+		- Elements contained by DataIdent, DataQual, ConstsTypes, and Extent entities were reordered 
+		   to match the order in which elements are listed in the data dictionary.
+		- Had to move some entity declaractions around. IE 6, which uses stricter validation rules, couldn't 
+		   open the DTD because parameter entities must be declared before they can be used. 
+		   	- Moved Measure and Distance entities and value and uom elements after the declarations for 
+		   	   units of measure because they refer to the UnitsOfMeasureTypes entity. 
+		   	- Moved Integer, Decimal, and Real entities before those elements. 
+		   	- Moved LocalName, TypedName, ScopedName, and MemberName entities before those elements. 
+		   	- Moved part IV after part V because datumID references the RS_Identifier entity.
+		 - Outstanding issues with this DTD: 
+		 	- GM_Point is not included in GM_ObjectTypes, which means there is no way to define centerPt, 
+		 	   etc. in GridSpatRep, Georect, and Georef.
+		 	- Under dataLineage there is the possibility for circular references between processing steps 
+		 	   and source information.
+		 	- Temporal entities derived from 19108 define too many useless levels of hierarchy within the XML.
+		   
+	Nov 9 2001  by Aleta Vienneau (ESRI)
+		- fixed typos in entity and element names, and in languageCode values
+		- changed attribute lists to code values instead of text values to support internationalization
+		- added missing element in entity definition for GeoBndBox: exTypeCode
+
+	Jul 26 2001  by Shawn Silkensen (Lockheed Martin)
+		ISO 19118 Encoding DTD - Automatically produced  with XML Spy v4.0 beta 2
+		XSL Processor: Microsoft  version 1 
+		XSLT script  : CFG2DTD.xsl 
+ -->
+<!-- -->
+<!-- PART 1 - CSL DECLARATIONS-->
+<!--The following elements and entites have been taken from the Conceptual Schema Language (19103) DTD. They do not make up that DTD in its entirety, and are placed here for ease of use of this DTD-->
+<!ENTITY % CharacterString '(#PCDATA)'>
+<!ENTITY % Date '(#PCDATA)'>
+<!--Formatted as - CCYYMMDD-->
+<!ENTITY % DateTime '(#PCDATA)'>
+<!--Formatted as - CCYYMMDDTHHMMSS-->
+<!ENTITY % Time '(#PCDATA)'>
+<!--Formatted as - THHMMSS-->
+<!ENTITY % Boolean '(#PCDATA)'>
+<!ENTITY % Record '(#PCDATA)'>
+<!ENTITY % RecordType '(#PCDATA)'>
+<!ENTITY % Binary '(#PCDATA)'>
+<!ENTITY % NumberTypes '(Integer | Decimal | Real )'>
+<!ENTITY % Decimal '(#PCDATA)'>
+<!ENTITY % Real '(#PCDATA)'>
+<!ENTITY % Integer '(#PCDATA)'>
+<!ELEMENT Integer %Integer;>
+<!ELEMENT Decimal %Decimal;>
+<!ELEMENT Real %Real;>
+<!ENTITY % GenericNameTypes '(TypeName | LocalName | ScopedName | MemberName )'>
+<!ENTITY % LocalName '(scope)'>
+<!ENTITY % TypeName '(scope, aName)'>
+<!ENTITY % ScopedName '(scope)'>
+<!ENTITY % MemberName '(scope, aName, attributeType)'>
+<!ELEMENT TypeName %TypeName;>
+<!ELEMENT LocalName %LocalName;>
+<!ELEMENT ScopedName %ScopedName;>
+<!ELEMENT MemberName %MemberName;>
+<!ELEMENT scope (#PCDATA)>
+<!--"scope" is the name of the namespace-->
+<!ELEMENT aName (#PCDATA)>
+<!ELEMENT attributeType %TypeName;>
+<!ENTITY % UnitOfMeasureTypes '(UomArea | UomTime | UomLength | UomVolume | UomVelocity | UomAngle | UomScale )'>
+<!ENTITY % UomLength '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomAngle '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomScale '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomTime '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomArea '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomVolume '(uomName, conversionToISOstandardUnit)'>
+<!ENTITY % UomVelocity '(uomName, conversionToISOstandardUnit)'>
+<!ELEMENT UomLength %UomLength;>
+<!ELEMENT UomAngle %UomAngle;>
+<!ELEMENT UomScale %UomScale;>
+<!ELEMENT UomTime %UomTime;>
+<!ELEMENT UomArea %UomArea;>
+<!ELEMENT UomVolume %UomVolume;>
+<!ELEMENT UomVelocity %UomVelocity;>
+<!ELEMENT uomName (#PCDATA)>
+<!ELEMENT conversionToISOstandardUnit %Real;>
+<!ENTITY % Measure '(value, uom)'>
+<!ENTITY % Distance '(value, uom)'>
+<!ELEMENT value (#PCDATA)>
+<!ELEMENT uom %UnitOfMeasureTypes;>
+<!--PART 2 : SPATIAL DECLARATIONS-->
+<!--The following elements and entites have been taken from the Spatial Schema (19107) DTD. They do not make up that DTD in its entirety, and are placed here for ease of use of this DTD-->
+<!ENTITY % GM_ObjectTypes '(GM_Polygon)'>
+<!ENTITY % GM_Polygon '(MdCoRefSys?, coordinates)'>
+<!ENTITY % GM_Point '(MdCoRefSys?, coordinates)'>
+<!ELEMENT coordinates (#PCDATA)>
+<!ATTLIST coordinates
+	tupleSep (space | comma | period) "space"
+	coordSep (space | comma | period) "comma"
+	decimalChar (period | comma) "period"
+	dimension (2 | 3) "2"
+	precision (single | double) "single"
+>
+<!ELEMENT GM_Polygon %GM_Polygon;>
+<!ELEMENT GM_Point %GM_Point;>
+<!--PART 3: TEMPORAL DECLARATIONS-->
+<!--The following elements and entites have been taken from the Temporal (19108) DTD. They do not make up that DTD in its entirety, and are placed here for ease of use of this DTD-->
+<!ENTITY % TM_PeriodDuration '(designator, years?, months?, days?, timeIndicator?, hours?, minutes?, seconds?)'>
+<!ELEMENT designator (#PCDATA)>
+<!ELEMENT years (#PCDATA)>
+<!ELEMENT months (#PCDATA)>
+<!ELEMENT days (#PCDATA)>
+<!ELEMENT timeIndicator (#PCDATA)>
+<!ELEMENT hours (#PCDATA)>
+<!ELEMENT minutes (#PCDATA)>
+<!ELEMENT seconds (#PCDATA)>
+<!ENTITY % TM_Primitive '(TM_GeometricPrimitive)'>
+<!ENTITY % TM_GeometricPrimitive '(TM_Instant | TM_Period)'>
+<!ENTITY % TM_Instant '(tmPosition)'>
+<!ENTITY % TM_Period '(begin, end)'>
+<!ENTITY % TM_PositionTypes '(TM_DateAndTime | TM_CalDate | TM_ClockTime)'>
+<!ENTITY % TM_DateAndTime '(calDate, clkTime)'>
+<!ENTITY % TM_CalDate '(calDate)'>
+<!--For TM_CalDate, Gregorian calendar is assumed to be used-->
+<!ENTITY % TM_ClockTime '(clkTime)'>
+<!ELEMENT TM_CalDate %TM_CalDate;>
+<!ELEMENT TM_ClockTime %TM_ClockTime;>
+<!ELEMENT TM_DateAndTime %TM_DateAndTime;>
+<!ELEMENT TM_GeometricPrimitive %TM_GeometricPrimitive;>
+<!ELEMENT TM_Instant %TM_Instant;>
+<!ELEMENT TM_Period %TM_Period;>
+<!ELEMENT tmPosition %TM_PositionTypes;>
+<!ELEMENT calDate %Date;>
+<!ELEMENT clkTime %Time;>
+<!ELEMENT begin %DateTime;>
+<!ELEMENT end %DateTime;>
+<!-- PART 5 - TYPE ENTITY DECLARATIONS -->
+<!--Metadata Entity-->
+<!ENTITY % Metadata '(mdFileID?, mdLang?, mdChar?, mdParentID?, mdHrLv*, mdHrLvName*, mdContact, mdDateSt, mdStanName?, mdStanVer?, distInfo?, dataIdInfo+, appSchInfo*, porCatInfo*, mdMaint?, mdConst*, dqInfo*, spatRepInfo*, refSysInfo*, contInfo*, mdExtInfo*)'>
+<!-- Identification Entities -->
+<!ENTITY % DataIdent '(idCitation, idAbs, idPurp?, idCredit*, idStatus*, idPoC*, resMaint*, graphOver*, dsFormat*, descKeys*, idSpecUse*, resConst*, spatRpType*, dataScale*, dataLang+, dataChar?, tpCat+, geoBox*, geoDesc*, envirDesc?, dataExt*, suppInfo?)'>
+<!ENTITY % BrowGraph '(bgFileName, bgFileDesc?, bgFileType?)'>
+<!ENTITY % RepFract '(rfDenom)'>
+<!ENTITY % Resol '(equScale | scaleDist)'>
+<!ENTITY % Usage '(specUsage, usageDate?, usrDetLim?, usrCntInfo+)'>
+<!ENTITY % Keywords '(keyword+, keyTyp?, thesaName?)'>
+<!-- Constraint Entities -->
+<!ENTITY % ConstsTypes '(Consts | LegConsts | SecConsts)'>
+<!ENTITY % Consts '(useLimit*)'>
+<!ENTITY % LegConsts '(useLimit*, accessConsts*, useConsts*, othConsts*)'>
+<!ENTITY % SecConsts '(useLimit*, class, userNote?, classSys?, handDesc?)'>
+<!-- Data Quality Entities -->
+<!ENTITY % PrcessStep '(stepDesc, stepRat?, stepDateTm?, stepProc*, stepSrc*)'>
+<!ENTITY % Source '(srcDesc?, srcScale?, srcRefSys?, srcCitatn?, srcExt*, srcStep*)'>
+<!ENTITY % Lineage '(statement?, dataSource*, prcStep*)'>
+<!ENTITY % ResultTypes '(ConResult | QuanResult | Result )'>
+<!ENTITY % ConResult '(conSpec, conExpl, conPass)'>
+<!ENTITY % QuanResult '(quanValType?, quanValUnit?, errStat?, quanVal+)'>
+<!ENTITY % Result '(#PCDATA)'>
+<!ENTITY % DQElementTypes '(DQRelIntPosAcc | DQQuanAttAcc | DQDomConsis | DQGridDataPosAcc | DQTempValid | DQAbsExtPosAcc | DQConcConsis | DQCompComm | DQFormConsis | DQTopConsis | DQAccTimeMeas | DQNonQuanAttAcc | DQThemClassCor | DQCompOm | DQTempConsis )'>
+<!ENTITY % DQTempValid '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQTempConsis '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQAccTimeMeas '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQQuanAttAcc '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQNonQuanAttAcc '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQThemClassCor '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQRelIntPosAcc '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQGridDataPosAcc '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQAbsExtPosAcc '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQTopConsis '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQFormConsis '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQDomConsis '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQConcConsis '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQCompOm '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DQCompComm '(measName*, measId?, measDesc?, evalMethType?, evalMethDesc?, evalProc?, measDateTm?, measResult+)'>
+<!ENTITY % DataQual '(dqScope, dqReport*, dataLineage?)'>
+<!ENTITY % DQScope '(scpLvl+, scpExt?, scpLvlDesc*)'>
+<!-- Maintenance Entities -->
+<!ENTITY % MaintInfo '(maintFreq, dateNext?, usrDefFreq?, maintScp*, upScpDesc*, maintNote*)'>
+<!ENTITY % ScpDesc '(attribSet | featSet | featIntSet | attribIntSet | datasetSet | other)'>
+<!-- Spatial Representation Entities -->
+<!ENTITY % SpatRepTypes '(Georect | GridSpatRep | Georef | VectSpatRep )'>
+<!ENTITY % GridSpatRep '(numDims, axDimProps, cellGeo, tranParaAv)'>
+<!ENTITY % VectSpatRep '(topLvl?, geometObjs*)'>
+<!ENTITY % Georef '(numDims, axDimProps, cellGeo, tranParaAv, ctrlPtAv, orieParaAv, orieParaDs?, georefPars, paraCit*)'>
+<!ENTITY % Dimen '(dimName, dimSize, dimResol?)'>
+<!ENTITY % Georect '(numDims, axDimProps, cellGeo, tranParaAv, chkPtAv, chkPtDesc?, cornerPts, centerPt?, ptInPixel, transDimDesc?, transDimMap*)'>
+<!ENTITY % GeometObjs '(geoObjTyp, geoObjCnt?)'>
+<!-- Reference System Entities -->
+<!ENTITY % RefSystemTypes '(RefSystem | MdCoRefSys )'>
+<!ENTITY % RefSystem '(refSysID?)'>
+<!ENTITY % MdCoRefSys '(refSysID?, projection?, ellipsoid?, datum?, projParas?, ellParas?)'>
+<!ENTITY % ProjParas '(zone?, stanParal*, longCntMer?, latProjOri?, falEastng?, falNorthng?, falENUnits?, sclFacEqu?, hgtProsPt?, longProjCnt?, latProjCnt?, sclFacCnt?, stVrLongPl?, sclFacPrOr?, obLnAziPars?, obLnPtPars*)'>
+<!ENTITY % ObLineAzi '(aziAngle, aziPtLong)'>
+<!ENTITY % ObLinePt '(obLineLat, obLineLong)'>
+<!ENTITY % EllParas '(semiMajAx, axisUnits, denFlatRat?)'>
+<!-- Content Entities -->
+<!ENTITY % ContInfoTypes '(ContInfo | CovDesc | FetCatDesc | ImgDesc )'>
+<!ENTITY % FetCatDesc '(compCode?, catLang*, incWithDS, catFetTyps*, catCitation+)'>
+<!ENTITY % CovDesc '(attDesc, contentTyp, covDim*)'>
+<!ENTITY % ImgDesc '(attDesc, contentTyp, covDim*, illElevAng?, illAziAng?, imagCond?, imagQuCode?, cloudCovPer?, prcTypCde?, cmpGenQuan?, trianInd?, radCalDatAv?, camCalInAv?, filmDistInAv?, lensDistInAv?)'>
+<!ENTITY % ContInfo '(#PCDATA)'>
+<!ENTITY % MdIdentTypes '(RS_Identifier | MdIdent )'>
+<!ENTITY % RS_Identifier '(identAuth?, identCode)'>
+<!ENTITY % MdIdent '(identAuth?, identCode)'>
+<!ENTITY % RangeDimTypes '(Band | RangeDim )'>
+<!ENTITY % RangeDim '(seqID?, dimDescrp?)'>
+<!ENTITY % Band '(seqID?, dimDescrp?, maxVal?, minVal?, valUnit?, pkResp?, bitsPerVal?, toneGrad?, sclFac?, offset?)'>
+<!ENTITY % Sequence_Dimen_ '(Dimen)*'>
+<!-- Portrayal Catalogue Entity -->
+<!ENTITY % PortCatRef '(portCatCit+)'>
+<!-- Distribution Entities -->
+<!ENTITY % Medium '(medName?, medDensity*, medDenUnits?, medVol?, medFormat*, medNote?)'>
+<!ENTITY % DigTranOps '(unitsODist?, transSize?, onLineSrc*, offLineMed?)'>
+<!ENTITY % StanOrdProc '(resFees?, planAvDtTm?, ordInstr?, ordTurn?)'>
+<!ENTITY % Distributor '(distorCont, distorFormat+, distorOrdPrc*, distorTran*)'>
+<!ENTITY % Distrib '(distributor*)'>
+<!ENTITY % Format '(formatName, formatVer, formatAmdNum?, formatSpec?, fileDecmTech?)'>
+<!-- Extension Entities -->
+<!ENTITY % ExtEleInfo '(extEleName, extShortName?, extDomCode?, extEleDef, extEleOb?, extEleCond?, eleDataType, extEleMxOc?, extEleDomVal?, extEleParEnt+, extEleRule, extEleRat*, extEleSrc+)'>
+<!ENTITY % MdExtInfo '(extOnRes?, extEleInfo*)'>
+<!-- Application Schema Entities -->
+<!ENTITY % AppSchInfo '(asName, asSchLang, asCstLang, asAscii?, asGraFile?, asSwDevFile?, asSwDevFiFt?, featCatSup?)'>
+<!ENTITY % FeatTypList '(spatObj, spatSchName)'>
+<!ENTITY % SpatAttSup '(featTypeList+)'>
+<!-- Extent Entities -->
+<!ENTITY % TempExtentTypes '(SpatTempEx | TempExtent)'>
+<!ENTITY % TempExtent '(exTemp)'>
+<!ENTITY % VertExtent '(vertMinVal, vertMaxVal, vertUoM, vertDatum)'>
+<!ENTITY % BoundPoly '(exTypeCode?, polygon+)'>
+<!ENTITY % Extent '(exDesc?, geoEle*, tempEle*, vertEle*)'>
+<!ENTITY % GeoExtentTypes '(BoundPoly | GeoBndBox | GeoDesc )'>
+<!ENTITY % GeoBndBox '(exTypeCode?, westBL, eastBL, southBL, northBL)'>
+<!ENTITY % SpatTempEx '(exTemp, exSpat+)'>
+<!ENTITY % GeoDesc '(exTypeCode?, geoId)'>
+<!-- Citation Entities -->
+<!ENTITY % RespParty '(rpIndName?, rpOrgName?, rpPosName?, rpCntInfo?, role)'>
+<!ENTITY % Citation '(resTitle, resAltTitle*, resRefDate+, resEd?, resEdDate?, citId*, citIdType*, citRespParty*, presForm*, datasetSeries?, otherCitDet?, collTitle?, isbn?, issn?)'>
+<!ENTITY % Address '(delPoint*, city?, adminArea?, postCode?, country?, eMailAdd*)'>
+<!ENTITY % OnlineRes '(linkage, protocol?, appProfile?, orName?, orDesc?, orFunct?)'>
+<!ENTITY % Contact '(cntPhone?, cntAddress?, cntOnlineRes?, cntHours?, cntInstr?)'>
+<!ENTITY % Telephone '(voiceNum*, faxNum*)'>
+<!ENTITY % URL '(#PCDATA)'>
+<!ENTITY % DateRef '(refDate, refDateType)'>
+<!ENTITY % DatasetSeries '(seriesName?, issId?, artPage?)'>
+<!-- PART 4 - SPATIAL REFERENCE BY COORDINATES DECLARATIONS-->
+<!ENTITY % SC_VerticalDatum '(datumID)'>
+<!ELEMENT datumID %RS_Identifier;>
+<!-- PART 6 - ELEMENT DECLARATIONS -->
+<!--Metadata Entity Set Elements-->
+<!ELEMENT metadata %Metadata;>
+<!ELEMENT mdFileID (#PCDATA)>
+<!ELEMENT mdLang (languageCode)>
+<!ELEMENT mdChar (CharSetCd)>
+<!ELEMENT mdParentID (#PCDATA)>
+<!ELEMENT mdHrLv (ScopeCd)>
+<!ELEMENT mdHrLvName (#PCDATA)>
+<!ELEMENT mdContact %RespParty;>
+<!ELEMENT mdDateSt %Date;>
+<!ELEMENT mdStanName (#PCDATA)>
+<!ELEMENT mdStanVer (#PCDATA)>
+<!ELEMENT distInfo %Distrib;>
+<!ELEMENT dataIdInfo %DataIdent;>
+<!ELEMENT appSchInfo %AppSchInfo;>
+<!ELEMENT porCatInfo %PortCatRef;>
+<!ELEMENT mdMaint %MaintInfo;>
+<!ELEMENT mdConst %ConstsTypes;>
+<!ELEMENT dqInfo %DataQual;>
+<!ELEMENT spatRepInfo %SpatRepTypes;>
+<!ELEMENT refSysInfo %RefSystemTypes;>
+<!ELEMENT contInfo %ContInfoTypes;>
+<!ELEMENT mdExtInfo %MdExtInfo;>
+<!--Identification Elements-->
+<!ELEMENT idCitation %Citation;>
+<!ELEMENT idAbs (#PCDATA)>
+<!ELEMENT idPurp (#PCDATA)>
+<!ELEMENT idCredit (#PCDATA)>
+<!ELEMENT idStatus (ProgCd)>
+<!ELEMENT idPoC %RespParty;>
+<!ELEMENT resConst %ConstsTypes;>
+<!ELEMENT dsFormat %Format;>
+<!ELEMENT idSpecUse %Usage;>
+<!ELEMENT resMaint %MaintInfo;>
+<!ELEMENT descKeys %Keywords;>
+<!ELEMENT graphOver %BrowGraph;>
+<!ELEMENT spatRpType (SpatRepTypCd)>
+<!ELEMENT dataScale %Resol;>
+<!ELEMENT dataLang (languageCode)>
+<!ELEMENT dataChar (CharSetCd)>
+<!ELEMENT tpCat (TopicCatCd)>
+<!ELEMENT geoBox %GeoBndBox;>
+<!ELEMENT geoDesc %GeoDesc;>
+<!ELEMENT envirDesc (#PCDATA)>
+<!ELEMENT dataExt %Extent;>
+<!ELEMENT suppInfo (#PCDATA)>
+<!ELEMENT bgFileName (#PCDATA)>
+<!ELEMENT bgFileDesc (#PCDATA)>
+<!ELEMENT bgFileType (#PCDATA)>
+<!ELEMENT rfDenom %Integer;>
+<!ELEMENT equScale %RepFract;>
+<!ELEMENT scaleDist %Distance;>
+<!ELEMENT specUsage (#PCDATA)>
+<!ELEMENT usageDate %DateTime;>
+<!ELEMENT usrDetLim (#PCDATA)>
+<!ELEMENT usrCntInfo %RespParty;>
+<!ELEMENT keyword (#PCDATA)>
+<!ELEMENT keyTyp (KeyTypCd)>
+<!ELEMENT thesaName %Citation;>
+<!--Constraint Elements-->
+<!ELEMENT Consts %Consts;>
+<!ELEMENT LegConsts %LegConsts;>
+<!ELEMENT useLimit (#PCDATA)>
+<!ELEMENT accessConsts (RestrictCd)>
+<!ELEMENT useConsts (RestrictCd)>
+<!ELEMENT othConsts (#PCDATA)>
+<!ELEMENT SecConsts %SecConsts;>
+<!ELEMENT class (ClasscationCd)>
+<!ELEMENT userNote (#PCDATA)>
+<!ELEMENT classSys (#PCDATA)>
+<!ELEMENT handDesc (#PCDATA)>
+<!--Data Quality Elements-->
+<!ELEMENT stepDesc (#PCDATA)>
+<!ELEMENT stepRat (#PCDATA)>
+<!ELEMENT stepDateTm %DateTime;>
+<!ELEMENT stepProc %RespParty;>
+<!ELEMENT stepSrc %Source;>
+<!ELEMENT srcDesc (#PCDATA)>
+<!ELEMENT srcScale %RepFract;>
+<!ELEMENT srcRefSys %RefSystemTypes;>
+<!ELEMENT srcCitatn %Citation;>
+<!ELEMENT srcExt %Extent;>
+<!ELEMENT srcStep %PrcessStep;>
+<!ELEMENT statement (#PCDATA)>
+<!ELEMENT dataSource %Source;>
+<!ELEMENT prcStep %PrcessStep;>
+<!ELEMENT Result %Result;>
+<!ELEMENT ConResult %ConResult;>
+<!ELEMENT conSpec %Citation;>
+<!ELEMENT conExpl (#PCDATA)>
+<!ELEMENT conPass %Boolean;>
+<!ELEMENT QuanResult %QuanResult;>
+<!ELEMENT quanValType %RecordType;>
+<!ELEMENT quanValUnit %Measure;>
+<!ELEMENT errStat (#PCDATA)>
+<!ELEMENT quanVal %Record;>
+<!ELEMENT DQTempValid %DQTempValid;>
+<!ELEMENT DQTempConsis %DQTempConsis;>
+<!ELEMENT DQAccTimeMeas %DQAccTimeMeas;>
+<!ELEMENT DQQuanAttAcc %DQQuanAttAcc;>
+<!ELEMENT DQNonQuanAttAcc %DQNonQuanAttAcc;>
+<!ELEMENT DQThemClassCor %DQThemClassCor;>
+<!ELEMENT DQRelIntPosAcc %DQRelIntPosAcc;>
+<!ELEMENT DQGridDataPosAcc %DQGridDataPosAcc;>
+<!ELEMENT DQAbsExtPosAcc %DQAbsExtPosAcc;>
+<!ELEMENT DQTopConsis %DQTopConsis;>
+<!ELEMENT DQFormConsis %DQFormConsis;>
+<!ELEMENT DQDomConsis %DQDomConsis;>
+<!ELEMENT DQConcConsis %DQConcConsis;>
+<!ELEMENT DQCompOm %DQCompOm;>
+<!ELEMENT DQCompComm %DQCompComm;>
+<!ELEMENT measName (#PCDATA)>
+<!ELEMENT measId %MdIdentTypes;>
+<!ELEMENT measDesc (#PCDATA)>
+<!ELEMENT evalMethType (EvalMethTypeCd)>
+<!ELEMENT evalMethDesc (#PCDATA)>
+<!ELEMENT evalProc %Citation;>
+<!ELEMENT measDateTm %DateTime;>
+<!ELEMENT measResult %ResultTypes;>
+<!ELEMENT dqScope %DQScope;>
+<!ELEMENT dataLineage %Lineage;>
+<!ELEMENT dqReport %DQElementTypes;>
+<!ELEMENT scpLvl (ScopeCd)>
+<!ELEMENT scpExt %Extent;>
+<!ELEMENT scpLvlDesc %ScpDesc;>
+<!--Maintenance Elements-->
+<!ELEMENT maintFreq (MaintFreqCd)>
+<!ELEMENT dateNext %Date;>
+<!ELEMENT usrDefFreq %TM_PeriodDuration;>
+<!ELEMENT maintScp (ScopeCd)>
+<!ELEMENT upScpDesc %ScpDesc;>
+<!ELEMENT maintNote (#PCDATA)>
+<!ELEMENT attribSet (#PCDATA)>
+<!--"attributes" is a list of the attributes updated during the maintenance-->
+<!ELEMENT featSet (#PCDATA)>
+<!--"features" is a list of the features updated  during the maintenance-->
+<!ELEMENT featIntSet (#PCDATA)>
+<!--"featureInstances" is alist of the feature instances updated during the maintenance-->
+<!ELEMENT attribIntSet (#PCDATA)>
+<!--"attributeInstances" is alist of the attribute instances updated during the maaintenance-->
+<!ELEMENT datasetSet (#PCDATA)>
+<!ELEMENT other (#PCDATA)>
+<!--Spatial Representation Elements-->
+<!ELEMENT GridSpatRep %GridSpatRep;>
+<!ELEMENT numDims %Integer;>
+<!ELEMENT axDimProps %Sequence_Dimen_;>
+<!ELEMENT cellGeo (CellGeoCd)>
+<!ELEMENT tranParaAv %Boolean;>
+<!ELEMENT VectSpatRep %VectSpatRep;>
+<!ELEMENT topLvl (TopoLevCd)>
+<!ELEMENT geometObjs %GeometObjs;>
+<!ELEMENT Georef %Georef;>
+<!ELEMENT ctrlPtAv %Boolean;>
+<!ELEMENT orieParaAv %Boolean;>
+<!ELEMENT orieParaDs (#PCDATA)>
+<!ELEMENT georefPars %Record;>
+<!ELEMENT paraCit %Citation;>
+<!ELEMENT Dimen %Dimen;>
+<!ELEMENT dimName (DimNameTypCd)>
+<!ELEMENT dimSize %Integer;>
+<!ELEMENT dimResol %Measure;>
+<!ELEMENT Georect %Georect;>
+<!ELEMENT chkPtAv %Boolean;>
+<!ELEMENT chkPtDesc (#PCDATA)>
+<!ELEMENT cornerPts %GM_Point;>
+<!ELEMENT centerPt %GM_Point;>
+<!ELEMENT ptInPixel (PixOrientCd)>
+<!ELEMENT transDimDesc (#PCDATA)>
+<!ELEMENT transDimMap (#PCDATA)>
+<!ELEMENT geoObjTyp (GeoObjTypCd)>
+<!ELEMENT geoObjCnt %Integer;>
+<!--Reference System Elements-->
+<!ELEMENT MdIdent %MdIdent;>
+<!ELEMENT RS_Identifier %RS_Identifier;>
+<!ELEMENT identAuth %Citation;>
+<!ELEMENT identCode (#PCDATA)>
+<!ELEMENT RefSystem %RefSystem;>
+<!ELEMENT refSysID %RS_Identifier;>
+<!ELEMENT MdCoRefSys %MdCoRefSys;>
+<!ELEMENT projection %RS_Identifier;>
+<!ELEMENT ellipsoid %RS_Identifier;>
+<!ELEMENT datum %RS_Identifier;>
+<!ELEMENT projParas %ProjParas;>
+<!ELEMENT ellParas %EllParas;>
+<!ELEMENT ProjParas %ProjParas;>
+<!ELEMENT zone %Integer;>
+<!ELEMENT stanParal %Real;>
+<!ELEMENT longCntMer %Real;>
+<!ELEMENT latProjOri %Real;>
+<!ELEMENT falEastng %Real;>
+<!ELEMENT falNorthng %Real;>
+<!ELEMENT falENUnits %UomLength;>
+<!ELEMENT sclFacEqu %Real;>
+<!ELEMENT hgtProsPt %Real;>
+<!ELEMENT longProjCnt %Real;>
+<!ELEMENT latProjCnt %Real;>
+<!ELEMENT sclFacCnt %Real;>
+<!ELEMENT stVrLongPl %Real;>
+<!ELEMENT sclFacPrOr %Real;>
+<!ELEMENT obLnAziPars %ObLineAzi;>
+<!ELEMENT obLnPtPars %ObLinePt;>
+<!ELEMENT aziAngle %Real;>
+<!ELEMENT aziPtLong %Real;>
+<!ELEMENT ObLinePt %ObLinePt;>
+<!ELEMENT obLineLat %Real;>
+<!ELEMENT obLineLong %Real;>
+<!ELEMENT semiMajAx %Real;>
+<!ELEMENT axisUnits %UomLength;>
+<!ELEMENT denFlatRat %Real;>
+<!--Content Elements-->
+<!ELEMENT ContInfo %ContInfo;>
+<!ELEMENT FetCatDesc %FetCatDesc;>
+<!ELEMENT compCode %Boolean;>
+<!ELEMENT catLang (languageCode)>
+<!ELEMENT incWithDS %Boolean;>
+<!ELEMENT catFetTyps %GenericNameTypes;>
+<!ELEMENT catCitation %Citation;>
+<!ELEMENT CovDesc %CovDesc;>
+<!ELEMENT attDesc %RecordType;>
+<!ELEMENT contentTyp (ContentTypCd)>
+<!ELEMENT covDim %RangeDimTypes;>
+<!ELEMENT ImgDesc %ImgDesc;>
+<!ELEMENT illElevAng %Real;>
+<!ELEMENT illAziAng %Real;>
+<!ELEMENT imagCond (ImgCondCd)>
+<!ELEMENT imagQuCode %MdIdentTypes;>
+<!ELEMENT cloudCovPer %Real;>
+<!ELEMENT prcTypCde %MdIdentTypes;>
+<!ELEMENT cmpGenQuan %Integer;>
+<!ELEMENT trianInd %Boolean;>
+<!ELEMENT radCalDatAv %Boolean;>
+<!ELEMENT camCalInAv %Boolean;>
+<!ELEMENT filmDistInAv %Boolean;>
+<!ELEMENT lensDistInAv %Boolean;>
+<!ELEMENT RangeDim %RangeDim;>
+<!ELEMENT seqID %MemberName;>
+<!ELEMENT dimDescrp (#PCDATA)>
+<!ELEMENT Band %Band;>
+<!ELEMENT maxVal %Real;>
+<!ELEMENT minVal %Real;>
+<!ELEMENT valUnit %UomLength;>
+<!ELEMENT pkResp %Real;>
+<!ELEMENT bitsPerVal %Integer;>
+<!ELEMENT toneGrad %Integer;>
+<!ELEMENT sclFac %Real;>
+<!ELEMENT offset %Real;>
+<!--Portrayal Catalogue Element-->
+<!ELEMENT portCatCit %Citation;>
+<!--Distribution Elements-->
+<!ELEMENT medName (MedNameCd)>
+<!ELEMENT medDensity %Real;>
+<!ELEMENT medDenUnits (#PCDATA)>
+<!ELEMENT medVol %Integer;>
+<!ELEMENT medFormat (MedFormCd)>
+<!ELEMENT medNote (#PCDATA)>
+<!ELEMENT unitsODist (#PCDATA)>
+<!ELEMENT transSize %Real;>
+<!ELEMENT onLineSrc %OnlineRes;>
+<!ELEMENT offLineMed %Medium;>
+<!ELEMENT resFees (#PCDATA)>
+<!ELEMENT planAvDtTm %DateTime;>
+<!ELEMENT ordInstr (#PCDATA)>
+<!ELEMENT ordTurn (#PCDATA)>
+<!ELEMENT distorCont %RespParty;>
+<!ELEMENT distorFormat %Format;>
+<!ELEMENT distorOrdPrc %StanOrdProc;>
+<!ELEMENT distorTran %DigTranOps;>
+<!ELEMENT distributor %Distributor;>
+<!ELEMENT distTranOps %DigTranOps;>
+<!ELEMENT formatName (#PCDATA)>
+<!ELEMENT formatVer (#PCDATA)>
+<!ELEMENT formatAmdNum (#PCDATA)>
+<!ELEMENT formatSpec (#PCDATA)>
+<!ELEMENT fileDecmTech (#PCDATA)>
+<!--Extension Elements-->
+<!ELEMENT extEleName (#PCDATA)>
+<!ELEMENT extShortName (#PCDATA)>
+<!ELEMENT extDomCode %Integer;>
+<!ELEMENT extEleDef (#PCDATA)>
+<!ELEMENT extEleOb (ObCd)>
+<!ELEMENT extEleCond (#PCDATA)>
+<!ELEMENT eleDataType (DatatypeCd)>
+<!ELEMENT extEleMxOc (#PCDATA)>
+<!ELEMENT extEleDomVal (#PCDATA)>
+<!ELEMENT extEleParEnt (#PCDATA)>
+<!ELEMENT extEleRule (#PCDATA)>
+<!ELEMENT extEleRat (#PCDATA)>
+<!ELEMENT extEleSrc %RespParty;>
+<!ELEMENT extOnRes %OnlineRes;>
+<!ELEMENT extEleInfo %ExtEleInfo;>
+<!--Application Schema Elements-->
+<!ELEMENT asName %Citation;>
+<!ELEMENT asSchLang (#PCDATA)>
+<!ELEMENT asCstLang (#PCDATA)>
+<!ELEMENT asAscii (#PCDATA)>
+<!ELEMENT asGraFile (#PCDATA)>
+<!ELEMENT asSwDevFile %Binary;>
+<!ELEMENT asSwDevFiFt (#PCDATA)>
+<!ELEMENT featCatSup %SpatAttSup;>
+<!ELEMENT spatObj (#PCDATA)>
+<!ELEMENT spatSchName (#PCDATA)>
+<!ELEMENT SpatAttSup %SpatAttSup;>
+<!ELEMENT featTypeList %FeatTypList;>
+<!--Extent Elements-->
+<!ELEMENT TempExtent %TempExtent;>
+<!ELEMENT exTemp %TM_Primitive;>
+<!ELEMENT VertExtent %VertExtent;>
+<!ELEMENT vertMinVal %Real;>
+<!ELEMENT vertMaxVal %Real;>
+<!ELEMENT vertUoM %UomLength;>
+<!ELEMENT vertDatum %SC_VerticalDatum;>
+<!ELEMENT exDesc (#PCDATA)>
+<!ELEMENT vertEle %VertExtent;>
+<!ELEMENT tempEle %TempExtentTypes;>
+<!ELEMENT geoEle %GeoExtentTypes;>
+<!ELEMENT exTypeCode %Boolean;>
+<!ELEMENT BoundPoly %BoundPoly;>
+<!ELEMENT polygon %GM_ObjectTypes;>
+<!ELEMENT GeoBndBox %GeoBndBox;>
+<!ELEMENT westBL %Real;>
+<!ELEMENT eastBL %Real;>
+<!ELEMENT southBL %Real;>
+<!ELEMENT northBL %Real;>
+<!ELEMENT SpatTempEx %SpatTempEx;>
+<!ELEMENT exSpat %GeoExtentTypes;>
+<!ELEMENT GeoDesc %GeoDesc;>
+<!ELEMENT geoId %MdIdent;>
+<!--Citation Elements-->
+<!ELEMENT rpIndName (#PCDATA)>
+<!ELEMENT rpOrgName (#PCDATA)>
+<!ELEMENT rpPosName (#PCDATA)>
+<!ELEMENT rpCntInfo %Contact;>
+<!ELEMENT role (RoleCd)>
+<!ELEMENT resTitle (#PCDATA)>
+<!ELEMENT resAltTitle (#PCDATA)>
+<!ELEMENT resRefDate %DateRef;>
+<!ELEMENT resEd (#PCDATA)>
+<!ELEMENT resEdDate %Date;>
+<!ELEMENT citId (#PCDATA)>
+<!ELEMENT citIdType (#PCDATA)>
+<!ELEMENT citRespParty %RespParty;>
+<!ELEMENT presForm (PresFormCd)>
+<!ELEMENT datasetSeries %DatasetSeries;>
+<!ELEMENT otherCitDet (#PCDATA)>
+<!ELEMENT collTitle (#PCDATA)>
+<!ELEMENT isbn (#PCDATA)>
+<!ELEMENT issn (#PCDATA)>
+<!ELEMENT delPoint (#PCDATA)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT adminArea (#PCDATA)>
+<!ELEMENT postCode (#PCDATA)>
+<!ELEMENT country (#PCDATA)>
+<!ELEMENT eMailAdd (#PCDATA)>
+<!ELEMENT linkage %URL;>
+<!ELEMENT protocol (#PCDATA)>
+<!ELEMENT appProfile (#PCDATA)>
+<!ELEMENT orName (#PCDATA)>
+<!ELEMENT orDesc (#PCDATA)>
+<!ELEMENT orFunct (OnFunctCd)>
+<!ELEMENT cntPhone %Telephone;>
+<!ELEMENT cntAddress %Address;>
+<!ELEMENT cntOnlineRes %OnlineRes;>
+<!ELEMENT cntHours (#PCDATA)>
+<!ELEMENT cntInstr (#PCDATA)>
+<!ELEMENT voiceNum (#PCDATA)>
+<!ELEMENT faxNum (#PCDATA)>
+<!ELEMENT refDate %Date;>
+<!ELEMENT refDateType (DateTypCd)>
+<!ELEMENT seriesName (#PCDATA)>
+<!ELEMENT issId (#PCDATA)>
+<!ELEMENT artPage (#PCDATA)>
+<!ELEMENT URL %URL;>
+<!--PART 7: CODELIST and ENUMERATION DECLARATIONS-->
+<!ELEMENT DateTypCd EMPTY>
+<!ATTLIST DateTypCd
+	value (001 | 002 | 003) #REQUIRED
+>
+<!ELEMENT OnFunctCd EMPTY>
+<!ATTLIST OnFunctCd
+	value (001 | 002 | 003 | 004 | 005) #REQUIRED
+>
+<!ELEMENT PresFormCd EMPTY>
+<!ATTLIST PresFormCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014) #REQUIRED
+>
+<!ELEMENT RoleCd EMPTY>
+<!ATTLIST RoleCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010) #REQUIRED
+>
+<!ELEMENT EvalMethTypeCd EMPTY>
+<!ATTLIST EvalMethTypeCd
+	value (001 | 002 | 003) #REQUIRED
+>
+<!ELEMENT CellGeoCd EMPTY>
+<!ATTLIST CellGeoCd
+	value (001 | 002) #REQUIRED
+>
+<!ELEMENT CharSetCd EMPTY>
+<!ATTLIST CharSetCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 | 015 | 016 | 017 | 018 | 019 | 020 | 021 | 022 | 023 | 024) #REQUIRED
+>
+<!ELEMENT ClasscationCd EMPTY>
+<!ATTLIST ClasscationCd
+	value (001 | 002 | 003 | 004 | 005) #REQUIRED
+>
+<!ELEMENT ContentTypCd EMPTY>
+<!ATTLIST ContentTypCd
+	value (001 | 002 | 003) #REQUIRED
+>
+<!ELEMENT DatatypeCd (#PCDATA)>
+<!ATTLIST DatatypeCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 | 015) #REQUIRED
+>
+<!ELEMENT DimNameTypCd EMPTY>
+<!ATTLIST DimNameTypCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008) #REQUIRED
+>
+<!ELEMENT GeoObjTypCd EMPTY>
+<!ATTLIST GeoObjTypCd
+	value (001 | 002 | 003 | 004 | 005 | 006) #REQUIRED
+>
+<!ELEMENT ImgCondCd EMPTY>
+<!ATTLIST ImgCondCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011) #REQUIRED
+>
+<!ELEMENT KeyTypCd EMPTY>
+<!ATTLIST KeyTypCd
+	value (001 | 002 | 003 | 004 | 005) #REQUIRED
+>
+<!ELEMENT MaintFreqCd EMPTY>
+<!ATTLIST MaintFreqCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 998) #REQUIRED
+>
+<!ELEMENT MedFormCd EMPTY>
+<!ATTLIST MedFormCd
+	value (001 | 002 | 003 | 004 | 005 | 006) #REQUIRED
+>
+<!ELEMENT MedNameCd EMPTY>
+<!ATTLIST MedNameCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 | 015 | 016 | 017 | 018) #REQUIRED
+>
+<!ELEMENT ObCd EMPTY>
+<!ATTLIST ObCd
+	value (001 | 002 | 003) #REQUIRED
+>
+<!ELEMENT PixOrientCd EMPTY>
+<!ATTLIST PixOrientCd
+	value (001 | 002 | 003 | 004 | 005) #REQUIRED
+>
+<!ELEMENT ProgCd EMPTY>
+<!ATTLIST ProgCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007) #REQUIRED
+>
+<!ELEMENT RestrictCd EMPTY>
+<!ATTLIST RestrictCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008) #REQUIRED
+>
+<!ELEMENT ScopeCd EMPTY>
+<!ATTLIST ScopeCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 | 015) #REQUIRED
+>
+<!ELEMENT SpatRepTypCd EMPTY>
+<!ATTLIST SpatRepTypCd
+	value (001 | 002 | 003 | 004 | 005 | 006) #REQUIRED
+>
+<!ELEMENT TopicCatCd EMPTY>
+<!ATTLIST TopicCatCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009 | 010 | 011 | 012 | 013 | 014 | 015 | 016 | 017 | 018 | 019) #REQUIRED
+>
+<!ELEMENT TopoLevCd EMPTY>
+<!ATTLIST TopoLevCd
+	value (001 | 002 | 003 | 004 | 005 | 006 | 007 | 008 | 009) #REQUIRED
+>
+<!--The language codelist below comes from ISO 639-2, as various parts of that standard can be used, the codelist is not present in 19115.-->
+<!ELEMENT languageCode EMPTY>
+<!ATTLIST languageCode
+	value (aa | ab | af | am | ar | as | ay | az | ba | be | bg | bh | bi | bn | bo | br | ca | co | cs | cy | da | de | dz | el | en | eo | es | et | eu | fa | fi | fj | fo | fr | fy | ga | gd | gl | gn | gu | ha | hi | hr | hu | hy | ia | ie | ik | in | is | it | iw | ja | ji | jw | ka | kk | kl | km | kn | ko | ks | ku | ky | la | ln | lo | lt | lv | mg | mi | mk | ml | mn | mo | mr | ms | mt | my | na | ne | nl | no | oc | om | or | pa | pl | ps | pt | qu | rm | rn | ro | ru | rw | sa | sd | sg | sh | si | sk | sl | sm | sn | so | sq | sr | ss | st | su | sv | sw | ta | te | tg | th | ti | tk | tl | tn | to | tr | ts | tt | tw | uk | ur | uz | vi | vo | wo | xh | yo | zh | zu) "en"
+>
+<!ATTLIST GeoBndBox
+	esriExtentType (native) #IMPLIED
+>

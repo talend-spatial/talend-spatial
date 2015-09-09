@@ -1,0 +1,173 @@
+<%@ jet 
+imports="
+    org.talend.core.model.process.INode 
+    org.talend.core.model.process.ElementParameterParser 
+    org.talend.core.model.metadata.IMetadataTable 
+    org.talend.core.model.metadata.IMetadataColumn 
+    org.talend.core.model.process.IConnection
+    org.talend.core.model.process.IConnectionCategory
+    org.talend.designer.codegen.config.CodeGeneratorArgument
+    java.util.List
+    java.io.File
+    java.util.ArrayList
+    org.talend.core.model.metadata.types.JavaTypesManager
+    org.talend.core.model.metadata.types.JavaType
+" 
+%>
+<%
+CodeGeneratorArgument codeGenArgument = (CodeGeneratorArgument) argument;
+INode node = (INode)codeGenArgument.getArgument();
+List<IMetadataTable> metadatas = node.getMetadataList();
+if ((metadatas!=null)&&(metadatas.size()>0)) {
+    IMetadataTable metadata = metadatas.get(0);
+    if (metadata!=null) {
+    String cid = node.getUniqueName();
+    String filename = ElementParameterParser.getValueWithUIFieldKey(node,"__FILENAME__", "FILENAME");
+    String title = ElementParameterParser.getValue(node,"__TITLE__");
+    String description = ElementParameterParser.getValue(node,"__DESCRIPTION__");
+    String pubdate = ElementParameterParser.getValue(node,"__PUBDATE__");
+    String geoFormat = ElementParameterParser.getValue(node,"__GEOFORMAT__");
+    String link = ElementParameterParser.getValue(node,"__LINK__");
+    File file = new File(filename);
+    boolean isAppend = ElementParameterParser.getValue(node,"__APPEND__").equals("true");
+    List< ? extends IConnection> conns = node.getIncomingConnections();
+  %>  
+ <%        
+        if(conns!=null){
+            if (conns.size()>0){
+               IConnection conn =conns.get(0);
+            if (conn.getLineStyle().hasConnectionCategory(IConnectionCategory.DATA)) {
+            List<IMetadataColumn> columns = metadata.getListColumns();
+                int sizeColumns = columns.size();
+    %>    
+        {
+            if(<%=isAppend %> && file_<%=cid %>.exists())
+            {
+                java.util.List list_<%=cid %> = document_<%=cid %>.selectNodes("/rss/channel" );
+                channelElement_<%=cid %> = (org.dom4j.Element) list_<%=cid %>.get(0);
+                list_<%=cid %>= document_<%=cid %>.selectNodes("/rss/channel/title" );
+                titleHElement_<%=cid %> = (org.dom4j.Element) list_<%=cid%>.get(0);
+                titleHElement_<%=cid %>.setText(<%=title %>);
+                list_<%=cid %>= document_<%=cid %>.selectNodes("/rss/channel/description" );
+                descriptionHElement_<%=cid %> = (org.dom4j.Element) list_<%=cid %>.get(0);
+                descriptionHElement_<%=cid %>.setText(<%=description %>);
+                list_<%=cid %>= document_<%=cid %>.selectNodes("/rss/channel/pubdate" );
+                pubdateHElement_<%=cid %>=(org.dom4j.Element) list_<%=cid %>.get(0);
+                pubdateHElement_<%=cid %>.setText(<%=pubdate %>);
+                list_<%=cid %>= document_<%=cid %>.selectNodes("/rss/channel/link" );
+                linkHElement_<%=cid %>=(org.dom4j.Element) list_<%=cid %>.get(0);
+                linkHElement_<%=cid %>.setText(<%=link %>);
+                
+            }
+               org.dom4j.Element itemElement = channelElement_<%=cid %>.addElement("item");
+
+  <%              
+                for (int i = 0; i < sizeColumns; i++) {
+                IMetadataColumn column = columns.get(i);
+                String coluLabel=column.getLabel();
+                coluLabel=coluLabel.toLowerCase();
+                JavaType javaType = JavaTypesManager.getJavaTypeFromId(column.getTalendType());
+   %>     
+		    ns_<%=cid %> = "talend:"; // Default to talend namespace for unknown element
+			
+			for (int i = 0; i <= rssEl_<%=cid %>.size() - 1; i++) {
+				if(rssEl_<%=cid %>.get(i).equals("<%=coluLabel %>")) {
+					 ns_<%=cid %> = "";
+					 break;
+				}
+			}
+			for (int i = 0; i <= dcEl_<%=cid %>.size() - 1; i++) {
+				if(dcEl_<%=cid %>.get(i).equals("<%=coluLabel %>")) {
+					 ns_<%=cid %> = "dc:";
+					 break;
+				}
+			}
+ 		    for (int i = 0; i <= gmlEl_<%=cid %>.size() - 1; i++) {
+				if(gmlEl_<%=cid %>.get(i).equals("<%=coluLabel %>")) {
+					 ns_<%=cid %> = "gml:";
+					 break;
+				}
+			}
+ 		    for (int i = 0; i <= georssEl_<%=cid %>.size() - 1; i++) {
+				if(georssEl_<%=cid %>.get(i).equals("<%=coluLabel %>")) {
+					 ns_<%=cid %> = "georss:";
+					 break;
+				}
+			}
+
+
+            // georss:point
+            // Add namespace for well known element
+//            arrayList.indexOf(searchString)
+   <%        
+                if (javaType == JavaTypesManager.STRING) {
+    %>    
+				org.dom4j.Element <%=coluLabel%>Element = itemElement.addElement(ns_<%=cid %> +
+								 "<%=coluLabel %>");
+				<%=coluLabel%>Element.setText(<%=conn.getName() %>.<%=column.getLabel() %> == null ? "" : <%=conn.getName() %>.<%=column.getLabel() %>);
+    <%        
+                } else if (javaType == JavaTypesManager.DATE) {
+    %>
+                java.text.SimpleDateFormat sdfTemp_<%=cid %> = new java.text.SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z",java.util.Locale.US);
+                java.util.SimpleTimeZone aZone_<%=cid %> = new java.util.SimpleTimeZone(8,"GMT");
+                sdfTemp<%=cid%>.setTimeZone(aZone_<%=cid %>);
+				org.dom4j.Element <%=coluLabel %>Element=itemElement.addElement(ns_<%=cid %> + "<%=coluLabel %>");
+                <%=coluLabel %>Element.setText(<%=conn.getName() %>.<%=column.getLabel() %> == null ? 
+                			"" : 
+                			sdfTemp_<%=cid %>.format( <%=conn.getName() %>.<%=column.getLabel() %>));
+    <%        
+                } else if (javaType == JavaTypesManager.getJavaTypeFromId("id_Geometry")) {
+				// FIXME : if not a geometry
+				/*
+				<georss:point>45.256 -71.92</georss:point>
+				or
+				<georss:where>
+					<gml:Point>
+					  <gml:pos>45.256 -71.92</gml:pos>
+					</gml:Point>
+				</georss:where>
+				*/
+					if (geoFormat.equals("GML")) {
+	%>
+				org.dom4j.Element <%=coluLabel %>Element = itemElement.addElement("georss:where");
+	<%
+					} else if (geoFormat.equals("GMLPOINT")) {
+	%>
+            	org.talend.sdi.geometry.Geometry bbox_<%=cid %>_<%=coluLabel %> =
+									((org.talend.sdi.geometry.Geometry)<%=conn.getName() %>.<%=column.getLabel() %>)
+												.getCentroid();
+				org.dom4j.Element <%=coluLabel %>Element = itemElement.addElement("georss:where");
+				org.dom4j.Element <%=coluLabel %>PtElement = <%=coluLabel %>Element.addElement("gml:Point");
+                org.dom4j.Element <%=coluLabel %>PosElement = <%=coluLabel %>PtElement.addElement("gml:Pos");
+                <%=coluLabel %>PosElement.setText(String.valueOf(bbox_<%=cid %>_<%=coluLabel %>.getCoordinates()[0].x) +
+                                                " " +
+                                                String.valueOf(bbox_<%=cid %>_<%=coluLabel %>.getCoordinates()[0].y));
+	<%
+					} else {
+	%>
+            	org.talend.sdi.geometry.Geometry bbox_<%=cid %>_<%=coluLabel %> =
+									((org.talend.sdi.geometry.Geometry)<%=conn.getName() %>.<%=column.getLabel() %>)
+												.getCentroid();
+				org.dom4j.Element <%=coluLabel %>Element=itemElement.addElement("georss:point");
+                <%=coluLabel %>Element.setText(String.valueOf(bbox_<%=cid %>_<%=coluLabel %>.getCoordinates()[0].y) +
+                                                " " +
+                                                String.valueOf(bbox_<%=cid %>_<%=coluLabel %>.getCoordinates()[0].x));
+    <%            
+					}
+                } else {
+    %>
+				org.dom4j.Element <%=coluLabel %>Element = itemElement.addElement(ns_<%=cid %> + "<%=coluLabel %>");
+                <%=coluLabel %>Element.setText(String.valueOf(<%=conn.getName() %>.<%=column.getLabel() %>));
+    <%
+                        }
+                    }
+                }
+            }
+         }
+%>         
+             nb_line_<%=cid%>++;
+         }
+<%             
+        }
+    }
+%>

@@ -1,9 +1,0 @@
-Index: org.talend.designer.components.ecosystem/META-INF/MANIFEST.MF
-===================================================================
---- org.talend.designer.components.ecosystem/META-INF/MANIFEST.MF	(revision 31214)
-+++ org.talend.designer.components.ecosystem/META-INF/MANIFEST.MF	(working copy)
-@@ -25,3 +25,4 @@
-  org.talend.designer.components.ecosystem.jobs,
-  org.talend.designer.components.ecosystem.model,
-  org.talend.designer.components.ecosystem.ui.views
-+Eclipse-BundleShape: dir

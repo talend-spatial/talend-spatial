@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Talend Spatial components Plug-in
+Bundle-SymbolicName: org.talend.sdi.designer.components;singleton:=true
+Bundle-Version: 6.0.1
+Bundle-Localization: plugin
+Bundle-Activator: org.talend.sdi.designer.components.Plugin
+Bundle-Vendor: Camptocamp, Neogeo technologies, titellus
+Require-Bundle: org.talend.core,
+ org.talend.librariesmanager,
+ org.talend.model,
+ org.talend.libraries.apache,
+ org.talend.designer.codegen,
+ org.eclipse.ui.workbench
+Eclipse-LazyStart: true
+Export-Package: org.talend.sdi.designer.components
+Bundle-ClassPath: .
+Eclipse-BundleShape: dir
