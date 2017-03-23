@@ -89,7 +89,7 @@ poSpatialFilter_<%=cid %> = new org.gdal.ogr.Geometry(org.gdal.ogr.ogrConstants.
 poSpatialFilter_<%=cid %>.AddGeometry(oRing_<%=cid %>);
 
 //michimau
-if (!where.equals("") || !sql.equals("")) {
+if (!where.equals("") && !sql.equals("")) {
     System.out.print("FAILURE:\n" + "You cannot use both where and sql.";
     return;
 }
