@@ -93,6 +93,8 @@ if (!where.equals("") && !sql.equals("")) {
     return;
 }
 
+
+
 <%
         }
         
@@ -103,12 +105,12 @@ pszWHERE_<%=cid %> = <%=where %>;
 <%
          }
 
-        // SQL query
-        if (!sql.equals("")) {
+         if (!sql.equals("")) {
 %>
 pszSQL_<%=cid %> = <%=sql %>;
 <%
          }
+
 %>
 
 /* get feature source from store */
