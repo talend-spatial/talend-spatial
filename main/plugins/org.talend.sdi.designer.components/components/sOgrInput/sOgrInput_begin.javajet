@@ -104,6 +104,14 @@ pszWHERE_<%=cid %> = <%=where %>;
          }
 %>
 
+        if (!sql.equals("")) {
+%>
+pszSQL_<%=cid %> = <%=sql %>;
+<%
+         }
+%>
+
+
 /* get feature source from store */
 org.gdal.ogr.DataSource poDS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
 if (poDS_<%=cid %> == null) {
