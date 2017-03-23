@@ -88,7 +88,6 @@ oRing_<%=cid %>.AddPoint(xmin_<%=cid %>, ymin_<%=cid %>);
 poSpatialFilter_<%=cid %> = new org.gdal.ogr.Geometry(org.gdal.ogr.ogrConstants.wkbPolygon);
 poSpatialFilter_<%=cid %>.AddGeometry(oRing_<%=cid %>);
 
-//michimau
 if (!where.equals("") && !sql.equals("")) {
     System.out.print("FAILURE:\n" + "You cannot use both where and sql.";
     return;
@@ -142,7 +141,7 @@ if(dialect) {
 
 if (pszSQL_<%=cid %> != null) {
     org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.ExecuteSQL(pszSQL_<%=cid %>, "", pszDialect_<%=cid %>);
-} else
+} else {
     org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
 }
 
