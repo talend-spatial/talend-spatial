@@ -31,6 +31,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
         String ymax = ElementParameterParser.getValue(node,"__YMAX__");
         String where = ElementParameterParser.getValue(node,"__WHERE__");
         String sql = ElementParameterParser.getValue(node,"__SQL__");
+        String sqldialect = ElementParameterParser.getValue(node,"__DIALECT__");
 %>
 
 /* initialize feature count */
@@ -49,7 +50,7 @@ org.gdal.ogr.Geometry poSpatialFilter_<%=cid %> = null;
 
 String pszWHERE_<%=cid %> = null;
 String pszSQLStatement_<%=cid %> = null;
-String pszDialect_<%=cid %> = null;
+String pszDialect_<%=cid %> = <%="\"" + sqldialect + "\""%>;
 
 /* initialize data source and layer (only one) */
 String pszDataSource_<%=cid %> = <%=filename %>;
@@ -89,14 +90,19 @@ poSpatialFilter_<%=cid %>.AddGeometry(oRing_<%=cid %>);
 
 <%
         }
-        
         // SQL filter
         if (!where.equals("")) {
 %>
 pszWHERE_<%=cid %> = <%=where %>;
 <%
-         }
+        }
+        if (!sql.equals("")) {
 %>
+pszSQLStatement_<%=cid %> = <%=sql %>;
+<%
+        }
+%>
+
 
 /* get feature source from store */
 org.gdal.ogr.DataSource poDS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
@@ -109,7 +115,6 @@ if (poDS_<%=cid %> == null) {
     }
     return;
 }
-
 
 org.gdal.ogr.Driver poDriver_<%=cid %> = poDS_<%=cid %>.GetDriver();
 
@@ -128,7 +133,14 @@ if (papszLayers_<%=cid %>.equals("")) {
     throw new java.io.IOException("GDAL/OGR: Choose a layer to read from.");
 }
 
-org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
+org.gdal.ogr.Layer poLayer_<%=cid %> = null;
+
+if (!pszSQLStatement_<%=cid %>.equals("")) {
+  poLayer_<%=cid %> = poDS_<%=cid %>.ExecuteSQL(pszSQLStatement_<%=cid %>, null, pszDialect_<%=cid %>);
+} else {
+  poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
+}
+
 
 /* Set filters if provided. */
 if (pszWHERE_<%=cid %> != null)
