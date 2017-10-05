@@ -31,7 +31,7 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
         String ymax = ElementParameterParser.getValue(node,"__YMAX__");
         String where = ElementParameterParser.getValue(node,"__WHERE__");
         String sql = ElementParameterParser.getValue(node,"__SQL__");
-        boolean dialect = ("true").equals(ElementParameterParser.getValue(node,"__DIALECT__"));
+        String sqldialect = ElementParameterParser.getValue(node,"__DIALECT__");
 %>
 
 /* initialize feature count */
@@ -50,7 +50,7 @@ org.gdal.ogr.Geometry poSpatialFilter_<%=cid %> = null;
 
 String pszWHERE_<%=cid %> = null;
 String pszSQLStatement_<%=cid %> = null;
-String pszDialect_<%=cid %> = null;
+String pszDialect_<%=cid %> = <%="\"" + sqldialect + "\""%>;
 
 /* initialize data source and layer (only one) */
 String pszDataSource_<%=cid %> = <%=filename %>;
@@ -88,30 +88,21 @@ oRing_<%=cid %>.AddPoint(xmin_<%=cid %>, ymin_<%=cid %>);
 poSpatialFilter_<%=cid %> = new org.gdal.ogr.Geometry(org.gdal.ogr.ogrConstants.wkbPolygon);
 poSpatialFilter_<%=cid %>.AddGeometry(oRing_<%=cid %>);
 
-if (!where.equals("") && !sql.equals("")) {
-    System.out.print("FAILURE:\n" + "You cannot use both where and sql.");
-    return;
-}
-
-
-
 <%
         }
-        
-        // SQL WHERE filter
+        // SQL filter
         if (!where.equals("")) {
 %>
 pszWHERE_<%=cid %> = <%=where %>;
 <%
-         }
-
-         if (!sql.equals("")) {
+        }
+        if (!sql.equals("")) {
 %>
-pszSQL_<%=cid %> = <%=sql %>;
+pszSQLStatement_<%=cid %> = <%=sql %>;
 <%
-         }
-
+        }
 %>
+
 
 /* get feature source from store */
 org.gdal.ogr.DataSource poDS_<%=cid %> = org.gdal.ogr.ogr.Open(pszDataSource_<%=cid %>, !bReadOnly_<%=cid %>);
@@ -142,17 +133,14 @@ if (papszLayers_<%=cid %>.equals("")) {
     throw new java.io.IOException("GDAL/OGR: Choose a layer to read from.");
 }
 
-if(dialect) {
-    pszDialect_<%=cid %> = 'SQLITE';
+org.gdal.ogr.Layer poLayer_<%=cid %> = null;
+
+if (!pszSQLStatement_<%=cid %>.equals("")) {
+  poLayer_<%=cid %> = poDS_<%=cid %>.ExecuteSQL(pszSQLStatement_<%=cid %>, null, pszDialect_<%=cid %>);
 } else {
-    pszDialect_<%=cid %> = '';
+  poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
 }
 
-if (pszSQL_<%=cid %> != null) {
-    org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.ExecuteSQL(pszSQL_<%=cid %>, "", pszDialect_<%=cid %>);
-} else {
-    org.gdal.ogr.Layer poLayer_<%=cid %> = poDS_<%=cid %>.GetLayer(papszLayers_<%=cid %>);
-}
 
 /* Set filters if provided. */
 if (pszWHERE_<%=cid %> != null)
@@ -160,6 +148,7 @@ if (pszWHERE_<%=cid %> != null)
 
 if (poSpatialFilter_<%=cid %> != null)
     poLayer_<%=cid %>.SetSpatialFilter(poSpatialFilter_<%=cid %>);
+
 
 /* CRS TODO get EPSG code */
 int pszWKT_<%=cid %>;
@@ -174,6 +163,9 @@ else {
     	pszWKT_<%=cid %> = -1;
     }
 }
+
+
+
 
 /* loop over the feature collection and fill up the columns */
 org.gdal.ogr.Feature poFeature_<%=cid %>;
