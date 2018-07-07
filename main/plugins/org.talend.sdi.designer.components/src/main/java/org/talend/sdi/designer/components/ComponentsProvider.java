@@ -17,7 +17,7 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
-import org.talend.commons.ui.runtime.exception.ExceptionHandler;
+import org.talend.commons.exception.ExceptionHandler;
 import org.talend.core.model.components.AbstractComponentsProvider;
 
 /**
@@ -33,7 +33,7 @@ public class ComponentsProvider extends AbstractComponentsProvider {
 
     
     @Override
-    protected File getExternalComponentsLocation() {
+	protected File getExternalComponentsLocation() {
         URL url = FileLocator
                 .find(Plugin.getDefault().getBundle(), 
                                 new Path("components"), null);

@@ -134,7 +134,7 @@ public class SpatialVectorStep1Form extends AbstractSpatialVectorFileStepForm {
         Composite compositeFileLocation = Form.startNewDimensionnedGridLayout(group, 3, WIDTH_GRIDDATA_PIXEL, 120);
 
         // server Combo - FIXME - not sure is useful ?
-        String[] serverLocation = { "Localhost 127.0.0.1" }; //$NON-NLS-1$
+        String[] serverLocation = { "Localhost 127.0.1.1" }; //$NON-NLS-1$
         serverCombo = new LabelledCombo(compositeFileLocation, Messages.getString("FileStep1.server"), Messages //$NON-NLS-1$
                 .getString("FileStep1.serverTip"), serverLocation, 2, true, SWT.NONE); //$NON-NLS-1$
 

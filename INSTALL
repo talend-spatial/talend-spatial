@@ -3,6 +3,7 @@ How-to install Talend Open Studio Spatial module ?
 
  * Download TOS DI from http://www.talend.com
  * Unzip TOS DI
+ * Start TOS once and close 
  * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/ 
  * Unzip Spatial module
  * Copy the content of the plugin directory in the plugins directory of TOS
@@ -24,10 +25,7 @@ On Windows, configure the following system variables:
  * PROJ_LIB C:\Program Files\GDAL\projlib
 
 
-On Linux, modify the ini file matching the TOS executable (eg. TOS_DI-linux-gtk-x86_64.ini 
-for TOS_DI-linux-gtk-x86_64) in order to add GDAL/OGR to the library path using:
-
--Djava.library.path=/path/to/gdal/swig/java
+On Linux, install package libgdal-java.
 
 
 More information
@@ -38,15 +36,11 @@ More information
  * Forum: http://www.talendforge.org/forum/viewforum.php?id=9
 
 
-FAQ
----
-
- * After spatial plugins installation, no spatial components appears in the palette ?
-Start from a clean TOS zip and do not start TOS before unzipping spatial plugins.
-
-
 List of changes
 ---------------
+
+ * Talend spatial module version 7.0.1:
+  * Fix installation with TOS => 6.3.2 #74
 
  * Talend spatial module version 5.4.1:
   * Projection issue on MN03 #62

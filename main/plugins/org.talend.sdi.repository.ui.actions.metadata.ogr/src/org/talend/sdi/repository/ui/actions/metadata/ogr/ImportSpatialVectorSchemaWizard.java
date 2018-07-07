@@ -350,7 +350,11 @@ public class ImportSpatialVectorSchemaWizard extends RepositoryWizard implements
 			} catch (java.lang.UnsatisfiedLinkError e) {
 				// TODO : add to panel info
 				System.err
-						.println("In order to use GDAL/OGR in Talend, the java.library.path variable should point to GDAL library.");
+						.println("In order to use GDAL/OGR in Talend, the GDAL Java library has to be installed.");
+                System.err
+						.println("On linux, you can install libgdal-java package (eg. on Ubuntu, sudo apt install libgdal-java).");
+                System.err
+						.println("Another option is to set the java.library.path variable which should point to the GDAL library.");
 				System.err
 						.println("To set this property, go to the Run view > Advanced settings > Use specific JVM Arguments");
 				System.err.println("and add a new argument:");
@@ -438,13 +442,14 @@ public class ImportSpatialVectorSchemaWizard extends RepositoryWizard implements
 			labelEmpty2.setText("");
 
 			String[] layers = {};
+			int horizontalSpan = 2;
 			final LabelledCombo cb = new LabelledCombo(
 					compositeFileLocation,
 					org.talend.sdi.repository.ui.actions.metadata.ogr.Messages
 							.getString("CreateSpatialVectorMetadata.layers"),
 					org.talend.sdi.repository.ui.actions.metadata.ogr.Messages
 							.getString("CreateSpatialVectorMetadata.layersTip"),
-					layers);
+					layers, horizontalSpan, true);
 			cb.setVisible(false);
 
 			labelGdf.applyTo(compositeFileLocation);
