@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.talend.spatial</groupId>
     <artifactId>tspatial-common</artifactId>
-    <version>7.0.1</version>
+    <version>7.1.1</version>
     <relativePath>../../../</relativePath>
   </parent>
   <artifactId>org.talend.sdi.repository.ui.actions.metadata</artifactId>

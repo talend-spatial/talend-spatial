@@ -15,6 +15,7 @@ package org.talend.sdi.repository.metadata.content;
 import org.talend.core.model.repository.ERepositoryObjectType;
 import org.talend.core.repository.model.ProjectRepositoryNode;
 import org.talend.repository.model.RepositoryNode;
+import org.talend.repository.view.di.metadata.content.AbstractMetadataContentProvider;
 
 public class MetadataSpatialVectorFileContentProvider extends AbstractMetadataContentProvider {
 
@@ -27,7 +28,7 @@ public class MetadataSpatialVectorFileContentProvider extends AbstractMetadataCo
      */
     @Override
     protected RepositoryNode getTopLevelNodeFromProjectRepositoryNode(ProjectRepositoryNode projectNode) {
-        return projectNode.getRootRepositoryNode(ERepositoryObjectType.METADATA_SPATIAL_FILE_VECTOR);
+		return projectNode.getRootRepositoryNode(ERepositoryObjectType.METADATA_GENERIC_SCHEMA);
     }
 
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.talend.sdi.feature"
+      label="Spatial Feature"
+      version="7.1.1.qualifier"
+      provider-name="titellus">
+
+   <license>
+      The licence are describe in branding feature
+   </license>
+
+   <url>
+      <discovery label="Talend spatial web site" url="https://github.com/talend-spatial/"/>
+   </url>
+
+   <plugin
+         id="org.talend.liraries.sdi"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.sdi.workspace.spatial"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.talend.sdi.designer.components"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.sdi.designer.components.sandbox"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.sdi.repository.ui.actions.metadata"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.talend.sdi.repository.ui.actions.metadata.ogr"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -38,7 +38,8 @@
            context="plugin:org.talend.libraries.sdi"
            language="java"
            message="Needed for Talend Spatial Component"
-           name="org.talend.sdi.jar" mvn_uri="mvn:org.talend.libraries/org.talend.sdi/7.0.1"
+           name="org.talend.sdi.jar" 
+           mvn_uri="mvn:org.talend.libraries/org.talend.sdi/7.1.1"
            required="false">
        </libraryNeeded>
    </extension>

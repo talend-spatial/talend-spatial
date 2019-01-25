@@ -23,7 +23,7 @@
              isResouce="true"
              key="repository.metadataSpatialVectorFile"
              label="Spatial vector file"
-             ordinal="47"
+             ordinal="470"
              parentNodeType="METADATA"
              products="DI"
              type="METADATA_SPATIAL_FILE_VECTOR">
