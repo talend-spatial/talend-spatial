@@ -23,6 +23,12 @@
                   bundleId="">
             </bundleId>
          </library>
+         <library
+               name="gt-api-8.5.jar">
+            <bundleId
+                  bundleId="">
+            </bundleId>
+         </library>
       </systemRoutine>
       <systemRoutine
             name="GeoOperation">
@@ -55,6 +61,12 @@
          </library>
          <library
                name="gt-xsd-core-8.5.jar">
+            <bundleId
+                  bundleId="">
+            </bundleId>
+         </library>
+         <library
+               name="gt-xsd-gml3-8.5.jar">
             <bundleId
                   bundleId="">
             </bundleId>
