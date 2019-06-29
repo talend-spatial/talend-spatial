@@ -53,6 +53,6 @@ See the [CONTRIBUTORS.md](./CONTRIBUTORS.md) file for details.
 
 ## License
 
-Copyright (c) 2007-2015 Talend
+Copyright (c) 2007-2019 Talend
 
 Licensed under the Apache V2 License
