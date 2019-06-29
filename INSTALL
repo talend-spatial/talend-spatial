@@ -39,6 +39,9 @@ More information
 List of changes
 ---------------
 
+ * Talend spatial module version 7.1.1:
+  * Fix installation with TOS => 7.1.1 #78
+  
  * Talend spatial module version 7.0.1:
   * Fix installation with TOS => 6.3.2 #74
 
