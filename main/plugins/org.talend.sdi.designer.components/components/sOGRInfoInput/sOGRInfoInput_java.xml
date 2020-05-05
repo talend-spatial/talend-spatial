@@ -49,7 +49,7 @@
                 <COLUMN NAME="epsg_code" TYPE="id_Integer" LENGTH="6" />
                 <COLUMN NAME="geo_extent" TYPE="id_Geometry" />
                 <COLUMN NAME="latlon_extent" TYPE="id_Geometry" />
-                <COLUMN NAME="nb_features" TYPE="id_Integer" LENGTH="2" />
+                <COLUMN NAME="nb_features" TYPE="id_Long" LENGTH="2" />
                 <COLUMN NAME="error" TYPE="id_String" LENGTH="255" />
             </TABLE>
         </PARAMETER>

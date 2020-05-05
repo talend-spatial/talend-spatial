@@ -54,7 +54,7 @@
     String fidColumn_<%=cid %> = "";
     String geomColumn_<%=cid %> = "";
     String columnsDef_<%=cid %> = "";
-    int nbFeatures_<%=cid %> = 0;
+    long nbFeatures_<%=cid %> = 0;
     int nbErrors_<%=cid %> = 0;
     String errors_<%=cid %> = "";
     java.util.HashMap<String, double[]> corners_<%=cid %>;
