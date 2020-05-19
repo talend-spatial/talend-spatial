@@ -29,6 +29,18 @@
                   bundleId="">
             </bundleId>
          </library>
+         <library
+                 name="gt-opengis-8.5.jar">
+            <bundleId
+                    bundleId="">
+            </bundleId>
+         </library>
+         <library
+                 name="gt-referencing-8.5.jar">
+            <bundleId
+                    bundleId="">
+            </bundleId>
+         </library>
       </systemRoutine>
       <systemRoutine
             name="GeoOperation">

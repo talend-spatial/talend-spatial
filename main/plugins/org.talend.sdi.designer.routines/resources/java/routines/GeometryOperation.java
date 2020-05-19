@@ -357,11 +357,33 @@ public class GeometryOperation {
      * 
      * {param} double(1) tolerance
      * 
-     * {example} SIMPLIFY(null, "", 1)
+     * {example} SIMPLIFY(geom, "", 1)
      * 
      */
     public static Geometry SIMPLIFY(Geometry geom, String type, double tolerance) {
     return geom.simplify(type, tolerance);
+    }
+
+    /**
+     * PRECISIONREDUCER( ) Returns a less precise geometry.
+     *
+     * {talendTypes} geometry | Geometry
+     *
+     * {Category} GeometryOperation
+     *
+     * {param} Geometry(null)
+     *
+     * {param} int(3) numberOfDecimals
+     *
+     * {example} PRECISIONREDUCER(geom, 3)
+     *
+     */
+    public static Geometry PRECISIONREDUCER(Geometry geom, int numberOfDecimals) {
+        com.vividsolutions.jts.geom.PrecisionModel precisionModel =
+                new com.vividsolutions.jts.geom.PrecisionModel(
+                        java.lan.Math.pow(10, numberOfDecimals - 1));
+        return com.vividsolutions.jts.precision.GeometryPrecisionReducer.reduce(
+                geom, precisionModel);
     }
 
     /**

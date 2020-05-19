@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Spatial lib Plug-in
 Bundle-SymbolicName: org.talend.libraries.sdi;singleton:=true
-Bundle-Version: 7.1.1
+Bundle-Version: 7.3.2
 Bundle-ClassPath: .,
  lib/jsr-275-1.0-beta-2.jar,
  lib/gt-opengis-8.5.jar,

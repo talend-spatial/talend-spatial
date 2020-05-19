@@ -2,3 +2,4 @@
 target
 org.talend.sdi.repository.ui.actions.metadata/bin
 .idea
+*.iml
