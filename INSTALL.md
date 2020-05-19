@@ -111,8 +111,6 @@ On Linux, install package libgdal-java.
 
 ## Build from source
 
-### Repository Structure
-
 
 ```shell script
 mkdir talend
