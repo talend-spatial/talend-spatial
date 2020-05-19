@@ -46,26 +46,26 @@ On Linux, install package libgdal-java.
 
 ## List of changes
 
- * Talend spatial module version 7.3.1:
+* Talend spatial module version 7.3.1:
   * Fix installation with TOS => 7.3.1 #78
   * Update to GDAL 3.0.x #80
   * sProj / Handle null geometry
 
- * Talend spatial module version 7.1.1:
+* Talend spatial module version 7.1.1:
   * Fix installation with TOS => 7.1.1 #78
   
- * Talend spatial module version 7.0.1:
+* Talend spatial module version 7.0.1:
   * Fix installation with TOS => 6.3.2 #74
 
- * Talend spatial module version 5.4.1:
+* Talend spatial module version 5.4.1:
   * Projection issue on MN03 #62
   
- * Talend spatial module version 5.4.0:
+* Talend spatial module version 5.4.0:
   * sOgrInfo / Do not skip layer when latlon bbox is empty
   * OGR / Generic schema / Missing geometry column (#50)
   * sShapefileOutput / Add option to set DBF charset (#49)
 
- * Talend spatial module version 5.3.1:
+* Talend spatial module version 5.3.1:
   * Create generic schema from any OGR supported format.
   * Demo workspace / Use Natural Earth data to easily run sample jobs
   * Metadata crawler demo workspace / Populate your metadata catalog by scanning folders, services and databases for GIS data
@@ -80,18 +80,18 @@ On Linux, install package libgdal-java.
   * Missing library using sSimpleGeomToMulti components
   * sOgrInput / List datasource layers when not set 
 
- * Talend spatial module version 5.3.0:
+* Talend spatial module version 5.3.0:
   * Add support for TDI 5.3.x series
   * sWfsInput / error 401
 
- * Talend spatial module version 5.2.1:
+* Talend spatial module version 5.2.1:
   * GeoTools 8.5 upgrade - MIF/MID, EDIGEO and GPX format is now supported by OGR component
   * sProj / Add custom transform for projection (#10) - IGN Ntv2 grid transformation supported
   * sOGRInput-sOGROutput / Read and write all OGR formats (#14, #12) - Vector format supported http://www.gdal.org/ogr/ogr_formats.html
   * Add NetCDF, OPeNDAP and THREDDS Iterator components developed by IMOS - Thanks to Craig Jones
   * New components documentation - Thanks Yves Jacolin
 
- * Talend spatial module version 5.2.0:
+* Talend spatial module version 5.2.0:
   * OGRInfo and GDALInfo input components does not set geometry CRS (#9)
   * Add i18n files (#6)
   * sCSWRequest component retrieves CSW response (#5)
@@ -101,7 +101,7 @@ On Linux, install package libgdal-java.
   * Fix wrong log4j dependency version (#1).
   * Update for TOS DI 5.2.x
 
- * Talend spatial module version 5.1.1 :
+* Talend spatial module version 5.1.1 :
   * sGdalInfoInput component
   * sOgrInfoInput component
   * Tested on TOS DI 5.1.1 and 5.2.0M3
@@ -112,17 +112,7 @@ On Linux, install package libgdal-java.
 ## Build from source
 
 ### Repository Structure
-All Talend Studio repositories follow the same file structure:
-```
 
-  |_ main           Main Eclipse plugins and features
-    |_ features
-    |_ plugins
-  |_ src            Talend Spatial library
-  |_ i18n           Internationalization plugins and features.
-      |_ features
-      |_ plugins
-```
 
 ```shell script
 mkdir talend
