@@ -211,18 +211,20 @@ if ((metadatas != null) && (metadatas.size() > 0)) {
     /* TODO : Check sourceCRS for current component == CRS of input features */
      
     /* Transform */
-    org.talend.sdi.geometry.Geometry geomProj_<%=cid %> = new org.talend.sdi.geometry.Geometry(
-                                    org.geotools.geometry.jts.JTS.transform( 
-                                        geom_<%=cid %>._getInternalGeometry (),
-                                        transform_<%=cid %>
-                                    )
-                                );
-                                
-    /* setCRS */
-    geomProj_<%=cid %>.setCRS (targetCRS_<%=cid %>);
+    Geometry result_<%=cid %> = null;
+    if (geom_<%=cid %> != null) {
+	    org.talend.sdi.geometry.Geometry geomProj_<%=cid %> = new org.talend.sdi.geometry.Geometry(
+		                            org.geotools.geometry.jts.JTS.transform( 
+		                                geom_<%=cid %>._getInternalGeometry (),
+		                                transform_<%=cid %>
+		                            )
+		                        );
+		                        
+	    /* setCRS */
+	    geomProj_<%=cid %>.setCRS (targetCRS_<%=cid %>);
     
-    Geometry result_<%=cid %> = geomProj_<%=cid %>;
-    
+    	    result_<%=cid %> = geomProj_<%=cid %>;
+    }
 <%
                     } else if (operationType.equals("POLYGONIZER")) {
                     
