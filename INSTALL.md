@@ -1,17 +1,25 @@
-How-to install Talend Open Studio Spatial module ?
---------------------------------------------------
+## How-to install Talend Open Studio Spatial module ?
 
  * Download TOS DI from http://www.talend.com
+ * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/
  * Unzip TOS DI
- * Start TOS once and close 
- * Download Spatial module http://sourceforge.net/projects/sdispatialetl/files/sdispatialetl/ 
  * Unzip Spatial module
  * Copy the content of the plugin directory in the plugins directory of TOS
  * Start TOS
 
+## No spatial component in the palette ?
 
-How-to set-up GDAL/OGR ?
-------------------------
+In configuration/config.ini for osgi.bundles=... property add:
+
+```
+,org.talend.libraries.sdi-7.1.1@4,org.talend.sdi.designer.components-7.1.1@4,
+org.talend.sdi.designer.routines-7.1.1@4,org.talend.sdi.repository.ui.actions.metadata-7.1.1@4,
+org.talend.sdi.repository.ui.actions.metadata.ogr-7.1.1@4,
+org.talend.sdi.workspace.spatial-7.1.1@4 
+```
+
+
+## How-to set-up GDAL/OGR ?
 
 GDAL/OGR library is used to create generic schema from all OGR supported format
 (eg. SHP, MIF, GML, KML, DXF, WFS, ...). For this, GDAL/OGR should be installed 
@@ -28,16 +36,20 @@ On Windows, configure the following system variables:
 On Linux, install package libgdal-java.
 
 
-More information
-----------------
+
+## More information
 
  * Home page: http://talend-spatial.github.com/
  * Wiki: http://github.com/talend-spatial/talend-spatial/wiki
  * Forum: http://www.talendforge.org/forum/viewforum.php?id=9
 
 
-List of changes
----------------
+## List of changes
+
+ * Talend spatial module version 7.3.1:
+  * Fix installation with TOS => 7.3.1 #78
+  * Update to GDAL 3.0.x #80
+  * sProj / Handle null geometry
 
  * Talend spatial module version 7.1.1:
   * Fix installation with TOS => 7.1.1 #78
@@ -97,17 +109,54 @@ List of changes
 
 
 
+## Build from source
+
+### Repository Structure
+All Talend Studio repositories follow the same file structure:
+```
+
+  |_ main           Main Eclipse plugins and features
+    |_ features
+    |_ plugins
+  |_ src            Talend Spatial library
+  |_ i18n           Internationalization plugins and features.
+      |_ features
+      |_ plugins
+```
+
+```shell script
+mkdir talend
+cd talend
+git clone git@github.com:Talend/studio-se-master.git 
+cd studio-se-master
+# Remove private repository from .gitslave
+# by removing "../toem-studio-se.git" "../toem-studio-se" ifpresent
+gits populate --with-ifpresent
+gits checkout -b 7.3 origin/maintenance/7.3
+
+export MAVEN_OPTS='-Xmx8000m -XX:MaxPermSize=512m -XX:-UseConcMarkSweepGC'
+mvn clean install
 
 
-F.A.Q
------
+cd ..
+git clone git@github.com:talend-spatial/talend-spatial.git
+cd talend-spatial
+mvn clean install
+
+```
+
+
+
+## F.A.Q
 
 How-to solve GDAL/OGR exception ?
 
+```
 Exception like java.lang.UnsatisfiedLinkError: org.gdal.gdal.gdalJNI.Dataset_SWIGUpcast(J)J
 	at org.gdal.gdal.gdalJNI.Dataset_SWIGUpcast(Native Method)
 	at org.gdal.gdal.Dataset.<init>(Dataset.java:15)
 	at org.gdal.gdal.gdal.Open(gdal.java:583)
+```
 may occur if the GDAL/OGR library installed is a different version of the one provided
 in Talend Spatial.
 
