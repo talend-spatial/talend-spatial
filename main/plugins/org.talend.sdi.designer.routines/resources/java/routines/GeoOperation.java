@@ -32,11 +32,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} INTERSECTS(null,null)
+     * {example} INTERSECTS(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean INTERSECTS(Geometry geom1, Geometry geom2) {
@@ -54,11 +54,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} TOUCHES(null,null)
+     * {example} TOUCHES(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean TOUCHES(Geometry geom1, Geometry geom2) {
@@ -76,11 +76,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} CROSSES(null,null)
+     * {example} CROSSES(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean CROSSES(Geometry geom1, Geometry geom2) {
@@ -99,11 +99,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} CONTAINS(null,null)
+     * {example} CONTAINS(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean CONTAINS(Geometry geom1, Geometry geom2) {
@@ -121,11 +121,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} WITHIN(null,null)
+     * {example} WITHIN(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean WITHIN(Geometry geom1, Geometry geom2) {
@@ -143,11 +143,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} COVERS(null,null)
+     * {example} COVERS(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean COVERS(Geometry geom1, Geometry geom2) {
@@ -166,11 +166,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} COVEREDBY(null,null)
+     * {example} COVEREDBY(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean COVEREDBY(Geometry geom1, Geometry geom2) {
@@ -189,11 +189,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} DISJOINT(null,null)
+     * {example} DISJOINT(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean DISJOINT(Geometry geom1, Geometry geom2) {
@@ -212,11 +212,11 @@ public class GeoOperation {
      * 
      * {Category} GeoOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row2.the_geom)
      * 
-     * {example} OVERLAPS(null,null)
+     * {example} OVERLAPS(row1.the_geom, row2.the_geom)
      * 
      */
     public static boolean OVERLAPS(Geometry geom1, Geometry geom2) {

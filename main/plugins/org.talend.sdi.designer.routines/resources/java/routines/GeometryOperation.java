@@ -32,7 +32,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETAREA(null)
      * 
@@ -48,7 +48,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETAREA(null)
      * 
@@ -64,7 +64,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETNUMPOINTS(null)
      * 
@@ -81,7 +81,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETNUMGEOMETRIES(null)
      * 
@@ -97,7 +97,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETGEOMETRYTYPE(null)
      * 
@@ -113,7 +113,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETSRID(null)
      * 
@@ -131,7 +131,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {param} String(null)
      * 
@@ -171,9 +171,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} EQUALS(null, null)
      * 
@@ -189,9 +189,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} DISTANCE(null, null)
      * 
@@ -207,7 +207,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETCENTROID(null)
      * 
@@ -224,7 +224,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETINTERIORPOINT(null)
      * 
@@ -240,7 +240,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETENVELOPE(null)
      * 
@@ -256,7 +256,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETBOUNDARY(null)
      * 
@@ -273,7 +273,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} GETCONVEXHULL(null)
      * 
@@ -289,7 +289,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {param} int(null)
      * 
@@ -310,7 +310,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {param} int(-1) pair of coordinates
      * 
@@ -350,7 +350,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {param} String("DouglasPeuckerSimplifier") Type, values:
      * "DouglasPeuckerSimplifier", "TopologyPreservingSimplifier"
@@ -371,7 +371,7 @@ public class GeometryOperation {
      *
      * {Category} GeometryOperation
      *
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      *
      * {param} int(3) numberOfDecimals
      *
@@ -381,9 +381,11 @@ public class GeometryOperation {
     public static Geometry PRECISIONREDUCER(Geometry geom, int numberOfDecimals) {
         com.vividsolutions.jts.geom.PrecisionModel precisionModel =
                 new com.vividsolutions.jts.geom.PrecisionModel(
-                        java.lan.Math.pow(10, numberOfDecimals - 1));
-        return com.vividsolutions.jts.precision.GeometryPrecisionReducer.reduce(
-                geom, precisionModel);
+                        java.lang.Math.pow(10, numberOfDecimals - 1));
+        return new Geometry(
+                com.vividsolutions.jts.precision.GeometryPrecisionReducer.reduce(
+                geom._getInternalGeometry(), precisionModel),
+                geom.getCRS());
     }
 
     /**
@@ -393,7 +395,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {param} double(1) distance
      * 
@@ -428,9 +430,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} INTERSECTION(null)
      * 
@@ -446,9 +448,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} UNION(null)
      * 
@@ -465,9 +467,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} SYMDIFFERENCE(null)
      * 
@@ -483,9 +485,9 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} DIFFERENCE(null)
      * 
@@ -501,7 +503,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} ISVALID(null)
      * 
@@ -517,7 +519,7 @@ public class GeometryOperation {
      * 
      * {Category} GeometryOperation
      * 
-     * {param} Geometry(null)
+     * {param} Geometry(row1.the_geom)
      * 
      * {example} TOWKT(null)
      * 
