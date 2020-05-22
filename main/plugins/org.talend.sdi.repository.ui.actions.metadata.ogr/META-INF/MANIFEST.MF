@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Talend Spatial Repository Plug-in
 Bundle-SymbolicName: org.talend.sdi.repository.ui.actions.metadata.ogr;singleton:=true
-Bundle-Version: 7.3.2
+Bundle-Version: 7.4.1
 Bundle-Activator: org.talend.sdi.repository.ui.actions.metadata.ogr.Activator
 Require-Bundle: org.talend.libraries.ui,
  org.apache.axis,

@@ -4,13 +4,19 @@
 	<parent>
 		<groupId>org.talend.studio</groupId>
 		<artifactId>parent-pom</artifactId>
-		<version>7.3.2-SNAPSHOT</version>
-		<relativePath />
+		<version>7.4.1-SNAPSHOT</version>
+		<relativePath/>
 	</parent>
 	<groupId>org.talend.spatial</groupId>
 	<artifactId>tspatial-common</artifactId>
 	<packaging>pom</packaging>
+	<version>7.4.1</version>
 	<repositories>
+		<repository>
+			<id>tos-p2</id>
+			<url>${tos-p2-repo.url}</url>
+			<layout>p2</layout>
+		</repository>
 		<repository>
 			<id>talend_open</id>
 			<releases>

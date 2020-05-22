@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.talend.spatial</groupId>
     <artifactId>tspatial-common</artifactId>
-    <version>7.3.2-SNAPSHOT</version>
+    <version>7.4.1</version>
     <relativePath>../../../</relativePath>
   </parent>
   <artifactId>org.talend.sdi.designer.components.sandbox</artifactId>
