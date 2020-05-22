@@ -102,7 +102,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/net.opengis.wps-8.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.w3.xlink-8.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/picocontainer-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/postgis-driver-1.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/postgis-jdbc-2.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/postgresql-8.4-701.jdbc3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/sqlite-jdbc-spatialite-3.7.2-2.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/swt.gtk.linux.x86-3.6.1.v3655c.jar"/>

@@ -480,7 +480,7 @@ for file in $(ls *); do name=${file%.jar}; printf "<IMPORT\n  NAME=\"${name}\"\n
 />
 <IMPORT
   NAME="postgis-driver-1.0"
-  MODULE="postgis-driver-1.0.jar"
+  MODULE="postgis-jdbc-2.4.0.jar"
   REQUIRED="true"
 />
 <IMPORT
