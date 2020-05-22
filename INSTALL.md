@@ -12,10 +12,10 @@
 In configuration/config.ini for osgi.bundles=... property add:
 
 ```
-,org.talend.libraries.sdi-7.1.1@4,org.talend.sdi.designer.components-7.1.1@4,
-org.talend.sdi.designer.routines-7.1.1@4,org.talend.sdi.repository.ui.actions.metadata-7.1.1@4,
-org.talend.sdi.repository.ui.actions.metadata.ogr-7.1.1@4,
-org.talend.sdi.workspace.spatial-7.1.1@4 
+,org.talend.libraries.sdi-7.4.1@4,org.talend.sdi.designer.components-7.4.1@4,
+org.talend.sdi.designer.routines-7.4.1@4,org.talend.sdi.repository.ui.actions.metadata-7.4.1@4,
+org.talend.sdi.repository.ui.actions.metadata.ogr-7.4.1@4,
+org.talend.sdi.workspace.spatial-7.4.1@4 
 ```
 
 
