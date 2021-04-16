@@ -130,7 +130,7 @@ cd ..
 git clone git@github.com:talend-spatial/talend-spatial.git
 cd talend-spatial
 mvn clean install
-
+./package.sh 7.4.1
 ```
 
 
