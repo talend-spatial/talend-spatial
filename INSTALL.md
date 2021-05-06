@@ -46,6 +46,9 @@ On Linux, install package libgdal-java.
 
 ## List of changes
 
+* Talend spatial module version 7.4.1:
+  * Test installation with TOS 7.4.1M8
+  
 * Talend spatial module version 7.3.1:
   * Fix installation with TOS => 7.3.1 #78
   * Update to GDAL 3.0.x #80
