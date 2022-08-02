@@ -38,6 +38,6 @@ Once it's running then you can connect to it using vnc using the following addre
 
 	localhost:5900
 
-Access the menu using the icon in the bottom left corner of the desktop and choose System Tools&rarr;File Manager PCManFM, then navigate to `/data/TOS_DI-20181026_1147-v7.1.1/` and execute (double-click) `TOS_DI-linux-gtk-x86_64`. If it asks you to confirm that you want to execute the file, choose the button marked "Execute". 
+Access the menu using the icon in the bottom left corner of the desktop and choose System Tools&rarr;File Manager PCManFM, then navigate to `/root/TOS_DI-20210406_1041-V7.4.1M8/` and execute (double-click) `TOS_DI-linux-gtk-x86_64`. If it asks you to confirm that you want to execute the file, choose the button marked "Execute". 
 
 When Talend loads, accept any licenses that you're asked to accept and start a new project. If you have added a volume mount as described above, your files will be located at `/data`.
