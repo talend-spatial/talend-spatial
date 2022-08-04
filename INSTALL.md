@@ -7,6 +7,10 @@
  * Copy the content of the plugin directory in the plugins directory of TOS
  * Start TOS
 
+## Run using docker ubuntu image and a vnc server
+
+ * Follow the included instructions in the `docker` folder
+
 ## No spatial component in the palette ?
 
 In configuration/config.ini for osgi.bundles=... property add:
