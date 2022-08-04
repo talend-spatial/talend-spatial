@@ -23,11 +23,11 @@ Build docker image inside the `docker` folder using:
 
 Start crawler using:
 
-	docker run --name crawler -p 5900:5900 crawler
+	docker run --rm --name crawler -p 5900:5900 crawler
 
 Optionally add a volume mount for your data (use the correct syntax for the host files- the example below is for a linux host):
 
-	docker run --name crawler -p 5900:5900 -v /host/path/to/files:/data crawler
+	docker run --rm --name crawler -p 5900:5900 -v /host/path/to/files:/data crawler
 
 
 ### Connecting and Running ###
@@ -38,7 +38,7 @@ Once it's running then you can connect to it using vnc using the following addre
 
 	localhost:5900
 
-Access the menu using the icon in the bottom left corner of the desktop and choose System Tools&rarr;File Manager PCManFM, then navigate to `/root/TOS_DI-20181026_1147-v7.1.1/` and execute (double-click) `TOS_DI-linux-gtk-x86_64`. If it asks you to confirm that you want to execute the file, choose the button marked "Execute". 
+Access the menu using the icon in the bottom left corner of the desktop and choose System Tools&rarr;File Manager PCManFM, then navigate to `/root/TOS_DI-20181026_1147-v7.1.1/` and run  `TOS_DI-linux-gtk-x86_64` (press the execute button).
 
 When Talend loads, accept any licenses that you're asked to accept and start a new project. If you have added a volume mount as described above, your files will be located at `/data`.
 
@@ -56,6 +56,6 @@ org.talend.sdi.workspace.spatial-7.4.1@4
 
 to the **osgi.bundles=...** property.
 
-Note that this will not persist beyond a restart of the docker container. If you wish to permanently fix this then save the edited `/root/TOS_DI-20181026_1147-v7.1.1/configuration/config.ini` file to your local computer, and mount it as a volume for the docker command. For example:
+Note that this will not persist beyond a restart of the docker container. If you wish to permanently fix this then save the edited `/root/TOS_DI-20181026_1147-v7.1.1/configuration/config.ini` file to your local computer, then mount it as a volume for the docker command. For example:
 
-	docker run --name crawler -p 5900:5900 -v /host/path/to/files:/data -v /host/path/to/config.ini:/root/TOS_DI-20181026_1147-v7.1.1/configuration/config.ini crawler
+	docker run --rm --name crawler -p 5900:5900 -v /host/path/to/files:/data -v /host/path/to/config.ini:/root/TOS_DI-20181026_1147-v7.1.1/configuration/config.ini crawler
