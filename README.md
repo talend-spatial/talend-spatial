@@ -1,5 +1,8 @@
 # Spatial extension for Talend
 
+ Following Talend's decision to retire Talend open studio (https://www.talend.com/products/talend-open-studio/), this project is archived.
+    
+
 OPENSOURCE GEOSPATIAL ETL SETL
 
 http://talend-spatial.github.io/
